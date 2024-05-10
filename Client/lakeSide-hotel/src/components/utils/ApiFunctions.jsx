@@ -31,3 +31,5 @@ export async function getRoomTypes() {
 		throw new Error("Error fetching room types")
 	}
 }
+
+// Demo Commit
