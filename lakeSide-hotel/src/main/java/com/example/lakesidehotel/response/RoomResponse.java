@@ -1,4 +1,4 @@
-package com.example.lakesidehotel.repository;
+package com.example.lakesidehotel.response;
 
 import com.example.lakesidehotel.model.BookedRoom;
 import lombok.Data;

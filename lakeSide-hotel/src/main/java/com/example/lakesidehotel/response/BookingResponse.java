@@ -1,17 +1,10 @@
-package com.example.lakesidehotel.repository;
+package com.example.lakesidehotel.response;
 
-import com.example.lakesidehotel.model.BookedRoom;
 import com.example.lakesidehotel.model.Room;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.tomcat.util.codec.binary.Base64;
-
-import java.math.BigDecimal;
-import java.sql.Blob;
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @AllArgsConstructor

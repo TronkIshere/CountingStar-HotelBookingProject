@@ -51,7 +51,7 @@ public class BookedRoom {
     }
 
     public void setNumOfAdults(int numOfAdults) {
-        NumOfAdults = numOfAdults;
+          NumOfAdults = numOfAdults;
         calculateTotalNumberOfGuest();
     }
 
