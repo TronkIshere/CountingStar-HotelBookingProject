@@ -32,4 +32,5 @@ public class RoomResponse {
         this.photo = photoBytes != null ? Base64.encodeBase64String(photoBytes) : null;
         //this.bookings = bookings;
     }
+
 }
