@@ -11,9 +11,7 @@ export async function addRoom(photo, roomType, roomPrice) {
 	formData.append("roomType", roomType)
 	formData.append("roomPrice", roomPrice)
 
-	const response = await api.post("/rooms/add/new-room", formData,{
-		headers: getHeader()
-	})
+	const response = await api.post("/rooms/add/new-room", formData)
 	if (response.status === 201) {
 		return true
 	} else {
@@ -57,7 +55,7 @@ export async function deleteRoom(roomId) {
 export async function updateRoom(roomId, roomData){
 	const formData = new FormData()
 	formData.append("roomType", roomData.roomType)
-	formData.append("roomPrice", room.Price)
+	formData.append("roomPrice", roomData.Price)
 	formData.append("photo", roomData.photo)
 	const response = await api.put(`/rooms/update/${roomId}`)
 	return response
