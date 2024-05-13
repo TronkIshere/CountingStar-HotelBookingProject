@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { addRoom } from '../utils/ApiFunctions'
 import RoomTypeSelector from '../common/RoomTypeSelector'
+import { Link } from "react-router-dom";
 
 
 const AddRoom = () => {
@@ -10,8 +11,8 @@ const AddRoom = () => {
         roomPrice : ""
     })
 
-    const[imagePreview, setImagePreview] = useState("")
     const[successMessage, setSuccessMessage] = useState("")
+    const[imagePreview, setImagePreview] = useState("")
     const[errorMessage, setErrorMessage] = useState("")
 
     const handleRoomInputChange = (e) => {
@@ -57,9 +58,9 @@ const AddRoom = () => {
   return (
     <>
     <section className='container mt-5 mb-5'>
+        <h2 className='text-center mt-5 mb-2'>Add a New Room</h2>
         <div className='row justify-content-center'>
-            <div className='col-md-8 col-lg'>
-                <h2 className='mt-5 mb-2'>Add a New Room</h2>
+            <div className='col-md-8 col-lg-6'>
                 {successMessage && (
                     <div className='alert alert-success fade show'>{successMessage}</div>
                 )}
@@ -113,7 +114,10 @@ const AddRoom = () => {
                         )}
                     </div>
 
-                    <div className='d-grid d-md-flex mt-2'>
+                    <div className='d-grid gap-2 d-md-flex mt-2'>
+                        <Link to={"/existing-rooms"} className="btn btn-outline-info">
+							Back
+						</Link>       
                         <button className='btn btn-outline-primary ml-5'>
                             Save Room
                         </button>
