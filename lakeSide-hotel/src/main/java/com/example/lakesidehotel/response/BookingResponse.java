@@ -21,7 +21,7 @@ public class BookingResponse {
     private String bookingConfirmationCode;
     private Room room;
 
-    public BookingResponse(Long bookingId, LocalDate checkInDate, LocalDate checkOutDate, String bookingConfirmationCode) {
+    public BookingResponse(Long bookingId, LocalDate checkInDate, LocalDate checkOutDate, String bookingConfirmationCode, String guestEmail, int numOfAdults, int numOfChildren, int totalNumOfGuest, String confirmationCode, RoomResponse room) {
         this.bookingId = bookingId;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
