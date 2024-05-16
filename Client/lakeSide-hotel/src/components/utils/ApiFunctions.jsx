@@ -73,15 +73,18 @@ export async function getRoomById(roomId){
 
 /* This function saves a new booking to the databse */
 export async function bookRoom(roomId, booking) {
-	try {
-		const response = await api.post(`/bookings/room/${roomId}/booking`, booking)
-	} catch (error){
-		if (error.response && error.response.data) {
-			throw new Error(error.response.data)
-		} else {
-			throw new Error(`Error booking room: ${error.message}`)
-		}
-	}
+    try {
+        const response = await api.post(`/bookings/room/${roomId}/booking`, booking);
+        console.log("API response:", response);
+    } catch (error) {
+        if (error.response && error.response.data) {
+            console.error("API error:", error.response.data);
+            throw new Error(error.response.data);
+        } else {
+            console.error("API error:", error.message);
+            throw new Error(`Error booking room: ${error.message}`);
+        }
+    }
 }
 
 /* This function gets alll bokings from the database */
