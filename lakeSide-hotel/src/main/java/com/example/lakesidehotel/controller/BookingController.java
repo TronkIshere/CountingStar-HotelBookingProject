@@ -28,6 +28,14 @@ public class BookingController {
         List<BookedRoom> bookings = bookingService.getAllBookings();
         List<BookingResponse> bookingResponses = new ArrayList<>();
         for (BookedRoom booking : bookings){
+
+            //Check if the command retrieves data
+            //Because the Front-end side has some APIs that are null
+            System.out.println("Guest email:" + booking.getGuestEmail());
+            System.out.println("Guest Fullname:" + booking.getGuestFullName());
+            System.out.println("Guest numOfAdults:" + booking.getNumOfAdults());
+            System.out.println("Guest numOfChildren:" + booking.getNumOfChildren());
+
             BookingResponse bookingResponse = getBookingResponse(booking);
             bookingResponses.add(bookingResponse);
         }

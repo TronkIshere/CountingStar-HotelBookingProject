@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import BookingForm from './BookingForm'
 import { getRoomById} from '../utils/ApiFunctions'
+import RoomCarousel from '../common/RoomCarousel'
 
 const Checkout = () => {
   const [error, setError] = useState(null)

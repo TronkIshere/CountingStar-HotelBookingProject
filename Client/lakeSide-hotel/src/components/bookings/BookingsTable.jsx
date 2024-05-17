@@ -1,5 +1,6 @@
 import { parseISO } from 'date-fns'
-import React, {useState} from 'react'
+import React, { useState, useEffect } from 'react'
+import DateSlider from '../common/DateSlider'
 
 const BookingsTable = ({bookingInfo, handleBookingCancellation}) => {
     const[filteredBookings, setFilteredBookings] = useState(bookingInfo)
@@ -24,7 +25,7 @@ const BookingsTable = ({bookingInfo, handleBookingCancellation}) => {
 
     return (
 		<section className="p-4">
-			<DateSlider onDateChange={filterBookings} onFilterChange={filterBooknigs} />
+			<DateSlider onDateChange={filterBookings} onFilterChange={filterBookings} />
 			<table className="table table-bordered table-hover shadow">
 				<thead>
 					<tr>
