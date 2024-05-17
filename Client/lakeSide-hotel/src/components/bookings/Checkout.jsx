@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from "react"
 import BookingForm from './BookingForm'
+import { useParams } from "react-router-dom"
 import { getRoomById} from '../utils/ApiFunctions'
 import RoomCarousel from '../common/RoomCarousel'
+import {
+	FaUtensils,
+	FaWifi,
+	FaTv,
+	FaWineGlassAlt,
+	FaParking,
+	FaCar,
+	FaTshirt
+} from "react-icons/fa"
 
 const Checkout = () => {
   const [error, setError] = useState(null)
@@ -33,7 +43,7 @@ const Checkout = () => {
         <section className="container">
           <div className="row flex-column flex-md-row align-items-center">
             <div className="col-md-4 mt-5 mb-5">
-              {isLoiading ? (
+              {isLoading ? (
                 <p>Loading room information</p>
               ): error ? (
                 <p>{error}</p>
@@ -44,32 +54,32 @@ const Checkout = () => {
                   alt="Room photo"
                   style={{width : "100%", height : "200px"}}/>
 
-                  <table>
-                    <tbody>
-                      <tr>
-                        <th>Room Type :</th>
-                        <th>RoomInfo.roomType :</th>
-                      </tr>
-                      <tr>
-                        <th>Room Price :</th>
-                        <th>RoomInfo.roomPrice :</th>
-                      </tr>
-
-                      <tr>
-                        <td>
-                          <ul className="list-unstyled">
-                            <li><FaWifi /> Wifi</li>
-                            <li><FaTv /> Netfilx Premium</li>
-                            <li><FaUtensils /> Breakfast</li>
-                            <li><FaWineGlassAlt /> Mini bar refreshment</li>
-                            <li><FaCar /> Car Service</li>
-                            <li><FaParking /> Parking Space</li>
-                            <li><FaTshirt /> Laundry</li>
-                          </ul>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+<table className="table table-bordered">
+									<tbody>
+										<tr>
+											<th>Room Type:</th>
+											<td>{roomInfo.roomType}</td>
+										</tr>
+										<tr>
+											<th>Price per night:</th>
+											<td>${roomInfo.roomPrice}</td>
+										</tr>
+										<tr>
+											<th>Room Service:</th>
+											<td>
+												<ul className="list-unstyled">
+													<li><FaWifi /> Wifi</li>
+													<li><FaTv /> Netfilx Premium</li>
+													<li><FaUtensils /> Breakfast</li>
+													<li><FaWineGlassAlt /> Mini bar refreshment</li>
+													<li><FaCar /> Car Service</li>
+													<li><FaParking /> Parking Space</li>
+													<li><FaTshirt /> Laundry</li>
+												</ul>
+											</td>
+										</tr>
+									</tbody>
+								</table>
                 </div>
               )}
             </div>

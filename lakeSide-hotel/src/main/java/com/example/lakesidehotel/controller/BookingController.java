@@ -31,14 +31,18 @@ public class BookingController {
 
             //Check if the command retrieves data
             //Because the Front-end side has some APIs that are null
+            System.out.println("Booking id: " + booking.getBookingId());
             System.out.println("Guest email:" + booking.getGuestEmail());
             System.out.println("Guest Fullname:" + booking.getGuestFullName());
             System.out.println("Guest numOfAdults:" + booking.getNumOfAdults());
             System.out.println("Guest numOfChildren:" + booking.getNumOfChildren());
+            System.out.println("Room id:" + booking.getRoom().getId());
+            System.out.println("BookingConfirmationCode: " + booking.getBookingConfirmationCode());
 
             BookingResponse bookingResponse = getBookingResponse(booking);
             bookingResponses.add(bookingResponse);
         }
+        System.out.println("bookingResponses: " + bookingResponses);
         return ResponseEntity.ok(bookingResponses);
     }
 
@@ -81,12 +85,12 @@ public class BookingController {
                 booking.getBookingId(),
                 booking.getCheckInDate(),
                 booking.getCheckOutDate(),
-                booking.getGuestFullName(),
+                booking.getBookingConfirmationCode(),
                 booking.getGuestEmail(),
                 booking.getNumOfAdults(),
                 booking.getNumOfChildren(),
                 booking.getTotalNumOfGuest(),
-                booking.getBookingConfirmationCode(),
+                booking.getGuestFullName(),
                 room);
     }
 }

@@ -46,9 +46,9 @@ const BookingsTable = ({bookingInfo, handleBookingCancellation}) => {
 				</thead>
 				<tbody className="text-center">
 					{filteredBookings.map((booking, index) => (
-						<tr key={booking.id}>
-							<td>{index + 1}</td>
-							<td>{booking.id}</td>
+						<tr key={booking.bookingId}>
+							{/* <td>{index + 1}</td>
+							<td>{booking.bookingId}</td>
 							<td>{booking.room.id}</td>
 							<td>{booking.room.roomType}</td>
 							<td>{booking.checkInDate}</td>
@@ -58,6 +58,21 @@ const BookingsTable = ({bookingInfo, handleBookingCancellation}) => {
 							<td>{booking.numOfAdults}</td>
 							<td>{booking.numOfChildren}</td>
 							<td>{booking.totalNumOfGuests}</td>
+							<td>{booking.bookingConfirmationCode}</td> */}
+
+							{/* Testing API code 
+							Missing Booking id, Room id, guest name, guest email, number of guest*/}
+							<td>{index + 1}</td>
+							<td>{booking.bookingId}</td>
+							<td>{booking.room ? booking.room.id : 'N/A'}</td>
+							<td>{booking.room ? booking.room.roomType : 'N/A'}</td>
+							<td>{booking.checkInDate}</td>
+							<td>{booking.checkOutDate}</td>
+							<td>{booking.guestFullName}</td>
+							<td>{booking.guestEmail}</td>
+							<td>{booking.numOfAdults}</td>
+							<td>{booking.numOfChildren}</td>
+							<td>{booking.totalNumOfGuest}</td>
 							<td>{booking.bookingConfirmationCode}</td>
 							<td>
 								<button

@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class BookingResponse {
     private Long bookingId;
@@ -15,17 +14,32 @@ public class BookingResponse {
     private LocalDate checkOutDate;
     private String guestFullName;
     private String guestEmail;
-    private int NumOfAdults;
-    private int NumOfChildren;
+    private int numOfAdults;
+    private int numOfChildren;
     private int totalNumOfGuest;
     private String bookingConfirmationCode;
-    private Room room;
+    private RoomResponse room;
 
-    public BookingResponse(Long bookingId, LocalDate checkInDate, LocalDate checkOutDate, String bookingConfirmationCode, String guestEmail, int numOfAdults, int numOfChildren, int totalNumOfGuest, String confirmationCode, RoomResponse room) {
+    public BookingResponse(Long bookingId,
+                           LocalDate checkInDate,
+                           LocalDate checkOutDate,
+                           String bookingConfirmationCode,
+                           String guestEmail,
+                           int numOfAdults,
+                           int numOfChildren,
+                           int totalNumOfGuest,
+                           String guestFullName,
+                           RoomResponse room) {
         this.bookingId = bookingId;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.bookingConfirmationCode = bookingConfirmationCode;
+        this.guestEmail = guestEmail;
+        this.numOfAdults = numOfAdults;
+        this.numOfChildren = numOfChildren;
+        this.totalNumOfGuest = totalNumOfGuest;
+        this.guestFullName = guestFullName;
+        this.room = room;
     }
 }
 
