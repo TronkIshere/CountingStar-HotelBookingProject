@@ -14,11 +14,10 @@ spring:
       format_sql: true
   servlet:
     multipart:
-    max-file-size: 5MB
-    max-request-size: 5MB
-    file-size-threshold: 2KB
+      max-file-size: 500KB
+      max-request-size: 500KB
 
-    security:
-      jwt:
-        secret-key: 36763979244226452948404D635166546A576D5A7134743777217A25432A462D
-        expire-length: 3600000
+security:
+  jwt:
+    secret: 36763979244226452948404D635166546A576D5A7134743777217A25432A462D
+    expirationInMils: 3600000
