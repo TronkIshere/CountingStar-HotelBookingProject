@@ -42,6 +42,7 @@ const RoomSearch = () => {
 
     const handleInputChange = (e) =>{
         const { name, value } = e.target 
+        setSearchQuery({ ...searchQuery, [name]: value })
         const checkIn = moment(searchQuery.checkInDate)
         const checkOut = moment(searchQuery.checkOutDate)
         if(checkIn.isValid() && checkOut.isValid()){
@@ -81,7 +82,7 @@ const RoomSearch = () => {
                         <Form.Label>Check-out date</Form.Label>
                         <Form.Control
                         type='date'
-                        name='checkInDate'
+                        name='checkOutDate'
                         value={searchQuery.checkOutDate}
                         onChange={handleInputChange}
                         min={moment().format("YYYY-MM-DD")}>
