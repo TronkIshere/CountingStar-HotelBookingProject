@@ -1,5 +1,5 @@
 import moment from 'moment'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { getAvailableRooms } from '../utils/ApiFunctions'
 import {Container, Col, Row, Form, Button} from 'react-bootstrap'
 import RoomTypeSelector from './RoomTypeSelector'
