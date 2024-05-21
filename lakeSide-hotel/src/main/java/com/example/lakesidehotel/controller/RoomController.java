@@ -107,13 +107,6 @@ public class RoomController {
         System.out.println("Room type:" + room.getRoomType());
         System.out.println("Room price:" + room.getRoomPrice());
         List<BookedRoom> bookings = getAllBookingByRoomId(room.getId());
-        /*List<BookingResponse> bookingInfo = bookings
-                .stream()
-                .map(booking -> new BookingResponse(
-                        booking.getBookingId(),
-                        booking.getCheckInDate(),
-                        booking.getCheckOutDate(),
-                        booking.getBookingConfirmationCode())).toList();*/
         byte[] photoBytes = null;
         Blob photoBlob = room.getPhoto();
         if (photoBlob != null) {
