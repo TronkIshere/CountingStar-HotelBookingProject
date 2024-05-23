@@ -29,7 +29,7 @@ const HotelService = () => {
 
 				<Row xs={1} md={2} lg={3} className="g-4 mt-2">
 					<Col>
-						<Card>
+						<Card className="card-body-form">
 							<Card.Body>
 								<Card.Title className="hotel-color">
 									<FaWifi /> WiFi
@@ -39,7 +39,7 @@ const HotelService = () => {
 						</Card>
 					</Col>
 					<Col>
-						<Card>
+						<Card className="card-body-form">
 							<Card.Body>
 								<Card.Title className="hotel-color">
 									<FaUtensils /> Breakfast
@@ -49,7 +49,7 @@ const HotelService = () => {
 						</Card>
 					</Col>
 					<Col>
-						<Card>
+						<Card className="card-body-form">
 							<Card.Body>
 								<Card.Title className="hotel-color">
 									<FaTshirt /> Laundry
@@ -59,7 +59,7 @@ const HotelService = () => {
 						</Card>
 					</Col>
 					<Col>
-						<Card>
+						<Card className="card-body-form">
 							<Card.Body>
 								<Card.Title className="hotel-color">
 									<FaCocktail /> Mini-bar
@@ -69,7 +69,7 @@ const HotelService = () => {
 						</Card>
 					</Col>
 					<Col>
-						<Card>
+						<Card className="card-body-form">
 							<Card.Body>
 								<Card.Title className="hotel-color">
 									<FaParking /> Parking
@@ -79,7 +79,7 @@ const HotelService = () => {
 						</Card>
 					</Col>
 					<Col>
-						<Card>
+						<Card className="card-body-form">
 							<Card.Body>
 								<Card.Title className="hotel-color">
 									<FaSnowflake /> Air conditioning

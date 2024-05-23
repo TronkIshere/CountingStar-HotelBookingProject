@@ -79,7 +79,7 @@ const FindBooking = () => {
 
 	return (
 		<>
-			<div className="container mt-5 d-flex flex-column justify-content-center align-items-center">
+			<div className="container mt-5 d-flex flex-column justify-content-center align-items-center make-footer-down">
 				<h2 className="text-center mb-4">Find My Booking</h2>
 				<form onSubmit={handleFormSubmit} className="col-md-6">
 					<div className="input-group mb-3">
@@ -100,40 +100,41 @@ const FindBooking = () => {
 				</form>
 
 				{isLoading ? (
-					<div>Finding your booking...</div>
-				) : error ? (
-					<div className="text-danger">Error: {error}</div>
-				) : bookingInfo.bookingConfirmationCode ? (
-					<div className="col-md-6 mt-4 mb-5">
-						<h3>Booking Information</h3>
-						<p className="text-success">Confirmation Code: {bookingInfo.bookingConfirmationCode}</p>
-						<p>Room Number: {bookingInfo.room.id}</p>
-						<p>Room Type: {bookingInfo.room.roomType}</p>
-						<p>
-							Check-in Date:{" "}
-							{moment(bookingInfo.checkInDate).subtract(1, "month").format("MMM Do, YYYY")}
-						</p>
-						<p>
-							Check-out Date:{" "}
-							{moment(bookingInfo.checkInDate).subtract(1, "month").format("MMM Do, YYYY")}
-						</p>
-						<p>Full Name: {bookingInfo.guestName}</p>
-						<p>Email Address: {bookingInfo.guestEmail}</p>
-						<p>Adults: {bookingInfo.numOfAdults}</p>
-						<p>Children: {bookingInfo.numOfChildren}</p>
-						<p>Total Guest: {bookingInfo.totalNumOfGuests}</p>
+                <div className="loading-message">Finding your booking...</div>
+            ) : error ? (
+                <div className="text-danger error-message">Error: {error}</div>
+            ) : bookingInfo.bookingConfirmationCode ? (
+                <div className="col-md-6 mt-4 mb-5 booking-info-container">
+                    <h3 className="booking-info-title">Booking Information</h3>
+                    <p className="text-success confirmation-code">
+                        Confirmation Code: {bookingInfo.bookingConfirmationCode}
+                    </p>
+                    <p className="booking-detail">Room Number: {bookingInfo.room.id}</p>
+                    <p className="booking-detail">Room Type: {bookingInfo.room.roomType}</p>
+                    <p className="booking-detail">
+                        Check-in Date: {moment(bookingInfo.checkInDate).subtract(1, "month").format("MMM Do, YYYY")}
+                    </p>
+                    <p className="booking-detail">
+                        Check-out Date: {moment(bookingInfo.checkInDate).subtract(1, "month").format("MMM Do, YYYY")}
+                    </p>
+                    <p className="booking-detail">Full Name: {bookingInfo.guestName}</p>
+                    <p className="booking-detail">Email Address: {bookingInfo.guestEmail}</p>
+                    <p className="booking-detail">Adults: {bookingInfo.numOfAdults}</p>
+                    <p className="booking-detail">Children: {bookingInfo.numOfChildren}</p>
+                    <p className="booking-detail">Total Guest: {bookingInfo.totalNumOfGuests}</p>
 
-						{!isDeleted && (
-							<button
-								onClick={() => handleBookingCancellation(bookingInfo.id)}
-								className="btn btn-danger">
-								Cancel Booking
-							</button>
-						)}
-					</div>
-				) : (
-					<div>find booking...</div>
-				)}
+                    {!isDeleted && (
+                        <button
+                            onClick={() => handleBookingCancellation(bookingInfo.id)}
+                            className="btn btn-danger cancel-button"
+                        >
+                            Cancel Booking
+                        </button>
+                    )}
+                </div>
+            ) : (
+                <div className="loading-message">Finding booking...</div>
+            )}
 
 				{isDeleted && <div className="alert alert-success mt-3 fade show">{successMessage}</div>}
 			</div>

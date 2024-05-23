@@ -3,11 +3,14 @@
 body {
   font-family: 'Roboto', sans-serif;
   min-height: 100vh;
-  padding-bottom: 50px;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Playfair Display', serif;
+}
+
+.make-footer-down {
+  margin-bottom: 50vh;
 }
 
 .card {
@@ -166,14 +169,31 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Footer */
-.footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: #f5f5f5;
-  height: 60px;
-  text-align: center;
+.footer-container {
+  background-color: #343a40; 
+  color: #fff; 
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.footer-container a {
+  color: #fff; 
+}
+
+.footer-container a:hover {
+  text-decoration: none; 
+}
+
+.footer-container h5 {
+  color: #fff; 
+}
+
+.footer-container .nav-link {
+  color: #fff; 
+}
+
+.footer-container .nav-link:hover {
+  color: #f8f9fa; 
 }
 
 /* Parallax */
@@ -240,6 +260,297 @@ h1, h2, h3, h4, h5, h6 {
 .card-body-form {
   height: 100%;
 }
+
+/*BookingForm*/
+.reserve-room-container {
+  font-family: 'Roboto', sans-serif;
+  padding-bottom: 2rem;
+}
+
+.reserve-room-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: rgb(34, 49, 63); /* Xanh navy đậm */
+  margin-bottom: 2rem;
+}
+
+.reserve-room-card {
+  background-color: #f8f9fa; /* Màu nền */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+.reserve-room-form-label {
+  font-weight: 600;
+  color: rgb(34, 49, 63); /* Xanh navy đậm */
+}
+
+.reserve-room-form-control {
+  border-radius: 5px;
+  border: 1px solid rgb(34, 49, 63); /* Xanh navy đậm */
+  padding: 0.75rem;
+}
+
+.reserve-room-form-control:focus {
+  border-color: rgb(212, 175, 55); /* Vàng kim loại */
+  box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+}
+
+.reserve-room-submit-btn {
+  background-color: rgb(34, 49, 63); /* Xanh navy đậm */
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.reserve-room-submit-btn:hover {
+  background-color: rgb(24, 40, 56); /* Xanh navy tối hơn */
+}
+
+.reserve-room-error-message {
+  color: red;
+  font-size: 0.875rem;
+}
+
+.reserve-room-fieldset {
+  border: 1px solid rgb(34, 49, 63); /* Xanh navy đậm */
+  border-radius: 5px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.reserve-room-legend {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  color: rgb(34, 49, 63); /* Xanh navy đậm */
+  margin-bottom: 1rem; /* Thêm margin bottom để tạo khoảng cách với các phần khác */
+  text-transform: uppercase; /* Chuyển đổi văn bản thành chữ in hoa */
+  border-bottom: 2px solid rgb(34, 49, 63); /* Đường viền dưới */
+  padding-bottom: 0.5rem; /* Padding dưới */
+}
+
+/*CheckOut*/
+.checkout-room-info {
+  padding: 20px;
+  background-color: #f9f9f9; /* Màu nền cho phần thông tin phòng */
+  border-radius: 10px; /* Bo tròn góc */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+}
+
+.checkout-room-info img {
+  width: 100%;
+  height: 200px;
+  border-radius: 10px; /* Bo tròn góc */
+  object-fit: cover; /* Căn chỉnh hình ảnh */
+  margin-bottom: 20px; /* Khoảng cách dưới hình ảnh */
+}
+
+.checkout-room-info table {
+  margin-top: 20px; /* Khoảng cách trên bảng */
+  width: 100%;
+}
+
+.check-out-background {
+  margin-top: 3rem;
+  background-image: url(./assets/images/check-out-background-img.jpg);
+  background-repeat: no-repeat;
+}
+
+/*BookingSummary*/
+.reservation-summary {
+  background-color: #f8f9fa; 
+  border: 1px solid #ddd;
+  border-radius: 8px; 
+  padding: 20px;
+}
+
+.reservation-summary-title {
+  color: #333; 
+  font-size: 1.5rem; 
+  margin-bottom: 20px; 
+}
+
+.reservation-info p {
+  font-size: 1.1rem;
+  margin-bottom: 10px; 
+}
+
+.guest-info strong {
+  font-weight: bold; 
+}
+
+.confirm-booking-button {
+  margin-top: 20px; 
+  background-color: #28a745; 
+  color: #fff; 
+  border: none;
+  border-radius: 5px; 
+  padding: 10px 20px;
+  font-size: 1.1rem; 
+  cursor: pointer;
+  transition: background-color 0.3s ease; 
+}
+
+.confirm-booking-button:hover {
+  background-color: #218838; 
+}
+
+/*Login*/
+.login-container {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.login-container h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.login-container label {
+  font-weight: bold;
+  color: #555;
+}
+
+.login-container .form-control {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.login-container .btn-hotel {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.login-container .btn-hotel:hover {
+  background-color: #0056b3;
+}
+
+.login-container .register-link {
+  margin-left: 10px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-container .register-link:hover {
+  text-decoration: underline;
+}
+
+/*Registration*/
+.registration-container {
+  max-width: 650px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.registration-container h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.registration-container label {
+  font-weight: bold;
+  color: #555;
+}
+
+.registration-container .form-control {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.registration-container .btn-hotel {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.registration-container .btn-hotel:hover {
+  background-color: #0056b3;
+}
+
+.registration-container .register-link {
+  margin-left: 10px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-container .register-link:hover {
+  text-decoration: underline;
+}
+
+/*RoomCard*/
+.room-card-info {
+  text-align: start;
+}
+
+/*FindBooking*/
+.booking-info-container {
+  background-color: #f8f9fa; 
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.booking-info-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.confirmation-code {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.booking-detail {
+  font-size: 1rem;
+  margin: 10px 0;
+}
+
+.loading-message,
+.error-message {
+  font-size: 1.25rem;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.cancel-button {
+  margin-top: 20px;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-button:hover {
+  background-color: #c82333;
+}
+
 
 /* Animations */
 .animated {

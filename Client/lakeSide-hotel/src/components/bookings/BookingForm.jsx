@@ -96,14 +96,14 @@ const BookingForm = () => {
 
     return (
         <>
-            <div className='container mb-5'>
+            <div className='reserve-room-container container mb-5'>
                 <div className='row'>
                     <div className='col-md-6'>
-                        <div className='card card-body mt-5'>
-                            <h4 className='card card-title'> Reserve Room</h4>
+                        <div className='reserve-room-card card card-body mt-5'>
+                            <h4 className='reserve-room-title card card-title'> Reserve Room</h4>
                             <Form noValidate validated={isValidated} onSubmit={handleSubmit}>
                                 <Form.Group>
-                                    <Form.Label htmlFor="guestFullName">Full Name :</Form.Label>
+                                    <Form.Label htmlFor="guestFullName" className="reserve-room-form-label">Full Name :</Form.Label>
                                     <FormControl
                                         required
                                         type="text"
@@ -112,15 +112,16 @@ const BookingForm = () => {
                                         value={booking.guestFullName || ""}
                                         placeholder="Enter your full name"
                                         onChange={handleInputChange}
+                                        className="reserve-room-form-control"
                                     />
-                                    <Form.Control.Feedback type="invalid">
+                                    <Form.Control.Feedback type="invalid" className="reserve-room-error-message">
                                         Please enter your fullname
                                     </Form.Control.Feedback>
                                 </Form.Group>
 
                                 <Form.Group>
-                                    <Form.Label htmlFor="guestEmail" className="hotel-color">
-                                        Email
+                                    <Form.Label htmlFor="guestEmail" className="reserve-room-form-label">
+                                        Email :
                                     </Form.Label>
                                     <FormControl
                                         required
@@ -130,18 +131,21 @@ const BookingForm = () => {
                                         value={booking.guestEmail || ""}
                                         placeholder="Enter your email"
                                         onChange={handleInputChange}
+                                        className="reserve-room-form-control"
                                     />
-                                    <Form.Control.Feedback type="invalid">
+                                    <Form.Control.Feedback type="invalid" className="reserve-room-error-message">
                                         Please enter a valid email address.
                                     </Form.Control.Feedback>
                                 </Form.Group>
 
                                 <fieldset style={{ border: "2px" }}>
-                                    <legend>Lodging Period</legend>
+                                    <legend className='reserve-room-legend'>
+                                        Lodging Period
+                                    </legend>
                                     <div className="row">
                                         <div className="col-6">
-                                            <Form.Label htmlFor="checkInDate" className="hotel-color">
-                                                Check-in date
+                                            <Form.Label htmlFor="checkInDate" className="reserve-room-form-label">
+                                                Check-in date :
                                             </Form.Label>
                                             <FormControl
                                                 required
@@ -151,15 +155,16 @@ const BookingForm = () => {
                                                 value={booking.checkInDate}
                                                 placeholder="check-in-date"
                                                 onChange={handleInputChange}
+                                                className="reserve-room-form-control"
                                             />
-                                            <Form.Control.Feedback type="invalid">
+                                            <Form.Control.Feedback type="invalid" className="reserve-room-error-message">
                                                 Please select a check in date.
                                             </Form.Control.Feedback>
                                         </div>
 
                                         <div className="col-6">
-                                            <Form.Label htmlFor="checkOutDate" className="hotel-color">
-                                                Check-out date
+                                            <Form.Label htmlFor="checkOutDate" className="reserve-room-form-label">
+                                                Check-out date :
                                             </Form.Label>
                                             <FormControl
                                                 required
@@ -169,8 +174,9 @@ const BookingForm = () => {
                                                 value={booking.checkOutDate}
                                                 placeholder="check-out-date"
                                                 onChange={handleInputChange}
+                                                className="reserve-room-form-control"
                                             />
-                                            <Form.Control.Feedback type="invalid">
+                                            <Form.Control.Feedback type="invalid" className="reserve-room-error-message">
                                                 Please select a check out date.
                                             </Form.Control.Feedback>
                                         </div>
@@ -179,11 +185,13 @@ const BookingForm = () => {
                                 </fieldset>
 
                                 <fieldset style={{ border: "2px" }}>
-                                    <legend>Number of Guest</legend>
+                                    <legend className='reserve-room-legend'>
+                                        Number of Guest
+                                    </legend>
                                     <div className="row">
                                         <div className="col-6">
-                                            <Form.Label htmlFor="numOfAdults" className="hotel-color">
-                                                Adults
+                                            <Form.Label htmlFor="numOfAdults" className="reserve-room-form-label">
+                                                Adults :
                                             </Form.Label>
                                             <FormControl
                                                 required
@@ -194,14 +202,15 @@ const BookingForm = () => {
                                                 min={1}
                                                 placeholder="0"
                                                 onChange={handleInputChange}
+                                                className="reserve-room-form-control"
                                             />
-                                            <Form.Control.Feedback type="invalid">
+                                            <Form.Control.Feedback type="invalid" className="reserve-room-form-label">
                                                 Please select at least 1 adult.
                                             </Form.Control.Feedback>
                                         </div>
                                         <div className="col-6">
-                                            <Form.Label htmlFor="numOfChildren" className="hotel-color">
-                                                Children
+                                            <Form.Label htmlFor="numOfChildren" className="reserve-room-form-label">
+                                                Children :
                                             </Form.Label>
                                             <FormControl
                                                 required
@@ -212,22 +221,23 @@ const BookingForm = () => {
                                                 placeholder="0"
                                                 min={0}
                                                 onChange={handleInputChange}
+                                                className="reserve-room-form-control"
                                             />
-                                            <Form.Control.Feedback type="invalid">
+                                            <Form.Control.Feedback type="invalid" className="reserve-room-error-message">
                                                 Select 0 if no children
                                             </Form.Control.Feedback>
                                         </div>
                                     </div>
                                 </fieldset>
                                 <div className="form-group mt-2 mb-2">
-                                    <button type="submit" className="btn btn-hotel">
+                                    <button type="submit" className="reserve-room-submit-btn btn">
                                         Continue
                                     </button>
                                 </div>
                             </Form>
                         </div>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-6">
                         {isSubmitted && (
                             <BookingSummary
                                 booking={booking}
