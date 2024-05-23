@@ -61,7 +61,7 @@ const RoomSearch = () => {
 
   return (
     <>
-    <Container className='mt-5 mb-5 py-5 shadow'>
+    <Container className='RoomSearch-form mt-5 mb-5 py-3 shadow'>
         <Form onSubmit={handleSearch}>
             <Row className='justify-content-center'>
                 <Col xs={12} md={3}>
@@ -93,14 +93,24 @@ const RoomSearch = () => {
                 <Col xs={12} md={3}>
                     <Form.Group>
                         <Form.Label>Room Type</Form.Label>
-                        <div className='d-flex'>
+                        <div>
                             <RoomTypeSelector
                                 handleRoomInputChange={handleInputChange}
                                 newRoom={searchQuery}
                             />
-                            <Button variant='secondary' type='submit'>Search</Button>
                         </div>
                     </Form.Group>
+                </Col>
+
+                <Col xs={12} md={2} className='search-submit'>
+                    <Button variant='secondary' type='submit'>
+                        Search
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="search-icon size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+</svg>
+
+
+                    </Button>
                 </Col>
             </Row>
         </Form>

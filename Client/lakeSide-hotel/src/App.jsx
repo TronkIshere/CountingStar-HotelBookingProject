@@ -1,4 +1,3 @@
-import './App.css'
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css"
 import "/node_modules/bootstrap/dist/js/bootstrap.min.js"
 import AddRoom from './components/room/AddRoom'
@@ -18,8 +17,8 @@ import Login from './components/auth/Login'
 import Registration from './components/auth/Registration'
 import Profile from './components/auth/Profile'
 import { AuthProvider } from './components/auth/AuthProvider'
-import { createPopper } from '@popperjs/core';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import './App.css'
 
 function App() {
   return (

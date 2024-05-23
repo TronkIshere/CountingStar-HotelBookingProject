@@ -1,114 +1,247 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@400;700&family=Lora:wght@400;700&display=swap');
+
 body {
+  font-family: 'Roboto', sans-serif;
   min-height: 100vh;
   padding-bottom: 50px;
 }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif;
+}
+
 .card {
   opacity: 0.9;
+  padding: 1rem;
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-img-top {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.card-body {
+  text-align: center;
 }
 
 /* Navigation bar definitions */
- .navbar{
+.navbar {
   padding: 0;
- }
- .navbar .navbar-nav .nav-link{
-  padding: 1em;
- }
- .navbar .navbar-nav .nav-item{
-  position: relative;
- }
+}
 
- .navbar .navbar-nav .nav-item::after{
+.navbar .navbar-nav .nav-link {
+  padding: 1em;
+}
+
+.navbar .navbar-nav .nav-item {
+  position: relative;
+}
+
+.navbar .navbar-nav .nav-item::after {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   content: '';
-  background-color:rgb(169, 77, 123) ;
+  background-color: rgb(34, 49, 63); /* Xanh navy đậm */
   width: 0;
   margin: 0 auto;
   height: 4px;
-  transition: all .5s;
- }
- .navbar .navbar-nav .nav-item:hover::after{
-  width: 100%;
- }
- .navbar-dark .navbar-nav .nav-link {
-  color: rgb(25, 24, 24);
+  transition: all 0.5s;
 }
 
+.navbar .navbar-nav .nav-item:hover::after {
+  width: 100%;
+}
+
+.navbar-dark .navbar-nav .nav-link,
 .navbar-dark .navbar-brand {
   color: rgb(25, 24, 24);
 }
 
- @media screen and (min-width: 992px){
-  .navbar{
-  padding: 0;
- }
- .navbar .navbar-nav .nav-link{
-  padding: 1em 0;
- }
- .navbar .navbar-nav .nav-item{
-  margin: 0 1em;
- }
- }
-
-  /* Hotel custom color */
- .btn-hotel{
-  background-color: rgb(169, 77, 123);
-  color: #fff;
+@media screen and (min-width: 992px) {
+  .navbar {
+    padding: 0;
   }
-  .btn-hotel:hover{
-  background-color: rgb(137, 127, 132);
+
+  .navbar .navbar-nav .nav-link {
+    padding: 1em 0;
+  }
+
+  .navbar .navbar-nav .nav-item {
+    margin: 0 1em;
+  }
+}
+
+/* Hotel custom color */
+.btn-hotel {
+  background-color: rgb(34, 49, 63); /* Xanh navy đậm */
+  color: #fff;
+}
+
+.btn-hotel:hover {
+  background-color: rgb(24, 40, 56); /* Xanh navy tối hơn */
   color: #fff;
   transition: 0.7s;
   outline-color: transparent;
-  outline-style:solid;
+  outline-style: solid;
+}
 
+.hotel-color {
+  color: rgb(212, 175, 55); /* Vàng kim loại */
+}
+
+.room-price {
+  color: rgb(212, 175, 55); /* Vàng kim loại */
+  font-family: 'Lora', serif;
+  font-size: 1.2em;
+  font-weight: 500; /* Làm nổi bật giá phòng */
+}
+
+.vertical-rule {
+  border-left: 0.5px solid black;
+  height: 100vh;
+}
+
+/* Header */
+.header {
+  position: relative;
+  background-size: cover;
+  background-image: url('./assets/images/HomePagePic1.jpg');
+  background-position: center center;
+}
+
+.header-title {
+  color: #fff;
+  font-size: 4rem;
+  align-content: center;
+  font-family: 'Playfair Display', serif;
+}
+
+/* Header overlay */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.overlay-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  justify-content: flex-start;
+}
+
+/* The header banner */
+.header-banner {
+  background-image: url('./assets/images/HomePagePic1.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  height: 80vh;
+  margin: 2rem;
+  border-radius: 2rem;
+  overflow: hidden;
+}
+
+@media only screen and (max-width: 768px) {
+  .header-banner h1 {
+    font-size: 20px;
   }
+}
 
-  .hotel-color{
-    color: rgb(169, 77, 123);
+@media only screen and (max-width: 480px) {
+  .header-banner h1 {
+    font-size: 16px;
   }
-  .room-price{
-    color:darkgoldenrod;
-    font-family: 'Courier New', Courier, monospace;
-    font-size:medium;
-  }
-  .vertical-rule{
-    border-left: '0.5px solid black';
-    height: '100vh'
-  }
+}
 
+/* Footer */
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #f5f5f5;
+  height: 60px;
+  text-align: center;
+}
 
-
+/* Parallax */
 .parallax {
-  background-image: url("./assets/images/HomePagePic2.jpg");
+  background-image: url('./assets/images/HomePagePic2.jpg');
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   height: 50vh;
-}
-
-.header {
-  position: relative;
-  height: 150px;
-  background-size: cover;
-  background-image: url("./assets/images/HomePagePic1.jpg");
-  background-position: center center;
-}
-.header-title {
-  color: #fff;
-  font-size: 4rem;
-  align-content: center;
-}
-
-.parallax {
   margin-top: 50px;
   color: white;
   text-shadow: 2px 2px black;
 }
 
+/* RoomSearch */
+.RoomSearch-form {
+  border-radius: 5rem;
+  overflow: hidden;
+}
+
+.RoomSearch-form .form-label {
+  font-weight: 500;
+}
+
+.search-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-submit button {
+  width: 100%;
+  border-radius: 1.8rem;
+}
+
+.search-icon {
+  height: 1.4rem;
+  padding-left: 0.4rem;
+}
+
+/* RoomCarousel */
+.browse-all-room-text {
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.6rem;
+  margin: 2rem;
+}
+
+.room-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5em;
+  color: rgb(34, 49, 63); /* Xanh navy đậm */
+}
+
+.room-price {
+  color: rgb(212, 175, 55); /* Vàng kim loại */
+  font-family: 'Lora', serif;
+  font-size: 1.2em;
+  font-weight: 500; /* Làm nổi bật giá phòng */
+}
+
+/*HotelService*/
+.card-body-form {
+  height: 100%;
+}
+
+/* Animations */
 .animated {
   animation-duration: 1s;
 }
@@ -168,57 +301,4 @@ body {
     opacity: 1;
     transform: none;
   }
-}
-/* Header overlay */
-  .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-  .overlay-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-     transform: translate(-50%, -50%);
-    color: #fff;
-    justify-content: flex-start;
-  }
-
-/* The header banner */
-.header-banner {
-  background-image:  url("./assets/images/HomePagePic1.jpg");
-   background-size: cover;
-  background-position: center;
-   position: relative;
-  height: 80vh;
- }
-
-.header-banner {
-  position: relative;
-  height: 500px;
-}
-
-@media only screen and (max-width: 768px) {
-  .header-banner h1 {
-    font-size: 20px;
-  }
-}
-
-@media only screen and (max-width: 480px) {
-  .header-banner h1 {
-    font-size: 16px;
-  }
-}
-
- .footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: #f5f5f5;
-  height: 60px;
-  text-align: center;
 }
