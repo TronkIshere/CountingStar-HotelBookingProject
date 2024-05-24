@@ -1,5 +1,6 @@
 package com.example.lakesidehotel.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class Room {
     private boolean isBooked = false;
 
     @Lob
+    @JsonIgnore
     private Blob photo;
 
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

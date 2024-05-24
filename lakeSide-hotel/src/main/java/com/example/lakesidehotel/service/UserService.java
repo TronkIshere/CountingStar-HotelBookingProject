@@ -47,6 +47,7 @@ public class UserService implements IUserService{
 
     @Override
     public User getUser(String email) {
+        System.out.println("==========Get user by emil is start working==========");
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
