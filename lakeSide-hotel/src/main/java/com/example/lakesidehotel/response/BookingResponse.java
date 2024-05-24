@@ -1,6 +1,7 @@
 package com.example.lakesidehotel.response;
 
 import com.example.lakesidehotel.model.Room;
+import com.example.lakesidehotel.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class BookingResponse {
     private int totalNumOfGuest;
     private String bookingConfirmationCode;
     private RoomResponse room;
+    private User user;
 
     public BookingResponse(Long bookingId,
                            LocalDate checkInDate,

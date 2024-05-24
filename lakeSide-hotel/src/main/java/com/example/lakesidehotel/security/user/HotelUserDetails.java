@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class HotelUserDetails implements UserDetails {
     private Long id;
-    private  String email;
+    private String email;
     private String password;
     private Collection<GrantedAuthority> authorities;
     public static HotelUserDetails buildUserDetails(User user){

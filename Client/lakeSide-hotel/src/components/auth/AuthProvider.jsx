@@ -13,13 +13,15 @@ export const AuthProvider = ({ children }) => {
 
 	const handleLogin = (token) => {
 		const decodedUser = jwtDecode(token)
-		localStorage.setItem("userId", decodedUser.sub)
+		localStorage.setItem("userEmail", decodedUser.sub)
+		localStorage.setItem("userId", decodedUser.userId)
 		localStorage.setItem("userRole", decodedUser.roles)
 		localStorage.setItem("token", token)
 		setUser(decodedUser)
 	}
 
 	const handleLogout = () => {
+		localStorage.removeItem("userEmail")
 		localStorage.removeItem("userId")
 		localStorage.removeItem("userRole")
 		localStorage.removeItem("token")

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin("http://localhost:5173")
 @RequiredArgsConstructor
@@ -58,14 +59,14 @@ public class BookingController {
         }
     }
 
-    @GetMapping("/user/{email}/bookings")
-    public ResponseEntity<List<BookingResponse>> getBookingsByUserEmail(@PathVariable String email) {
-        List<BookedRoom> bookings = bookingService.getBookingsByUserEmail(email);
-        List<BookingResponse> bookingResponses = new ArrayList<>();
-        for (BookedRoom booking : bookings) {
-            BookingResponse bookingResponse = getBookingResponse(booking);
-            bookingResponses.add(bookingResponse);
-        }
+    @GetMapping("/user/{userId}/bookings")
+    public ResponseEntity<List<BookingResponse>> getBookingsByUserId(@PathVariable Long userId) {
+        List<BookedRoom> bookings = bookingService.getBookingsByUserId(userId);
+        List<BookingResponse> bookingResponses = bookings.stream()
+                .map(this::getBookingResponse)
+                .collect(Collectors.toList());
+        System.out.println("This function had take data");
+        System.out.println("Data: " + bookingResponses);
         return ResponseEntity.ok(bookingResponses);
     }
 

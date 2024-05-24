@@ -26,13 +26,16 @@ const Profile = () => {
 	const [errorMessage, setErrorMessage] = useState("")
 	const navigate = useNavigate()
 
+	const userEmail = localStorage.getItem("userEmail")
 	const userId = localStorage.getItem("userId")
 	const token = localStorage.getItem("token")
+
+	console.log(userEmail)
 
 	useEffect(() => {
 		const fetchUser = async () => {
 			try {
-				const userData = await getUser(userId, token)
+				const userData = await getUser(userEmail, token)
 				setUser(userData)
 			} catch (error) {
 				console.error(error)
@@ -40,7 +43,7 @@ const Profile = () => {
 		}
 
 		fetchUser()
-	}, [userId])
+	}, [userEmail])
 
 	useEffect(() => {
 		const fetchBookings = async () => {
@@ -54,14 +57,14 @@ const Profile = () => {
 		}
 
 		fetchBookings()
-	}, [userId])
+	}, [userEmail])
 
 	const handleDeleteAccount = async () => {
 		const confirmed = window.confirm(
 			"Are you sure you want to delete your account? This action cannot be undone."
 		)
 		if (confirmed) {
-			await deleteUser(userId)
+			await deleteUser(userEmail)
 				.then((response) => {
 					setMessage(response.data)
 					localStorage.removeItem("token")
@@ -167,16 +170,14 @@ const Profile = () => {
 									<tbody>
 										{bookings.map((booking, index) => (
 											<tr key={index}>
-												<td>{booking.id}</td>
+												<td>{booking.bookingId}</td>
 												<td>{booking.room.id}</td>
 												<td>{booking.room.roomType}</td>
 												<td>
 													{moment(booking.checkInDate).subtract(1, "month").format("MMM Do, YYYY")}
 												</td>
 												<td>
-													{moment(booking.checkOutDate)
-														.subtract(1, "month")
-														.format("MMM Do, YYYY")}
+													{moment(booking.checkOutDate).subtract(1, "month").format("MMM Do, YYYY")}
 												</td>
 												<td>{booking.bookingConfirmationCode}</td>
 												<td className="text-success">On-going</td>

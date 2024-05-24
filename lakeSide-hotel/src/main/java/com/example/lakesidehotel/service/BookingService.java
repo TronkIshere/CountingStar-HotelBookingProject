@@ -31,11 +31,6 @@ public class BookingService implements IBookingService{
     }
 
     @Override
-    public List<BookedRoom> getBookingsByUserEmail(String email) {
-        return bookingRepository.findByGuestEmail(email);
-    }
-
-    @Override
     public String saveBooking(Long roomId, BookedRoom bookingRequest) {
         if (bookingRequest.getCheckOutDate().isBefore(bookingRequest.getCheckInDate())){
             throw new InvalidBookingRequestException("Check-in date must come before check-out date");
@@ -58,6 +53,10 @@ public class BookingService implements IBookingService{
                 .orElseThrow(() -> new ResourceNotFoundException("No booking found with booking code :"+confirmationCode));
     }
 
+    @Override
+    public List<BookedRoom> getBookingsByUserId(Long userId) {
+        return bookingRepository.findByUserId(userId);
+    }
 
     private boolean roomIsAvailable(BookedRoom bookingRequest, List<BookedRoom> existingBookings) {
         return existingBookings.stream()

@@ -3,7 +3,6 @@ package com.example.lakesidehotel.service;
 import com.example.lakesidehotel.model.BookedRoom;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IBookingService {
     List<BookedRoom> getAllBookings();
@@ -16,5 +15,5 @@ public interface IBookingService {
 
     List<BookedRoom> getAllBookingsByRoomId(Long roomId);
 
-    List<BookedRoom> getBookingsByUserEmail(String email);
+    List<BookedRoom> getBookingsByUserId(Long userId);
 }
