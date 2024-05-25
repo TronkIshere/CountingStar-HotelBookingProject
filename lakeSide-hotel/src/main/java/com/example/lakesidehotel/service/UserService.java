@@ -74,6 +74,6 @@ public class UserService implements IUserService{
             HotelUserDetails userDetails = (HotelUserDetails) authentication.getPrincipal();
             return userDetails.getId();
         }
-        return 4L; // Hoặc ném một ngoại lệ nếu không tìm thấy thông tin người dùng
+        return 4L; // Demo code
     }
 }
