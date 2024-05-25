@@ -25,10 +25,8 @@ public class UserController {
     @GetMapping("/{email}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> getUserByEmail(@PathVariable("email") String email){
-        System.out.println("==========getUserByEmail is working==========");
         try{
             User theUser = userService.getUser(email);
-            System.out.println("==========getUserByEmail have take the data==========");
             return ResponseEntity.ok(theUser);
         }catch (UsernameNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

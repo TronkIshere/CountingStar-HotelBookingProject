@@ -1,17 +1,21 @@
 package com.example.lakesidehotel.service;
 
+import com.example.lakesidehotel.model.BookedRoom;
 import com.example.lakesidehotel.model.Role;
 import com.example.lakesidehotel.model.User;
 import com.example.lakesidehotel.repository.RoleReponsitory;
 import com.example.lakesidehotel.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -47,8 +51,13 @@ public class UserService implements IUserService{
 
     @Override
     public User getUser(String email) {
-        System.out.println("==========Get user by emil is start working==========");
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    @Override
+    public Optional<User> getUserById(Long userId) {
+        return Optional.ofNullable(userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found")));
     }
 }

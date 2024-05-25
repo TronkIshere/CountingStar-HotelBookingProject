@@ -16,7 +16,7 @@ const BookingForm = () => {
         checkInDate: "",
         checkOutDate: "",
         numOfAdults: "",
-        numOfChildren: ""
+        numOfChildren: ""     
     })
     const [roomInfo, setRoomInfo] = useState({
         photo: "",
@@ -24,6 +24,7 @@ const BookingForm = () => {
         roomPrice: ""
     })
 
+    const userId = localStorage.getItem("userId")
     const { roomId } = useParams()
     const navigate = useNavigate()
 
@@ -84,9 +85,10 @@ const BookingForm = () => {
 
     const handleBooking = async () => {
         try {
+            console.log("check confirmation data: ", roomId , booking)
             const confirmationCode = await bookRoom(roomId, booking)
             setIsSubmitted(true)
-            navigate("/booking-success", { state: { message: confirmationCode } })
+            navigate("/booking-success", { state: { message: "Booking successful", confirmationCode } })
         } catch (error) {
             const errorMessage = error.message
             console.log(errorMessage)

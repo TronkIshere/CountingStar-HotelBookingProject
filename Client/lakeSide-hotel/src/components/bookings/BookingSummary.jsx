@@ -13,19 +13,16 @@ const BookingSummary = ({ booking, payment, isFormValid, onConfirm }) => {
     const navigate = useNavigate()
 
     const handleConfirmBooking = () => {
-        console.log("Confirm booking clicked")
         setIsProcessingPayment(true)
         setTimeout(() => {
             setIsProcessingPayment(false)
             setIsBookingConfirmed(true)
             onConfirm()
-            console.log("Booking confirmed")
         }, 3000)
     }
 
     useEffect(() => {
         if (isBookingConfirmed) {
-            console.log("isBookingConfirmed changed: true")
             navigate("/booking-success")
         }
     }, [isBookingConfirmed, navigate])
@@ -74,7 +71,7 @@ const BookingSummary = ({ booking, payment, isFormValid, onConfirm }) => {
                     ) : isBookingConfirmed ? (
                         <div className='d-flex justify-content-center align-items-center'>
                             <div className='spinner-border text-primary' role='status'>
-                                <span className='sr-only'>Loading</span>
+                                <span className='sr-only'>Loading...</span>
                             </div>
                         </div>
                     ) : null}

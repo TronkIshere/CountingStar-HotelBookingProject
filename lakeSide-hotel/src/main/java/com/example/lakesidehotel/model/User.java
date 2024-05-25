@@ -31,4 +31,12 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BookedRoom> bookedRooms = new HashSet<>();
+
+    public void addBooking(BookedRoom booking) {
+        if (bookedRooms == null) {
+            bookedRooms = new HashSet<>();
+        }
+        bookedRooms.add(booking);
+        booking.setUser(this);
+    }
 }

@@ -4,7 +4,9 @@ import com.example.lakesidehotel.exeption.InvalidBookingRequestException;
 import com.example.lakesidehotel.exeption.ResourceNotFoundException;
 import com.example.lakesidehotel.model.BookedRoom;
 import com.example.lakesidehotel.model.Room;
+import com.example.lakesidehotel.model.User;
 import com.example.lakesidehotel.repository.BookingRepository;
+import com.example.lakesidehotel.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +16,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookingService implements IBookingService{
     private final BookingRepository bookingRepository;
+    private final UserRepository userRepository;
     private final IRoomService roomService;
+    private final IUserService userService;
 
     @Override
     public List<BookedRoom> getAllBookings() {
@@ -36,6 +40,7 @@ public class BookingService implements IBookingService{
             throw new InvalidBookingRequestException("Check-in date must come before check-out date");
         }
         Room room = roomService.getRoomById(roomId).get();
+
         List<BookedRoom> existingBookings = room.getBookings();
         boolean roomIsAvailable = roomIsAvailable(bookingRequest, existingBookings);
         if (roomIsAvailable){

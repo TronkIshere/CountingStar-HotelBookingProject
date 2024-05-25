@@ -9,7 +9,7 @@ import { useLocation } from 'react-router-dom'
 const Home = () => {
   const location = useLocation()
   const message = location.state && location.state.message 
-  const currentUser = localStorage.getItem("userId")
+  const currentUser = localStorage.getItem("userEmail")
   return (
     <section>
       {message && <p className="text-warning px-5">{message}</p>}
