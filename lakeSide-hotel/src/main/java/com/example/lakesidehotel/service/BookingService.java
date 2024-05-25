@@ -20,6 +20,7 @@ public class BookingService implements IBookingService{
     private final IRoomService roomService;
     private final IUserService userService;
 
+
     @Override
     public List<BookedRoom> getAllBookings() {
         return bookingRepository.findAll();
@@ -39,12 +40,18 @@ public class BookingService implements IBookingService{
         if (bookingRequest.getCheckOutDate().isBefore(bookingRequest.getCheckInDate())){
             throw new InvalidBookingRequestException("Check-in date must come before check-out date");
         }
+
+        Long userId = userService.getCurrentUserId();
+        System.out.println("User ID: " + userId);
+
         Room room = roomService.getRoomById(roomId).get();
+        User user = userService.getUserById(userId).get();
 
         List<BookedRoom> existingBookings = room.getBookings();
         boolean roomIsAvailable = roomIsAvailable(bookingRequest, existingBookings);
         if (roomIsAvailable){
             room.addBooking(bookingRequest);
+            user.addBooking(bookingRequest);
             bookingRepository.save(bookingRequest);
         } else {
             throw new InvalidBookingRequestException("Sorry, This room is not available for the selected dates;");

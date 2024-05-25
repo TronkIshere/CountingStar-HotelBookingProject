@@ -12,4 +12,6 @@ public interface IUserService {
     User getUser(String email);
 
     Optional<User> getUserById(Long userId);
+
+    Long getCurrentUserId();
 }

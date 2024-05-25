@@ -1,18 +1,20 @@
 package com.example.lakesidehotel.service;
 
-import com.example.lakesidehotel.model.BookedRoom;
 import com.example.lakesidehotel.model.Role;
 import com.example.lakesidehotel.model.User;
 import com.example.lakesidehotel.repository.RoleReponsitory;
 import com.example.lakesidehotel.repository.UserRepository;
+import com.example.lakesidehotel.security.user.HotelUserDetails;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -59,5 +61,19 @@ public class UserService implements IUserService{
     public Optional<User> getUserById(Long userId) {
         return Optional.ofNullable(userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found")));
+    }
+
+    @Override
+    public Long getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        System.out.println("======authentication test========");
+        System.out.println(authentication.getDetails());
+
+        if (authentication != null && authentication.getPrincipal() instanceof HotelUserDetails) {
+            HotelUserDetails userDetails = (HotelUserDetails) authentication.getPrincipal();
+            return userDetails.getId();
+        }
+        return 4L; // Hoặc ném một ngoại lệ nếu không tìm thấy thông tin người dùng
     }
 }

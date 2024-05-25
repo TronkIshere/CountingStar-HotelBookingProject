@@ -239,7 +239,7 @@ const BookingForm = () => {
                             </Form>
                         </div>
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-5">
                         {isSubmitted && (
                             <BookingSummary
                                 booking={booking}
