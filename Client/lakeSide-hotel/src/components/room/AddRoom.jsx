@@ -8,7 +8,8 @@ const AddRoom = () => {
     const[newRoom, setNewRoom] = useState({
         photo : null,
         roomType : "",
-        roomPrice : ""
+        roomPrice : "",
+        roomDescription : ""
     })
 
     const[successMessage, setSuccessMessage] = useState("")
@@ -37,10 +38,10 @@ const AddRoom = () => {
     const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const success = await addRoom(newRoom.photo, newRoom.roomType, newRoom.roomPrice)
+			const success = await addRoom(newRoom.photo, newRoom.roomType, newRoom.roomPrice, newRoom.roomDescription)
 			if (success !== undefined) {
 				setSuccessMessage("A new room was  added successfully !")
-				setNewRoom({ photo: null, roomType: "", roomPrice: "" })
+				setNewRoom({ photo: null, roomType: "", roomPrice: "", roomDescription: "" })
 				setImagePreview("")
 				setErrorMessage("")
 			} else {
@@ -93,6 +94,19 @@ const AddRoom = () => {
                         id="roomPrice"
                         name="roomPrice"
                         value={newRoom.roomPrice}
+                        onChange={handleRoomInputChange}/>
+                    </div>
+
+                    <div className='mb-3'>
+                        <label htmlFor='roomDescription' className='form-label'>
+                            Room Description
+                        </label>
+                        <input
+                        required
+                        className="form-control"
+                        id="roomDescription"
+                        name="roomDescription"
+                        value={newRoom.roomDescription}
                         onChange={handleRoomInputChange}/>
                     </div>
 

@@ -4,7 +4,6 @@ import com.example.lakesidehotel.exeption.InvalidBookingRequestException;
 import com.example.lakesidehotel.exeption.ResourceNotFoundException;
 import com.example.lakesidehotel.model.BookedRoom;
 import com.example.lakesidehotel.model.Room;
-import com.example.lakesidehotel.model.User;
 import com.example.lakesidehotel.response.BookingResponse;
 import com.example.lakesidehotel.response.RoomResponse;
 import com.example.lakesidehotel.service.IBookingService;
@@ -12,8 +11,6 @@ import com.example.lakesidehotel.service.IRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -83,7 +80,8 @@ public class BookingController {
         RoomResponse room = new RoomResponse(
                 theRoom.getId(),
                 theRoom.getRoomType(),
-                theRoom.getRoomPrice());
+                theRoom.getRoomPrice(),
+                theRoom.getRoomDescription());
         return new BookingResponse(
                 booking.getBookingId(),
                 booking.getCheckInDate(),

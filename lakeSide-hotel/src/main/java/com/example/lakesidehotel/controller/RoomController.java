@@ -37,9 +37,10 @@ public class RoomController {
     public ResponseEntity<RoomResponse> addNewRoom(
             @RequestParam("photo")MultipartFile photo,
             @RequestParam("roomType")String roomType,
-            @RequestParam("roomPrice")BigDecimal roomPrice) throws SQLException, IOException {
-        Room savedRoom = roomService.addNewRoom(photo, roomType, roomPrice);
-        RoomResponse response = new RoomResponse(savedRoom.getId(), savedRoom.getRoomType(), savedRoom.getRoomPrice());
+            @RequestParam("roomPrice")BigDecimal roomPrice,
+            @RequestParam("roomDescription")String roomDescription) throws SQLException, IOException {
+        Room savedRoom = roomService.addNewRoom(photo, roomType, roomPrice, roomDescription);
+        RoomResponse response = new RoomResponse(savedRoom.getId(), savedRoom.getRoomType(), savedRoom.getRoomPrice(), savedRoom.getRoomDescription());
 
         return ResponseEntity.ok(response);
     }
@@ -53,11 +54,7 @@ public class RoomController {
     public ResponseEntity<List<RoomResponse>> getAllRooms() throws SQLException{
         List<Room> rooms = roomService.getAllRooms();
         List<RoomResponse> roomResponses = new ArrayList<>();
-        System.out.println("getAllRooms");
         for(Room room : rooms) {
-            System.out.println("Room Id:" + room.getId());
-            System.out.println("Room type:" + room.getRoomType());
-            System.out.println("Room price:" + room.getRoomPrice());
             byte[] photoBytes = roomService.getRoomPhotoByRoomId(room.getId());
             if(photoBytes != null && photoBytes.length > 0) {
                 String base64Photo = Base64.encodeBase64String(photoBytes);
@@ -66,9 +63,6 @@ public class RoomController {
                 roomResponses.add(roomResponse);
             }
         }
-        // Log the retrieved rooms
-        System.out.println("Rooms: " + rooms);
-        System.out.println("Retrieved rooms: " + roomResponses);
         return ResponseEntity.ok(roomResponses);
     }
 
@@ -102,10 +96,6 @@ public class RoomController {
     }
 
     private RoomResponse getRoomResponse(Room room) {
-        System.out.println("RoomResponse");
-        System.out.println("Room Id:" + room.getId());
-        System.out.println("Room type:" + room.getRoomType());
-        System.out.println("Room price:" + room.getRoomPrice());
         List<BookedRoom> bookings = getAllBookingByRoomId(room.getId());
         byte[] photoBytes = null;
         Blob photoBlob = room.getPhoto();

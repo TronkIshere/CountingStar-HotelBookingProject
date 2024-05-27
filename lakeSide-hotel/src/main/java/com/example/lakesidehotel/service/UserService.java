@@ -66,14 +66,10 @@ public class UserService implements IUserService{
     @Override
     public Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        System.out.println("======authentication test========");
-        System.out.println(authentication.getDetails());
-
         if (authentication != null && authentication.getPrincipal() instanceof HotelUserDetails) {
             HotelUserDetails userDetails = (HotelUserDetails) authentication.getPrincipal();
             return userDetails.getId();
         }
-        return 4L; // Demo code
+        return 4L;
     }
 }

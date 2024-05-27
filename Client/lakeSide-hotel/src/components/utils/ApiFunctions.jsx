@@ -13,11 +13,12 @@ export const getHeader = () =>{
 }
 
 /* This function adds a new room room to the database */
-export async function addRoom(photo, roomType, roomPrice) {
+export async function addRoom(photo, roomType, roomPrice, roomDescription) {
 	const formData = new FormData()
 	formData.append("photo", photo)
 	formData.append("roomType", roomType)
 	formData.append("roomPrice", roomPrice)
+	formData.append("roomDescription", roomDescription)
 
 	const response = await api.post("/rooms/add/new-room", formData)
 	if (response.status === 201) {

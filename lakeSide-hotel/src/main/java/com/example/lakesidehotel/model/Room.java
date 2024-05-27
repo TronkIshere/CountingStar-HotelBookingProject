@@ -23,6 +23,7 @@ public class Room {
     private Long id;
     private String roomType;
     private BigDecimal roomPrice;
+    private String roomDescription;
     private boolean isBooked = false;
 
     @Lob

@@ -49,10 +49,6 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtTokenForUser(authentication);
         HotelUserDetails userDetails = (HotelUserDetails) authentication.getPrincipal();
-
-        System.out.println("=========Check UserDetails=========");
-        System.out.println(userDetails);
-
         List<String> roles = userDetails.getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority).toList();
         return ResponseEntity.ok(new JwtResponse(
