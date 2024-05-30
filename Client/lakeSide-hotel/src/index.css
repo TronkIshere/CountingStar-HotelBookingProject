@@ -211,7 +211,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* RoomSearch */
 .RoomSearch-form {
-  border-radius: 5rem;
+  background-color: white;
   overflow: hidden;
 }
 
@@ -613,3 +613,48 @@ h1, h2, h3, h4, h5, h6 {
     transform: none;
   }
 }
+
+
+/*Testing new page and components*/
+.header-form {
+  padding: 20px;
+  background-color: #F2F9FF; 
+  height: 500px;
+}
+
+.header-context {
+  height: 350px;
+}
+
+.demo-header-banner {
+  margin-bottom: 20px;
+}
+
+.header-text {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.room-search-container {
+    position: absolute;
+    bottom: -50%; /* Extend beyond the bottom edge */
+    left: 50%;
+    transform: translate(-50%, 50%);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.room-search-container .form-control {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.header-banner-pic {
+  background-image: url(assets/images/New-header-banner-pic.jpg);
+  width: 100%;
+}
+
+
+

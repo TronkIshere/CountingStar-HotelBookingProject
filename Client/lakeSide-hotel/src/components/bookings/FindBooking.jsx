@@ -43,7 +43,6 @@ const FindBooking = () => {
 	const handleFormSubmit = async (event) => {
 		event.preventDefault()
 		setIsLoading(true)
-
 		try {
 			const data = await getBookingByConfirmationCode(confirmationCode)
 			setBookingInfo(data)

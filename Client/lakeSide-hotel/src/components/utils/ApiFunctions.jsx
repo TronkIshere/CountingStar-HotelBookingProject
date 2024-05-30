@@ -13,11 +13,12 @@ export const getHeader = () =>{
 }
 
 /* This function adds a new room room to the database */
-export async function addRoom(photo, roomType, roomPrice) {
+export async function addRoom(photo, roomType, roomPrice, roomDescription) {
 	const formData = new FormData()
 	formData.append("photo", photo)
 	formData.append("roomType", roomType)
 	formData.append("roomPrice", roomPrice)
+	formData.append("roomDescription", roomDescription)
 
 	const response = await api.post("/rooms/add/new-room", formData)
 	if (response.status === 201) {
@@ -80,13 +81,22 @@ export async function getRoomById(roomId){
 }
 
 /* This function saves a new booking to the databse */
-export async function bookRoom(roomId, booking) {
+export async function bookRoom(roomId, booking, userId) {
     try {
 
 		console.log(roomId)
 		console.log(booking)
+		console.log(userId)
 
-        const response = await api.post(`/bookings/room/${roomId}/booking`, booking);
+		const formData = new FormData
+		formData.append('booking', booking); 
+        formData.append('userId', userId); 
+
+        const response = await api.post(
+			`/bookings/room/${roomId}/booking?userId=${userId}`,
+			booking, 
+			{headers: getHeader()}
+		);
         console.log("API response:", response);
     } catch (error) {
         if (error.response && error.response.data) {

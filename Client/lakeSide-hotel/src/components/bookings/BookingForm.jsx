@@ -85,8 +85,8 @@ const BookingForm = () => {
 
     const handleBooking = async () => {
         try {
-            console.log("check confirmation data: ", roomId , booking)
-            const confirmationCode = await bookRoom(roomId, booking)
+            console.log("check confirmation data: ", roomId , booking, userId)
+            const confirmationCode = await bookRoom(roomId, booking, userId)
             setIsSubmitted(true)
             navigate("/booking-success", { state: { message: "Booking successful", confirmationCode } })
         } catch (error) {
