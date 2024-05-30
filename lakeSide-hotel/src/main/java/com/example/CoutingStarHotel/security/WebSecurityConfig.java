@@ -71,7 +71,7 @@ public class WebSecurityConfig {
         MethodInvokingFactoryBean methodInvokingFactoryBean = new MethodInvokingFactoryBean();
         methodInvokingFactoryBean.setTargetClass(SecurityContextHolder.class);
         methodInvokingFactoryBean.setTargetMethod("setStrategyName");
-        methodInvokingFactoryBean.setArguments(new String[]{SecurityContextHolder.MODE_INHERITABLETHREADLOCAL});
+        methodInvokingFactoryBean.setArguments(new String[]{SecurityContextHolder.MODE_GLOBAL});
         return methodInvokingFactoryBean;
     }
 }

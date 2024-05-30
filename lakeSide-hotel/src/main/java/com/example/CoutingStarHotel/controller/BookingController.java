@@ -12,6 +12,7 @@ import com.example.CoutingStarHotel.service.IRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -51,14 +52,10 @@ public class BookingController {
 
     @PostMapping("/room/{roomId}/booking")
     public ResponseEntity<?> saveBooking(@PathVariable Long roomId,
-                                         @RequestBody BookedRoom bookingRequest){
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        HotelUserDetails userDetails = (HotelUserDetails) authentication.getPrincipal();
-        System.out.println("==========================");
-        System.out.println("Current userId: " + userDetails.getId());
+                                         @RequestBody BookedRoom bookingRequest,
+                                         @RequestParam(required = false) Long userId){
         try{
-            String confirmationCode = bookingService.saveBooking(roomId, bookingRequest);
+            String confirmationCode = bookingService.saveBooking(roomId, bookingRequest, userId);
             return ResponseEntity.ok(
                     "Room booked successfully, Your booking confirmation code is :" + confirmationCode);
 

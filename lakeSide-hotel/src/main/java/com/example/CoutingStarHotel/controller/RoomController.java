@@ -74,7 +74,7 @@ public class RoomController {
 
     @PutMapping("/update/{roomId}")
     public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long roomId,
-                                                   @RequestParam(required = false)  String roomType,
+                                                   @RequestParam(required = false) String roomType,
                                                    @RequestParam(required = false) BigDecimal roomPrice,
                                                    @RequestParam(required = false) MultipartFile photo) throws SQLException, IOException {
         byte[] photoBytes = photo != null && !photo.isEmpty() ?

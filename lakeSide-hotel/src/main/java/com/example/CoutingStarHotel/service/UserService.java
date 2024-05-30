@@ -61,18 +61,4 @@ public class UserService implements IUserService{
         return Optional.ofNullable(userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found")));
     }
-
-    @Override
-    public Long getCurrentUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof HotelUserDetails) {
-            HotelUserDetails userDetails = (HotelUserDetails) authentication.getPrincipal();
-            System.out.println("==========================");
-            System.out.println("Current userId: " + userDetails.getId());
-            return userDetails.getId();
-        }
-        System.out.println("==========================");
-        System.out.println("Current userId: Null");
-        return null;
-    }
 }

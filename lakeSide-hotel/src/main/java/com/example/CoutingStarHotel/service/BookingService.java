@@ -7,9 +7,7 @@ import com.example.CoutingStarHotel.model.Room;
 import com.example.CoutingStarHotel.model.User;
 import com.example.CoutingStarHotel.repository.BookingRepository;
 import com.example.CoutingStarHotel.repository.UserRepository;
-import com.example.CoutingStarHotel.security.user.CurrentHotelUserDetails;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookingService implements IBookingService{
     private final BookingRepository bookingRepository;
-    private final UserRepository userRepository;
     private final IRoomService roomService;
     private final IUserService userService;
-    @Autowired
-    private CurrentHotelUserDetails currentHotelUserDetails;
 
 
     @Override
@@ -40,15 +35,10 @@ public class BookingService implements IBookingService{
     }
 
     @Override
-    public String saveBooking(Long roomId, BookedRoom bookingRequest) {
+    public String saveBooking(Long roomId, BookedRoom bookingRequest, Long userId) {
         if (bookingRequest.getCheckOutDate().isBefore(bookingRequest.getCheckInDate())){
             throw new InvalidBookingRequestException("Check-in date must come before check-out date");
         }
-
-        //Long userId = currentHotelUserDetails.getCurrentUserId();
-        Long userId = userService.getCurrentUserId();
-        System.out.println("User ID: " + userId);
-
         Room room = roomService.getRoomById(roomId).get();
         User user = userService.getUserById(userId).get();
 
