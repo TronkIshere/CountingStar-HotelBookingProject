@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -49,6 +50,9 @@ public class BookedRoom {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "bookedRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Rating> ratings;
 
     public void calculateTotalNumberOfGuest() {
         this.totalNumOfGuest = this.NumOfAdults + NumOfChildren;

@@ -32,6 +32,13 @@ public class Room {
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BookedRoom> bookings;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_id")
+    private Hotel hotel;
+
+    @OneToOne(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Discount discount;
+
     public Room() {
         this.bookings = new ArrayList<>();
     }
