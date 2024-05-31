@@ -1,10 +1,7 @@
 package com.example.CoutingStarHotel.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.sql.ast.tree.expression.Star;
 
 import java.util.Date;
@@ -14,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Rating {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -29,8 +27,4 @@ public class Rating {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bookedRoom_id")
     private BookedRoom bookedRoom;
-
-    public Rating() {
-
-    }
 }

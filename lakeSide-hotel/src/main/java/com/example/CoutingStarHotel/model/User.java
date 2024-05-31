@@ -46,4 +46,8 @@ public class User {
         bookedRooms.add(booking);
         booking.setUser(this);
     }
+
+    public void addHotel(Hotel hotel){
+        hotel.setUser(this);
+    }
 }
