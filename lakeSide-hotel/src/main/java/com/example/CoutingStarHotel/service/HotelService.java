@@ -21,6 +21,11 @@ public class HotelService implements IHotelService{
     }
 
     @Override
+    public List<Hotel> getAllHotelsByCity(String city){
+        return hotelRepository.findAllHotelsByCity(city);
+    }
+
+    @Override
     public String saveHotel(Long userId, Hotel hotelRequest){
         User user = userRepository.getById(userId);
         user.addHotel(hotelRequest);

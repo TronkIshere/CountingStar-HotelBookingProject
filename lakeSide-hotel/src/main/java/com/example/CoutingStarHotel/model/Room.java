@@ -53,4 +53,8 @@ public class Room {
         String bookingCode = RandomStringUtils.randomNumeric(10);
         booking.setBookingConfirmationCode(bookingCode);
     }
+
+    public void addDiscount(Discount discount){
+        discount.setRoom(this);
+    }
 }

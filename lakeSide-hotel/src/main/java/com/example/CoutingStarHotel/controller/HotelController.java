@@ -1,6 +1,8 @@
 package com.example.CoutingStarHotel.controller;
 
 import com.example.CoutingStarHotel.exeption.InvalidBookingRequestException;
+import com.example.CoutingStarHotel.exeption.InvalidDiscountRequestException;
+import com.example.CoutingStarHotel.exeption.InvalidHotelRequestException;
 import com.example.CoutingStarHotel.model.Hotel;
 import com.example.CoutingStarHotel.response.HotelResponse;
 import com.example.CoutingStarHotel.service.IHotelService;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin("http://localhost:5173")
 @RequiredArgsConstructor
@@ -34,7 +37,7 @@ public class HotelController {
         try{
             String ownerName = hotelService.saveHotel(userId, hotelRequest);
             return ResponseEntity.ok("Save hotel successfully with Owner name: " + ownerName);
-        }catch (InvalidBookingRequestException e){
+        }catch (InvalidHotelRequestException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -42,6 +45,15 @@ public class HotelController {
     @DeleteMapping("/hotel/{hotelId}/delete")
     public void deleteHotel(@PathVariable Long hotelId){
         hotelService.deleteHotel(hotelId);
+    }
+
+    @GetMapping("/hotel/{city}/hotels")
+    public ResponseEntity<List<HotelResponse>> getHotelsByCity(@PathVariable String city){
+        List<Hotel> hotels = hotelService.getAllHotelsByCity(city);
+        List<HotelResponse> hotelResponses = hotels.stream()
+                .map(this::getHotelResponse)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(hotelResponses);
     }
 
     private HotelResponse getHotelResponse(Hotel hotel){

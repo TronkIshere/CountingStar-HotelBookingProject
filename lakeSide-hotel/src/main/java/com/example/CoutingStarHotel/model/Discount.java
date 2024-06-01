@@ -16,7 +16,7 @@ public class Discount {
     @Id
     private Long id;
     private int percentDiscount;
-    private String couponDescription;
+    private String discountDescription;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
