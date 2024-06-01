@@ -9,7 +9,12 @@ import com.example.CoutingStarHotel.service.IHotelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.sql.rowset.serial.SerialBlob;
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +25,16 @@ import java.util.stream.Collectors;
 @RequestMapping("/hotels")
 public class HotelController {
     private final IHotelService hotelService;
+    @PostMapping("/hotel/{userId}/addHotel")
+    public ResponseEntity<?> addHotel(@PathVariable Long userId,
+                                      @RequestParam("hotelName") String hotelName,
+                                      @RequestParam("city") String city,
+                                      @RequestParam("hotelDescription") String hotelDescription,
+                                      @RequestParam("phoneNumber") String phoneNumber,
+                                      @RequestParam("photo") MultipartFile photo) {
+        String hotelOwnerName = hotelService.addHotel(userId, hotelName, city, hotelDescription, phoneNumber, photo);
+        return ResponseEntity.ok(hotelOwnerName);
+    }
     @GetMapping("/all-hotels")
     public ResponseEntity<List<HotelResponse>> getAllHotels(){
         List<Hotel> hotels = hotelService.getAllHotels();
@@ -31,15 +46,19 @@ public class HotelController {
         return ResponseEntity.ok(hotelResponses);
     }
 
-    @PostMapping("/hotel/{userId}/saveHotel")
-    public ResponseEntity<?> saveHotel(@PathVariable Long userId,
-                                       @RequestBody Hotel hotelRequest){
-        try{
-            String ownerName = hotelService.saveHotel(userId, hotelRequest);
-            return ResponseEntity.ok("Save hotel successfully with Owner name: " + ownerName);
-        }catch (InvalidHotelRequestException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PutMapping("/hotel/{hotelId}/updateHotel")
+    public ResponseEntity<HotelResponse> updateHotel(@PathVariable Long hotelId,
+                                                     @RequestParam(required = false) String hotelName,
+                                                     @RequestParam(required = false) String hotelDescription,
+                                                     @RequestParam(required = false) String phoneNumber,
+                                                     @RequestParam(required = false) MultipartFile photo) throws IOException, SQLException {
+        byte[] photoBytes = photo != null && !photo.isEmpty() ?
+                photo.getBytes() : hotelService.getHotelPhotobyHotelId(hotelId);
+        Blob photoBlob = photoBytes != null && photoBytes.length >0 ? new SerialBlob(photoBytes): null;
+        Hotel theHotel = hotelService.updateHotel(hotelId, hotelName, hotelDescription, phoneNumber, photoBytes);
+        theHotel.setPhoto(photoBlob);
+        HotelResponse hotelResponse = getHotelResponse(theHotel);
+        return ResponseEntity.ok(hotelResponse);
     }
 
     @DeleteMapping("/hotel/{hotelId}/delete")
