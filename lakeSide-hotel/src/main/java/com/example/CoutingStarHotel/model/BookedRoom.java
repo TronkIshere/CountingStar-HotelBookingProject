@@ -51,8 +51,8 @@ public class BookedRoom {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "bookedRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Rating> ratings;
+    @OneToOne(mappedBy = "bookedRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Rating ratings;
 
     public void calculateTotalNumberOfGuest() {
         this.totalNumOfGuest = this.NumOfAdults + NumOfChildren;
@@ -78,5 +78,9 @@ public class BookedRoom {
 
     public void setRoom(Room room) {
         this.room = room;
+    }
+
+    public void addComment(Rating rating) {
+        rating.setBookedRoom(this);
     }
 }

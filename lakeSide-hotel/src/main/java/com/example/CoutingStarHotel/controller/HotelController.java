@@ -31,7 +31,7 @@ public class HotelController {
                                       @RequestParam("city") String city,
                                       @RequestParam("hotelDescription") String hotelDescription,
                                       @RequestParam("phoneNumber") String phoneNumber,
-                                      @RequestParam("photo") MultipartFile photo) {
+                                      @RequestParam("photo") MultipartFile photo) throws SQLException, IOException {
         String hotelOwnerName = hotelService.addHotel(userId, hotelName, city, hotelDescription, phoneNumber, photo);
         return ResponseEntity.ok(hotelOwnerName);
     }

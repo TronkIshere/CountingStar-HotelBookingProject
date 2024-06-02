@@ -50,4 +50,8 @@ public class User {
     public void addHotel(Hotel hotel){
         hotel.setUser(this);
     }
+
+    public void addComment(Rating rating) {
+        rating.setUser(this);
+    }
 }
