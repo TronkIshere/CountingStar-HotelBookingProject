@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -32,11 +33,25 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BookedRoom> bookedRooms = new HashSet<>();
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Hotel hotel;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rating> rating;
+
     public void addBooking(BookedRoom booking) {
         if (bookedRooms == null) {
             bookedRooms = new HashSet<>();
         }
         bookedRooms.add(booking);
         booking.setUser(this);
+    }
+
+    public void addHotel(Hotel hotel){
+        hotel.setUser(this);
+    }
+
+    public void addComment(Rating rating) {
+        rating.setUser(this);
     }
 }
