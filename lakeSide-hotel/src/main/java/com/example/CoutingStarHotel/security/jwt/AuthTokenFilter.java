@@ -24,6 +24,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private HotelUserDetailsService userDetailsService;
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
+
+    /*Nếu nó chạy thì nó chạy, đừng đụng vào nó*/
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,

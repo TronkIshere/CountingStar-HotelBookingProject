@@ -46,6 +46,15 @@ public class HotelController {
         return ResponseEntity.ok(hotelResponses);
     }
 
+    @GetMapping("/hotel/{city}/hotels")
+    public ResponseEntity<List<HotelResponse>> getHotelsByCity(@PathVariable String city){
+        List<Hotel> hotels = hotelService.getAllHotelsByCity(city);
+        List<HotelResponse> hotelResponses = hotels.stream()
+                .map(this::getHotelResponse)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(hotelResponses);
+    }
+
     @PutMapping("/hotel/{hotelId}/updateHotel")
     public ResponseEntity<HotelResponse> updateHotel(@PathVariable Long hotelId,
                                                      @RequestParam(required = false) String hotelName,
@@ -64,15 +73,6 @@ public class HotelController {
     @DeleteMapping("/hotel/{hotelId}/delete")
     public void deleteHotel(@PathVariable Long hotelId){
         hotelService.deleteHotel(hotelId);
-    }
-
-    @GetMapping("/hotel/{city}/hotels")
-    public ResponseEntity<List<HotelResponse>> getHotelsByCity(@PathVariable String city){
-        List<Hotel> hotels = hotelService.getAllHotelsByCity(city);
-        List<HotelResponse> hotelResponses = hotels.stream()
-                .map(this::getHotelResponse)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(hotelResponses);
     }
 
     private HotelResponse getHotelResponse(Hotel hotel){
