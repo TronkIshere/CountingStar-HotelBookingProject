@@ -1,0 +1,125 @@
+:root{
+    --color-one: #F2F9FF;
+    --color-two: white;
+    --color-three: #5F9AD4;
+    --color-text: #6E6E6E;
+    box-sizing: border-box;
+}
+
+* {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 62.5%;
+    line-height: 1.5;
+}
+
+/* slider switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 3rem;
+    height: 1.7rem;
+  }
+  
+  .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 1.3rem;
+    width: 1.3rem;
+    left: 0.2rem;
+    bottom: 0.2rem;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(1.3rem);
+    -ms-transform: translateX(1.3rem);
+    transform: translateX(1.3rem);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+body {
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+/* Text size */
+
+.text-lg {
+    font-size: 6.08rem;
+    line-height: 1.1;
+    font-weight: 400;
+    padding-bottom: 4rem;
+}
+
+.text-md {
+    font-size: 4.96rem;
+    line-height: 1.5;
+    padding-bottom: 4rem;
+    font-weight: 700;
+}
+
+.text-sm {
+    font-size: 2.6rem;
+    font-weight: 500;
+    padding-bottom: 4rem;
+}
+
+.text {
+    font-size: 1.6rem;
+    color: var(--color-text);
+    padding-bottom: 3rem;
+}
+
+.btn {
+    text-align: center;
+    background-color: #6DB3F9;
+    padding: 1.6rem 4.6rem;
+    border-radius: 1rem;
+    color: var(--color-two);
+    font-size: 1.6rem;
+    color: #fff;
+}
+
+.p-none {
+    padding: 0;
+}
