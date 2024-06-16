@@ -1,0 +1,34 @@
+.nav {
+    justify-content: space-between;
+    align-items: center;
+    height: 11.6rem   ;
+}
+
+.menu ,
+.menu ul {
+    display: flex;
+    margin: 0;
+}
+
+.menu {
+    justify-content: space-between;
+    align-items: center;
+    width: 76.6rem;
+    max-width: 76.6rem;
+}
+
+.menu ul {
+    align-items: center;
+}
+
+.menu__item {
+    padding: 1.8rem;
+}
+
+.menu__btn {
+    text-align: center;
+    background-color: #6DB3F9;
+    padding: 1.6rem 4.6rem;
+    border-radius: 1rem;
+    color: var(--color-two);
+}
