@@ -13,8 +13,10 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
-const Header = ({type}) => {
+const Header = ({ type }) => {
+  const [destination, setDestination] = useState("");
   const [openDate, setOpenDate] = useState(false);
   const [date, setDate] = useState([
     {
@@ -27,9 +29,10 @@ const Header = ({type}) => {
   const [options, setOptions] = useState({
     adult: 1,
     children: 0,
-    room: 1,
   });
 
+  const navigate = useNavigate()
+  
   const handleOption = (name, operation) => {
     setOptions((prev) => {
       return {
@@ -39,9 +42,17 @@ const Header = ({type}) => {
     });
   };
 
+  const handleSearch = ()=>{
+    navigate("/hotels", {state:{destination,date,options}})
+  }
+
   return (
     <div className="header">
-      <div className={type === "list" ? "headerContainer listMode" : "headerContainer"}>
+      <div
+        className={
+          type === "list" ? "headerContainer listMode" : "headerContainer"
+        }
+      >
         <div className="headerList">
           <div className="headerListItem active">
             <FontAwesomeIcon icon={faBed} />
@@ -64,16 +75,17 @@ const Header = ({type}) => {
             <span>Aiport taxis</span>
           </div>
         </div>
-
-        <h1 className="headerTitle">Nghỉ dưỡng đẳng cấp, trải nghiệm hoàn hảo.</h1>
-        <p className="headerDesc">
-          Muốn nhận ưu đãi từ chuyến đi của bạn – Hãy đăng ký tài khoản để nhận
-          ưu đãi giảm giá 10% cho mọi chuyến đi
-        </p>
-        <button className="headerBtn">Đăng nhập / Đăng ký</button>
-
-        { type !== "list" && 
+        {type !== "list" && (
           <>
+            <h1 className="headerTitle">
+              Nghỉ dưỡng đẳng cấp, trải nghiệm hoàn hảo.
+            </h1>
+            <p className="headerDesc">
+              Muốn nhận ưu đãi từ chuyến đi của bạn – Hãy đăng ký tài khoản để
+              nhận ưu đãi giảm giá 10% cho mọi chuyến đi
+            </p>
+            <button className="headerBtn">Đăng nhập / Đăng ký</button>
+
             <div className="headerSearch">
               <div className="headerSearchItem">
                 <FontAwesomeIcon icon={faBed} className="headerIcon" />
@@ -81,6 +93,7 @@ const Header = ({type}) => {
                   type="text"
                   placeholder="Bạn muốn đi đâu?"
                   className="headerSearchInput"
+                  onChange={e=>setDestination(e.target.value)}
                 />
               </div>
               <div className="headerSearchItem">
@@ -109,7 +122,7 @@ const Header = ({type}) => {
                   onClick={() => setOpenOptions(!openOptions)}
                   className="headerSearchText"
                 >
-                  {`${options.adult} người lớn | ${options.children} trẻ em | ${options.room} phòng`}
+                  {`${options.adult} người lớn | ${options.children} trẻ em`}
                 </span>
                 {openOptions && (
                   <div className="options">
@@ -155,36 +168,15 @@ const Header = ({type}) => {
                         </button>
                       </div>
                     </div>
-                    <div className="optionItem">
-                      <span className="OptionText">Phòng</span>
-                      <div className="optionCounter">
-                        <button
-                          className="optionCounterButton"
-                          disabled={options.room <= 1}
-                          onClick={() => handleOption("room", "d")}
-                        >
-                          -
-                        </button>
-                        <span className="optionCounterNumber">
-                          {options.room}
-                        </span>
-                        <button
-                          className="optionCounterButton"
-                          onClick={() => handleOption("room", "i")}
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
                   </div>
                 )}
               </div>
               <div className="headerSearchItem">
-                <button className="headerBtn">Tìm kiếm</button>
+                <button className="headerBtn" onClick={handleSearch}>Tìm kiếm</button>
               </div>
             </div>
           </>
-        }
+        )}
       </div>
     </div>
   );
