@@ -1,14 +1,14 @@
 import React from 'react'
 import './navbar.css'
 
-const Navbar = () => {
+const Navbar = ({onLoginClick}) => {
   return (
     <div className='navbar'>
         <div className='navContainer'>
-            <span className="logo">CoutingStar-Hotel</span>
+            <span className="logo">CoutingStar</span>
             <div className="navItems">
-                <button className="navButton">Register</button>
-                <button className="navButton">login</button>
+                <button className="navButton">Đăng ký</button>
+                <button onClick={onLoginClick} className="navButton">Đăng nhập</button>
             </div>
         </div>
     </div>

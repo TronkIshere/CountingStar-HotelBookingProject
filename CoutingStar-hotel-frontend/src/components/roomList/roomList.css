@@ -1,0 +1,47 @@
+.roomListContainer {
+    padding: 20px;
+}
+
+.roomListTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.roomListTable th, .roomListTable td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+.roomListTable th {
+    background-color: #0071c2;
+    color: white;
+}
+
+.roomListTable td {
+    background-color: #fff;
+}
+
+.bookButton {
+    padding: 10px 20px;
+    background-color: #0071c2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+.bookButton:hover {
+    background-color: #005fa3;
+}
+
+.noCreditCard {
+    color: green;
+    font-size: 12px;
+    text-align: center;
+}
