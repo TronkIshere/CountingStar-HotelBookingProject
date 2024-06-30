@@ -1,7 +1,7 @@
 import React from "react";
 import "./register.css";
 
-const MailList = () => {
+const Register = () => {
   return (
     <div className="mail">
       <h1 className="mailTitle">Save time, save money!</h1>
@@ -18,4 +18,4 @@ const MailList = () => {
   );
 };
 
-export default MailList;
+export default Register;

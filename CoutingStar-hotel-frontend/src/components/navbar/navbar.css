@@ -1,5 +1,5 @@
 .navbar{
-    height: 50px;
+    height: 70px;
     background-color: #003580;
     display: flex;
     justify-content: center;
@@ -16,12 +16,32 @@
 
 .logo{
     font-weight: 500;
+    font-size: 1.4rem;
 }
 
 .navButton{
+    font-size: 1rem;
     margin-left: 20px;
     border: none;
+    border-radius: 4px;
     padding: 5px 10px;
     cursor: pointer;
     color: #003580;
 }
+
+.postHotelButton {
+    border: none;
+    background-color: #003580;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .postHotelButton:hover {
+    background-color: #0d2a50;
+    transform: scale(1.05);
+  }
+

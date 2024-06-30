@@ -6,6 +6,8 @@ import Hotel from "./pages/hotel/Hotel";
 import Navbar from "./components/navbar/Navbar";
 import { useState } from "react";
 import Login from "./components/login/Login";
+import UserProfile from "./pages/userProfile/UserProfile";
+import Footer from "./components/footer/Footer";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -26,7 +28,9 @@ function App() {
         <Route path="/hotels" element={<List />} />
         <Route path="/hotels/:id" element={<List/>}/>
         <Route path="/hotelpage" element={<Hotel/>}/>
+        <Route path="/userProfile" element={<UserProfile/>}/>
       </Routes>
+      <Footer/>
     </BrowserRouter>
   );
 }

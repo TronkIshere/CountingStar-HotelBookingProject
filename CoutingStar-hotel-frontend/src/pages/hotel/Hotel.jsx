@@ -1,8 +1,6 @@
 import "./hotel.css";
 import Navbar from "../../components/navbar/Navbar";
 import Header from "../../components/header/Header";
-import MailList from "../../components/register/Register";
-import Footer from "../../components/footer/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleArrowLeft,
@@ -12,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import RoomList from "../../components/roomList/RoomList";
+import Register from "../../components/register/Register";
 
 const Hotel = () => {
   const [slideNumber, setSlideNumber] = useState(0);
@@ -135,8 +134,7 @@ const Hotel = () => {
           </div>
           <RoomList />
         </div>
-        <MailList />
-        <Footer />
+        <Register />
       </div>
     </div>
   );
