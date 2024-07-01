@@ -7,14 +7,17 @@ import {
   faCircleArrowRight,
   faCircleXmark,
   faLocationDot,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import RoomList from "../../components/roomList/RoomList";
 import Register from "../../components/register/Register";
+import Rating from "../../components/rating/Rating";
 
 const Hotel = () => {
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
+  const [ratingOpen, setRatingOpen] = useState(false);
 
   const photos = [
     {
@@ -80,6 +83,7 @@ const Hotel = () => {
             />
           </div>
         )}
+        {ratingOpen && <Rating onClose={() => setRatingOpen(false)} />}
         <div className="hotelWrapper">
           <button className="bookNow">Hãy đặt ngay!</button>
           <h1 className="hotelTitle">Khách Sạn Mỹ Hạnh</h1>
@@ -88,6 +92,13 @@ const Hotel = () => {
             <span>688/91 Quang Trung, Gò Vấp</span>
           </div>
           <span className="hotelDistance">Tại thành phố - Hồ Chí Minh</span>
+          <span className="hotelRating">
+            <p>
+              Đây là khách sạn với số sao là <FontAwesomeIcon icon={faStar} />{" "}
+              5/5
+            </p>
+            <p className="viewHotelRating" onClick={() => setRatingOpen(true)}>Xem đánh giá</p>
+          </span>
           <span className="hotelPriceHighlight">
             Hãy đặt ngay để tận hưởng khoảng khắc tuyệt vời tại khách sạn
           </span>

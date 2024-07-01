@@ -13,6 +13,22 @@
     gap: 10px;
     position: relative;
   }
+
+  .hotelRating {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .hotelRating > p {
+    margin: 0;
+  }
+  
+  .hotelRating .viewHotelRating {
+    color: #0071c2;
+    cursor: pointer;
+    text-decoration: underline;
+  }
   
   .bookNow {
     position: absolute;
