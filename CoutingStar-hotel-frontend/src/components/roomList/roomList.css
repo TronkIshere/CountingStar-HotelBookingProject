@@ -1,0 +1,103 @@
+.container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .content {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+  }
+  
+  .profile {
+    width: 30%;
+    padding: 20px;
+    background-color: whitesmoke;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-right: 20px;
+  }
+  
+  .profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+  }
+  
+  .profile-info {
+    text-align: left;
+  }
+  
+  .profile-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .profile-row strong {
+    width: 30%;
+  }
+  
+  .profile-row span, .profile-row ul {
+    width: 70%;
+  }
+  
+  .booking-history {
+    width: 70%;
+    padding: 20px;
+    background-color: whitesmoke;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    max-height: 600px;
+  }
+  
+  .roomListTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .roomListTable th, .roomListTable td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .roomListTable th {
+    background-color: #0071c2;
+    color: white;
+  }
+  
+  .roomListTable td {
+    background-color: #fff;
+  }
+  
+  .bookButton {
+    padding: 10px 20px;
+    background-color: #0071c2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 20px;
+  }
+  
+  .bookButton:hover {
+    background-color: #005fa3;
+  }
+  
+  .text-danger {
+    color: #dc3545;
+  }
+  
+  .text-success {
+    color: #28a745;
+  }
+  
