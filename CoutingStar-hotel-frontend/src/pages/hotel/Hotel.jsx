@@ -7,10 +7,11 @@ import {
   faCircleArrowRight,
   faCircleXmark,
   faLocationDot,
+  faPencil,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import RoomList from "../../components/roomList/RoomList";
+import RoomList from "../../components/room/roomList/RoomList";
 import Register from "../../components/register/Register";
 import Rating from "../../components/rating/Rating";
 
@@ -97,7 +98,9 @@ const Hotel = () => {
               Đây là khách sạn với số sao là <FontAwesomeIcon icon={faStar} />{" "}
               5/5
             </p>
-            <p className="viewHotelRating" onClick={() => setRatingOpen(true)}>Xem đánh giá</p>
+            <p className="viewHotelRating" onClick={() => setRatingOpen(true)}>
+              Xem đánh giá
+            </p>
           </span>
           <span className="hotelPriceHighlight">
             Hãy đặt ngay để tận hưởng khoảng khắc tuyệt vời tại khách sạn

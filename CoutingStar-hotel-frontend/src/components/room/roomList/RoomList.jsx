@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./roomList.css";
-import BookingForm from "../bookingForm/BookingForm";
+import BookingForm from "../../bookingForm/BookingForm";
 
 const RoomList = () => {
   const [selectedRoom, setSelectedRoom] = useState(null);
@@ -57,7 +57,6 @@ const RoomList = () => {
             <th>Loại phòng</th>
             <th>Miêu tả</th>
             <th>Giá tiền</th>
-            <th>Miêu tả phòng</th>
             <th>Đánh giá</th>
             <th></th>
           </tr>
@@ -68,7 +67,6 @@ const RoomList = () => {
               <td>{room.type}</td>
               <td>{room.description}</td>
               <td>{room.price}</td>
-              <td>{room.details}</td>
               <td>{room.rating}</td>
               <td>
                 <button

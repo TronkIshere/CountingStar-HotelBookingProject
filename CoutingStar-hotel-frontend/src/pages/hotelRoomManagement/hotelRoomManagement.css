@@ -1,0 +1,73 @@
+.roomListContainer {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .openModalButton {
+    padding: 10px 20px;
+    background-color: #0071c2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  
+  .openModalButton:hover {
+    background-color: #005fa3;
+  }
+  
+  .roomListTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .roomListTable th,
+  .roomListTable td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .roomListTable th {
+    background-color: #0071c2;
+    color: white;
+  }
+  
+  .roomListTable td {
+    background-color: #fff;
+  }
+  
+
+  .addButton,
+  .editButton,
+  .deleteButton {
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 5px;
+  }
+  
+  .editButton {
+    background-color: #0071c2;
+  }
+  
+  .editButton:hover {
+    background-color: #005fa3;
+  }
+  
+  .deleteButton {
+    background-color: #d9534f;
+  }
+  
+  .deleteButton:hover {
+    background-color: #c9302c;
+  }
+  

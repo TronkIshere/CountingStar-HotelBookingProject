@@ -8,7 +8,9 @@ import { useState } from "react";
 import Login from "./components/login/Login";
 import UserProfile from "./pages/userProfile/UserProfile";
 import Footer from "./components/footer/Footer";
-import HotelRegistration from "./components/registerHotelOwner/HotelRegistration";
+import HotelRegistration from "./pages/hotelRegistration/HotelRegistration";
+import HotelInformation from "./pages/hotelInformation/HotelInformation";
+import HotelRoomManagement from "./pages/hotelRoomManagement/HotelRoomManagement";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -31,6 +33,8 @@ function App() {
         <Route path="/hotelpage" element={<Hotel/>}/>
         <Route path="/userProfile" element={<UserProfile/>}/>
         <Route path="/hotelRegistration" element={<HotelRegistration/>}/>
+        <Route path="/HotelInfomation" element={<HotelInformation/>}/>
+        <Route path="/HotelRoomManagement" element={<HotelRoomManagement/>}/>
       </Routes>
       <Footer/>
     </BrowserRouter>
