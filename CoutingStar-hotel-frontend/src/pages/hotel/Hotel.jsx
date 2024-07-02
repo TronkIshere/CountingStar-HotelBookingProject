@@ -8,6 +8,7 @@ import {
   faCircleXmark,
   faLocationDot,
   faPencil,
+  faPhone,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
@@ -88,9 +89,11 @@ const Hotel = () => {
         <div className="hotelWrapper">
           <button className="bookNow">Hãy đặt ngay!</button>
           <h1 className="hotelTitle">Khách Sạn Mỹ Hạnh</h1>
-          <div className="hotelAddress">
+          <div className="hotelAddressAndContact">
             <FontAwesomeIcon icon={faLocationDot} />
             <span>688/91 Quang Trung, Gò Vấp</span>
+            <FontAwesomeIcon icon={faPhone}/>
+            <span>0359256696</span>
           </div>
           <span className="hotelDistance">Tại thành phố - Hồ Chí Minh</span>
           <span className="hotelRating">

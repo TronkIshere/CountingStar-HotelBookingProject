@@ -47,8 +47,8 @@
     font-size: 24px;
   }
   
-  .hotelAddress {
-    font-size: 12px;
+  .hotelAddressAndContact {
+    font-size: 14px;
     display: flex;
     align-items: center;
     gap: 10px;

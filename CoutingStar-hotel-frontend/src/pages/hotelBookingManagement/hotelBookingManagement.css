@@ -1,0 +1,42 @@
+.bookingListContainer {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .bookingListTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .bookingListTable th, .bookingListTable td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .bookingListTable th {
+    background-color: #0071c2;
+    color: white;
+  }
+  
+  .bookingListTable td {
+    background-color: #fff;
+  }
+  
+  .deleteButton {
+    padding: 10px 20px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .deleteButton:hover {
+    background-color: #c82333;
+  }
+  

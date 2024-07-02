@@ -11,6 +11,7 @@ import Footer from "./components/footer/Footer";
 import HotelRegistration from "./pages/hotelRegistration/HotelRegistration";
 import HotelInformation from "./pages/hotelInformation/HotelInformation";
 import HotelRoomManagement from "./pages/hotelRoomManagement/HotelRoomManagement";
+import HotelBookingManagement from "./pages/hotelBookingManagement/HotelBookingManagement";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -35,6 +36,7 @@ function App() {
         <Route path="/hotelRegistration" element={<HotelRegistration/>}/>
         <Route path="/HotelInfomation" element={<HotelInformation/>}/>
         <Route path="/HotelRoomManagement" element={<HotelRoomManagement/>}/>
+        <Route path="/HotelBookingManagement" element={<HotelBookingManagement/>}/>
       </Routes>
       <Footer/>
     </BrowserRouter>
