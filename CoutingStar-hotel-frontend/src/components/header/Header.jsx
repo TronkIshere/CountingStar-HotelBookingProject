@@ -5,6 +5,7 @@ import {
   faBed,
   faCalendar,
   faCar,
+  faLocation,
   faPerson,
   faPlane,
   faTaxi,
@@ -31,8 +32,8 @@ const Header = ({ type }) => {
     children: 0,
   });
 
-  const navigate = useNavigate()
-  
+  const navigate = useNavigate();
+
   const handleOption = (name, operation) => {
     setOptions((prev) => {
       return {
@@ -42,9 +43,9 @@ const Header = ({ type }) => {
     });
   };
 
-  const handleSearch = ()=>{
-    navigate("/hotels", {state:{destination,date,options}})
-  }
+  const handleSearch = () => {
+    navigate("/hotels", { state: { destination, date, options } });
+  };
 
   return (
     <div className="header">
@@ -72,7 +73,7 @@ const Header = ({ type }) => {
           </div>
           <div className="headerListItem">
             <FontAwesomeIcon icon={faTaxi} />
-            <span>Aiport taxis</span>
+            <span>Airport taxis</span>
           </div>
         </div>
         {type !== "list" && (
@@ -89,12 +90,30 @@ const Header = ({ type }) => {
             <div className="headerSearch">
               <div className="headerSearchItem">
                 <FontAwesomeIcon icon={faBed} className="headerIcon" />
-                <input
-                  type="text"
-                  placeholder="Bạn muốn đi đâu?"
-                  className="headerSearchInput"
-                  onChange={e=>setDestination(e.target.value)}
-                />
+                <select
+                  className="headerSearchSelect"
+                  value={destination}
+                  onChange={(e) => setDestination(e.target.value)}
+                >
+                  <option value="" disabled>
+                    Bạn muốn đi đâu?
+                  </option>
+                  <option value="Ho Chi Minh">
+                    Hồ Chí Minh
+                  </option>
+                  <option value="Ha Noi">
+                    Hà Nội
+                  </option>
+                  <option value="Da Lat">
+                    Đà Lạt
+                  </option>
+                  <option value="Nha Trang">
+                    Nha Trang
+                  </option>
+                  <option value="Vung Tau">
+                    Vũng Tàu
+                  </option>
+                </select>
               </div>
               <div className="headerSearchItem">
                 <FontAwesomeIcon icon={faCalendar} className="headerIcon" />
@@ -127,7 +146,7 @@ const Header = ({ type }) => {
                 {openOptions && (
                   <div className="options">
                     <div className="optionItem">
-                      <span className="OptionText">Người lớn</span>
+                      <span className="optionText">Người lớn</span>
                       <div className="optionCounter">
                         <button
                           className="optionCounterButton"
@@ -148,7 +167,7 @@ const Header = ({ type }) => {
                       </div>
                     </div>
                     <div className="optionItem">
-                      <span className="OptionText">Trẻ em</span>
+                      <span className="optionText">Trẻ em</span>
                       <div className="optionCounter">
                         <button
                           className="optionCounterButton"
@@ -172,7 +191,9 @@ const Header = ({ type }) => {
                 )}
               </div>
               <div className="headerSearchItem">
-                <button className="headerBtn" onClick={handleSearch}>Tìm kiếm</button>
+                <button className="headerBtn" onClick={handleSearch}>
+                  Tìm kiếm
+                </button>
               </div>
             </div>
           </>
