@@ -7,6 +7,7 @@ import "react-date-range/dist/theme/default.css";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-scroll";
 
 const Header = ({ type }) => {
   const [destination, setDestination] = useState("");
@@ -68,7 +69,9 @@ const Header = ({ type }) => {
           <>
             <h1 className="headerTitle">Nghỉ dưỡng đẳng cấp, trải nghiệm hoàn hảo.</h1>
             <p className="headerDesc">Muốn nhận ưu đãi từ chuyến đi của bạn – Hãy đăng ký tài khoản để nhận ưu đãi giảm giá 10% cho mọi chuyến đi</p>
-            <button className="headerBtn">Đăng nhập / Đăng ký</button>
+            <Link to="register" smooth={true} duration={500} className="headerBtn">
+              Đăng ký ngay hôm nay!
+            </Link>
 
             <div className="headerSearch">
               <div className="headerSearchItem">

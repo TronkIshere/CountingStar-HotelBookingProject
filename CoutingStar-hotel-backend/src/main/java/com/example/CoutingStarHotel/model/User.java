@@ -22,6 +22,7 @@ public class User {
     private String lastName;
     private String email;
     private String password;
+    private String phoneNumber;
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = {CascadeType.PERSIST,
                     CascadeType.MERGE, CascadeType.DETACH})

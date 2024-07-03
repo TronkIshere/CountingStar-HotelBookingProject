@@ -26,11 +26,12 @@ public class UserService implements IUserService{
     private final RoleReponsitory roleReponsitory;
     @Override
     public User registerUser(User user) {
+        System.out.println("RegisterUser is running");
+        System.out.println(user.getPassword() + " " + user.getPhoneNumber());
         if (userRepository.existsByEmail(user.getEmail())){
             throw new UsernameNotFoundException(user.getEmail() + " already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        System.out.println(user.getPassword());
         Role userRole = roleReponsitory.findByName("ROLE_USER").get();
         user.setRoles(Collections.singletonList(userRole));
         return userRepository.save(user);
