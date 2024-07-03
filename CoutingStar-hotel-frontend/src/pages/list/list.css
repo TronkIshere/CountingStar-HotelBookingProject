@@ -34,10 +34,12 @@
     margin-bottom: 10px;
 }
 
+.lsItem>select,
 .lsItem>label{
     font-size: 12px;
 }
 
+.lsItem>select,
 .lsItem>input{
     height: 30px;
     border: none;

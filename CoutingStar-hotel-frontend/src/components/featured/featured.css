@@ -5,6 +5,7 @@
   justify-content: space-between;
   gap: 20px;
   z-index: 1;
+  cursor: pointer;
 }
 
 .top {

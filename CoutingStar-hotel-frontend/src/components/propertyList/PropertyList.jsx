@@ -12,36 +12,36 @@ const PropertyList = () => {
       <div className="pListItem">
         <img src={phong1} alt="" className="pListImg" />
         <div className="pListTitles">
-          <h1>Hotels</h1>
-          <h2>233 hotels</h2>
+          <h1>Nhanh chóng</h1>
+          <h2>Chỉ với vài click!</h2>
         </div>
       </div>
       <div className="pListItem">
         <img src={phong2} alt="" className="pListImg" />
         <div className="pListTitles">
-          <h1>Hotels</h1>
-          <h2>233 hotels</h2>
+          <h1>Tiện lợi</h1>
+          <h2>Không thủ tục rườm rà</h2>
         </div>
       </div>
       <div className="pListItem">
         <img src={phong3} alt="" className="pListImg" />
         <div className="pListTitles">
-          <h1>Hotels</h1>
-          <h2>233 hotels</h2>
+          <h1>Giá hời</h1>
+          <h2>Giảm giá ngập trời</h2>
         </div>
       </div>
       <div className="pListItem">
         <img src={phong4} alt="" className="pListImg" />
         <div className="pListTitles">
-          <h1>Hotels</h1>
-          <h2>233 hotels</h2>
+          <h1>Dễ dàng</h1>
+          <h2>Giao diện thân thiện</h2>
         </div>
       </div>
       <div className="pListItem">
         <img src={phong5} alt="" className="pListImg" />
         <div className="pListTitles">
-          <h1>Hotels</h1>
-          <h2>233 hotels</h2>
+          <h1>tiện nghi</h1>
+          <h2>Dễ tìm ra được phòng phù hợp</h2>
         </div>
       </div>
     </div>
