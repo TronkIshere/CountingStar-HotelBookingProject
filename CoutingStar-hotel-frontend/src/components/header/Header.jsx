@@ -1,15 +1,7 @@
 import React, { useState } from "react";
 import "./header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBed,
-  faCalendar,
-  faCar,
-  faLocation,
-  faPerson,
-  faPlane,
-  faTaxi,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBed, faCalendar, faCar, faLocation, faPerson, faPlane, faTaxi } from "@fortawesome/free-solid-svg-icons";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { DateRange } from "react-date-range";
@@ -44,16 +36,12 @@ const Header = ({ type }) => {
   };
 
   const handleSearch = () => {
-    navigate("/hotels", { state: { destination, date, options } });
+    navigate('/hotels', { state: { destination, date, options } });
   };
 
   return (
     <div className="header">
-      <div
-        className={
-          type === "list" ? "headerContainer listMode" : "headerContainer"
-        }
-      >
+      <div className={type === "list" ? "headerContainer listMode" : "headerContainer"}>
         <div className="headerList">
           <div className="headerListItem active">
             <FontAwesomeIcon icon={faBed} />
@@ -78,69 +66,34 @@ const Header = ({ type }) => {
         </div>
         {type !== "list" && (
           <>
-            <h1 className="headerTitle">
-              Nghỉ dưỡng đẳng cấp, trải nghiệm hoàn hảo.
-            </h1>
-            <p className="headerDesc">
-              Muốn nhận ưu đãi từ chuyến đi của bạn – Hãy đăng ký tài khoản để
-              nhận ưu đãi giảm giá 10% cho mọi chuyến đi
-            </p>
+            <h1 className="headerTitle">Nghỉ dưỡng đẳng cấp, trải nghiệm hoàn hảo.</h1>
+            <p className="headerDesc">Muốn nhận ưu đãi từ chuyến đi của bạn – Hãy đăng ký tài khoản để nhận ưu đãi giảm giá 10% cho mọi chuyến đi</p>
             <button className="headerBtn">Đăng nhập / Đăng ký</button>
 
             <div className="headerSearch">
               <div className="headerSearchItem">
                 <FontAwesomeIcon icon={faBed} className="headerIcon" />
-                <select
-                  className="headerSearchSelect"
-                  value={destination}
-                  onChange={(e) => setDestination(e.target.value)}
-                >
-                  <option value="" disabled>
-                    Bạn muốn đi đâu?
-                  </option>
-                  <option value="Ho Chi Minh">
-                    Hồ Chí Minh
-                  </option>
-                  <option value="Ha Noi">
-                    Hà Nội
-                  </option>
-                  <option value="Da Lat">
-                    Đà Lạt
-                  </option>
-                  <option value="Nha Trang">
-                    Nha Trang
-                  </option>
-                  <option value="Vung Tau">
-                    Vũng Tàu
-                  </option>
+                <select className="headerSearchSelect" value={destination} onChange={(e) => setDestination(e.target.value)}>
+                  <option value="" disabled>Bạn muốn đi đâu?</option>
+                  <option value="Ho Chi Minh">Hồ Chí Minh</option>
+                  <option value="Ha Noi">Hà Nội</option>
+                  <option value="Da Lat">Đà Lạt</option>
+                  <option value="Nha Trang">Nha Trang</option>
+                  <option value="Vung Tau">Vũng Tàu</option>
                 </select>
               </div>
               <div className="headerSearchItem">
                 <FontAwesomeIcon icon={faCalendar} className="headerIcon" />
-                <span
-                  onClick={() => setOpenDate(!openDate)}
-                  className="headerSearchText"
-                >{`${format(date[0].startDate, "MM/dd/yyyy")} đến ${format(
-                  date[0].endDate,
-                  "MM/dd/yyyy"
-                )}`}</span>
+                <span onClick={() => setOpenDate(!openDate)} className="headerSearchText">
+                  {`${format(date[0].startDate, "MM/dd/yyyy")} đến ${format(date[0].endDate, "MM/dd/yyyy")}`}
+                </span>
                 {openDate && (
-                  <DateRange
-                    editableDateInputs={true}
-                    onChange={(item) => setDate([item.selection])}
-                    moveRangeOnFirstSelection={false}
-                    ranges={date}
-                    className="date"
-                    minDate={new Date()}
-                  />
+                  <DateRange editableDateInputs={true} onChange={(item) => setDate([item.selection])} moveRangeOnFirstSelection={false} ranges={date} className="date" minDate={new Date()} />
                 )}
               </div>
               <div className="headerSearchItem">
                 <FontAwesomeIcon icon={faPerson} className="headerIcon" />
-                <span
-                  onClick={() => setOpenOptions(!openOptions)}
-                  className="headerSearchText"
-                >
+                <span onClick={() => setOpenOptions(!openOptions)} className="headerSearchText">
                   {`${options.adult} người lớn | ${options.children} trẻ em`}
                 </span>
                 {openOptions && (
@@ -148,20 +101,11 @@ const Header = ({ type }) => {
                     <div className="optionItem">
                       <span className="optionText">Người lớn</span>
                       <div className="optionCounter">
-                        <button
-                          className="optionCounterButton"
-                          disabled={options.adult <= 1}
-                          onClick={() => handleOption("adult", "d")}
-                        >
+                        <button className="optionCounterButton" disabled={options.adult <= 1} onClick={() => handleOption("adult", "d")}>
                           -
                         </button>
-                        <span className="optionCounterNumber">
-                          {options.adult}
-                        </span>
-                        <button
-                          className="optionCounterButton"
-                          onClick={() => handleOption("adult", "i")}
-                        >
+                        <span className="optionCounterNumber">{options.adult}</span>
+                        <button className="optionCounterButton" onClick={() => handleOption("adult", "i")}>
                           +
                         </button>
                       </div>
@@ -169,20 +113,11 @@ const Header = ({ type }) => {
                     <div className="optionItem">
                       <span className="optionText">Trẻ em</span>
                       <div className="optionCounter">
-                        <button
-                          className="optionCounterButton"
-                          disabled={options.children <= 0}
-                          onClick={() => handleOption("children", "d")}
-                        >
+                        <button className="optionCounterButton" disabled={options.children <= 0} onClick={() => handleOption("children", "d")}>
                           -
                         </button>
-                        <span className="optionCounterNumber">
-                          {options.children}
-                        </span>
-                        <button
-                          className="optionCounterButton"
-                          onClick={() => handleOption("children", "i")}
-                        >
+                        <span className="optionCounterNumber">{options.children}</span>
+                        <button className="optionCounterButton" onClick={() => handleOption("children", "i")}>
                           +
                         </button>
                       </div>

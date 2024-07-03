@@ -8,6 +8,7 @@ import com.example.CoutingStarHotel.response.HotelResponse;
 import com.example.CoutingStarHotel.service.IHotelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @CrossOrigin("http://localhost:5173")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/hotels")
+@RequestMapping("/hotel")
 public class HotelController {
     private final IHotelService hotelService;
     @PostMapping("/hotel/{userId}/addHotel")
@@ -46,7 +47,7 @@ public class HotelController {
         return ResponseEntity.ok(hotelResponses);
     }
 
-    @GetMapping("/hotel/{city}/hotels")
+    @GetMapping("/{city}/hotels")
     public ResponseEntity<List<HotelResponse>> getHotelsByCity(@PathVariable String city){
         List<Hotel> hotels = hotelService.getAllHotelsByCity(city);
         List<HotelResponse> hotelResponses = hotels.stream()
@@ -60,11 +61,12 @@ public class HotelController {
                                                      @RequestParam(required = false) String hotelName,
                                                      @RequestParam(required = false) String hotelDescription,
                                                      @RequestParam(required = false) String phoneNumber,
+                                                     @RequestParam(required = false) String city,
                                                      @RequestParam(required = false) MultipartFile photo) throws IOException, SQLException {
         byte[] photoBytes = photo != null && !photo.isEmpty() ?
                 photo.getBytes() : hotelService.getHotelPhotobyHotelId(hotelId);
         Blob photoBlob = photoBytes != null && photoBytes.length >0 ? new SerialBlob(photoBytes): null;
-        Hotel theHotel = hotelService.updateHotel(hotelId, hotelName, hotelDescription, phoneNumber, photoBytes);
+        Hotel theHotel = hotelService.updateHotel(hotelId, hotelName, hotelDescription, phoneNumber, city, photoBytes);
         theHotel.setPhoto(photoBlob);
         HotelResponse hotelResponse = getHotelResponse(theHotel);
         return ResponseEntity.ok(hotelResponse);
@@ -80,6 +82,7 @@ public class HotelController {
                 hotel.getId(),
                 hotel.getHotelName(),
                 hotel.getCity(),
+                hotel.getHotelLocation(),
                 hotel.getHotelDescription(),
                 hotel.getPhoneNumber(),
                 hotel.getPhoto(),

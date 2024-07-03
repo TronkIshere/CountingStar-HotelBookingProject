@@ -58,7 +58,7 @@ public class WebSecurityConfig {
                         exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/rooms/**","/bookings/**")
+                        .requestMatchers("/auth/**", "/rooms/**","/bookings/**", "/hotel/**")
                         .permitAll().requestMatchers("/roles/**").hasRole("ADMIN")
                         .anyRequest().authenticated());
         http.authenticationProvider(authenticationProvider());
@@ -74,6 +74,6 @@ public class WebSecurityConfig {
         methodInvokingFactoryBean.setArguments(new String[]{SecurityContextHolder.MODE_GLOBAL});
         return methodInvokingFactoryBean;
     }
-}
 
-//demo push on git at backend branch
+
+}

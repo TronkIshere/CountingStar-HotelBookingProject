@@ -12,6 +12,55 @@ export const getHeader = () =>{
 	}
 }
 
+/* Add new hotel function */
+export async function addHotel(userId, hotelName, city, hotelDescription, phoneNumber, photo) {
+	const formData = new FormData()
+	formData.append("hotelName", hotelName)
+	formData.append("city", city)
+	formData.append("hotelDescription", hotelDescription)
+	formData.append("phoneNumber", phoneNumber)
+	formData.append("photo", photo)
+
+	const response = await api.post(`/hotel/${userId}/addHotel`, formData)
+	if (response.status === 201) {
+		return true
+	} else {
+		return false
+	}
+}
+
+/* Get all hotels by city */
+export async function getHotelsByCity(city) {
+	try {
+		const response = await api.get(`/hotel/${city}/hotels`)
+		return response.data
+	} catch (error) {
+		throw new Error("Error fetching hotels")
+	}
+}
+
+/* Update hotel informtaion */
+export async function updateHotel(hotelId, hotelData){
+	const formData = new FormData()
+	formData.append("hotelName", hotelData.hotelName)
+	formData.append("hotelDescription", hotelData.hotelDescription)
+	formData.append("phoneNumber", hotelData.phoneNumber)
+	formData.append("photo", hotelData.photo)
+	const response = await api.put(`/rooms/update/${hotelId}`, formData)
+	return response
+}
+
+export async function deleteHotel(hotelId) {
+	try {
+		const result = await api.delete(`/hotel/${hotelId}/delete`, {
+			headers: getHeader()
+		})
+		return result.data
+	} catch (error) {
+		throw new Error(`Error deleting room ${error.message}`)
+	}
+}
+
 /* This function adds a new room room to the database */
 export async function addRoom(photo, roomType, roomPrice, roomDescription) {
 	const formData = new FormData()

@@ -21,6 +21,7 @@ public class Hotel {
     private Long id;
     private String hotelName;
     private String city;
+    private String hotelLocation;
     private String hotelDescription;
     private String phoneNumber;
 

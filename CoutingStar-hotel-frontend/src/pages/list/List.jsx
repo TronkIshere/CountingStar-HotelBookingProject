@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/navbar/Navbar";
 import Header from "../../components/header/Header";
 import "./list.css";
@@ -6,13 +6,56 @@ import { useLocation } from "react-router-dom";
 import { format } from "date-fns";
 import { DateRange } from "react-date-range";
 import SearchItem from "../../components/searchItem/SearchItem";
+import { getHotelsByCity } from "../../components/utils/ApiFunction";
 
 const List = () => {
   const location = useLocation();
-  const [destination, setDestination] = useState(location.state.destination);
-  const [date, setDate] = useState(location.state.date);
+  const { destination: initialDestination = "", date: initialDate = [], options: initialOptions = {} } = location.state || {};
+
+  const [hotels, setHotels] = useState([]);
   const [openDate, setOpenDate] = useState(false);
-  const [options, setOptions] = useState(location.state.options);
+  const [destination, setDestination] = useState(initialDestination);
+  const [date, setDate] = useState(initialDate);
+  const [options, setOptions] = useState(initialOptions);
+
+  useEffect(() => {
+    // Fetch hotels when component mounts initially
+    fetchHotels();
+  }, []);
+
+  useEffect(() => {
+    // Update destination and date on initial load or when they change
+    setDestination(initialDestination);
+    setDate(initialDate);
+  }, [initialDestination, initialDate]);
+
+  const fetchHotels = async () => {
+    try {
+      const hotelsData = await getHotelsByCity(decodeURIComponent(destination));
+      setHotels(hotelsData);
+    } catch (error) {
+      console.error("Error fetching hotels:", error);
+    }
+  };
+
+  const handleDestinationChange = (e) => {
+    setDestination(e.target.value);
+  };
+
+  const handleDateChange = (item) => {
+    setDate([item.selection]);
+  };
+
+  const handleOptionChange = (name, value) => {
+    setOptions((prevOptions) => ({
+      ...prevOptions,
+      [name]: value,
+    }));
+  };
+
+  const handleSearch = () => {
+    fetchHotels();
+  };
 
   return (
     <div>
@@ -23,17 +66,26 @@ const List = () => {
             <h1 className="lsTitle">Search</h1>
             <div className="lsItem">
               <label>Điểm đến</label>
-              <input placeholder={destination} type="text" />
+              <select value={destination} onChange={handleDestinationChange}>
+                <option value="" disabled>
+                  Bạn muốn đi đâu?
+                </option>
+                <option value="Ho Chi Minh">Hồ Chí Minh</option>
+                <option value="Ha Noi">Hà Nội</option>
+                <option value="Da Lat">Đà Lạt</option>
+                <option value="Nha Trang">Nha Trang</option>
+                <option value="Vung Tau">Vũng Tàu</option>
+              </select>
             </div>
             <div className="lsItem">
               <label>Ngày thuê</label>
               <span onClick={() => setOpenDate(!openDate)}>{`${format(
-                date[0].startDate,
+                date[0]?.startDate,
                 "MM/dd/yyyy"
-              )} đến ${format(date[0].endDate, "MM/dd/yyyy")}`}</span>
+              )} đến ${format(date[0]?.endDate, "MM/dd/yyyy")}`}</span>
               {openDate && (
                 <DateRange
-                  onChange={(item) => setDate([item.selection])}
+                  onChange={handleDateChange}
                   minDate={new Date()}
                   ranges={date}
                 />
@@ -69,7 +121,8 @@ const List = () => {
                     type="number"
                     min={1}
                     className="lsOptionInput"
-                    placeholder={options.adult}
+                    value={options.adult}
+                    onChange={(e) => handleOptionChange("adult", e.target.value)}
                   />
                 </div>
 
@@ -79,21 +132,22 @@ const List = () => {
                     type="number"
                     min={0}
                     className="lsOptionInput"
-                    placeholder={options.children}
+                    value={options.children}
+                    onChange={(e) => handleOptionChange("children", e.target.value)}
                   />
                 </div>
               </div>
             </div>
-            <button>Tìm kiếm</button>
+            <button onClick={handleSearch}>Tìm kiếm</button>
           </div>
           <div className="listResult">
-            <SearchItem/>
-            <SearchItem/>
-            <SearchItem/>
-            <SearchItem/>
-            <SearchItem/>
-            <SearchItem/>
-            <SearchItem/>
+            {hotels.length > 0 ? (
+              hotels.map((hotel) => (
+                <SearchItem key={hotel.id} hotel={hotel} />
+              ))
+            ) : (
+              <p>No hotels found</p>
+            )}
           </div>
         </div>
       </div>

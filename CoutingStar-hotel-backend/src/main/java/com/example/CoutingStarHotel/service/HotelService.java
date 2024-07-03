@@ -71,11 +71,12 @@ public class HotelService implements IHotelService{
     }
 
     @Override
-    public Hotel updateHotel(Long hotelId, String hotelName, String hotelDescription, String phoneNumber, byte[] photoBytes) {
+    public Hotel updateHotel(Long hotelId, String hotelName, String hotelDescription, String phoneNumber, String city, byte[] photoBytes) {
         Hotel hotel = hotelRepository.findById(hotelId).get();
         if (hotelName != null) hotel.setHotelName(hotelName);
         if (hotelDescription != null) hotel.setHotelDescription(hotelDescription);
         if (phoneNumber != null) hotel.setPhoneNumber(phoneNumber);
+        if (city != null) hotel.setCity(city);
         if (photoBytes != null && photoBytes.length > 0) {
             try {
                 hotel.setPhoto(new SerialBlob(photoBytes));
