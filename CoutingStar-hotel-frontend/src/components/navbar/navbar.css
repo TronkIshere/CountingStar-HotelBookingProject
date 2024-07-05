@@ -27,13 +27,13 @@
     padding: 5px 10px;
     cursor: pointer;
     color: #003580;
+    font-weight: 500;
 }
 
 .postHotelButton {
     border: none;
     background-color: #003580;
     font-size: 1.2rem;
-    font-weight: 500;
     color: white;
     padding: 10px 20px;
     border-radius: 5px;

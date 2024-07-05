@@ -48,7 +48,6 @@ public class HotelController {
     @GetMapping("/hotel/{hotelId}")
     public ResponseEntity<Optional<HotelResponse>> getHotelById(@PathVariable Long hotelId){
         Optional<Hotel> theHotel = hotelService.getHotelById(hotelId);
-        System.out.println("Get info demo: " + theHotel.get().getHotelName());
         return theHotel.map(room -> {
             HotelResponse hotelResponse = getHotelResponse(room);
             return  ResponseEntity.ok(Optional.of(hotelResponse));
@@ -93,8 +92,7 @@ public class HotelController {
                 hotel.getHotelLocation(),
                 hotel.getHotelDescription(),
                 hotel.getPhoneNumber(),
-                hotel.getPhoto(),
-                hotel.getRooms()
+                hotel.getPhoto()
         );
     }
 }

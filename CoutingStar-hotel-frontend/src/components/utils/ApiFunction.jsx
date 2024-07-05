@@ -41,7 +41,6 @@ export async function getHotelsByCity(city) {
 
 export async function getHotelById(hotelId) {
 	try {
-		console.log(hotelId)
 		const response = await api.get(`/hotels/hotel/${hotelId}`)
 		return response.data
 	} catch (error) {
@@ -135,6 +134,15 @@ export async function getRoomById(roomId){
 		const result = await api.get(`/rooms/room/${roomId}`)
 		return result.data
 	} catch(error) {
+		throw new Error(`Error fetching room ${err.message}`)
+	}
+}
+
+export async function getRoomsByHotelId(hotelId){
+	try{
+		const result = await api.get(`/rooms/${hotelId}`)
+		return result.data;
+	} catch(error){
 		throw new Error(`Error fetching room ${err.message}`)
 	}
 }

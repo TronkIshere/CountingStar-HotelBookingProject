@@ -32,7 +32,7 @@ const Hotel = () => {
     hotelLocation: "",
     hotelDescription: "",
     phoneNumber: "",
-    photo: "",
+    photo: ""
   })
 
   const { hotelId } = useParams()
@@ -170,7 +170,7 @@ const Hotel = () => {
               <button>Đặt phòng ngay!</button>
             </div>
           </div>
-          <RoomList />
+          <RoomList hotelId={hotelInfo.id} />
         </div>
         <Register />
       </div>

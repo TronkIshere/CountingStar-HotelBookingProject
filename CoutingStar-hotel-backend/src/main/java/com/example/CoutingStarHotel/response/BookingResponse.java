@@ -28,8 +28,7 @@ public class BookingResponse {
                            int numOfAdults,
                            int numOfChildren,
                            int totalNumOfGuest,
-                           String guestFullName,
-                           RoomResponse room) {
+                           String guestFullName, RoomResponse room) {
         this.bookingId = bookingId;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
@@ -39,7 +38,6 @@ public class BookingResponse {
         this.numOfChildren = numOfChildren;
         this.totalNumOfGuest = totalNumOfGuest;
         this.guestFullName = guestFullName;
-        this.room = room;
     }
 }
 

@@ -50,6 +50,22 @@ public class RoomController {
         return roomService.getAllRoomTypes();
     }
 
+    @GetMapping("/{hotelId}")
+    public ResponseEntity<List<RoomResponse>> getRoomsByHotelId(@PathVariable Long hotelId) throws SQLException{
+        List<Room> rooms = roomService.getRoomByHotelId(hotelId);
+        List<RoomResponse> roomResponses = new ArrayList<>();
+        for(Room room : rooms){
+            byte[] photoBytes = roomService.getRoomPhotoByRoomId(room.getId());
+            if(photoBytes != null && photoBytes.length > 0) {
+                String base64Photo = Base64.encodeBase64String(photoBytes);
+                RoomResponse roomResponse = getRoomResponse(room);
+                roomResponse.setPhoto(base64Photo);
+                roomResponses.add(roomResponse);
+            }
+        }
+        return ResponseEntity.ok(roomResponses);
+    }
+
     @GetMapping("/all-rooms")
     public ResponseEntity<List<RoomResponse>> getAllRooms() throws SQLException{
         List<Room> rooms = roomService.getAllRooms();
@@ -96,7 +112,6 @@ public class RoomController {
     }
 
     private RoomResponse getRoomResponse(Room room) {
-        List<BookedRoom> bookings = getAllBookingByRoomId(room.getId());
         byte[] photoBytes = null;
         Blob photoBlob = room.getPhoto();
         if (photoBlob != null) {
@@ -110,6 +125,7 @@ public class RoomController {
                 room.getId(),
                 room.getRoomType(),
                 room.getRoomPrice(),
+                room.getRoomDescription(),
                 room.isBooked(),
                 photoBytes);
     }

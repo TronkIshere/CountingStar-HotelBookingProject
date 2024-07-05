@@ -23,7 +23,7 @@ public class HotelResponse {
     private List<Room> rooms;
     private User user;
 
-    public HotelResponse(Long id, String hotelName, String city, String hotelLocation, String hotelDescription, String phoneNumber, Blob photo, List<Room> rooms) {
+    public HotelResponse(Long id, String hotelName, String city, String hotelLocation, String hotelDescription, String phoneNumber, Blob photo) {
         this.id = id;
         this.hotelName = hotelName;
         this.city = city;
@@ -31,6 +31,5 @@ public class HotelResponse {
         this.hotelDescription = hotelDescription;
         this.phoneNumber = phoneNumber;
         this.photo = photo;
-        this.rooms = rooms;
     }
 }

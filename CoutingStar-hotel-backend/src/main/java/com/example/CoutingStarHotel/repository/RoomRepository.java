@@ -19,4 +19,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     List<Room> findAvailableRoomsByDatesAndType(@Param("checkInDate") LocalDate checkInDate,
                                                 @Param("checkOutDate") LocalDate checkOutDate,
                                                 @Param("roomType") String roomType);
+
+    @Query("SELECT r FROM Room r WHERE r.hotel.id = :hotelId")
+    List<Room> findRoomsByHotelId(@Param("hotelId") Long hotelId);
 }

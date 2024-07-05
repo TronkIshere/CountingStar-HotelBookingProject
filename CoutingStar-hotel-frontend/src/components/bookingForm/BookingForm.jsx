@@ -11,20 +11,17 @@ const BookingForm = ({ room, onClose }) => {
         <h1>Đặt phòng</h1>
         <div className="roomContent">
           <div className="roomImg">
-            <img src={room.image} alt={room.type} />
+            <img src={`data:image/png;base64, ${room.photo}`} alt={room.roomType} />
           </div>
           <div className="roomDetail">
             <p>
-              <strong>Loại phòng:</strong> {room.type}
+              <strong>Loại phòng:</strong> {room.roomType}
             </p>
             <p>
-              <strong>Miêu tả:</strong> {room.description}
+              <strong>Miêu tả:</strong> {room.roomDescription}
             </p>
             <p>
-              <strong>Giá tiền:</strong> {room.price}
-            </p>
-            <p>
-              <strong>Miêu tả phòng:</strong> {room.details}
+              <strong>Giá tiền:</strong> {room.roomPrice}
             </p>
             <p>
               <strong>Đánh giá:</strong> {room.rating}

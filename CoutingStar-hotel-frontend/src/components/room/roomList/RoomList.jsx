@@ -1,56 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./roomList.css";
 import BookingForm from "../../bookingForm/BookingForm";
+import { getRoomsByHotelId } from "../../utils/ApiFunction";
 
-const RoomList = () => {
-  const [selectedRoom, setSelectedRoom] = useState(null);
+const RoomList = ({ hotelId }) => {
+  const [selectedRoom, setSelectedRoom] = useState(null)
+  const [rooms, setRooms] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
+
   const handleBookClick = (room) => {
-    setSelectedRoom(room);
+    setSelectedRoom(room)
   };
+
   const handleCloseModal = () => {
-    setSelectedRoom(null);
+    setSelectedRoom(null)
   };
-  const rooms = [
-    {
-      type: "Deluxe",
-      description: "A spacious room with a beautiful view.",
-      price: "$150",
-      details:
-        "King size bed, Free WiFi, Air conditioning, Mini bar, Balcony with sea view",
-      rating: "4.5/5",
-    },
-    {
-      type: "Standard",
-      description: "A comfortable room for a great stay.",
-      price: "$100",
-      details: "Queen size bed, Free WiFi, TV, Private bathroom",
-      rating: "4.0/5",
-    },
-    {
-      type: "Suite",
-      description: "A luxurious suite with all amenities.",
-      price: "$250",
-      details: "King size bed, Free WiFi, Jacuzzi, Kitchenette, Living room",
-      rating: "4.8/5",
-    },
-    {
-      type: "Single",
-      description: "A cozy room perfect for solo travelers.",
-      price: "$80",
-      details: "Single bed, Free WiFi, TV, Shared bathroom",
-      rating: "3.8/5",
-    },
-    {
-      type: "Double",
-      description: "A room with two beds for friends or family.",
-      price: "$120",
-      details: "Two single beds, Free WiFi, TV, Private bathroom",
-      rating: "4.2/5",
-    },
-  ];
+
+  useEffect(() => {
+    setIsLoading(true);
+    getRoomsByHotelId(hotelId)
+      .then((response) => {
+        console.log("Rooms data:", response)
+        setRooms(response)
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        console.error("Error fetching rooms:", error)
+        setError(error)
+        setIsLoading(false)
+      });
+  }, [hotelId])
+
+  if (isLoading) {
+    return <div>Đang kiểm tra phòng...</div>
+  }
+
+
   return (
     <div className="roomListContainer">
-      <h1>Room List</h1>
+      <h1>Danh sách phòng</h1>
       <table className="roomListTable">
         <thead>
           <tr>
@@ -62,23 +51,29 @@ const RoomList = () => {
           </tr>
         </thead>
         <tbody>
-          {rooms.map((room, index) => (
-            <tr key={index}>
-              <td>{room.type}</td>
-              <td>{room.description}</td>
-              <td>{room.price}</td>
-              <td>{room.rating}</td>
-              <td>
-                <button
-                  className="bookButton"
-                  onClick={() => handleBookClick(room)}
-                >
-                  Đặt
-                </button>
-                <div className="noCreditCard">Không cần thẻ tín dụng</div>
-              </td>
+          {rooms.length > 0 ? (
+            rooms.map((room, index) => (
+              <tr key={index}>
+                <td>{room.roomType}</td>
+                <td>{room.roomDescription}</td>
+                <td>${room.roomPrice}</td>
+                <td>Đánh giá</td>
+                <td>
+                  <button
+                    className="bookButton"
+                    onClick={() => handleBookClick(room)}
+                  >
+                    Đặt
+                  </button>
+                  <div className="noCreditCard">Không cần thẻ tín dụng</div>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="5">Không có phòng nào</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
       {selectedRoom && (
