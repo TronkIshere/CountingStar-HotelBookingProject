@@ -21,7 +21,7 @@ export async function addHotel(userId, hotelName, city, hotelDescription, phoneN
 	formData.append("phoneNumber", phoneNumber)
 	formData.append("photo", photo)
 
-	const response = await api.post(`/hotel/${userId}/addHotel`, formData)
+	const response = await api.post(`/hotels/${userId}/addHotel`, formData)
 	if (response.status === 201) {
 		return true
 	} else {
@@ -32,7 +32,17 @@ export async function addHotel(userId, hotelName, city, hotelDescription, phoneN
 /* Get all hotels by city */
 export async function getHotelsByCity(city) {
 	try {
-		const response = await api.get(`/hotel/${city}/hotels`)
+		const response = await api.get(`/hotels/${city}`)
+		return response.data
+	} catch (error) {
+		throw new Error("Error fetching hotels")
+	}
+}
+
+export async function getHotelById(hotelId) {
+	try {
+		console.log(hotelId)
+		const response = await api.get(`/hotels/hotel/${hotelId}`)
 		return response.data
 	} catch (error) {
 		throw new Error("Error fetching hotels")
@@ -205,16 +215,16 @@ export async function getAvailableRooms(checkInDate, checkOutDate, roomType) {
 /* This function register a new user */
 export async function registerUser(registration) {
 	try {
-		const response = await api.post("/auth/register-user", registration)
-		return response.data
+	  const response = await api.post("/auth/register-user", registration);
+	  return response.data;
 	} catch (error) {
-		if (error.reeponse && error.response.data) {
-			throw new Error(error.response.data)
-		} else {
-			throw new Error(`User registration error : ${error.message}`)
-		}
+	  if (error.response && error.response.data) {
+		throw new Error(JSON.stringify(error.response.data));
+	  } else {
+		throw new Error(`User registration error: ${error.message}`);
+	  }
 	}
-}
+  }
 
 /* This function login a registered user */
 export async function loginUser(login) {

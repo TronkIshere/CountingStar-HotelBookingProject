@@ -48,6 +48,12 @@ public class HotelService implements IHotelService{
     }
 
     @Override
+    public Optional<Hotel> getHotelById(Long hotelId) {
+        return Optional.ofNullable(hotelRepository.findById(hotelId)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId)));
+    }
+
+    @Override
     public List<Hotel> getAllHotels(){
         return hotelRepository.findAll();
     }

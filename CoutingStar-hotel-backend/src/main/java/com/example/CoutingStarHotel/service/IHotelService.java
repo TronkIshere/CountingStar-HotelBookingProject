@@ -21,4 +21,6 @@ public interface IHotelService {
     Hotel updateHotel(Long hotelId, String hotelName, String hotelDescription, String city, String phoneNumber, byte[] photoBytes);
 
     String addHotel(Long userId, String hotelName, String city, String hotelDescription, String phoneNumber, MultipartFile photo) throws IOException, SQLException;
+
+    Optional<Hotel> getHotelById(Long hotelId);
 }

@@ -14,7 +14,7 @@ const Featured = () => {
   const handleCityClick = (city) => {
     const encodedCity = encodeURIComponent(city);
     const currentDate = new Date();
-    navigate(`/hotels/${encodedCity}`, { state: { destination: encodedCity, date: [{ startDate: currentDate, endDate: currentDate }], options: {} } });
+    navigate(`/hotels/`, { state: { destination: encodedCity, date: [{ startDate: currentDate, endDate: currentDate }], options: {} } });
   };
 
   return (

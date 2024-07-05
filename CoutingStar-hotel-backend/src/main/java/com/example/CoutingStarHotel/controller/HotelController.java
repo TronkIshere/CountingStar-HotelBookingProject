@@ -1,14 +1,11 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.exeption.InvalidBookingRequestException;
-import com.example.CoutingStarHotel.exeption.InvalidDiscountRequestException;
-import com.example.CoutingStarHotel.exeption.InvalidHotelRequestException;
+import com.example.CoutingStarHotel.exeption.ResourceNotFoundException;
 import com.example.CoutingStarHotel.model.Hotel;
 import com.example.CoutingStarHotel.response.HotelResponse;
 import com.example.CoutingStarHotel.service.IHotelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,15 +15,16 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @CrossOrigin("http://localhost:5173")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/hotel")
+@RequestMapping("/hotels")
 public class HotelController {
     private final IHotelService hotelService;
-    @PostMapping("/hotel/{userId}/addHotel")
+    @PostMapping("/{userId}/addHotel")
     public ResponseEntity<?> addHotel(@PathVariable Long userId,
                                       @RequestParam("hotelName") String hotelName,
                                       @RequestParam("city") String city,
@@ -47,7 +45,17 @@ public class HotelController {
         return ResponseEntity.ok(hotelResponses);
     }
 
-    @GetMapping("/{city}/hotels")
+    @GetMapping("/hotel/{hotelId}")
+    public ResponseEntity<Optional<HotelResponse>> getHotelById(@PathVariable Long hotelId){
+        Optional<Hotel> theHotel = hotelService.getHotelById(hotelId);
+        System.out.println("Get info demo: " + theHotel.get().getHotelName());
+        return theHotel.map(room -> {
+            HotelResponse hotelResponse = getHotelResponse(room);
+            return  ResponseEntity.ok(Optional.of(hotelResponse));
+        }).orElseThrow(() -> new ResourceNotFoundException("hotel not found"));
+    }
+
+    @GetMapping("/{city}")
     public ResponseEntity<List<HotelResponse>> getHotelsByCity(@PathVariable String city){
         List<Hotel> hotels = hotelService.getAllHotelsByCity(city);
         List<HotelResponse> hotelResponses = hotels.stream()
@@ -56,7 +64,7 @@ public class HotelController {
         return ResponseEntity.ok(hotelResponses);
     }
 
-    @PutMapping("/hotel/{hotelId}/updateHotel")
+    @PutMapping("/{hotelId}/updateHotel")
     public ResponseEntity<HotelResponse> updateHotel(@PathVariable Long hotelId,
                                                      @RequestParam(required = false) String hotelName,
                                                      @RequestParam(required = false) String hotelDescription,

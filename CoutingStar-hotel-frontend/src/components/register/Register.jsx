@@ -41,7 +41,6 @@ const Register = () => {
       } else {
         errorMessage += error.message;
       }
-
       setSuccessMessage("");
       setErrorMessage(errorMessage);
     }

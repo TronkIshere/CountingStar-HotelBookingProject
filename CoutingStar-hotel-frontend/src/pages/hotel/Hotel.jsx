@@ -11,15 +11,46 @@ import {
   faPhone,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RoomList from "../../components/room/roomList/RoomList";
 import Register from "../../components/register/Register";
 import Rating from "../../components/rating/Rating";
+import { getHotelById } from "../../components/utils/ApiFunction";
+import { useParams } from "react-router-dom";
 
 const Hotel = () => {
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
   const [ratingOpen, setRatingOpen] = useState(false);
+
+  const [error, setError] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [hotelInfo, setHotelInfo] = useState({
+    id: "",
+    hotelName: "",
+    city: "",
+    hotelLocation: "",
+    hotelDescription: "",
+    phoneNumber: "",
+    photo: "",
+  })
+
+  const { hotelId } = useParams()
+
+  useEffect(() => {
+    setTimeout(() => {
+      getHotelById(hotelId)
+        .then((response) => {
+          console.log(response);
+          setHotelInfo(response)
+          setIsLoading(false)
+        })
+        .catch((error) => {
+          setError(error)
+          setIsLoading(false)
+        })
+    }, 2000)
+  }, [hotelId])
 
   const photos = [
     {
@@ -88,14 +119,14 @@ const Hotel = () => {
         {ratingOpen && <Rating onClose={() => setRatingOpen(false)} />}
         <div className="hotelWrapper">
           <button className="bookNow">Hãy đặt ngay!</button>
-          <h1 className="hotelTitle">Khách Sạn Mỹ Hạnh</h1>
+          <h1 className="hotelTitle">{hotelInfo.hotelName}</h1>
           <div className="hotelAddressAndContact">
             <FontAwesomeIcon icon={faLocationDot} />
-            <span>688/91 Quang Trung, Gò Vấp</span>
+            <span>{hotelInfo.hotelLocation}</span>
             <FontAwesomeIcon icon={faPhone}/>
-            <span>0359256696</span>
+            <span>{hotelInfo.phoneNumber}</span>
           </div>
-          <span className="hotelDistance">Tại thành phố - Hồ Chí Minh</span>
+          <span className="hotelDistance">Tại thành phố - {hotelInfo.city}</span>
           <span className="hotelRating">
             <p>
               Đây là khách sạn với số sao là <FontAwesomeIcon icon={faStar} />{" "}
@@ -123,19 +154,9 @@ const Hotel = () => {
 
           <div className="hotelDetails">
             <div className="hotelDetailsTexts">
-              <h1 className="hotelTitle">Nằm ở khu du lịch</h1>
+              <h1 className="hotelTitle">Tổng quan khách sạn</h1>
               <p className="hotelDesc">
-                Nằm cách Cổng St. Florian ở Krakow 5 phút đi bộ, Tower Street
-                Apartments cung cấp chỗ ở được trang bị máy điều hòa và wifi
-                miễn phí. Các căn hộ có sàn gỗ cứng và có bếp nhỏ đầy đủ tiện
-                nghi với lò vi sóng, TV màn hình phẳng, và phòng tắm riêng với
-                vòi sen và máy sấy tóc. Một chiếc tủ lạnh là cũng được cung cấp,
-                cũng như một ấm trà điện và một máy pha cà phê. máy móc. Các
-                điểm tham quan nổi tiếng gần căn hộ bao gồm Hội trường Vải,
-                Quảng trường Chợ Chính và Tháp Tòa thị chính. Gần nhất sân bay
-                là John Paul II International Kraków–Balice, 16,1 km từ Tower
-                Street Apartments và nơi lưu trú cung cấp dịch vụ trả phí dịch
-                vụ đưa đón sân bay.
+                {hotelInfo.hotelDescription}
               </p>
             </div>
             <div className="hotelDetailsPrice">
