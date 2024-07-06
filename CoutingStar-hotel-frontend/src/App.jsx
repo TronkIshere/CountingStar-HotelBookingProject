@@ -12,6 +12,7 @@ import HotelRegistration from "./pages/hotelRegistration/HotelRegistration";
 import HotelInformation from "./pages/hotelInformation/HotelInformation";
 import HotelRoomManagement from "./pages/hotelRoomManagement/HotelRoomManagement";
 import HotelBookingManagement from "./pages/hotelBookingManagement/HotelBookingManagement";
+import { AuthProvider } from "./components/utils/AuthProvider";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -24,22 +25,30 @@ function App() {
     setShowLogin(false);
   };
   return (
-    <BrowserRouter>
-      <Navbar onLoginClick={handleLoginClick}/>
-      {showLogin && <Login onClose={handleCloseModal} />}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/hotels" element={<List />} />
-        <Route path="/hotels/hotel/:hotelId" element={<Hotel/>}/>
-        <Route path="/hotelpage" element={<Hotel/>}/>
-        <Route path="/userProfile" element={<UserProfile/>}/>
-        <Route path="/hotelRegistration" element={<HotelRegistration/>}/>
-        <Route path="/HotelInfomation" element={<HotelInformation/>}/>
-        <Route path="/HotelRoomManagement" element={<HotelRoomManagement/>}/>
-        <Route path="/HotelBookingManagement" element={<HotelBookingManagement/>}/>
-      </Routes>
-      <Footer/>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Navbar onLoginClick={handleLoginClick} />
+        {showLogin && <Login onClose={handleCloseModal} />}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/hotels" element={<List />} />
+          <Route path="/hotels/hotel/:hotelId" element={<Hotel />} />
+          <Route path="/hotelpage" element={<Hotel />} />
+          <Route path="/userProfile" element={<UserProfile />} />
+          <Route path="/hotelRegistration" element={<HotelRegistration />} />
+          <Route path="/HotelInfomation" element={<HotelInformation />} />
+          <Route
+            path="/HotelRoomManagement"
+            element={<HotelRoomManagement />}
+          />
+          <Route
+            path="/HotelBookingManagement"
+            element={<HotelBookingManagement />}
+          />
+        </Routes>
+        <Footer />
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
