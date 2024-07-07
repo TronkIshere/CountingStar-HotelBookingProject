@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import RoomList from "../../components/room/roomList/RoomList";
 import Register from "../../components/register/Register";
 import Rating from "../../components/rating/Rating";
-import { getHotelById } from "../../components/utils/ApiFunction";
+import { getHighestPriceByHotelId, getHotelById, getLowestPriceByHotelId } from "../../components/utils/ApiFunction";
 import { useParams } from "react-router-dom";
 
 const Hotel = () => {
@@ -34,6 +34,12 @@ const Hotel = () => {
     phoneNumber: "",
     photo: ""
   })
+  const [lowestPrice, setLowestPrice] = useState({
+    price: ""
+  });
+  const [highestPrice, setHighestPrice] = useState({
+    price: ""
+  });
 
   const { hotelId } = useParams()
 
@@ -51,6 +57,50 @@ const Hotel = () => {
         })
     }, 2000)
   }, [hotelId])
+
+  useEffect(() => {
+    const fetchLowestPrice = async () => {
+      try {
+        const success = await getLowestPriceByHotelId(hotelId);
+        if (success) {
+          console.log(success)
+          const lowestPrice = success;
+          setLowestPrice({ price: lowestPrice });
+        } else {
+          setErrorMessage("Error fetching the lowest price.");
+        }
+      } catch (error) {
+        setErrorMessage("Error fetching the lowest price.");
+      }
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 4000);
+    };
+
+    fetchLowestPrice();
+  }, [hotelId]);
+
+  useEffect(() => {
+    const fetchHighestPrice = async () => {
+      try {
+        const success = await getHighestPriceByHotelId(hotelId);
+        if (success) {
+          console.log(success)
+          const highestPrice = success;
+          setHighestPrice({ price: highestPrice });
+        } else {
+          setErrorMessage("Error fetching the highest price.");
+        }
+      } catch (error) {
+        setErrorMessage("Error fetching the highest price.");
+      }
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 4000);
+    };
+
+    fetchHighestPrice();
+  }, [hotelId]);
 
   const photos = [
     {
@@ -165,7 +215,7 @@ const Hotel = () => {
                 Nằm tại thành phố Hồ Chí Minh, khách sạn này có số điểm là 9.8!
               </span>
               <h2>
-                <b>từ $945</b> (1 đêm)
+                <b>Từ ${lowestPrice.price}-{highestPrice.price}</b> (1 đêm)
               </h2>
               <button>Đặt phòng ngay!</button>
             </div>

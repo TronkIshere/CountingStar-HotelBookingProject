@@ -21,9 +21,7 @@ const Register = () => {
   const handleRegistration = async (e) => {
     e.preventDefault();
     try {
-      console.log('Registration data:', registration);
       const result = await registerUser(registration);
-      console.log('Registration result:', result);
       setSuccessMessage(result);
       setErrorMessage("");
       setRegistration({

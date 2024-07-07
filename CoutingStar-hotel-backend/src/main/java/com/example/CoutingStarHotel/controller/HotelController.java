@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.rowset.serial.SerialBlob;
+import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -52,6 +53,18 @@ public class HotelController {
             HotelResponse hotelResponse = getHotelResponse(room);
             return  ResponseEntity.ok(Optional.of(hotelResponse));
         }).orElseThrow(() -> new ResourceNotFoundException("hotel not found"));
+    }
+
+    @GetMapping("/hotel/{hotelId}/hotelLowestPrice")
+    public ResponseEntity<Long> getHotelLowestPriceByHotelId(@PathVariable Long hotelId){
+        Long hotelLowestPrice = hotelService.getHotelLowestPriceByHotelId(hotelId);
+        return ResponseEntity.ok(hotelLowestPrice);
+    }
+
+    @GetMapping("/hotel/{hotelId}/hotelHighestPrice")
+    public ResponseEntity<Long> getHotelHighestPriceByHotelId(@PathVariable Long hotelId){
+        Long hotelHighestPrice = hotelService.getHotelHighestPriceByHotelId(hotelId);
+        return ResponseEntity.ok(hotelHighestPrice);
     }
 
     @GetMapping("/{city}")

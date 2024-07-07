@@ -54,6 +54,15 @@ public class HotelService implements IHotelService{
     }
 
     @Override
+    public Long getHotelLowestPriceByHotelId(Long hotelId) {
+        return hotelRepository.getHotelLowestPriceByHotelId(hotelId);
+    }
+
+    @Override
+    public Long getHotelHighestPriceByHotelId(Long hotelId) {
+        return hotelRepository.getHotelHighestPriceByHotelId(hotelId);
+    }
+    @Override
     public List<Hotel> getAllHotels(){
         return hotelRepository.findAll();
     }

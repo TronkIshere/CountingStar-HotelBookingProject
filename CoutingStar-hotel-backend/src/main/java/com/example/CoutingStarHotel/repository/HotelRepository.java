@@ -10,4 +10,10 @@ import java.util.List;
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
     @Query("SELECT distinct h FROM Hotel h WHERE h.city = :city")
     List<Hotel> findAllHotelsByCity(@Param("city") String city);
+
+    @Query("SELECT MIN(r.roomPrice) FROM Room r WHERE r.hotel.id = :hotelId")
+    Long getHotelLowestPriceByHotelId(Long hotelId);
+
+    @Query("SELECT MAX(r.roomPrice) FROM Room r WHERE r.hotel.id = :hotelId")
+    Long getHotelHighestPriceByHotelId(Long hotelId);
 }

@@ -23,4 +23,8 @@ public interface IHotelService {
     String addHotel(Long userId, String hotelName, String city, String hotelDescription, String phoneNumber, MultipartFile photo) throws IOException, SQLException;
 
     Optional<Hotel> getHotelById(Long hotelId);
+
+    Long getHotelLowestPriceByHotelId(Long hotelId);
+
+    Long getHotelHighestPriceByHotelId(Long hotelId);
 }
