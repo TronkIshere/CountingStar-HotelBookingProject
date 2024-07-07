@@ -1,25 +1,25 @@
-.navbar{
+.navbar {
     height: 70px;
     background-color: #003580;
     display: flex;
     justify-content: center;
-}
-
-.navContainer{
+  }
+  
+  .navContainer {
     width: 100%;
     max-width: 1024px;
     color: white;
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.logo{
+  }
+  
+  .logo {
     font-weight: 500;
     font-size: 1.4rem;
-}
-
-.navButton{
+  }
+  
+  .navButton {
     font-size: 1rem;
     margin-left: 20px;
     border: none;
@@ -28,9 +28,9 @@
     cursor: pointer;
     color: #003580;
     font-weight: 500;
-}
-
-.postHotelButton {
+  }
+  
+  .postHotelButton {
     border: none;
     background-color: #003580;
     font-size: 1.2rem;
@@ -44,4 +44,50 @@
     background-color: #0d2a50;
     transform: scale(1.05);
   }
+  
+  .accountContainer {
+    position: relative;
+  }
+  
+  .dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    color: black;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  .dropdown ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .dropdown li {
+    padding: 10px;
+    cursor: pointer;
+    width: 160px;
+  }
 
+  .dropdown li button{
+    border: none;
+    background-color: white;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  
+  .dropdown li:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .userButton{
+    background-color: #003580;
+    font-size: 2rem;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
