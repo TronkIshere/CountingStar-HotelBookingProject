@@ -37,4 +37,9 @@ public class Hotel {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public void addRoom(Room room) {
+        rooms.add(room);
+        room.setHotel(this);
+    }
 }

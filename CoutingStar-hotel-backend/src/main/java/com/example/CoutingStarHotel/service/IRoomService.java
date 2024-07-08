@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IRoomService {
-    Room addNewRoom(MultipartFile file, String roomType, BigDecimal roomPrice, String roomDescription) throws SQLException, IOException;
+    Room addNewRoom(MultipartFile file, String roomType, BigDecimal roomPrice, String roomDescription, Long hotelId) throws SQLException, IOException;
 
     List<String> getAllRoomTypes();
 

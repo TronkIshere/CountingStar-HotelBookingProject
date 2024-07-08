@@ -89,14 +89,14 @@ export async function deleteHotel(hotelId) {
 }
 
 /* This function adds a new room room to the database */
-export async function addRoom(photo, roomType, roomPrice, roomDescription) {
+export async function addRoom(photo, roomType, roomPrice, roomDescription, hotelId) {
 	const formData = new FormData()
 	formData.append("photo", photo)
 	formData.append("roomType", roomType)
 	formData.append("roomPrice", roomPrice)
 	formData.append("roomDescription", roomDescription)
 
-	const response = await api.post("/rooms/add/new-room", formData)
+	const response = await api.post(`/rooms/add/new-room/${hotelId}`, formData)
 	if (response.status === 201) {
 		return true
 	} else {
@@ -152,7 +152,7 @@ export async function getRoomById(roomId){
 		const result = await api.get(`/rooms/room/${roomId}`)
 		return result.data
 	} catch(error) {
-		throw new Error(`Error fetching room ${err.message}`)
+		throw new Error(`Error fetching room ${error.message}`)
 	}
 }
 

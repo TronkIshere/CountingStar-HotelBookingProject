@@ -33,13 +33,14 @@ public class RoomController {
     private final IRoomService roomService;
     private final BookingService bookingService;
 
-    @PostMapping("/add/new-room")
+    @PostMapping("/add/new-room/{hotelId}")
     public ResponseEntity<RoomResponse> addNewRoom(
             @RequestParam("photo")MultipartFile photo,
             @RequestParam("roomType")String roomType,
             @RequestParam("roomPrice")BigDecimal roomPrice,
-            @RequestParam("roomDescription")String roomDescription) throws SQLException, IOException {
-        Room savedRoom = roomService.addNewRoom(photo, roomType, roomPrice, roomDescription);
+            @RequestParam("roomDescription")String roomDescription,
+            @PathVariable Long hotelId) throws SQLException, IOException {
+        Room savedRoom = roomService.addNewRoom(photo, roomType, roomPrice, roomDescription, hotelId);
         RoomResponse response = new RoomResponse(savedRoom.getId(), savedRoom.getRoomType(), savedRoom.getRoomPrice(), savedRoom.getRoomDescription());
 
         return ResponseEntity.ok(response);

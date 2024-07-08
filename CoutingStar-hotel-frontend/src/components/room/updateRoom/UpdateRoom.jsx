@@ -1,33 +1,65 @@
-import React, { useState, useEffect } from "react";
-import "./updateRoom.css";
+import React, { useState, useEffect } from "react"
+import "./updateRoom.css"
+import { getRoomById, updateRoom } from "../../utils/ApiFunction"
 
-const UpdateRoom = ({ room, handleUpdateRoom, onClose }) => {
-  const [updatedRoom, setUpdatedRoom] = useState(room);
+const UpdateRoom = ({ roomId, handleUpdateRoom, onClose }) => {
+  const [room, setRoom] = useState({
+    photo: "",
+    roomType: "",
+    roomPrice: "",
+    roomDescription: ""
+  })
 
-  useEffect(() => {
-    setUpdatedRoom(room);
-  }, [room]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setUpdatedRoom((prevRoom) => ({
-      ...prevRoom,
-      [name]: value,
-    }));
-  };
+  const [imagePreview, setImagePreview] = useState("")
+  const [successMessage, setSuccessMessage] = useState("")
+  const [errorMessage, setErrorMessage] = useState("")
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setUpdatedRoom((prevRoom) => ({
-      ...prevRoom,
-      image: file,
-    }));
-  };
+    const selectedImage = e.target.files[0]
+    setRoom({ ...room, photo: selectedImage })
+    setImagePreview(URL.createObjectURL(selectedImage))
+  }
 
-  const handleSubmit = () => {
-    handleUpdateRoom(updatedRoom);
-  };
+  const handleInputChange = (event) => {
+    const { name, value } = event.target
+    setRoom({ ...room, [name]: value })
+  }
 
+  useEffect(() => {
+    const fetchRoom = async () => {
+      try {
+        const roomData = await getRoomById(roomId)
+        setRoom(roomData)
+        setImagePreview(roomData.photo)
+      } catch (error) {
+        console.log(error)
+      }
+    };
+
+    fetchRoom()
+  }, [roomId])
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    try {
+      const response = await updateRoom(roomId, room)
+      if (response.status === 200) {
+        setSuccessMessage("Room updated successfully!")
+        const updatedRoomData = await getRoomById(roomId)
+        setRoom(updatedRoomData)
+        setImagePreview(updatedRoomData.photo)
+        handleUpdateRoom(updatedRoomData)
+        setErrorMessage("")
+      } else {
+        setErrorMessage("Error updating room")
+      }
+    } catch (error) {
+      console.error(error)
+      setErrorMessage(error.message)
+    }
+  }
+  
   return (
     <div className="modal">
       <div className="modalContent">
@@ -38,31 +70,31 @@ const UpdateRoom = ({ room, handleUpdateRoom, onClose }) => {
         <div className="modalBody">
           <input
             type="text"
-            name="type"
+            name="roomType"
             placeholder="Loại phòng"
-            value={updatedRoom.type}
+            value={room.roomType}
             onChange={handleInputChange}
           />
           <input
             type="text"
-            name="description"
+            name="roomDescription"
             placeholder="Miêu tả"
-            value={updatedRoom.description}
+            value={room.roomDescription}
             onChange={handleInputChange}
           />
           <input
             type="text"
-            name="price"
+            name="roomPrice"
             placeholder="Giá tiền"
-            value={updatedRoom.price}
+            value={room.roomPrice}
             onChange={handleInputChange}
           />
           <input
             type="file"
-            name="image"
-            accept="image/*"
+            name="photo"
             onChange={handleImageChange}
           />
+          {imagePreview && <img src={`data:image/jpeg;base64,${imagePreview}`} alt="Room preview" className="imagePreview" />}
         </div>
         <div className="modalFooter">
           <button className="updateButton" onClick={handleSubmit}>Cập nhật phòng</button>

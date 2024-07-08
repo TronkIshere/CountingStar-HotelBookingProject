@@ -1,45 +1,65 @@
 import React, { useState } from "react";
 import "./addRoom.css";
+import { addRoom } from "../../utils/ApiFunction";
 
-const AddRoom = ({ handleAddRoom, onClose }) => {
+const AddRoom = ({ onClose }) => {
   const [newRoom, setNewRoom] = useState({
-    type: "",
-    description: "",
-    price: "",
-    details: "",
-    image: null,
+    photo: null,
+    roomType: "",
+    roomPrice: "",
+    roomDescription: ""
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewRoom((prevRoom) => ({
-      ...prevRoom,
-      [name]: value,
-    }));
+  const [successMessage, setSuccessMessage] = useState("");
+  const [imagePreview, setImagePreview] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleRoomInputChange = (e) => {
+    const name = e.target.name;
+    let value = e.target.value;
+    if (name === "roomPrice") {
+      if (!isNaN(value)) {
+        value = parseInt(value);
+      } else {
+        value = "";
+      }
+    }
+    setNewRoom({ ...newRoom, [name]: value });
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setNewRoom((prevRoom) => ({
-      ...prevRoom,
-      image: file,
-    }));
-  };
+    const selectedImage = e.target.files[0];
+    setNewRoom({ ...newRoom, photo: selectedImage });
+    setImagePreview(URL.createObjectURL(selectedImage));
+  }
 
-  const handleSubmit = () => {
-    handleAddRoom(newRoom);
-    setNewRoom({
-      type: "",
-      description: "",
-      price: "",
-      details: "",
-      image: null,
-    });
-  };
+  const hotelId = localStorage.getItem("userHotelId")
+  console.log(hotelId)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const success = await addRoom(newRoom.photo, newRoom.roomType, newRoom.roomPrice, newRoom.roomDescription, hotelId);
+      if (success !== undefined) {
+        setSuccessMessage("A new room was added successfully!")
+        setNewRoom({ photo: null, roomType: "", roomPrice: "", roomDescription: "" })
+        setImagePreview("")
+        setErrorMessage("")
+      } else {
+        setErrorMessage("Error adding new room")
+      }
+    } catch (error) {
+      setErrorMessage(error.message)
+    }
+    setTimeout(() => {
+      setSuccessMessage("")
+      setErrorMessage("")
+    }, 3000)
+  }
 
   return (
     <div className="modal">
-      <div className="modalContent">
+      <form className="modalContent" onSubmit={handleSubmit}>
         <div className="modalHeader">
           <h2>Thêm phòng mới</h2>
           <span className="close" onClick={onClose}>&times;</span>
@@ -47,36 +67,43 @@ const AddRoom = ({ handleAddRoom, onClose }) => {
         <div className="modalBody">
           <input
             type="text"
-            name="type"
+            name="roomType"
             placeholder="Loại phòng"
-            value={newRoom.type}
-            onChange={handleInputChange}
+            value={newRoom.roomType}
+            onChange={handleRoomInputChange}
           />
           <input
             type="text"
-            name="description"
+            name="roomDescription"
             placeholder="Miêu tả"
-            value={newRoom.description}
-            onChange={handleInputChange}
+            value={newRoom.roomDescription}
+            onChange={handleRoomInputChange}
           />
           <input
             type="text"
-            name="price"
+            name="roomPrice"
             placeholder="Giá tiền"
-            value={newRoom.price}
-            onChange={handleInputChange}
+            value={newRoom.roomPrice}
+            onChange={handleRoomInputChange}
           />
           <input
             type="file"
-            name="image"
+            name="photo"
             accept="image/*"
             onChange={handleImageChange}
           />
+          {imagePreview && (
+            <div className="imagePreview">
+              <img className="inputImg" src={imagePreview} alt="Preview" />
+            </div>
+          )}
         </div>
         <div className="modalFooter">
-          <button className="addButton" onClick={handleSubmit}>Thêm phòng</button>
+          <button className="addButton" type="submit">Thêm phòng</button>
         </div>
-      </div>
+        {successMessage && <p className="successMessage">{successMessage}</p>}
+        {errorMessage && <p className="errorMessage">{errorMessage}</p>}
+      </form>
     </div>
   );
 };

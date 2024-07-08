@@ -1,53 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./hotelRoomManagement.css";
 import AddRoom from "../../components/room/addRoom/AddRoom";
 import UpdateRoom from "../../components/room/updateRoom/UpdateRoom";
 import DeleteRoom from "../../components/room/deleteRoom/DeleteRoom";
+import { getRoomsByHotelId } from "../../components/utils/ApiFunction";
 
 const HotelRoomManagement = () => {
-  const [rooms, setRooms] = useState([
-    {
-      type: "Deluxe",
-      description: "A spacious room with a beautiful view.",
-      price: "$150",
-      details:
-        "King size bed, Free WiFi, Air conditioning, Mini bar, Balcony with sea view",
-      rating: "4.5/5",
-    },
-    {
-      type: "Standard",
-      description: "A comfortable room for a great stay.",
-      price: "$100",
-      details: "Queen size bed, Free WiFi, TV, Private bathroom",
-      rating: "4.0/5",
-    },
-    {
-      type: "Suite",
-      description: "A luxurious suite with all amenities.",
-      price: "$250",
-      details: "King size bed, Free WiFi, Jacuzzi, Kitchenette, Living room",
-      rating: "4.8/5",
-    },
-    {
-      type: "Single",
-      description: "A cozy room perfect for solo travelers.",
-      price: "$80",
-      details: "Single bed, Free WiFi, TV, Shared bathroom",
-      rating: "3.8/5",
-    },
-    {
-      type: "Double",
-      description: "A room with two beds for friends or family.",
-      price: "$120",
-      details: "Two single beds, Free WiFi, TV, Private bathroom",
-      rating: "4.2/5",
-    },
-  ]);
-
+  const [rooms, setRooms] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const userHotelId = localStorage.getItem("userHotelId");
+
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        const roomsData = await getRoomsByHotelId(userHotelId);
+        setRooms(roomsData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchRooms();
+  }, [userHotelId]);
 
   const handleAddRoom = (newRoom) => {
     setRooms([...rooms, newRoom]);
@@ -62,8 +40,8 @@ const HotelRoomManagement = () => {
     setIsAddModalOpen(false);
   };
 
-  const handleOpenUpdateModal = (room) => {
-    setSelectedRoom(room);
+  const handleOpenUpdateModal = (roomId) => {
+    setSelectedRoomId(roomId);
     setIsUpdateModalOpen(true);
   };
 
@@ -73,14 +51,14 @@ const HotelRoomManagement = () => {
 
   const handleUpdateRoom = (updatedRoom) => {
     const updatedRooms = rooms.map((room) =>
-      room.type === updatedRoom.type ? updatedRoom : room
+      room.id === updatedRoom.id ? updatedRoom : room
     );
     setRooms(updatedRooms);
     setIsUpdateModalOpen(false);
   };
 
-  const handleOpenDeleteModal = (room) => {
-    setSelectedRoom(room);
+  const handleOpenDeleteModal = (roomId) => {
+    setSelectedRoomId(roomId);
     setIsDeleteModalOpen(true);
   };
 
@@ -89,7 +67,7 @@ const HotelRoomManagement = () => {
   };
 
   const handleDeleteRoom = (roomToDelete) => {
-    setRooms(rooms.filter((room) => room.type !== roomToDelete.type));
+    setRooms(rooms.filter((room) => room.id !== roomToDelete.id));
     setIsDeleteModalOpen(false);
   };
 
@@ -112,20 +90,20 @@ const HotelRoomManagement = () => {
         <tbody>
           {rooms.map((room, index) => (
             <tr key={index}>
-              <td>{room.type}</td>
-              <td>{room.description}</td>
-              <td>{room.price}</td>
-              <td>{room.rating}</td>
+              <td>{room.roomType}</td>
+              <td>{room.roomDescription}</td>
+              <td>{room.roomPrice}</td>
+              <td>none</td>
               <td>
                 <button
                   className="editButton"
-                  onClick={() => handleOpenUpdateModal(room)}
+                  onClick={() => handleOpenUpdateModal(room.id)}
                 >
                   Chỉnh sửa
                 </button>
                 <button
                   className="deleteButton"
-                  onClick={() => handleOpenDeleteModal(room)}
+                  onClick={() => handleOpenDeleteModal(room.id)}
                 >
                   Xóa
                 </button>
@@ -137,16 +115,16 @@ const HotelRoomManagement = () => {
       {isAddModalOpen && (
         <AddRoom handleAddRoom={handleAddRoom} onClose={handleCloseAddModal} />
       )}
-      {isUpdateModalOpen && selectedRoom && (
+      {isUpdateModalOpen && selectedRoomId && (
         <UpdateRoom
-          room={selectedRoom}
+          roomId={selectedRoomId}
           handleUpdateRoom={handleUpdateRoom}
           onClose={handleCloseUpdateModal}
         />
       )}
-      {isDeleteModalOpen && selectedRoom && (
+      {isDeleteModalOpen && selectedRoomId && (
         <DeleteRoom
-          room={selectedRoom}
+          roomId={selectedRoomId}
           handleDeleteRoom={handleDeleteRoom}
           onClose={handleCloseDeleteModal}
         />

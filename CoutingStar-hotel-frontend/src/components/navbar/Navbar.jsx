@@ -17,7 +17,8 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
 
   const isLoggedIn = user !== null;
   const userRole = localStorage.getItem("userRole");
-  const userId = localStorage.getItem('userId');
+  const userId = localStorage.getItem("userId");
+  const hotelId = localStorage.getItem("hotelId")
 
   const auth = useContext(AuthContext);
 
@@ -43,9 +44,29 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
                       <RouterLink to={`/user/${userId}`}>Người dùng</RouterLink>
                     </li>
                     {userRole === "ROLE_HOTEL_OWNER" && (
-                      <li className="navButtonLi">
-                        <RouterLink to={`/hotels/hotel/Owner/`}>Quản lý khách sạn</RouterLink>
-                      </li>
+                      <>
+                        <li className="navButtonLi">
+                          <RouterLink
+                            to={`/hotel/${hotelId}/hotelRoomManagement`}
+                          >
+                            Quản lý phòng
+                          </RouterLink>
+                        </li>
+                        <li className="navButtonLi">
+                          <RouterLink
+                            to={`/hotel/${hotelId}/hotelBookingManagement`}
+                          >
+                            Quản lý đặt phòng
+                          </RouterLink>
+                        </li>
+                        <li className="navButtonLi">
+                          <RouterLink
+                            to={`/hotel/${hotelId}/hotelInformationManagement`}
+                          >
+                            Quản lý khách sạn
+                          </RouterLink>
+                        </li>
+                      </>
                     )}
                     <li className="navButtonLi">
                       <button onClick={handleLogout}>Đăng xuất</button>
@@ -58,14 +79,24 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
             <>
               <button className="postHotelButton">Đăng phòng của bạn</button>
               <button className="navButton" onClick={onRegisterClick}>
-                <ScrollLink to="register" smooth={true} duration={500} className="navLink">
+                <ScrollLink
+                  to="register"
+                  smooth={true}
+                  duration={500}
+                  className="navLink"
+                >
                   Đăng ký
                 </ScrollLink>
               </button>
               <button onClick={onLoginClick} className="navButton">
-                <ScrollLink to="login" smooth={true} duration={500} className="navLink">
+                <RouterLink
+                  to="login"
+                  smooth={true}
+                  duration={500}
+                  className="navLink"
+                >
                   Đăng nhập
-                </ScrollLink>
+                </RouterLink>
               </button>
             </>
           )}

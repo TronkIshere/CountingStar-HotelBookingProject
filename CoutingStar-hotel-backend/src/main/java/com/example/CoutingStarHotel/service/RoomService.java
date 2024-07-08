@@ -2,7 +2,9 @@ package com.example.CoutingStarHotel.service;
 
 import com.example.CoutingStarHotel.exception.InternalServerException;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
+import com.example.CoutingStarHotel.model.Hotel;
 import com.example.CoutingStarHotel.model.Room;
+import com.example.CoutingStarHotel.repository.HotelRepository;
 import com.example.CoutingStarHotel.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,17 +23,20 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RoomService implements IRoomService{
     private final RoomRepository roomRepository;
+    private final HotelRepository hotelRepository;
     @Override
-    public Room addNewRoom(MultipartFile file, String roomType, BigDecimal roomPrice, String roomDescription) throws SQLException, IOException {
+    public Room addNewRoom(MultipartFile file, String roomType, BigDecimal roomPrice, String roomDescription, Long hotelId) throws SQLException, IOException {
         Room room = new Room();
         room.setRoomType(roomType);
         room.setRoomPrice(roomPrice);
         room.setRoomDescription(roomDescription);
+        Hotel hotel = hotelRepository.getById(hotelId);
         if(!file.isEmpty()) {
             byte[] photoBytes = file.getBytes();
             Blob photoBlob = new SerialBlob(photoBytes);
             room.setPhoto(photoBlob);
         }
+        hotel.addRoom(room);
         return roomRepository.save(room);
     }
 

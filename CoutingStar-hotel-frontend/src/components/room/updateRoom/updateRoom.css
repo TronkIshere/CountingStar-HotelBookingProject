@@ -82,4 +82,8 @@
   .updateButton:hover {
     background-color: #005fa3;
   }
+
+  .imagePreview{
+    width: 50%;
+  }
   

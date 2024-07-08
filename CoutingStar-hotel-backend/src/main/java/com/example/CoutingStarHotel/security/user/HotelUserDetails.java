@@ -23,6 +23,7 @@ public class HotelUserDetails implements UserDetails {
     private String password;
     private String phoneNumber;
     private Collection<GrantedAuthority> authorities;
+    private Long hotelId;
     public static HotelUserDetails buildUserDetails(User user){
         List<GrantedAuthority> authorities = user.getRoles()
                 .stream()
@@ -33,7 +34,8 @@ public class HotelUserDetails implements UserDetails {
                 user.getEmail(),
                 user.getPassword(),
                 user.getPhoneNumber(),
-                authorities);
+                authorities,
+                user.getHotel().getId());
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
