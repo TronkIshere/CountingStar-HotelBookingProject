@@ -18,7 +18,7 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
   const isLoggedIn = user !== null;
   const userRole = localStorage.getItem("userRole");
   const userId = localStorage.getItem("userId");
-  const hotelId = localStorage.getItem("hotelId")
+  const hotelId = localStorage.getItem("userHotelId")
 
   const auth = useContext(AuthContext);
 

@@ -73,17 +73,18 @@ public class RoomService implements IRoomService{
     }
 
     @Override
-    public Room updateRoom(Long roomId, String roomType, BigDecimal roomPrice, byte[] photoBytes) {
+    public Room updateRoom(Long roomId, String roomType, String roomDescription, BigDecimal roomPrice, MultipartFile photo) throws IOException, SQLException {
         Room room = roomRepository.findById(roomId).get();
         if (roomType != null) room.setRoomType(roomType);
+        if (roomDescription != null) room.setRoomDescription(roomDescription);
         if (roomPrice != null) room.setRoomPrice(roomPrice);
-        if (photoBytes != null && photoBytes.length > 0) {
-            try {
-                room.setPhoto(new SerialBlob(photoBytes));
-            } catch (SQLException ex) {
-                throw new InternalServerException("Error updating room");
-            }
+
+        if (photo != null && !photo.isEmpty()) {
+            byte[] photoBytes = photo.getBytes();
+            Blob photoBlob = new SerialBlob(photoBytes);
+            room.setPhoto(photoBlob);
         }
+
         return roomRepository.save(room);
     }
 

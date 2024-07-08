@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./hotelRoomManagement.css";
+import "./hotelInformationManagement.css";
 import AddRoom from "../../components/room/addRoom/AddRoom";
 import UpdateRoom from "../../components/room/updateRoom/UpdateRoom";
 import DeleteRoom from "../../components/room/deleteRoom/DeleteRoom";
@@ -12,64 +12,64 @@ const HotelRoomManagement = () => {
   const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const userHotelId = localStorage.getItem("userHotelId")
+  const userHotelId = localStorage.getItem("userHotelId");
 
   useEffect(() => {
     const fetchRooms = async () => {
       try {
         const roomsData = await getRoomsByHotelId(userHotelId);
-        setRooms(roomsData)
+        setRooms(roomsData);
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    }
+    };
 
-    fetchRooms()
-  }, [userHotelId])
+    fetchRooms();
+  }, [userHotelId]);
 
   const handleAddRoom = (newRoom) => {
-    setRooms([...rooms, newRoom])
-    setIsAddModalOpen(false)
-  }
+    setRooms([...rooms, newRoom]);
+    setIsAddModalOpen(false);
+  };
 
   const handleOpenAddModal = () => {
-    setIsAddModalOpen(true)
-  }
+    setIsAddModalOpen(true);
+  };
 
   const handleCloseAddModal = () => {
-    setIsAddModalOpen(false)
-  }
+    setIsAddModalOpen(false);
+  };
 
   const handleOpenUpdateModal = (roomId) => {
-    setSelectedRoomId(roomId)
-    setIsUpdateModalOpen(true)
-  }
+    setSelectedRoomId(roomId);
+    setIsUpdateModalOpen(true);
+  };
 
   const handleCloseUpdateModal = () => {
-    setIsUpdateModalOpen(false)
-  }
+    setIsUpdateModalOpen(false);
+  };
 
   const handleUpdateRoom = (updatedRoom) => {
     const updatedRooms = rooms.map((room) =>
       room.id === updatedRoom.id ? updatedRoom : room
-    )
-    setRooms(updatedRooms)
-    setIsUpdateModalOpen(false)
-  }
+    );
+    setRooms(updatedRooms);
+    setIsUpdateModalOpen(false);
+  };
 
   const handleOpenDeleteModal = (roomId) => {
     setSelectedRoomId(roomId);
-    setIsDeleteModalOpen(true)
-  }
+    setIsDeleteModalOpen(true);
+  };
 
   const handleCloseDeleteModal = () => {
-    setIsDeleteModalOpen(false)
-  }
+    setIsDeleteModalOpen(false);
+  };
 
-  const handleDeleteRoom = (roomId) => {
-    setRooms(rooms.filter((room) => room.id !== roomId))
-    setIsDeleteModalOpen(false)
-  }
+  const handleDeleteRoom = (roomToDelete) => {
+    setRooms(rooms.filter((room) => room.id !== roomToDelete.id));
+    setIsDeleteModalOpen(false);
+  };
 
   return (
     <div className="roomListContainer">

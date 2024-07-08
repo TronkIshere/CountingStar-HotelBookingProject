@@ -91,14 +91,11 @@ public class RoomController {
 
     @PutMapping("/update/{roomId}")
     public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long roomId,
-                                                   @RequestParam(required = false) String roomType,
-                                                   @RequestParam(required = false) BigDecimal roomPrice,
+                                                   @RequestParam String roomType,
+                                                   @RequestParam String roomDescription,
+                                                   @RequestParam BigDecimal roomPrice,
                                                    @RequestParam(required = false) MultipartFile photo) throws SQLException, IOException {
-        byte[] photoBytes = photo != null && !photo.isEmpty() ?
-                photo.getBytes() : roomService.getRoomPhotoByRoomId(roomId);
-        Blob photoBlob = photoBytes != null && photoBytes.length >0 ? new SerialBlob(photoBytes): null;
-        Room theRoom = roomService.updateRoom(roomId, roomType, roomPrice, photoBytes);
-        theRoom.setPhoto(photoBlob);
+        Room theRoom = roomService.updateRoom(roomId, roomType, roomDescription, roomPrice, photo);
         RoomResponse roomResponse = getRoomResponse(theRoom);
         return ResponseEntity.ok(roomResponse);
     }

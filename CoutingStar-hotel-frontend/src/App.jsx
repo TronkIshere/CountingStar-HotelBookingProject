@@ -36,14 +36,14 @@ function App() {
           <Route path="/user/:userId" element={<UserProfile />} />
           <Route path="/hotelRegistration" element={<HotelRegistration />} />
           <Route
-            path="hotel/:hotelId/HotelRoomManagement"
+            path="/hotel/:hotelId/HotelRoomManagement"
             element={<HotelRoomManagement />}
           />
           <Route
-            path="hotel/:hotelId/hotelBookingManagement"
+            path="/hotel/:hotelId/hotelBookingManagement"
             element={<HotelBookingManagement />}
           />
-          <Route path="hotel/:hotelId/hotelInformationManagement" element={<HotelInformation />} />
+          <Route path="/hotel/:hotelId/hotelInformationManagement" element={<HotelInformation />} />
         </Routes>
         <Footer />
       </BrowserRouter>

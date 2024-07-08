@@ -34,19 +34,18 @@ const AddRoom = ({ onClose }) => {
   }
 
   const hotelId = localStorage.getItem("userHotelId")
-  console.log(hotelId)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const success = await addRoom(newRoom.photo, newRoom.roomType, newRoom.roomPrice, newRoom.roomDescription, hotelId);
       if (success !== undefined) {
-        setSuccessMessage("A new room was added successfully!")
+        setSuccessMessage("Thêm phòng mới thành công!")
         setNewRoom({ photo: null, roomType: "", roomPrice: "", roomDescription: "" })
         setImagePreview("")
         setErrorMessage("")
       } else {
-        setErrorMessage("Error adding new room")
+        setErrorMessage("Có lỗi khi thêm phòng mới")
       }
     } catch (error) {
       setErrorMessage(error.message)
