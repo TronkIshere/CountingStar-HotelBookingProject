@@ -1,12 +1,11 @@
 package com.example.CoutingStarHotel.service;
 
-import com.example.CoutingStarHotel.exeption.InvalidBookingRequestException;
-import com.example.CoutingStarHotel.exeption.ResourceNotFoundException;
+import com.example.CoutingStarHotel.exception.InvalidBookingRequestException;
+import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.model.BookedRoom;
 import com.example.CoutingStarHotel.model.Room;
 import com.example.CoutingStarHotel.model.User;
 import com.example.CoutingStarHotel.repository.BookingRepository;
-import com.example.CoutingStarHotel.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

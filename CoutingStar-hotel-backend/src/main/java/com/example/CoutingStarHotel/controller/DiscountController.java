@@ -1,7 +1,7 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.exeption.InvalidDiscountRequestException;
-import com.example.CoutingStarHotel.exeption.ResourceNotFoundException;
+import com.example.CoutingStarHotel.exception.InvalidDiscountRequestException;
+import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.model.Discount;
 import com.example.CoutingStarHotel.response.DiscountResponse;
 import com.example.CoutingStarHotel.service.IDiscountService;

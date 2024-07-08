@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import "./hotel.css";
 import Navbar from "../../components/navbar/Navbar";
 import Header from "../../components/header/Header";
@@ -11,7 +12,7 @@ import {
   faPhone,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { Link } from "react-scroll"; // Import Link từ react-scroll
 import RoomList from "../../components/room/roomList/RoomList";
 import Register from "../../components/register/Register";
 import Rating from "../../components/rating/Rating";
@@ -168,7 +169,10 @@ const Hotel = () => {
         )}
         {ratingOpen && <Rating onClose={() => setRatingOpen(false)} />}
         <div className="hotelWrapper">
-          <button className="bookNow">Hãy đặt ngay!</button>
+          {/* Sử dụng Link từ react-scroll để cuộn đến RoomList */}
+          <Link to="roomList" smooth={true} duration={500}>
+            <button className="bookNow">Hãy đặt ngay!</button>
+          </Link>
           <h1 className="hotelTitle">{hotelInfo.hotelName}</h1>
           <div className="hotelAddressAndContact">
             <FontAwesomeIcon icon={faLocationDot} />
@@ -220,7 +224,9 @@ const Hotel = () => {
               <button>Đặt phòng ngay!</button>
             </div>
           </div>
-          <RoomList hotelId={hotelInfo.id} />
+          <div id="roomList">
+            <RoomList hotelId={hotelInfo.id} />
+          </div>
         </div>
         <Register />
       </div>

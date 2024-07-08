@@ -1,4 +1,4 @@
-package com.example.CoutingStarHotel.exeption;
+package com.example.CoutingStarHotel.exception;
 
 public class InvalidHotelRequestException extends RuntimeException{
     public InvalidHotelRequestException (String message){

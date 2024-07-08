@@ -25,6 +25,7 @@ const Login = ({ onClose }) => {
       const token = success.token;
       handleLogin(token);
       navigate("/");
+      onClose();
     } else {
       setErrorMessage("Invalid username or password. Please try again.");
     }
@@ -40,6 +41,7 @@ const Login = ({ onClose }) => {
         className="signInForm"
         onClick={(e) => e.stopPropagation()}
       >
+        <button className="close_button" onClick={onClose}>x</button>
         <h1>Đăng nhập</h1>
         <input
           type="email"
@@ -55,7 +57,7 @@ const Login = ({ onClose }) => {
           onChange={handleInputChange}
           placeholder="Nhập mật khẩu"
         />
-        <button type="submit">Đăng nhập</button>
+        <button type="submit" className="loginButton">Đăng nhập</button>
         {errorMessage && <div className="error">{errorMessage}</div>}
       </form>
     </div>

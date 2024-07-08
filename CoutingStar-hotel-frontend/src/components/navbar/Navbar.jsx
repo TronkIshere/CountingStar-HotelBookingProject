@@ -1,14 +1,15 @@
 import React, { useContext, useState } from "react";
 import "./navbar.css";
-import { Link } from "react-scroll";
 import { AuthContext } from "../utils/AuthProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
+import { Link as ScrollLink } from "react-scroll";
 
 const Navbar = ({ onLoginClick, onRegisterClick }) => {
   const [showAccount, setShowAccount] = useState(false);
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleAccountClick = () => {
     setShowAccount(!showAccount);
@@ -16,14 +17,13 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
 
   const isLoggedIn = user !== null;
   const userRole = localStorage.getItem("userRole");
+  const userId = localStorage.getItem('userId');
 
   const auth = useContext(AuthContext);
-  const navigate = useNavigate();
 
   const handleLogout = () => {
     auth.handleLogout();
-    window.location.reload();
-    navigate("/", { state: { message: " You have been logged out!" } });
+    navigate("/", { state: { message: "You have been logged out!" } });
   };
 
   return (
@@ -39,15 +39,15 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
               {showAccount && (
                 <div className="dropdown">
                   <ul>
-                    <li>
-                      <button>Người dùng</button>
+                    <li className="navButtonLi">
+                      <RouterLink to={`/user/${userId}`}>Người dùng</RouterLink>
                     </li>
                     {userRole === "ROLE_HOTEL_OWNER" && (
-                      <li>
-                        <button>Quản lý khách sạn</button>
+                      <li className="navButtonLi">
+                        <RouterLink to={`/hotels/hotel/Owner/`}>Quản lý khách sạn</RouterLink>
                       </li>
                     )}
-                    <li>
+                    <li className="navButtonLi">
                       <button onClick={handleLogout}>Đăng xuất</button>
                     </li>
                   </ul>
@@ -58,12 +58,14 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
             <>
               <button className="postHotelButton">Đăng phòng của bạn</button>
               <button className="navButton" onClick={onRegisterClick}>
-                <Link to="register" smooth={true} duration={500}>
+                <ScrollLink to="register" smooth={true} duration={500} className="navLink">
                   Đăng ký
-                </Link>
+                </ScrollLink>
               </button>
               <button onClick={onLoginClick} className="navButton">
-                Đăng nhập
+                <ScrollLink to="login" smooth={true} duration={500} className="navLink">
+                  Đăng nhập
+                </ScrollLink>
               </button>
             </>
           )}

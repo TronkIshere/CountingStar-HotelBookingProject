@@ -38,6 +38,7 @@ public class BookingResponse {
         this.numOfChildren = numOfChildren;
         this.totalNumOfGuest = totalNumOfGuest;
         this.guestFullName = guestFullName;
+        this.room = room;
     }
 }
 

@@ -1,7 +1,7 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.exeption.PhotoRetrievalExcetion;
-import com.example.CoutingStarHotel.exeption.ResourceNotFoundException;
+import com.example.CoutingStarHotel.exception.PhotoRetrievalExcetion;
+import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.model.BookedRoom;
 import com.example.CoutingStarHotel.model.Room;
 import com.example.CoutingStarHotel.response.RoomResponse;

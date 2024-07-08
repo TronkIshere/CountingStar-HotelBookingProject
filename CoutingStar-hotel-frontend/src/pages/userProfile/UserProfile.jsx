@@ -1,102 +1,84 @@
 import React, { useEffect, useState } from "react";
 import "./userProfile.css";
+import {getUserByEmail, getBookingsByUserId, deleteUser} from "../../components/utils/ApiFunction"
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
-  const [user, setUser] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [message, setMessage] = useState("");
-  const [bookings, setBookings] = useState([]);
+  const [user, setUser] = useState({
+		id: "",
+		email: "",
+		firstName: "",
+		lastName: "",
+    phoneNumber: "",
+		roles: [{ id: "", name: "" }]
+	})
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const fetchedUser = {
-          id: "12345",
-          firstName: "Nguyễn Hữu",
-          lastName: "Trọng",
-          email: "john.doe@example.com",
-          phoneNumber: "0359256696",
-          roles: "user",
-        };
-        const fetchedBookings = [
-          {
-            bookingId: "B123",
-            room: { id: "R1", roomType: "Single" },
-            checkInDate: "2024-06-01",
-            checkOutDate: "2024-06-07",
-            bookingConfirmationCode: "CONF123",
-            status: "On-going",
-          },
-          {
-            bookingId: "B124",
-            room: { id: "R2", roomType: "Double" },
-            checkInDate: "2024-07-01",
-            checkOutDate: "2024-07-07",
-            bookingConfirmationCode: "CONF124",
-            status: "Completed",
-          },
-          {
-            bookingId: "B125",
-            room: { id: "R3", roomType: "Suite" },
-            checkInDate: "2024-08-01",
-            checkOutDate: "2024-08-07",
-            bookingConfirmationCode: "CONF125",
-            status: "Cancelled",
-          },
-          {
-            bookingId: "B126",
-            room: { id: "R4", roomType: "Single" },
-            checkInDate: "2024-09-01",
-            checkOutDate: "2024-09-07",
-            bookingConfirmationCode: "CONF126",
-            status: "On-going",
-          },
-          {
-            bookingId: "B127",
-            room: { id: "R5", roomType: "Double" },
-            checkInDate: "2024-10-01",
-            checkOutDate: "2024-10-07",
-            bookingConfirmationCode: "CONF127",
-            status: "Completed",
-          },
-          {
-            bookingId: "B128",
-            room: { id: "R6", roomType: "Suite" },
-            checkInDate: "2024-11-01",
-            checkOutDate: "2024-11-07",
-            bookingConfirmationCode: "CONF128",
-            status: "Cancelled",
-          },
-          {
-            bookingId: "B129",
-            room: { id: "R7", roomType: "Single" },
-            checkInDate: "2024-12-01",
-            checkOutDate: "2024-12-07",
-            bookingConfirmationCode: "CONF129",
-            status: "On-going",
-          },
-          {
-            bookingId: "B130",
-            room: { id: "R8", roomType: "Double" },
-            checkInDate: "2024-12-01",
-            checkOutDate: "2024-12-07",
-            bookingConfirmationCode: "CONF130",
-            status: "On-going",
-          },
-        ];
-        setUser(fetchedUser);
-        setBookings(fetchedBookings);
-      } catch (error) {
-        setErrorMessage("Error fetching user data");
-      }
-    };
+	const [bookings, setBookings] = useState([
+		{
+			id: "",
+			room: { id: "", roomType: "" },
+			checkInDate: "",
+			checkOutDate: "",
+			bookingConfirmationCode: ""
+		}
+	])
+	const [message, setMessage] = useState("")
+	const [errorMessage, setErrorMessage] = useState("")
+	const navigate = useNavigate()
 
-    fetchUserData();
-  }, []);
+	const userEmail = localStorage.getItem("userEmail")
+	const userId = localStorage.getItem("userId")
+	const token = localStorage.getItem("token")
 
-  const handleDeleteAccount = () => {
-    alert("Account closed.");
-  };
+	useEffect(() => {
+		const fetchUser = async () => {
+			try {
+				const userData = await getUserByEmail(userEmail, token)
+				setUser(userData)
+			} catch (error) {
+				console.error(error)
+			}
+		}
+
+		fetchUser()
+	}, [userEmail])
+
+	useEffect(() => {
+		const fetchBookings = async () => {
+			try {
+				const response = await getBookingsByUserId(userId, token)
+				setBookings(response)
+			} catch (error) {
+				console.error("Error fetching bookings:", error.message)
+				setErrorMessage(error.message)
+			}
+		}
+
+		fetchBookings()
+	}, [userEmail])
+
+
+  const handleDeleteAccount = async () => {
+		const confirmed = window.confirm(
+			"Are you sure you want to delete your account? This action cannot be undone."
+		)
+		if (confirmed) {
+			await deleteUser(userEmail)
+				.then((response) => {
+					setMessage(response.data)
+					localStorage.removeItem("token")
+					localStorage.removeItem("userId")
+					localStorage.removeItem("userRole")
+					navigate("/")
+					window.location.reload()
+				})
+				.catch((error) => {
+					setErrorMessage(error.data)
+				})
+		}
+	}
+
+  const userRoles = user.roles.map((role) => role.name).join(", ");
 
   return (
     <div className="container">
@@ -122,7 +104,7 @@ const UserProfile = () => {
                 <strong>Số điện thoại:</strong> <span>{user.phoneNumber}</span>
               </div>
               <div className="profile-row">
-                <strong>vai trò:</strong> <span>{user.roles}</span>
+                <strong>vai trò:</strong> <span>{userRoles}</span>
               </div>
             </div>
             <button className="bookButton" onClick={handleDeleteAccount}>
@@ -163,12 +145,12 @@ const UserProfile = () => {
                 </tbody>
               </table>
             ) : (
-              <p>You have not made any bookings yet.</p>
+              <p>Bạn đã đặt phòng chưa?.</p>
             )}
           </div>
         </div>
       ) : (
-        <p>Loading user data...</p>
+        <p>Đang lấy dữ liệu người dùng...</p>
       )}
     </div>
   );

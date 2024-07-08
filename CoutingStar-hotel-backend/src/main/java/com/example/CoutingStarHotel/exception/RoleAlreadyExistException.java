@@ -1,4 +1,4 @@
-package com.example.CoutingStarHotel.exeption;
+package com.example.CoutingStarHotel.exception;
 
 public class RoleAlreadyExistException extends RuntimeException {
     public RoleAlreadyExistException(String message) {

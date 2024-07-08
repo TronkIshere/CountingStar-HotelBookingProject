@@ -1,6 +1,6 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.exeption.RoleAlreadyExistException;
+import com.example.CoutingStarHotel.exception.RoleAlreadyExistException;
 import com.example.CoutingStarHotel.model.Role;
 import com.example.CoutingStarHotel.model.User;
 import com.example.CoutingStarHotel.service.IRoleService;

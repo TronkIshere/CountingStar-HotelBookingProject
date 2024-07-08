@@ -1,6 +1,6 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.exeption.ResourceNotFoundException;
+import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.model.Hotel;
 import com.example.CoutingStarHotel.response.HotelResponse;
 import com.example.CoutingStarHotel.service.IHotelService;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.rowset.serial.SerialBlob;
-import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;

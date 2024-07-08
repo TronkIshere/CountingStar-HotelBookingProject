@@ -1,7 +1,7 @@
 package com.example.CoutingStarHotel.service;
 
-import com.example.CoutingStarHotel.exeption.InternalServerException;
-import com.example.CoutingStarHotel.exeption.ResourceNotFoundException;
+import com.example.CoutingStarHotel.exception.InternalServerException;
+import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.model.Room;
 import com.example.CoutingStarHotel.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;

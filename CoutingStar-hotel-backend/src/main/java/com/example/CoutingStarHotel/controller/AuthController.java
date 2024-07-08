@@ -1,13 +1,12 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.exeption.UserAlreadyExistsException;
+import com.example.CoutingStarHotel.exception.UserAlreadyExistsException;
 import com.example.CoutingStarHotel.model.User;
 import com.example.CoutingStarHotel.request.LoginRequest;
 import com.example.CoutingStarHotel.response.JwtResponse;
 import com.example.CoutingStarHotel.security.jwt.JwtUtils;
 import com.example.CoutingStarHotel.security.user.HotelUserDetails;
 import com.example.CoutingStarHotel.service.IUserService;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
