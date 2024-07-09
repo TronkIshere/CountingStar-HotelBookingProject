@@ -63,7 +63,7 @@ const SearchItem = ({ hotel }) => {
   };
   return (
     <div className="searchItem">
-      <img src={hotel.photo} alt="" className="siImg" />
+      <img src={`data:image/jpeg;base64,${hotel.photo}`} alt="" className="siImg" />
       <div className="siDesc">
         <h1 className="siHotelName">{hotel.hotelName}</h1>
         <span className="siCity">Tại thành phố {hotel.city}</span>

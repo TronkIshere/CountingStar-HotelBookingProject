@@ -1,136 +1,152 @@
 import React, { useState, useEffect } from "react";
 import "./hotelInformationManagement.css";
-import AddRoom from "../../components/room/addRoom/AddRoom";
-import UpdateRoom from "../../components/room/updateRoom/UpdateRoom";
-import DeleteRoom from "../../components/room/deleteRoom/DeleteRoom";
-import { getRoomsByHotelId } from "../../components/utils/ApiFunction";
+import { getHotelById, updateHotel } from "../../components/utils/ApiFunction";
 
-const HotelRoomManagement = () => {
-  const [rooms, setRooms] = useState([]);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [selectedRoomId, setSelectedRoomId] = useState(null);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+const HotelInformationManagement = () => {
+  const [hotel, setHotel] = useState({
+    hotelName: "",
+    city: "",
+    hotelLocation: "",
+    hotelDescription: "",
+    phoneNumber: "",
+    photo: "",
+  });
 
-  const userHotelId = localStorage.getItem("userHotelId");
+  const [imagePreview, setImagePreview] = useState("")
+  const [successMessage, setSuccessMessage] = useState("")
+  const [errorMessage, setErrorMessage] = useState("")
+
+  const handleImageChange = (e) => {
+    const selectedImage = e.target.files[0];
+    setHotel({ ...hotel, photo: selectedImage })
+    setImagePreview(URL.createObjectURL(selectedImage))
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target
+    setHotel({ ...hotel, [name]: value })
+  };
+
+  const hotelId = localStorage.getItem("userHotelId")
 
   useEffect(() => {
-    const fetchRooms = async () => {
+    const fetchRoom = async () => {
       try {
-        const roomsData = await getRoomsByHotelId(userHotelId);
-        setRooms(roomsData);
+        const hotelData = await getHotelById(hotelId)
+        setHotel(hotelData)
+        setImagePreview(hotelData.photo)
       } catch (error) {
-        console.error(error);
+        console.log(error)
       }
-    };
+    }
 
-    fetchRooms();
-  }, [userHotelId]);
+    fetchRoom()
+  }, [hotelId])
 
-  const handleAddRoom = (newRoom) => {
-    setRooms([...rooms, newRoom]);
-    setIsAddModalOpen(false);
-  };
-
-  const handleOpenAddModal = () => {
-    setIsAddModalOpen(true);
-  };
-
-  const handleCloseAddModal = () => {
-    setIsAddModalOpen(false);
-  };
-
-  const handleOpenUpdateModal = (roomId) => {
-    setSelectedRoomId(roomId);
-    setIsUpdateModalOpen(true);
-  };
-
-  const handleCloseUpdateModal = () => {
-    setIsUpdateModalOpen(false);
-  };
-
-  const handleUpdateRoom = (updatedRoom) => {
-    const updatedRooms = rooms.map((room) =>
-      room.id === updatedRoom.id ? updatedRoom : room
-    );
-    setRooms(updatedRooms);
-    setIsUpdateModalOpen(false);
-  };
-
-  const handleOpenDeleteModal = (roomId) => {
-    setSelectedRoomId(roomId);
-    setIsDeleteModalOpen(true);
-  };
-
-  const handleCloseDeleteModal = () => {
-    setIsDeleteModalOpen(false);
-  };
-
-  const handleDeleteRoom = (roomToDelete) => {
-    setRooms(rooms.filter((room) => room.id !== roomToDelete.id));
-    setIsDeleteModalOpen(false);
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await updateHotel(hotelId, hotel)
+      if (response.status === 200) {
+        setSuccessMessage("Chỉnh sửa khách sạn thành công!!!")
+        const updatedhotelData = await getRoomById(hotelId)
+        setHotel(updatedhotelData)
+        setImagePreview(updatedhotelData.photo)
+        handleUpdateRoom(updatedhotelData)
+        setErrorMessage("")
+      } else {
+        setErrorMessage("Đã xảy ra lỗi!!!")
+      }
+    } catch (error) {
+      setErrorMessage(error.message)
+    }
+  }
 
   return (
-    <div className="roomListContainer">
-      <h1>Quản lý phòng</h1>
-      <button className="addButton" onClick={handleOpenAddModal}>
-        Thêm phòng mới
-      </button>
-      <table className="roomListTable">
-        <thead>
-          <tr>
-            <th>Loại phòng</th>
-            <th>Miêu tả</th>
-            <th>Giá tiền</th>
-            <th>Đánh giá</th>
-            <th>Hành động</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rooms.map((room, index) => (
-            <tr key={index}>
-              <td>{room.roomType}</td>
-              <td>{room.roomDescription}</td>
-              <td>{room.roomPrice}</td>
-              <td>none</td>
-              <td>
-                <button
-                  className="editButton"
-                  onClick={() => handleOpenUpdateModal(room.id)}
-                >
-                  Chỉnh sửa
-                </button>
-                <button
-                  className="deleteButton"
-                  onClick={() => handleOpenDeleteModal(room.id)}
-                >
-                  Xóa
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {isAddModalOpen && (
-        <AddRoom handleAddRoom={handleAddRoom} onClose={handleCloseAddModal} />
-      )}
-      {isUpdateModalOpen && selectedRoomId && (
-        <UpdateRoom
-          roomId={selectedRoomId}
-          handleUpdateRoom={handleUpdateRoom}
-          onClose={handleCloseUpdateModal}
-        />
-      )}
-      {isDeleteModalOpen && selectedRoomId && (
-        <DeleteRoom
-          roomId={selectedRoomId}
-          handleDeleteRoom={handleDeleteRoom}
-          onClose={handleCloseDeleteModal}
-        />
-      )}
-    </div>
-  );
-};
+    <div className="container">
+      <form onSubmit={handleSubmit} className="form">
+        <h2>Chỉnh sửa thông tin khách sạn</h2>
+        <div className="form-group">
+          <label>Tên khách sạn:</label>
+          <input
+            type="text"
+            name="hotelName"
+            value={hotel.hotelName}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Thành phố:</label>
+          <input
+            type="text"
+            name="city"
+            value={hotel.city}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Địa chỉ:</label>
+          <input
+            type="text"
+            name="address"
+            value={hotel.hotelLocation}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Mô tả:</label>
+          <textarea
+            name="description"
+            value={hotel.hotelDescription}
+            onChange={handleInputChange}
+            required
+          ></textarea>
+        </div>
+        <div className="form-group">
+          <label>Số điện thoại:</label>
+          <input
+            type="tel"
+            name="hotelPhone"
+            value={hotel.phoneNumber}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Ảnh của khách sạn:</label>
+          <input
+            type="file"
+            name="hotelImage"
+            onChange={handleImageChange}
+          />
+          {imagePreview && (
+            <img
+              src={`data:image/jpeg;base64,${imagePreview}`}
+              alt="Room preview"
+              className="imagePreview"
+            />
+          )}
+        </div>
 
-export default HotelRoomManagement;
+        <button type="submit" className="postHotelButton">
+          Lưu
+        </button>
+        {successMessage && (
+          <div className="alert alert-success" role="alert">
+            {successMessage}
+          </div>
+        )}
+        {errorMessage && (
+          <div className="alert alert-danger" role="alert">
+            {errorMessage}
+          </div>
+        )}
+      </form>
+    </div>
+  )
+}
+
+export default HotelInformationManagement;

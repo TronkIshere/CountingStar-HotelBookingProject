@@ -9,8 +9,8 @@ import Login from "./components/login/Login";
 import UserProfile from "./pages/userProfile/UserProfile";
 import Footer from "./components/footer/Footer";
 import HotelRegistration from "./pages/hotelRegistration/HotelRegistration";
-import HotelInformation from "./pages/hotelInformationManagement/HotelInformationManagement";
 import HotelRoomManagement from "./pages/hotelRoomManagement/HotelRoomManagement";
+import HotelInformationManagement from "./pages/hotelInformationManagement/HotelInformationManagement";
 import HotelBookingManagement from "./pages/hotelBookingManagement/HotelBookingManagement";
 import { AuthProvider } from "./components/utils/AuthProvider";
 
@@ -43,7 +43,7 @@ function App() {
             path="/hotel/:hotelId/hotelBookingManagement"
             element={<HotelBookingManagement />}
           />
-          <Route path="/hotel/:hotelId/hotelInformationManagement" element={<HotelInformation />} />
+          <Route path="/hotel/:hotelId/hotelInformationManagement" element={<HotelInformationManagement />} />
         </Routes>
         <Footer />
       </BrowserRouter>

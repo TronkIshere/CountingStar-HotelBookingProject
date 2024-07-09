@@ -1,5 +1,6 @@
 package com.example.CoutingStarHotel.controller;
 
+import com.example.CoutingStarHotel.exception.PhotoRetrievalExcetion;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.model.Hotel;
 import com.example.CoutingStarHotel.response.HotelResponse;
@@ -75,18 +76,15 @@ public class HotelController {
         return ResponseEntity.ok(hotelResponses);
     }
 
-    @PutMapping("/{hotelId}/updateHotel")
+    @PutMapping("/hotel/{hotelId}/hotelInformationUpdate")
     public ResponseEntity<HotelResponse> updateHotel(@PathVariable Long hotelId,
-                                                     @RequestParam(required = false) String hotelName,
-                                                     @RequestParam(required = false) String hotelDescription,
-                                                     @RequestParam(required = false) String phoneNumber,
-                                                     @RequestParam(required = false) String city,
+                                                     @RequestParam String hotelName,
+                                                     @RequestParam String city,
+                                                     @RequestParam String hotelLocation,
+                                                     @RequestParam String hotelDescription,
+                                                     @RequestParam String phoneNumber,
                                                      @RequestParam(required = false) MultipartFile photo) throws IOException, SQLException {
-        byte[] photoBytes = photo != null && !photo.isEmpty() ?
-                photo.getBytes() : hotelService.getHotelPhotobyHotelId(hotelId);
-        Blob photoBlob = photoBytes != null && photoBytes.length >0 ? new SerialBlob(photoBytes): null;
-        Hotel theHotel = hotelService.updateHotel(hotelId, hotelName, hotelDescription, phoneNumber, city, photoBytes);
-        theHotel.setPhoto(photoBlob);
+        Hotel theHotel = hotelService.updateHotel(hotelId, hotelName, hotelLocation, hotelDescription, phoneNumber, city, photo);
         HotelResponse hotelResponse = getHotelResponse(theHotel);
         return ResponseEntity.ok(hotelResponse);
     }
@@ -97,6 +95,15 @@ public class HotelController {
     }
 
     private HotelResponse getHotelResponse(Hotel hotel){
+        byte[] photoBytes = null;
+        Blob photoBlob = hotel.getPhoto();
+        if (photoBlob != null) {
+            try {
+                photoBytes = photoBlob.getBytes(1, (int) photoBlob.length());
+            } catch (SQLException e) {
+                throw new PhotoRetrievalExcetion("Error retrieving photo");
+            }
+        }
         return new HotelResponse(
                 hotel.getId(),
                 hotel.getHotelName(),
@@ -104,7 +111,7 @@ public class HotelController {
                 hotel.getHotelLocation(),
                 hotel.getHotelDescription(),
                 hotel.getPhoneNumber(),
-                hotel.getPhoto()
+                photoBytes
         );
     }
 }

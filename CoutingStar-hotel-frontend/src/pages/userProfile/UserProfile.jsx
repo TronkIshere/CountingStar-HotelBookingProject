@@ -1,84 +1,85 @@
 import React, { useEffect, useState } from "react";
 import "./userProfile.css";
-import {getUserByEmail, getBookingsByUserId, deleteUser} from "../../components/utils/ApiFunction"
+import {
+  getUserByEmail,
+  getBookingsByUserId,
+  deleteUser,
+} from "../../components/utils/ApiFunction";
 import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
   const [user, setUser] = useState({
-		id: "",
-		email: "",
-		firstName: "",
-		lastName: "",
+    id: "",
+    email: "",
+    firstName: "",
+    lastName: "",
     phoneNumber: "",
-		roles: [{ id: "", name: "" }]
-	})
+    roles: [{ id: "", name: "" }],
+  });
 
-	const [bookings, setBookings] = useState([
-		{
-			id: "",
-			room: { id: "", roomType: "" },
-			checkInDate: "",
-			checkOutDate: "",
-			bookingConfirmationCode: ""
-		}
-	])
-	const [message, setMessage] = useState("")
-	const [errorMessage, setErrorMessage] = useState("")
-	const navigate = useNavigate()
+  const [bookings, setBookings] = useState([
+    {
+      id: "",
+      room: { id: "", roomType: "" },
+      checkInDate: "",
+      checkOutDate: "",
+      bookingConfirmationCode: "",
+    },
+  ]);
+  const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
-	const userEmail = localStorage.getItem("userEmail")
-	const userId = localStorage.getItem("userId")
-	const token = localStorage.getItem("token")
+  const userEmail = localStorage.getItem("userEmail");
+  const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
 
-	useEffect(() => {
-		const fetchUser = async () => {
-			try {
-				const userData = await getUserByEmail(userEmail, token)
-				setUser(userData)
-			} catch (error) {
-				console.error(error)
-			}
-		}
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await getUserByEmail(userEmail, token);
+        setUser(userData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-		fetchUser()
-	}, [userEmail])
+    fetchUser();
+  }, [userEmail]);
 
-	useEffect(() => {
-		const fetchBookings = async () => {
-			try {
-				const response = await getBookingsByUserId(userId, token)
-				setBookings(response)
-			} catch (error) {
-				console.error("Error fetching bookings:", error.message)
-				setErrorMessage(error.message)
-			}
-		}
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const response = await getBookingsByUserId(userId, token);
+        setBookings(response);
+      } catch (error) {
+        console.error("Error fetching bookings:", error.message);
+        setErrorMessage(error.message);
+      }
+    };
 
-		fetchBookings()
-	}, [userEmail])
-
+    fetchBookings();
+  }, [userEmail]);
 
   const handleDeleteAccount = async () => {
-		const confirmed = window.confirm(
-			"Are you sure you want to delete your account? This action cannot be undone."
-		)
-		if (confirmed) {
-			await deleteUser(userEmail)
-				.then((response) => {
-					setMessage(response.data)
-					localStorage.removeItem("token")
-					localStorage.removeItem("userId")
-					localStorage.removeItem("userRole")
-					navigate("/")
-					window.location.reload()
-				})
-				.catch((error) => {
-					setErrorMessage(error.data)
-				})
-		}
-	}
-
-  const userRoles = user.roles.map((role) => role.name).join(", ");
+    const confirmed = window.confirm(
+      "Are you sure you want to delete your account? This action cannot be undone."
+    );
+    if (confirmed) {
+      await deleteUser(userEmail)
+        .then((response) => {
+          setMessage(response.data);
+          localStorage.removeItem("token");
+          localStorage.removeItem("userId");
+          localStorage.removeItem("userRole");
+          navigate("/");
+          window.location.reload();
+        })
+        .catch((error) => {
+          setErrorMessage(error.data);
+        });
+    }
+  };
 
   return (
     <div className="container">
@@ -92,7 +93,9 @@ const UserProfile = () => {
               alt="Profile"
               className="profile-pic"
             />
-            <h2>{user.firstName} {user.lastName}</h2>
+            <h2>
+              {user.firstName} {user.lastName}
+            </h2>
             <div className="profile-info">
               <div className="profile-row">
                 <strong>ID:</strong> <span>{user.id}</span>
@@ -104,7 +107,16 @@ const UserProfile = () => {
                 <strong>Số điện thoại:</strong> <span>{user.phoneNumber}</span>
               </div>
               <div className="profile-row">
-                <strong>vai trò:</strong> <span>{userRoles}</span>
+                <strong>vai trò:</strong>{" "}
+                <span>
+                  <ul className="rolesList">
+                  {user.roles.map((role) => (
+                    <li key={role.id}>
+                      {role.name}
+                    </li>
+                  ))}
+                  </ul>
+                  </span>
               </div>
             </div>
             <button className="bookButton" onClick={handleDeleteAccount}>

@@ -70,10 +70,12 @@ export async function getHighestPriceByHotelId(hotelId){
 export async function updateHotel(hotelId, hotelData){
 	const formData = new FormData()
 	formData.append("hotelName", hotelData.hotelName)
+	formData.append("city", hotelData.city)
+	formData.append("hotelLocation", hotelData.hotelLocation)
 	formData.append("hotelDescription", hotelData.hotelDescription)
 	formData.append("phoneNumber", hotelData.phoneNumber)
 	formData.append("photo", hotelData.photo)
-	const response = await api.put(`/rooms/update/${hotelId}`, formData)
+	const response = await api.put(`/hotels/hotel/${hotelId}/hotelInformationUpdate`, formData)
 	return response
 }
 

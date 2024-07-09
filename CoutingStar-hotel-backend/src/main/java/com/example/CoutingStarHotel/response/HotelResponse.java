@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.tomcat.util.codec.binary.Base64;
 
 import java.sql.Blob;
 import java.util.List;
@@ -19,17 +20,17 @@ public class HotelResponse {
     private String hotelLocation;
     private String hotelDescription;
     private String phoneNumber;
-    private Blob photo;
+    private String photo;
     private List<Room> rooms;
     private User user;
 
-    public HotelResponse(Long id, String hotelName, String city, String hotelLocation, String hotelDescription, String phoneNumber, Blob photo) {
+    public HotelResponse(Long id, String hotelName, String city, String hotelLocation, String hotelDescription, String phoneNumber, byte[] photoBytes) {
         this.id = id;
         this.hotelName = hotelName;
         this.city = city;
         this.hotelLocation = hotelLocation;
         this.hotelDescription = hotelDescription;
         this.phoneNumber = phoneNumber;
-        this.photo = photo;
+        this.photo = photoBytes != null ? Base64.encodeBase64String(photoBytes) : null;
     }
 }
