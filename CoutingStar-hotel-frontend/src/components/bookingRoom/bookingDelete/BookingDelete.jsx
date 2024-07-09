@@ -1,7 +1,20 @@
 import React from "react";
 import "./bookingDelete.css";
+import { cancelBooking } from "../../utils/ApiFunction";
 
-const BookingDelete = ({ booking, handleDeleteBooking, onClose }) => {
+const BookingDelete = ({ bookingId, handleDeleteBooking, onClose }) => {
+  const handleDeleteBookingById = async () => {
+    try {
+      console.log(bookingId)
+      await cancelBooking(bookingId)
+      handleDeleteBooking(bookingId)
+      onClose()
+    } catch (error) {
+      console.error("Error deleting room:", error);
+    }
+    onClose()
+  }
+
   return (
     <div className="modal">
       <div className="modalContent">
@@ -10,10 +23,10 @@ const BookingDelete = ({ booking, handleDeleteBooking, onClose }) => {
           <span className="close" onClick={onClose}>&times;</span>
         </div>
         <div className="modalBody">
-          <p>Bạn có chắc chắn muốn xóa đặt phòng <strong>{booking.bookingId}</strong> không?</p>
+          <p>Bạn có chắc chắn muốn xóa đặt phòng không?</p>
         </div>
         <div className="modalFooter">
-          <button className="deleteButton" onClick={() => handleDeleteBooking(booking)}>Xóa</button>
+          <button className="deleteButton" onClick={handleDeleteBookingById}>Xóa</button>
           <button className="cancelButton" onClick={onClose}>Hủy</button>
         </div>
       </div>

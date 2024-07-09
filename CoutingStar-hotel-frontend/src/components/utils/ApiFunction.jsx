@@ -222,6 +222,19 @@ export async function getBookingByConfirmationCode(confirmationCode) {
 	}
 }
 
+export async function getBookingByHotelId(hotelId){
+	try{
+		const result = await api.get(`/bookings/hotel/${hotelId}/booking`)
+		return result.data
+	} catch (error) {
+		if (error.response && error.response.data) {
+			throw new Error(error.response.data)
+		} else {
+			throw new Error(`Error find booking:  ${error.message}`)
+		}
+	}
+}
+
 /* This is the function to cancel user booking */
 export async function cancelBooking(bookingId) {
 	try {

@@ -16,4 +16,6 @@ public interface IBookingService {
     List<BookedRoom> getAllBookingsByRoomId(Long roomId);
 
     List<BookedRoom> getBookingsByUserId(Long userId);
+
+    List<BookedRoom> getAllBookingsByHotelId(Long hotelId);
 }

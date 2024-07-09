@@ -64,6 +64,11 @@ public class BookingService implements IBookingService{
         return bookingRepository.findByUserId(userId);
     }
 
+    @Override
+    public List<BookedRoom> getAllBookingsByHotelId(Long hotelId) {
+        return bookingRepository.findByHotelId(hotelId);
+    }
+
     private boolean roomIsAvailable(BookedRoom bookingRequest, List<BookedRoom> existingBookings) {
         return existingBookings.stream()
                 .noneMatch(existingBooking ->

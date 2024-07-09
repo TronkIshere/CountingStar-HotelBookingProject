@@ -25,6 +25,9 @@ public class BookedRoom {
     @Column(name = "check_Out")
     private LocalDate checkOutDate;
 
+    @Column(name = "guest_PhoneNumber")
+    private String guestPhoneNumber;
+
     @Column(name = "guest_FullName")
     private String guestFullName;
 

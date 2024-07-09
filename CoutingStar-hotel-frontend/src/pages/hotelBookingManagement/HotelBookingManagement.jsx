@@ -1,43 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./hotelBookingManagement.css";
 import BookingDelete from "../../components/bookingRoom/bookingDelete/BookingDelete";
 import BookingUpdate from "../../components/bookingRoom/bookingUpdate/BookingUpdate";
+import { getBookingByHotelId } from "../../components/utils/ApiFunction";
 
 const HotelBookingManagement = () => {
   const [bookings, setBookings] = useState([
     {
-      bookingId: 1,
-      roomId: 101,
-      roomType: "Deluxe",
-      checkInDate: "2024-07-01",
-      checkOutDate: "2024-07-05",
-      confirmationCode: "ABC123",
-      email: "example1@example.com",
-      phoneNumber: "1234567890",
-      guestName: "John Doe",
-      totalPeople: 2,
+      bookingId: "",
+      checkInDate: "",
+      checkOutDate: "",
+      bookingConfirmationCode: "",
+      totalNumOfGuest: "",
+
+      room: { id: "", roomType: "" },
+
+      guestEmail: "",
+      guestPhoneNumber: "",
+      guestFullName: "",
     },
-    {
-      bookingId: 2,
-      roomId: 102,
-      roomType: "Standard",
-      checkInDate: "2024-07-02",
-      checkOutDate: "2024-07-06",
-      confirmationCode: "DEF456",
-      email: "example2@example.com",
-      phoneNumber: "0987654321",
-      guestName: "Jane Smith",
-      totalPeople: 1,
-    },
-    // ... more bookings
   ]);
+
+  const hotelId = localStorage.getItem("userHotelId");
+
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const response = await getBookingByHotelId(hotelId);
+        setBookings(response);
+      } catch (error) {
+        console.error("Error fetching bookings:", error.message);
+        setErrorMessage(error.message);
+      }
+    };
+
+    fetchBookings();
+  }, [hotelId]);
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [selectedBookingId, setSelectedBookingId] = useState(null);
 
-  const handleOpenDeleteModal = (booking) => {
-    setSelectedBooking(booking);
+  const handleOpenDeleteModal = (bookingId) => {
+    setSelectedBookingId(bookingId);
     setIsDeleteModalOpen(true);
   };
 
@@ -45,13 +50,13 @@ const HotelBookingManagement = () => {
     setIsDeleteModalOpen(false);
   };
 
-  const handleDeleteBooking = (bookingToDelete) => {
-    setBookings(bookings.filter(booking => booking.bookingId !== bookingToDelete.bookingId));
+  const handleDeleteBooking = (bookingId) => {
+    setBookings(bookings.filter((booking) => booking.bookingId !== bookingId));
     setIsDeleteModalOpen(false);
   };
 
-  const handleOpenUpdateModal = (booking) => {
-    setSelectedBooking(booking);
+  const handleOpenUpdateModal = (bookingId) => {
+    setSelectedBookingId(bookingId);
     setIsUpdateModalOpen(true);
   };
 
@@ -60,15 +65,19 @@ const HotelBookingManagement = () => {
   };
 
   const handleUpdateBooking = (updatedBooking) => {
-    setBookings(bookings.map(booking =>
-      booking.bookingId === updatedBooking.bookingId ? updatedBooking : booking
-    ));
+    setBookings(
+      bookings.map((booking) =>
+        booking.bookingId === updatedBooking.bookingId
+          ? updatedBooking
+          : booking
+      )
+    );
     setIsUpdateModalOpen(false);
   };
 
   return (
     <div className="bookingListContainer">
-      <h1>Hotel Booking Management</h1>
+      <h1>Quản lý đặt phòng</h1>
       <table className="bookingListTable">
         <thead>
           <tr>
@@ -89,33 +98,43 @@ const HotelBookingManagement = () => {
           {bookings.map((booking, index) => (
             <tr key={index}>
               <td>{booking.bookingId}</td>
-              <td>{booking.roomId}</td>
-              <td>{booking.roomType}</td>
+              <td>{booking.room.id}</td>
+              <td>{booking.room.roomType}</td>
               <td>{booking.checkInDate}</td>
               <td>{booking.checkOutDate}</td>
-              <td>{booking.confirmationCode}</td>
-              <td>{booking.email}</td>
-              <td>{booking.phoneNumber}</td>
-              <td>{booking.guestName}</td>
-              <td>{booking.totalPeople}</td>
+              <td>{booking.bookingConfirmationCode}</td>
+              <td>{booking.guestEmail}</td>
+              <td>{booking.guestPhoneNumber}</td>
+              <td>{booking.guestFullName}</td>
+              <td>{booking.totalNumOfGuest}</td>
               <td>
-                <button className="updateButton" onClick={() => handleOpenUpdateModal(booking)}>Chỉnh sửa</button>
-                <button className="deleteButton" onClick={() => handleOpenDeleteModal(booking)}>Xóa</button>
+                <button
+                  className="updateButton"
+                  onClick={() => handleOpenUpdateModal(booking.bookingId)}
+                >
+                  Chỉnh sửa
+                </button>
+                <button
+                  className="deleteButton"
+                  onClick={() => handleOpenDeleteModal(booking.bookingId)}
+                >
+                  Xóa
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      {isDeleteModalOpen && selectedBooking && (
+      {isDeleteModalOpen && selectedBookingId && (
         <BookingDelete
-          booking={selectedBooking}
+          bookingId={selectedBookingId}
           handleDeleteBooking={handleDeleteBooking}
           onClose={handleCloseDeleteModal}
         />
       )}
-      {isUpdateModalOpen && selectedBooking && (
+      {isUpdateModalOpen && selectedBookingId && (
         <BookingUpdate
-          booking={selectedBooking}
+          bookingId={selectedBookingId}
           handleUpdateBooking={handleUpdateBooking}
           onClose={handleCloseUpdateModal}
         />

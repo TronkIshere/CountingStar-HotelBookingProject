@@ -46,6 +46,17 @@ public class BookingController {
         }
     }
 
+    @GetMapping("/hotel/{hotelId}/booking")
+    public ResponseEntity<List<BookingResponse>> getBookingByHotelId(@PathVariable Long hotelId){
+        List<BookedRoom> bookings = bookingService.getAllBookingsByHotelId(hotelId);
+        List<BookingResponse> bookingResponses = new ArrayList<>();
+        for (BookedRoom booking : bookings){
+            BookingResponse bookingResponse = getBookingResponse(booking);
+            bookingResponses.add(bookingResponse);
+        }
+        return ResponseEntity.ok(bookingResponses);
+    }
+
     @PostMapping("/room/{roomId}/booking")
     public ResponseEntity<?> saveBooking(@PathVariable Long roomId,
                                          @RequestBody BookedRoom bookingRequest,
@@ -87,6 +98,7 @@ public class BookingController {
                 booking.getCheckOutDate(),
                 booking.getBookingConfirmationCode(),
                 booking.getGuestEmail(),
+                booking.getGuestPhoneNumber(),
                 booking.getNumOfAdults(),
                 booking.getNumOfChildren(),
                 booking.getTotalNumOfGuest(),

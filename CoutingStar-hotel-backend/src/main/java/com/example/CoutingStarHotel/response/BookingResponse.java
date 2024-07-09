@@ -13,6 +13,7 @@ public class BookingResponse {
     private LocalDate checkOutDate;
     private String guestFullName;
     private String guestEmail;
+    private String guestPhoneNumber;
     private int numOfAdults;
     private int numOfChildren;
     private int totalNumOfGuest;
@@ -25,6 +26,7 @@ public class BookingResponse {
                            LocalDate checkOutDate,
                            String bookingConfirmationCode,
                            String guestEmail,
+                           String guestPhoneNumber,
                            int numOfAdults,
                            int numOfChildren,
                            int totalNumOfGuest,
@@ -34,6 +36,7 @@ public class BookingResponse {
         this.checkOutDate = checkOutDate;
         this.bookingConfirmationCode = bookingConfirmationCode;
         this.guestEmail = guestEmail;
+        this.guestPhoneNumber = guestPhoneNumber;
         this.numOfAdults = numOfAdults;
         this.numOfChildren = numOfChildren;
         this.totalNumOfGuest = totalNumOfGuest;
