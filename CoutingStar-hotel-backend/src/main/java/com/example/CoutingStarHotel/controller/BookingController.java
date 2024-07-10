@@ -13,7 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +50,17 @@ public class BookingController {
         }
     }
 
+    @GetMapping("/booking/{bookingId}")
+    public ResponseEntity<?> getBookingByBookingId(@PathVariable Long bookingId){
+        try{
+            BookedRoom booking = bookingService.findByBookingId(bookingId);
+            BookingResponse bookingResponse = getBookingResponse(booking);
+            return ResponseEntity.ok(bookingResponse);
+        }catch (ResourceNotFoundException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
+
     @GetMapping("/hotel/{hotelId}/booking")
     public ResponseEntity<List<BookingResponse>> getBookingByHotelId(@PathVariable Long hotelId){
         List<BookedRoom> bookings = bookingService.getAllBookingsByHotelId(hotelId);
@@ -69,6 +84,22 @@ public class BookingController {
         }catch (InvalidBookingRequestException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @PutMapping("/booking/{bookingId}/update")
+    public ResponseEntity<BookingResponse> updateBooking(@PathVariable Long bookingId,
+                                                         @RequestParam String checkInDate,
+                                                         @RequestParam String checkOutDate,
+                                                         @RequestParam String guestEmail,
+                                                         @RequestParam String guestPhoneNumber,
+                                                         @RequestParam String guestFullName,
+                                                         @RequestParam int totalNumOfGuest){
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy,M,d");
+        LocalDate checkInLocalDate = LocalDate.parse(checkInDate, dateTimeFormatter);
+        LocalDate checkOutLocalDate = LocalDate.parse(checkOutDate, dateTimeFormatter);
+        BookedRoom bookedRoom = bookingService.updateBooked(bookingId, checkInLocalDate, checkOutLocalDate, guestEmail, guestPhoneNumber, guestFullName, totalNumOfGuest);
+        BookingResponse bookingResponse = getBookingResponse(bookedRoom);
+        return  ResponseEntity.ok(bookingResponse);
     }
 
     @GetMapping("/user/{userId}/bookings")

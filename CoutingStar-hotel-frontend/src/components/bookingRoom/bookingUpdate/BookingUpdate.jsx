@@ -1,83 +1,136 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./bookingUpdate.css";
+import { getBookingByBookingId, updateBooking } from "../../utils/ApiFunction";
+import moment from "moment/moment";
 
-const BookingUpdate = ({ booking, handleUpdateBooking, onClose }) => {
-  const [updatedBooking, setUpdatedBooking] = useState({ ...booking });
+const BookingUpdate = ({ bookingId, handleUpdateBooking, onClose }) => {
+  const [booking, setBooking] = useState([
+    {
+      bookingId: "",
+      checkInDate: "",
+      checkOutDate: "",
+      bookingConfirmationCode: "",
+      totalNumOfGuest: "",
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUpdatedBooking((prevBooking) => ({
-      ...prevBooking,
-      [name]: value,
-    }));
+      room: { id: "", roomType: "" },
+
+      guestEmail: "",
+      guestPhoneNumber: "",
+      guestFullName: "",
+    },
+  ]);
+
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const response = await getBookingByBookingId(bookingId);
+        setBooking(response);
+      } catch (error) {
+        console.error("Error fetching bookings:", error.message);
+        setErrorMessage(error.message);
+      }
+    };
+
+    fetchBookings();
+  }, [bookingId]);
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setBooking({ ...booking, [name]: value });
   };
 
-  const handleSubmit = () => {
-    handleUpdateBooking(updatedBooking);
-    onClose();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await updateBooking(bookingId, booking);
+      console.log(response);
+      if (response.status === 200) {
+        setSuccessMessage("Chỉnh sửa phòng thành công!!!");
+        const updatedBookingData = await getBookingByBookingId(BookingId);
+        setBooking(updatedBookingData);
+        handleUpdateBooking(updatedBookingData);
+        setErrorMessage("");
+      } else {
+        setErrorMessage("Đã xảy ra lỗi!!!");
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
   };
+
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   return (
     <div className="modal">
-      <div className="modalContent">
+      <form onClick={handleSubmit} className="modalContent">
         <div className="modalHeader">
           <h2>Chỉnh sửa thông tin đặt phòng</h2>
-          <span className="close" onClick={onClose}>&times;</span>
+          <span className="close" onClick={onClose}>
+            &times;
+          </span>
         </div>
         <div className="modalBody">
-          <input
+        <input
             type="date"
             name="checkInDate"
-            value={updatedBooking.checkInDate}
-            onChange={handleChange}
+            value={moment(booking.checkInDate).format("YYYY-MM-DD")}
+            onChange={handleInputChange}
           />
           <input
             type="date"
             name="checkOutDate"
-            value={updatedBooking.checkOutDate}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="confirmationCode"
-            placeholder="Mã xác nhận"
-            value={updatedBooking.confirmationCode}
-            onChange={handleChange}
+            value={moment(booking.checkOutDate).format("YYYY-MM-DD")}
+            onChange={handleInputChange}
           />
           <input
             type="email"
-            name="email"
+            name="guestEmail"
             placeholder="Email đăng ký"
-            value={updatedBooking.email}
-            onChange={handleChange}
+            value={booking.guestEmail}
+            onChange={handleInputChange}
           />
           <input
             type="tel"
-            name="phoneNumber"
+            name="guestPhoneNumber"
             placeholder="Số điện thoại"
-            value={updatedBooking.phoneNumber}
-            onChange={handleChange}
+            value={booking.guestPhoneNumber}
+            onChange={handleInputChange}
           />
           <input
             type="text"
-            name="guestName"
+            name="guestFullName"
             placeholder="Tên người đặt"
-            value={updatedBooking.guestName}
-            onChange={handleChange}
+            value={booking.guestFullName}
+            onChange={handleInputChange}
           />
           <input
             type="number"
-            name="totalPeople"
+            name="totalNumOfGuest"
             placeholder="Tổng số người"
-            value={updatedBooking.totalPeople}
-            onChange={handleChange}
+            value={booking.totalNumOfGuest}
+            onChange={handleInputChange}
           />
         </div>
+        {successMessage && (
+          <div className="alert alert-success" role="alert">
+            {successMessage}
+          </div>
+        )}
+        {errorMessage && (
+          <div className="alert alert-danger" role="alert">
+            {errorMessage}
+          </div>
+        )}
         <div className="modalFooter">
-          <button className="updateButton" onClick={handleSubmit}>Cập nhật</button>
-          <button className="cancelButton" onClick={onClose}>Hủy</button>
+          <button className="updateButton" type="submit">
+            Cập nhật
+          </button>
+          <button className="cancelButton" onClick={onClose}>
+            Hủy
+          </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

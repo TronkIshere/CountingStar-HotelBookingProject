@@ -235,6 +235,31 @@ export async function getBookingByHotelId(hotelId){
 	}
 }
 
+export async function getBookingByBookingId(bookingId, bookingData){
+	try{
+		const result = await api.get(`/bookings/booking/${bookingId}`)
+		return result.data
+	} catch (error) {
+		if (error.response && error.response.data) {
+			throw new Error(error.response.data)
+		} else {
+			throw new Error(`Error find booking:  ${error.message}`)
+		}
+	}
+}
+
+export async function updateBooking(bookingId, bookingData){
+	const formData = new FormData()
+	formData.append("checkInDate", bookingData.checkInDate)
+	formData.append("checkOutDate", bookingData.checkOutDate)
+	formData.append("guestEmail", bookingData.guestEmail)
+	formData.append("guestPhoneNumber", bookingData.guestPhoneNumber)
+	formData.append("guestFullName", bookingData.guestFullName)
+	formData.append("totalNumOfGuest", bookingData.totalNumOfGuest)
+	const result = await api.put(`/bookings/booking/${bookingId}/update`, formData)
+	return result
+}
+
 /* This is the function to cancel user booking */
 export async function cancelBooking(bookingId) {
 	try {

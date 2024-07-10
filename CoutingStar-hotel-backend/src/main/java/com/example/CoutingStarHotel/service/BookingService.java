@@ -9,6 +9,7 @@ import com.example.CoutingStarHotel.repository.BookingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -67,6 +68,24 @@ public class BookingService implements IBookingService{
     @Override
     public List<BookedRoom> getAllBookingsByHotelId(Long hotelId) {
         return bookingRepository.findByHotelId(hotelId);
+    }
+
+    @Override
+    public BookedRoom findByBookingId(Long bookingId) {
+        return bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("No booking found with bookingId :"+ bookingId));
+    }
+
+    @Override
+    public BookedRoom updateBooked(Long bookingId, LocalDate checkInDate, LocalDate checkOutDate, String guestEmail, String guestPhoneNumber, String guestFullName, int totalNumOfGuest) {
+        BookedRoom bookedRoom = bookingRepository.findById(bookingId).get();
+        if (checkInDate != null) bookedRoom.setCheckInDate(checkInDate);
+        if (checkOutDate != null) bookedRoom.setCheckOutDate(checkOutDate);
+        if (guestEmail != null) bookedRoom.setGuestEmail(guestEmail);
+        if (guestPhoneNumber != null) bookedRoom.setGuestPhoneNumber(guestPhoneNumber);
+        if (guestFullName != null) bookedRoom.setGuestFullName(guestFullName);
+        if (totalNumOfGuest > 0) bookedRoom.setTotalNumOfGuest(totalNumOfGuest);
+        return bookingRepository.save(bookedRoom);
     }
 
     private boolean roomIsAvailable(BookedRoom bookingRequest, List<BookedRoom> existingBookings) {
