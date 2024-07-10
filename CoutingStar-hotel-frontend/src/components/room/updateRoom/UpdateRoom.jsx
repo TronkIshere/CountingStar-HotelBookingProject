@@ -15,10 +15,10 @@ const UpdateRoom = ({ roomId, handleUpdateRoom, onClose }) => {
   const [errorMessage, setErrorMessage] = useState("")
 
   const handleImageChange = (e) => {
-    const selectedImage = e.target.files[0];
+    const selectedImage = e.target.files[0]
     setRoom({ ...room, photo: selectedImage })
     setImagePreview(URL.createObjectURL(selectedImage))
-  };
+  }
 
   const handleInputChange = (event) => {
     const { name, value } = event.target
@@ -34,7 +34,7 @@ const UpdateRoom = ({ roomId, handleUpdateRoom, onClose }) => {
       } catch (error) {
         console.log(error)
       }
-    }
+    };
 
     fetchRoom()
   }, [roomId])
@@ -57,7 +57,7 @@ const UpdateRoom = ({ roomId, handleUpdateRoom, onClose }) => {
     } catch (error) {
       setErrorMessage(error.message)
     }
-  }
+  };
 
   return (
     <div className="modal">
@@ -69,28 +69,40 @@ const UpdateRoom = ({ roomId, handleUpdateRoom, onClose }) => {
           </span>
         </div>
         <div className="modalBody">
-          <input
-            type="text"
-            name="roomType"
-            placeholder="Loại phòng"
-            value={room.roomType}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="roomDescription"
-            placeholder="Miêu tả"
-            value={room.roomDescription}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="roomPrice"
-            placeholder="Giá tiền"
-            value={room.roomPrice}
-            onChange={handleInputChange}
-          />
-          <input type="file" name="photo" onChange={handleImageChange} />
+          <label>
+            Loại phòng
+            <input
+              type="text"
+              name="roomType"
+              placeholder="Loại phòng"
+              value={room.roomType}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label>
+            Miêu tả
+            <input
+              type="text"
+              name="roomDescription"
+              placeholder="Miêu tả"
+              value={room.roomDescription}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label>
+            Giá tiền
+            <input
+              type="text"
+              name="roomPrice"
+              placeholder="Giá tiền"
+              value={room.roomPrice}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label>
+            Hình ảnh
+            <input type="file" name="photo" onChange={handleImageChange} />
+          </label>
           {imagePreview && (
             <img
               src={`data:image/jpeg;base64,${imagePreview}`}
@@ -117,7 +129,7 @@ const UpdateRoom = ({ roomId, handleUpdateRoom, onClose }) => {
         )}
       </form>
     </div>
-  );
-};
+  )
+}
 
 export default UpdateRoom;

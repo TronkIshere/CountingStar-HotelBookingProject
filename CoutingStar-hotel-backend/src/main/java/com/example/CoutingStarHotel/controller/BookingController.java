@@ -97,7 +97,8 @@ public class BookingController {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy,M,d");
         LocalDate checkInLocalDate = LocalDate.parse(checkInDate, dateTimeFormatter);
         LocalDate checkOutLocalDate = LocalDate.parse(checkOutDate, dateTimeFormatter);
-        BookedRoom bookedRoom = bookingService.updateBooked(bookingId, checkInLocalDate, checkOutLocalDate, guestEmail, guestPhoneNumber, guestFullName, totalNumOfGuest);
+        BookedRoom bookedRoom = bookingService.updateBooked(bookingId, checkInLocalDate, checkOutLocalDate,
+                guestEmail, guestPhoneNumber, guestFullName, totalNumOfGuest);
         BookingResponse bookingResponse = getBookingResponse(bookedRoom);
         return  ResponseEntity.ok(bookingResponse);
     }

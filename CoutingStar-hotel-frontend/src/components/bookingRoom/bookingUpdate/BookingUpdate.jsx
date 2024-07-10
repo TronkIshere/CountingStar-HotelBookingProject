@@ -63,7 +63,7 @@ const BookingUpdate = ({ bookingId, handleUpdateBooking, onClose }) => {
 
   return (
     <div className="modal">
-      <form onClick={handleSubmit} className="modalContent">
+      <form onSubmit={handleSubmit} className="modalContent">
         <div className="modalHeader">
           <h2>Chỉnh sửa thông tin đặt phòng</h2>
           <span className="close" onClick={onClose}>
@@ -71,46 +71,64 @@ const BookingUpdate = ({ bookingId, handleUpdateBooking, onClose }) => {
           </span>
         </div>
         <div className="modalBody">
-        <input
-            type="date"
-            name="checkInDate"
-            value={moment(booking.checkInDate).format("YYYY-MM-DD")}
-            onChange={handleInputChange}
-          />
-          <input
-            type="date"
-            name="checkOutDate"
-            value={moment(booking.checkOutDate).format("YYYY-MM-DD")}
-            onChange={handleInputChange}
-          />
-          <input
-            type="email"
-            name="guestEmail"
-            placeholder="Email đăng ký"
-            value={booking.guestEmail}
-            onChange={handleInputChange}
-          />
-          <input
-            type="tel"
-            name="guestPhoneNumber"
-            placeholder="Số điện thoại"
-            value={booking.guestPhoneNumber}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="guestFullName"
-            placeholder="Tên người đặt"
-            value={booking.guestFullName}
-            onChange={handleInputChange}
-          />
-          <input
-            type="number"
-            name="totalNumOfGuest"
-            placeholder="Tổng số người"
-            value={booking.totalNumOfGuest}
-            onChange={handleInputChange}
-          />
+          <label>
+            Ngày nhận phòng
+            <input
+              type="date"
+              name="checkInDate"
+              value={moment(booking.checkInDate).format("YYYY-MM-DD")}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label>
+            Ngày trả phòng
+            <input
+              type="date"
+              name="checkOutDate"
+              value={moment(booking.checkOutDate).format("YYYY-MM-DD")}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label>
+            Email đăng ký
+            <input
+              type="email"
+              name="guestEmail"
+              placeholder="Email đăng ký"
+              value={booking.guestEmail}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label>
+            Số điện thoại
+            <input
+              type="tel"
+              name="guestPhoneNumber"
+              placeholder="Số điện thoại"
+              value={booking.guestPhoneNumber}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label>
+            Tên người đặt
+            <input
+              type="text"
+              name="guestFullName"
+              placeholder="Tên người đặt"
+              value={booking.guestFullName}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label>
+            Tổng số người
+            <input
+              type="number"
+              name="totalNumOfGuest"
+              placeholder="Tổng số người"
+              value={booking.totalNumOfGuest}
+              onChange={handleInputChange}
+            />
+          </label>
         </div>
         {successMessage && (
           <div className="alert alert-success" role="alert">
