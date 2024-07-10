@@ -10,20 +10,20 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-scroll";
 
 const Header = ({ type }) => {
-  const [destination, setDestination] = useState("");
-  const [openDate, setOpenDate] = useState(false);
+  const [destination, setDestination] = useState("")
+  const [openDate, setOpenDate] = useState(false)
   const [date, setDate] = useState([
     {
       startDate: new Date(),
       endDate: new Date(),
       key: "selection",
-    },
-  ]);
-  const [openOptions, setOpenOptions] = useState(false);
+    }
+  ])
+  const [openOptions, setOpenOptions] = useState(false)
   const [options, setOptions] = useState({
     adult: 1,
     children: 0,
-  });
+  })
 
   const navigate = useNavigate();
 
@@ -32,13 +32,18 @@ const Header = ({ type }) => {
       return {
         ...prev,
         [name]: operation === "i" ? options[name] + 1 : options[name] - 1,
-      };
-    });
-  };
+      }
+    })
+  }
 
   const handleSearch = () => {
-    navigate('/hotels', { state: { destination, date, options } });
-  };
+    localStorage.setItem("startDate", date[0].startDate.toISOString())
+    localStorage.setItem("endDate", date[0].endDate.toISOString())
+    localStorage.setItem("adult", options.adult)
+    localStorage.setItem("children", options.children)
+  
+    navigate('/hotels', { state: { destination, date, options } })
+  }
 
   return (
     <div className="header">

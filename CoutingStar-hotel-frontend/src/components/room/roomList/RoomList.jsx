@@ -9,8 +9,8 @@ const RoomList = ({ hotelId }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  const handleBookClick = (room) => {
-    setSelectedRoom(room)
+  const handleBookClick = (roomId) => {
+    setSelectedRoom(roomId)
   };
 
   const handleCloseModal = () => {
@@ -61,7 +61,7 @@ const RoomList = ({ hotelId }) => {
                 <td>
                   <button
                     className="bookButton"
-                    onClick={() => handleBookClick(room)}
+                    onClick={() => handleBookClick(room.id)}
                   >
                     Đặt
                   </button>
@@ -77,7 +77,7 @@ const RoomList = ({ hotelId }) => {
         </tbody>
       </table>
       {selectedRoom && (
-        <BookingForm room={selectedRoom} onClose={handleCloseModal} />
+        <BookingForm roomId={selectedRoom} onClose={handleCloseModal} />
       )}
     </div>
   );

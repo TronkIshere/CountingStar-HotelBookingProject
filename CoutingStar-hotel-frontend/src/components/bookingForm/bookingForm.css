@@ -1,98 +1,126 @@
-/* Overlay styling */
+/* CSS Styling */
 .modal_overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  /* Form styling */
-  .bookingForm {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    max-width: 600px;
-    width: 90%;
-    position: relative;
-  }
-  
-  .bookingForm h1 {
-    margin-bottom: 20px;
-    color: #0071c2;
-  }
-  
-  .bookingForm p {
-    text-align: left;
-    margin: 10px 0;
-  }
-  
-  .bookingForm img {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
-  }
-  
-  .roomContent {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
-  }
-  
-  .roomImg {
-    flex: 1;
-  }
-  
-  .roomDetail {
-    flex: 2;
-    text-align: left;
-  }
-  
-  .userInfoInput {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  
-  .userInfoInput input {
-    height: 40px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  .submitButton {
-    width: 100%;
-    height: 50px;
-    background-color: #0071c2;
-    color: white;
-    font-weight: 500;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .submitButton:hover {
-    background-color: #005fa3;
-  }
-  
-  .closeButton {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.bookingForm {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 600px;
+  width: 90%;
+  position: relative;
+}
+
+.bookingForm h1 {
+  margin-bottom: 20px;
+  color: #0071c2;
+}
+
+.bookingForm p {
+  text-align: left;
+  margin: 10px 0;
+}
+
+.bookingForm img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+.roomContent {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.roomImg {
+  flex: 1;
+}
+
+.roomDetail {
+  flex: 2;
+  text-align: left;
+}
+
+.userInfoInput {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.userInfoInput input {
+  height: 40px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.dateSelection {
+  height: 40px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  display: inline-block;
+  width: 100%;
+  cursor: pointer;
+}
+
+.date {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  z-index: 1000;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+}
+
+.submitButton {
+  width: 100%;
+  height: 50px;
+  background-color: #0071c2;
+  color: white;
+  font-weight: 500;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.submitButton:hover {
+  background-color: #005fa3;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.headerSearchText {
+  display: inline-block;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+}

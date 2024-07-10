@@ -10,7 +10,11 @@ import { getHotelsByCity } from "../../components/utils/ApiFunction";
 
 const List = () => {
   const location = useLocation();
-  const { destination: initialDestination = "", date: initialDate = [], options: initialOptions = {} } = location.state || {};
+  const {
+    destination: initialDestination = "",
+    date: initialDate = [],
+    options: initialOptions = {},
+  } = location.state || {};
 
   const [hotels, setHotels] = useState([]);
   const [openDate, setOpenDate] = useState(false);
@@ -19,12 +23,10 @@ const List = () => {
   const [options, setOptions] = useState(initialOptions);
 
   useEffect(() => {
-    // Fetch hotels when component mounts initially
     fetchHotels();
   }, []);
 
   useEffect(() => {
-    // Update destination and date on initial load or when they change
     setDestination(initialDestination);
     setDate(initialDate);
   }, [initialDestination, initialDate]);
@@ -122,7 +124,9 @@ const List = () => {
                     min={1}
                     className="lsOptionInput"
                     value={options.adult}
-                    onChange={(e) => handleOptionChange("adult", e.target.value)}
+                    onChange={(e) =>
+                      handleOptionChange("adult", e.target.value)
+                    }
                   />
                 </div>
 
@@ -133,7 +137,9 @@ const List = () => {
                     min={0}
                     className="lsOptionInput"
                     value={options.children}
-                    onChange={(e) => handleOptionChange("children", e.target.value)}
+                    onChange={(e) =>
+                      handleOptionChange("children", e.target.value)
+                    }
                   />
                 </div>
               </div>
@@ -142,9 +148,7 @@ const List = () => {
           </div>
           <div className="listResult">
             {hotels.length > 0 ? (
-              hotels.map((hotel) => (
-                <SearchItem key={hotel.id} hotel={hotel} />
-              ))
+              hotels.map((hotel) => <SearchItem key={hotel.id} hotel={hotel} />)
             ) : (
               <p>No hotels found</p>
             )}
