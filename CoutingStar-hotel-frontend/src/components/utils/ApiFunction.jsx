@@ -176,10 +176,6 @@ export async function bookRoom(roomId, booking, userId) {
 		console.log(booking)
 		console.log(userId)
 
-		const formData = new FormData
-		formData.append('booking', booking); 
-        formData.append('userId', userId); 
-
         const response = await api.post(
 			`/bookings/room/${roomId}/booking?userId=${userId}`,
 			booking, 

@@ -2,12 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./bookingForm.css";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
-import {
-  getBookingByBookingId,
-  getRoomById,
-  getUserByEmail,
-  getUserProfile,
-} from "../utils/ApiFunction";
+import { getRoomById, getUserByEmail, bookRoom } from "../utils/ApiFunction";
+import moment from "moment";
 
 const BookingForm = ({ roomId, onClose }) => {
   const [openDate, setOpenDate] = useState(false);
@@ -17,37 +13,40 @@ const BookingForm = ({ roomId, onClose }) => {
       endDate: new Date(),
       key: "selection",
     },
-  ])
+  ]);
   const [room, setRoomInfo] = useState({
     id: "",
     photo: "",
     roomType: "",
-    roomPrice: "",
-  })
+    roomPrice: 0,
+    roomDescription: "",
+    rating: "",
+  });
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
     email: "",
     phoneNumber: "",
-  })
+  });
+  const [totalPayment, setTotalPayment] = useState(0);
+  const [error, setError] = useState("");
 
   const userEmail = localStorage.getItem("userEmail");
-  console.log("userEmail", userEmail);
-  if (userEmail != null) {
-    useEffect(() => {
+  const userId = localStorage.getItem("userId");
+
+  useEffect(() => {
+    if (userEmail) {
       const fetchUser = async () => {
         try {
-          const response = await getUserByEmail(userEmail)
-          setUser(response)
+          const response = await getUserByEmail(userEmail);
+          setUser(response);
         } catch (error) {
           console.error("Error fetching user:", error.message);
-          setErrorMessage(error.message);
         }
       };
-
-      fetchUser()
-    }, [userEmail])
-  }
+      fetchUser();
+    }
+  }, [userEmail]);
 
   useEffect(() => {
     const fetchRoom = async () => {
@@ -56,7 +55,6 @@ const BookingForm = ({ roomId, onClose }) => {
         setRoomInfo(response);
       } catch (error) {
         console.error("Error fetching room:", error.message);
-        setErrorMessage(error.message);
       }
     };
 
@@ -67,16 +65,16 @@ const BookingForm = ({ roomId, onClose }) => {
   const [children, setChildren] = useState(0);
 
   useEffect(() => {
-    const storedStartDate = localStorage.getItem("startDate");
-    const storedEndDate = localStorage.getItem("endDate");
+    const storedCheckInDate = localStorage.getItem("checkInDate");
+    const storedCheckOutDate = localStorage.getItem("checkOutDate");
     const storedAdults = localStorage.getItem("adults");
     const storedChildren = localStorage.getItem("children");
 
-    if (storedStartDate && storedEndDate) {
+    if (storedCheckInDate && storedCheckOutDate) {
       setDate([
         {
-          startDate: new Date(storedStartDate),
-          endDate: new Date(storedEndDate),
+          startDate: new Date(storedCheckInDate),
+          endDate: new Date(storedCheckOutDate),
           key: "selection",
         },
       ]);
@@ -89,14 +87,53 @@ const BookingForm = ({ roomId, onClose }) => {
 
   const handleDateChange = (item) => {
     setDate([item.selection]);
+    updateTotalPayment(item.selection.startDate, item.selection.endDate);
   };
 
-  const handleSubmit = () => {
-    localStorage.setItem("startDate", date[0].startDate.toISOString());
-    localStorage.setItem("endDate", date[0].endDate.toISOString());
-    localStorage.setItem("adults", adults);
-    localStorage.setItem("children", children);
-    onClose();
+  const handleSubmit = async () => {
+    const booking = {
+      guestFullName: `${user.firstName} ${user.lastName}`,
+      checkInDate: date[0].startDate.toISOString(),
+      checkOutDate: date[0].endDate.toISOString(),
+      guestPhoneNumber: user.phoneNumber,
+      guestEmail: user.email,
+      numOfAdults: adults,
+      numOfChildren: children,
+      totalPayment: calculatePayment(date[0].startDate, date[0].endDate),
+    };
+
+    try {
+      await bookRoom(roomId, booking, userId);
+      localStorage.setItem("checkInDate", booking.checkInDate);
+      localStorage.setItem("checkOutDate", booking.checkOutDate);
+      localStorage.setItem("adults", adults);
+      localStorage.setItem("children", children);
+      onClose();
+    } catch (error) {
+      console.error("Error booking room:", error.message);
+      setError(error.message);
+    }
+  };
+
+  const calculatePayment = (checkInDate, checkOutDate) => {
+    const checkIn = moment(checkInDate);
+    const checkOut = moment(checkOutDate);
+    const diffInDays = checkOut.diff(checkIn, "days");
+    const price = room.roomPrice ? room.roomPrice : 0;
+    return diffInDays * price;
+  };
+
+  const updateTotalPayment = (checkInDate, checkOutDate) => {
+    const total = calculatePayment(checkInDate, checkOutDate);
+    setTotalPayment(total);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setUser((prevUser) => ({
+      ...prevUser,
+      [name]: value,
+    }));
   };
 
   return (
@@ -129,21 +166,45 @@ const BookingForm = ({ roomId, onClose }) => {
           </div>
         </div>
         <div className="userInfoInput">
-        <input type="text" placeholder="Nhập Email" value={user.email} />
-          <input type="text" placeholder="Nhập tên" value={user.firstName} />
-          <input type="text" placeholder="Nhập họ và tên đệm" value={user.lastName} />
-          <input type="text" placeholder="Nhập số điện thoại" value={user.phoneNumber} />
+          <input
+            type="text"
+            name="email"
+            placeholder="Nhập Email"
+            value={user.email}
+            onChange={handleInputChange}
+          />
+          <input
+            type="text"
+            name="firstName"
+            placeholder="Nhập tên"
+            value={user.firstName}
+            onChange={handleInputChange}
+          />
+          <input
+            type="text"
+            name="lastName"
+            placeholder="Nhập họ và tên đệm"
+            value={user.lastName}
+            onChange={handleInputChange}
+          />
+          <input
+            type="text"
+            name="phoneNumber"
+            placeholder="Nhập số điện thoại"
+            value={user.phoneNumber}
+            onChange={handleInputChange}
+          />
           <input
             type="number"
             placeholder="Nhập số người lớn"
             value={adults}
-            onChange={(e) => setAdults(e.target.value)}
+            onChange={(e) => setAdults(parseInt(e.target.value, 10))}
           />
           <input
             type="number"
             placeholder="Nhập số trẻ em"
             value={children}
-            onChange={(e) => setChildren(e.target.value)}
+            onChange={(e) => setChildren(parseInt(e.target.value, 10))}
           />
           <div className="dateSelection">
             <span
@@ -166,6 +227,12 @@ const BookingForm = ({ roomId, onClose }) => {
               />
             )}
           </div>
+        </div>
+        <div className="totalPayment">
+          <p>
+            <strong>Tổng số tiền:</strong> {totalPayment} $
+          </p>
+          {error && <p className="error">{error}</p>}
         </div>
         <button className="submitButton" onClick={handleSubmit}>
           Đặt phòng
