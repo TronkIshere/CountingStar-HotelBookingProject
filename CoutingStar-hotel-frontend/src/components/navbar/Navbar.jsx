@@ -8,14 +8,12 @@ import { Link as ScrollLink } from "react-scroll";
 
 const Navbar = ({ onLoginClick, onRegisterClick }) => {
   const [showAccount, setShowAccount] = useState(false);
-  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleAccountClick = () => {
     setShowAccount(!showAccount);
   };
 
-  const isLoggedIn = user !== null;
   const userRole = localStorage.getItem("userRole");
   const userId = localStorage.getItem("userId");
   const hotelId = localStorage.getItem("userHotelId");
@@ -34,7 +32,7 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
           <RouterLink className="logo" to={`/`}>CoutingStar</RouterLink>
         </span>
         <div className="navItems">
-          {isLoggedIn ? (
+          {userId ? (
             <div className="accountContainer">
               <button className="userButton" onClick={handleAccountClick}>
                 <FontAwesomeIcon icon={faUserCircle} />

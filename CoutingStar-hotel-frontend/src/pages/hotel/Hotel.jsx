@@ -16,21 +16,19 @@ import { Link } from "react-scroll"; // Import Link từ react-scroll
 import RoomList from "../../components/room/roomList/RoomList";
 import Register from "../../components/register/Register";
 import Rating from "../../components/rating/Rating";
-import { getHighestPriceByHotelId, getHotelById, getLowestPriceByHotelId } from "../../components/utils/ApiFunction";
+import {
+  getHighestPriceByHotelId,
+  getHotelById,
+  getLowestPriceByHotelId,
+} from "../../components/utils/ApiFunction";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../../components/utils/AuthProvider";
 
 const Hotel = () => {
-  const [showAccount, setShowAccount] = useState(false);
-  const { user } = useContext(AuthContext);
-  const isLoggedIn = user !== null;
-
+  const userId = localStorage.getItem("userId");
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
   const [ratingOpen, setRatingOpen] = useState(false);
-
-  const [error, setError] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
   const [hotelInfo, setHotelInfo] = useState({
     id: "",
     hotelName: "",
@@ -39,38 +37,38 @@ const Hotel = () => {
     hotelDescription: "",
     phoneNumber: "",
     photo: "",
-    averageNumberOfHotelStars: ""
-  })
+    averageNumberOfHotelStars: "",
+  });
   const [lowestPrice, setLowestPrice] = useState({
-    price: ""
+    price: "",
   });
   const [highestPrice, setHighestPrice] = useState({
-    price: ""
+    price: "",
   });
 
-  const { hotelId } = useParams()
+  const { hotelId } = useParams();
 
   useEffect(() => {
     setTimeout(() => {
       getHotelById(hotelId)
         .then((response) => {
-          setHotelInfo(response)
-          console.log(response)
-          setIsLoading(false)
+          setHotelInfo(response);
+          console.log(response);
+          setIsLoading(false);
         })
         .catch((error) => {
-          setError(error)
-          setIsLoading(false)
-        })
-    }, 2000)
-  }, [hotelId])
+          setError(error);
+          setIsLoading(false);
+        });
+    }, 2000);
+  }, [hotelId]);
 
   useEffect(() => {
     const fetchLowestPrice = async () => {
       try {
         const success = await getLowestPriceByHotelId(hotelId);
         if (success) {
-          console.log(success)
+          console.log(success);
           const lowestPrice = success;
           setLowestPrice({ price: lowestPrice });
         } else {
@@ -92,7 +90,7 @@ const Hotel = () => {
       try {
         const success = await getHighestPriceByHotelId(hotelId);
         if (success) {
-          console.log(success)
+          console.log(success);
           const highestPrice = success;
           setHighestPrice({ price: highestPrice });
         } else {
@@ -173,7 +171,9 @@ const Hotel = () => {
             />
           </div>
         )}
-        {ratingOpen && <Rating hotelId={hotelInfo.id} onClose={() => setRatingOpen(false)} />}
+        {ratingOpen && (
+          <Rating hotelId={hotelInfo.id} onClose={() => setRatingOpen(false)} />
+        )}
         <div className="hotelWrapper">
           {/* Sử dụng Link từ react-scroll để cuộn đến RoomList */}
           <Link to="roomList" smooth={true} duration={500}>
@@ -183,10 +183,12 @@ const Hotel = () => {
           <div className="hotelAddressAndContact">
             <FontAwesomeIcon icon={faLocationDot} />
             <span>{hotelInfo.hotelLocation}</span>
-            <FontAwesomeIcon icon={faPhone}/>
+            <FontAwesomeIcon icon={faPhone} />
             <span>{hotelInfo.phoneNumber}</span>
           </div>
-          <span className="hotelDistance">Tại thành phố - {hotelInfo.city}</span>
+          <span className="hotelDistance">
+            Tại thành phố - {hotelInfo.city}
+          </span>
           <span className="hotelRating">
             <p>
               Đây là khách sạn với số sao là <FontAwesomeIcon icon={faStar} />{" "}
@@ -215,9 +217,7 @@ const Hotel = () => {
           <div className="hotelDetails">
             <div className="hotelDetailsTexts">
               <h1 className="hotelTitle">Tổng quan khách sạn</h1>
-              <p className="hotelDesc">
-                {hotelInfo.hotelDescription}
-              </p>
+              <p className="hotelDesc">{hotelInfo.hotelDescription}</p>
             </div>
             <div className="hotelDetailsPrice">
               <h1>Nơi tuyệt vời để thuê!</h1>
@@ -225,7 +225,10 @@ const Hotel = () => {
                 Nằm tại thành phố Hồ Chí Minh, khách sạn này có số điểm là 9.8!
               </span>
               <h2>
-                <b>Từ ${lowestPrice.price}-{highestPrice.price}</b> (1 đêm)
+                <b>
+                  Từ ${lowestPrice.price}-{highestPrice.price}
+                </b>{" "}
+                (1 đêm)
               </h2>
               <button>Đặt phòng ngay!</button>
             </div>
@@ -234,7 +237,7 @@ const Hotel = () => {
             <RoomList hotelId={hotelInfo.id} />
           </div>
         </div>
-        {isLoggedIn ? <div></div> : <Register />}
+        {userId ? <div></div> : <Register />}
       </div>
     </div>
   );
