@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./hotel.css";
 import Navbar from "../../components/navbar/Navbar";
 import Header from "../../components/header/Header";
@@ -18,8 +18,13 @@ import Register from "../../components/register/Register";
 import Rating from "../../components/rating/Rating";
 import { getHighestPriceByHotelId, getHotelById, getLowestPriceByHotelId } from "../../components/utils/ApiFunction";
 import { useParams } from "react-router-dom";
+import { AuthContext } from "../../components/utils/AuthProvider";
 
 const Hotel = () => {
+  const [showAccount, setShowAccount] = useState(false);
+  const { user } = useContext(AuthContext);
+  const isLoggedIn = user !== null;
+
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
   const [ratingOpen, setRatingOpen] = useState(false);
@@ -48,7 +53,6 @@ const Hotel = () => {
     setTimeout(() => {
       getHotelById(hotelId)
         .then((response) => {
-          console.log(response);
           setHotelInfo(response)
           setIsLoading(false)
         })
@@ -167,7 +171,7 @@ const Hotel = () => {
             />
           </div>
         )}
-        {ratingOpen && <Rating onClose={() => setRatingOpen(false)} />}
+        {ratingOpen && <Rating hotelId={hotelInfo.id} onClose={() => setRatingOpen(false)} />}
         <div className="hotelWrapper">
           {/* Sử dụng Link từ react-scroll để cuộn đến RoomList */}
           <Link to="roomList" smooth={true} duration={500}>
@@ -228,7 +232,7 @@ const Hotel = () => {
             <RoomList hotelId={hotelInfo.id} />
           </div>
         </div>
-        <Register />
+        {isLoggedIn ? <div></div> : <Register />}
       </div>
     </div>
   );

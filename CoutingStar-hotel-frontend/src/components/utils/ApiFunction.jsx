@@ -352,3 +352,26 @@ export async function getBookingsByUserId(userId, token) {
 		throw new Error("Failed to fetch bookings")
 	}
 }
+
+export async function checkIfUserCanComment(userId, hotelId){
+	try{
+		const response = await api.get(`/ratings/hotel/${hotelId}/CheckUserRating/${userId}`)
+		return response.data
+	} catch (error) {
+		throw new Error("Faild to check")
+	}
+}
+
+export async function addNewRating(userId, hotelId, star, comment, rateDay){
+	const formData = new FormData()
+	formData.append("star", star)
+	formData.append("comment", comment)
+	formData.append("rateDay", rateDay)
+
+	const response = await api.post(`ratings/add/hotel/${hotelId}/user/${userId}/addRating`, formData)
+	if (response.status === 201) {
+		return true
+	} else {
+		return false
+	}
+}

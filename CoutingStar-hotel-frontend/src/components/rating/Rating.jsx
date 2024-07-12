@@ -1,11 +1,31 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./rating.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faStar } from "@fortawesome/free-solid-svg-icons";
+import { AuthContext } from "../utils/AuthProvider";
+import { addNewRating, checkIfUserCanComment } from "../utils/ApiFunction";
 
-const Rating = ({ onClose }) => {
+const Rating = ({ hotelId, onClose }) => {
+  const { user } = useContext(AuthContext);
+  const isLoggedIn = user !== null;
   const [newComment, setNewComment] = useState("");
   const [newStars, setNewStars] = useState(0);
+  const [canComment, setCanComment] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const userId = localStorage.getItem("userId");
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      checkIfUserCanComment(userId, hotelId)
+        .then((response) => {
+          setCanComment(response);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [userId, hotelId]);
 
   const comments = [
     {
@@ -35,13 +55,35 @@ const Rating = ({ onClose }) => {
     setNewStars(stars);
   };
 
-  const handleCommentSubmit = (e) => {
+  const handleCommentSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitted stars:", newStars);
-    console.log("Submitted comment:", newComment);
-    setNewStars(0);
-    setNewComment("");
+    setSubmitting(true); // Bắt đầu gửi đánh giá
+
+    try {
+      const rateDay = new Date().toISOString();
+      const success = await addNewRating(
+        userId,
+        hotelId,
+        newStars,
+        newComment,
+        rateDay
+      );
+
+      if (success) {
+        console.log("Rating submitted successfully!");
+      } else {
+        console.error("Failed to submit rating");
+      }
+    } catch (error) {
+      console.error("Error submitting rating:", error.message);
+    } finally {
+      setSubmitting(false);
+      setNewStars(0);
+      setNewComment("");
+    }
   };
+
+  console.log("Check if can comment: " + isLoggedIn + " " + canComment);
 
   return (
     <div className="ratingPopup">
@@ -89,34 +131,43 @@ const Rating = ({ onClose }) => {
             ))}
           </div>
         </div>
+
         <div className="newReview">
-          <form onSubmit={handleCommentSubmit}>
-            <div className="starRating">
-              Hãy chọn số sao đánh giá: &#160;
-              {Array(5)
-                .fill()
-                .map((_, i) => (
-                  <FontAwesomeIcon
-                    icon={faStar}
-                    key={i}
-                    className={newStars > i ? "selectedStar" : ""}
-                    onClick={() => handleStarClick(i + 1)}
-                  />
-                ))}
-            </div>
-            <div className="wrapper">
-              <input
-                className="commentInput"
-                placeholder="Viết bình luận của bạn..."
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                required
-              />
-              <button type="submit" className="submitIcon">
-                <FontAwesomeIcon icon={faPaperPlane} />
-              </button>
-            </div>
-          </form>
+          {isLoggedIn && canComment ? (
+            <form onSubmit={handleCommentSubmit}>
+              <div className="starRating">
+                Hãy chọn số sao đánh giá: &#160;
+                {Array(5)
+                  .fill()
+                  .map((_, i) => (
+                    <FontAwesomeIcon
+                      icon={faStar}
+                      key={i}
+                      className={newStars > i ? "selectedStar" : ""}
+                      onClick={() => handleStarClick(i + 1)}
+                    />
+                  ))}
+              </div>
+              <div className="wrapper">
+                <input
+                  className="commentInput"
+                  placeholder="Viết bình luận của bạn..."
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  required
+                />
+                <button
+                  type="submit"
+                  className="submitIcon"
+                  disabled={submitting}
+                >
+                  <FontAwesomeIcon icon={faPaperPlane} />
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div className="remindText">Bạn phải đăng nhặp và đặt phòng (và chưa đánh giá) để có thể đánh giá.</div>
+          )}
         </div>
       </div>
     </div>

@@ -17,6 +17,8 @@
 .logo {
   font-weight: 500;
   font-size: 1.4rem;
+  text-decoration: none;
+  color: white;
 }
 
 .accountContainer ul {

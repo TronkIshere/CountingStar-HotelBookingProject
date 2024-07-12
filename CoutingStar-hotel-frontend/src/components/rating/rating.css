@@ -172,5 +172,10 @@
   .wrapper button:hover {
     color: #005396;
   }
+
+  .remindText{
+    margin-top: 15px;
+    text-align: center;
+  }
   
   

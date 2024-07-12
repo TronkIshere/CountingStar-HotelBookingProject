@@ -1,5 +1,6 @@
 package com.example.CoutingStarHotel.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,7 +24,6 @@ public class Role {
     private Long id;
     private String name;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "roles")
     private Collection<User> users = new HashSet<>();
 

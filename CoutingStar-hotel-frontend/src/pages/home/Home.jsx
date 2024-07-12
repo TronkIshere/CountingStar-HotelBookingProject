@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import "./home.css";
 import Header from "../../components/header/Header";
 import Featured from "../../components/featured/Featured";
 import PropertyList from "../../components/propertyList/PropertyList";
 import FeaturedProperties from "../../components/featuredProperties/FeaturedProperties";
 import Register from "../../components/register/Register";
+import { AuthContext } from "../../components/utils/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const [showAccount, setShowAccount] = useState(false);
+  const { user } = useContext(AuthContext);
+
+  const handleAccountClick = () => {
+    setShowAccount(!showAccount);
+  };
+
+  const isLoggedIn = user !== null;
+
   return (
     <div>
       <Header />
@@ -16,7 +27,7 @@ const Home = () => {
         <PropertyList />
         <h1 className="homeTitle">Những khách sạn đang được yêu thích</h1>
         <FeaturedProperties />
-        <Register />
+        {isLoggedIn ? <div></div> : <Register />}
       </div>
     </div>
   );

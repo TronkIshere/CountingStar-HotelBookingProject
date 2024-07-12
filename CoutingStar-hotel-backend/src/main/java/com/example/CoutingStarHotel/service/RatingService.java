@@ -11,8 +11,8 @@ import com.example.CoutingStarHotel.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -24,16 +24,18 @@ public class RatingService implements IRatingService{
     private final RoomRepository roomRepository;
 
     @Override
-    public Rating saveRating(Long bookedRoomId, int star, String comment, Date rateDay, Long userId) {
+    public Rating saveRating(Long hotelId, Long userId, int star, String comment, LocalDate rateDay) {
         Rating rating = new Rating();
         rating.setStar(star);
         rating.setComment(comment);
         rating.setRateDay(rateDay);
 
+        Long bookedRoomIdForAddComment = bookingRepository.findRoomUserHasBookedAndNotComment(hotelId, userId);
+
         User user = userRepository.findById(userId).get();
         user.addComment(rating);
 
-        BookedRoom bookedRoom = bookingRepository.findById(bookedRoomId).get();
+        BookedRoom bookedRoom = bookingRepository.findById(bookedRoomIdForAddComment).get();
         bookedRoom.addComment(rating);
 
         return ratingRepository.save(rating);
@@ -61,5 +63,17 @@ public class RatingService implements IRatingService{
     @Override
     public void deleteRating(Long ratingId) {
         ratingRepository.deleteById(ratingId);
+    }
+
+    public boolean checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(Long userId, Long hotelId) {
+        return hasBookedRoom(userId, hotelId) && !hasCommented(userId, hotelId);
+    }
+
+    public boolean hasBookedRoom(Long userId, Long hotelId){
+        return bookingRepository.hasBookedRoom(userId, hotelId);
+    }
+
+    public boolean hasCommented(Long userId, Long hotelId){
+        return bookingRepository.hasCommented(userId, hotelId);
     }
 }

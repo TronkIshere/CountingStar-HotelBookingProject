@@ -18,7 +18,7 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
   const isLoggedIn = user !== null;
   const userRole = localStorage.getItem("userRole");
   const userId = localStorage.getItem("userId");
-  const hotelId = localStorage.getItem("userHotelId")
+  const hotelId = localStorage.getItem("userHotelId");
 
   const auth = useContext(AuthContext);
 
@@ -30,7 +30,9 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
   return (
     <div className="navbar">
       <div className="navContainer">
-        <span className="logo">CoutingStar</span>
+        <span className="logo">
+          <RouterLink className="logo" to={`/`}>CoutingStar</RouterLink>
+        </span>
         <div className="navItems">
           {isLoggedIn ? (
             <div className="accountContainer">
@@ -90,7 +92,7 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
               </button>
               <button onClick={onLoginClick} className="navButton">
                 <RouterLink
-                  to="login"
+                  to="/"
                   smooth={true}
                   duration={500}
                   className="navLink"
