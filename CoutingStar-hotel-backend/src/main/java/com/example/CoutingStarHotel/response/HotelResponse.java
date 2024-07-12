@@ -23,8 +23,9 @@ public class HotelResponse {
     private String photo;
     private List<Room> rooms;
     private User user;
+    private double averageNumberOfHotelStars;
 
-    public HotelResponse(Long id, String hotelName, String city, String hotelLocation, String hotelDescription, String phoneNumber, byte[] photoBytes) {
+    public HotelResponse(Long id, String hotelName, String city, String hotelLocation, String hotelDescription, String phoneNumber, byte[] photoBytes, double averageNumberOfHotelStars) {
         this.id = id;
         this.hotelName = hotelName;
         this.city = city;
@@ -32,5 +33,6 @@ public class HotelResponse {
         this.hotelDescription = hotelDescription;
         this.phoneNumber = phoneNumber;
         this.photo = photoBytes != null ? Base64.encodeBase64String(photoBytes) : null;
+        this.averageNumberOfHotelStars = averageNumberOfHotelStars;
     }
 }

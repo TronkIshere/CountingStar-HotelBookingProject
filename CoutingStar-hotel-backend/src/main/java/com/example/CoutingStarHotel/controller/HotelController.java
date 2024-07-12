@@ -3,8 +3,11 @@ package com.example.CoutingStarHotel.controller;
 import com.example.CoutingStarHotel.exception.PhotoRetrievalExcetion;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.model.Hotel;
+import com.example.CoutingStarHotel.model.Rating;
+import com.example.CoutingStarHotel.model.Room;
 import com.example.CoutingStarHotel.response.HotelResponse;
 import com.example.CoutingStarHotel.service.IHotelService;
+import com.example.CoutingStarHotel.service.IRatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +28,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/hotels")
 public class HotelController {
     private final IHotelService hotelService;
+    private final IRatingService ratingService;
     @PostMapping("/{userId}/addHotel")
     public ResponseEntity<?> addHotel(@PathVariable Long userId,
                                       @RequestParam("hotelName") String hotelName,
@@ -38,6 +42,17 @@ public class HotelController {
     @GetMapping("/all-hotels")
     public ResponseEntity<List<HotelResponse>> getAllHotels(){
         List<Hotel> hotels = hotelService.getAllHotels();
+        List<HotelResponse> hotelResponses = new ArrayList<>();
+        for (Hotel hotel : hotels){
+            HotelResponse hotelResponse = getHotelResponse(hotel);
+            hotelResponses.add(hotelResponse);
+        }
+        return ResponseEntity.ok(hotelResponses);
+    }
+
+    @GetMapping("/homepage")
+    public ResponseEntity<List<HotelResponse>> getFiveHotelForHomePage(){
+        List<Hotel> hotels = hotelService.getFiveHotelForHomePage();
         List<HotelResponse> hotelResponses = new ArrayList<>();
         for (Hotel hotel : hotels){
             HotelResponse hotelResponse = getHotelResponse(hotel);
@@ -104,6 +119,7 @@ public class HotelController {
                 throw new PhotoRetrievalExcetion("Error retrieving photo");
             }
         }
+
         return new HotelResponse(
                 hotel.getId(),
                 hotel.getHotelName(),
@@ -111,7 +127,19 @@ public class HotelController {
                 hotel.getHotelLocation(),
                 hotel.getHotelDescription(),
                 hotel.getPhoneNumber(),
-                photoBytes
+                photoBytes,
+                AverageNumberOfHotelStars(hotel.getId())
         );
+    }
+
+    private double AverageNumberOfHotelStars(Long hotelId){
+        double result = 0;
+        int count = 0;
+        List<Rating> ratings = ratingService.getAllRatingByHotelId(hotelId);
+        for(Rating rating: ratings){
+            result += rating.getStar();
+            count++;
+        }
+        return result/count;
     }
 }

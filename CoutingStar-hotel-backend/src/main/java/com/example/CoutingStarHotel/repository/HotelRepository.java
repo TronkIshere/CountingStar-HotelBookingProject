@@ -16,4 +16,7 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
     @Query("SELECT MAX(r.roomPrice) FROM Room r WHERE r.hotel.id = :hotelId")
     Long getHotelHighestPriceByHotelId(Long hotelId);
+
+    @Query("SELECT h FROM Hotel h ORDER BY RAND()")
+    List<Hotel> getFiveHotelForHomePage();
 }

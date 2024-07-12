@@ -27,4 +27,6 @@ public interface IHotelService {
     Long getHotelLowestPriceByHotelId(Long hotelId);
 
     Long getHotelHighestPriceByHotelId(Long hotelId);
+
+    List<Hotel> getFiveHotelForHomePage();
 }

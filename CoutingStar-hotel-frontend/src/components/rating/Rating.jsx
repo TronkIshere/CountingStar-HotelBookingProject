@@ -89,6 +89,14 @@ const Rating = ({ hotelId, onClose }) => {
     return `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
   };
 
+  const calculateAverageRating = (ratings) => {
+    if (ratings.length === 0) return 0;
+    const totalStars = ratings.reduce((acc, rating) => acc + rating.star, 0);
+    return (totalStars / ratings.length).toFixed(1);
+  };
+
+  const averageRating = calculateAverageRating(ratings);
+
   console.log("Check if can comment: " + isLoggedIn + " " + canComment);
 
   return (
@@ -101,14 +109,16 @@ const Rating = ({ hotelId, onClose }) => {
         <div className="ratingOverView">
           <div className="ratingOverViewText">
             <div className="ratingOverViewText_header">
-              <strong>5</strong> trên 5
+              <strong>{averageRating}</strong> trên 5
             </div>
             <div className="ratingOverView_star">
-              <FontAwesomeIcon icon={faStar} />
-              <FontAwesomeIcon icon={faStar} />
-              <FontAwesomeIcon icon={faStar} />
-              <FontAwesomeIcon icon={faStar} />
-              <FontAwesomeIcon icon={faStar} />
+              {Array(5).fill().map((_, i) => (
+                <FontAwesomeIcon
+                  icon={faStar}
+                  key={i}
+                  className={i < Math.round(averageRating) ? "selectedStar" : ""}
+                />
+              ))}
             </div>
           </div>
           <div className="totalComments">{ratings.length} nhận xét</div>

@@ -38,7 +38,8 @@ const Hotel = () => {
     hotelLocation: "",
     hotelDescription: "",
     phoneNumber: "",
-    photo: ""
+    photo: "",
+    averageNumberOfHotelStars: ""
   })
   const [lowestPrice, setLowestPrice] = useState({
     price: ""
@@ -54,6 +55,7 @@ const Hotel = () => {
       getHotelById(hotelId)
         .then((response) => {
           setHotelInfo(response)
+          console.log(response)
           setIsLoading(false)
         })
         .catch((error) => {

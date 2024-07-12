@@ -16,6 +16,7 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -62,6 +63,12 @@ public class HotelService implements IHotelService{
     public Long getHotelHighestPriceByHotelId(Long hotelId) {
         return hotelRepository.getHotelHighestPriceByHotelId(hotelId);
     }
+
+    @Override
+    public List<Hotel> getFiveHotelForHomePage() {
+        return hotelRepository.getFiveHotelForHomePage().stream().limit(5).collect(Collectors.toList());
+    }
+
     @Override
     public List<Hotel> getAllHotels(){
         return hotelRepository.findAll();
