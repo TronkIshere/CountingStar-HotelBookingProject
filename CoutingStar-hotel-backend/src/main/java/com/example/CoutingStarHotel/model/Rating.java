@@ -1,5 +1,6 @@
 package com.example.CoutingStarHotel.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.sql.ast.tree.expression.Star;
@@ -22,10 +23,12 @@ public class Rating {
     private String comment;
     private LocalDate rateDay;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonBackReference
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bookedRoom_id")
     private BookedRoom bookedRoom;

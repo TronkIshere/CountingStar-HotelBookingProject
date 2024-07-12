@@ -375,3 +375,12 @@ export async function addNewRating(userId, hotelId, star, comment, rateDay){
 		return false
 	}
 }
+
+export async function getAllRatingByHotelId(hotelId){
+	try{
+		const response = await api.get(`/ratings/hotel/${hotelId}`)
+		return response.data
+	} catch (error) {
+		throw new Error("Faild to fetch Rating")
+	}
+}

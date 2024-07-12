@@ -1,9 +1,6 @@
 package com.example.CoutingStarHotel.service;
 
-import com.example.CoutingStarHotel.model.BookedRoom;
-import com.example.CoutingStarHotel.model.Rating;
-import com.example.CoutingStarHotel.model.Room;
-import com.example.CoutingStarHotel.model.User;
+import com.example.CoutingStarHotel.model.*;
 import com.example.CoutingStarHotel.repository.BookingRepository;
 import com.example.CoutingStarHotel.repository.RatingRepository;
 import com.example.CoutingStarHotel.repository.RoomRepository;
@@ -12,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -42,17 +38,6 @@ public class RatingService implements IRatingService{
     }
 
     @Override
-    public List<Rating> getAllRatingByRoomId(Long roomId) {
-        Room room = roomRepository.findById(roomId).get();
-        List<BookedRoom> bookedRoomList = room.getBookings();
-        List<Rating> ratingList = new ArrayList<>();
-        for (BookedRoom bookedRoom : bookedRoomList) {
-            ratingList.add(bookedRoom.getRatings());
-        }
-        return ratingList;
-    }
-
-    @Override
     public Rating updateRating(Long ratingId, int star, String comment) {
         Rating rating = ratingRepository.findById(ratingId).get();
         if(star != 0) rating.setStar(star);
@@ -65,6 +50,7 @@ public class RatingService implements IRatingService{
         ratingRepository.deleteById(ratingId);
     }
 
+    @Override
     public boolean checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(Long userId, Long hotelId) {
         return hasBookedRoom(userId, hotelId) && !hasCommented(userId, hotelId);
     }
@@ -75,5 +61,11 @@ public class RatingService implements IRatingService{
 
     public boolean hasCommented(Long userId, Long hotelId){
         return bookingRepository.hasCommented(userId, hotelId);
+    }
+
+    @Override
+    public List<Rating> getAllRatingByHotelId(Long hotelId) {
+        List<Rating> ratingList = ratingRepository.getAllRatingByHotelId(hotelId);
+        return ratingList;
     }
 }

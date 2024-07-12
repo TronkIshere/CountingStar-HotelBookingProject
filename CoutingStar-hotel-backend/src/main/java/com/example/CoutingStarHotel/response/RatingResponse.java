@@ -3,6 +3,7 @@ package com.example.CoutingStarHotel.response;
 import com.example.CoutingStarHotel.model.BookedRoom;
 import com.example.CoutingStarHotel.model.User;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
@@ -15,12 +16,14 @@ public class RatingResponse {
     private int star;
     private String comment;
     private LocalDate rateDay;
-    private User user;
-    private BookedRoom bookedRoom;
+    private String userName;
+    private String roomType;
 
-    public RatingResponse(int star, String comment, LocalDate rateDay) {
+    public RatingResponse(int star, String comment, LocalDate rateDay, String userName, String roomType) {
         this.star = star;
         this.comment = comment;
         this.rateDay = rateDay;
+        this.userName = userName;
+        this.roomType = roomType;
     }
 }

@@ -28,14 +28,19 @@ public class RatingController {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         LocalDate formatRateDay = LocalDate.parse(rateDay, dateTimeFormatter);
         Rating rating = ratingService.saveRating(hotelId, userId , star, comment, formatRateDay);
-        RatingResponse ratingResponse = new RatingResponse(rating.getStar(), rating.getComment(),rating.getRateDay());
+        RatingResponse ratingResponse = new RatingResponse
+                (rating.getStar(),
+                        rating.getComment(),
+                        rating.getRateDay(),
+                        rating.getBookedRoom().getGuestFullName(),
+                        rating.getBookedRoom().getRoom().getRoomType());
 
         return ResponseEntity.ok(ratingResponse);
     }
 
-    @GetMapping("/room/{roomId}/Rating")
-        public ResponseEntity<List<RatingResponse>> getAllRatingByRoomId(@PathVariable Long roomId){
-            List<Rating> ratings = ratingService.getAllRatingByRoomId(roomId);
+    @GetMapping("/hotel/{hotelId}")
+        public ResponseEntity<List<RatingResponse>> getAllRatingByRoomId(@PathVariable Long hotelId){
+            List<Rating> ratings = ratingService.getAllRatingByHotelId(hotelId);
             List<RatingResponse> ratingRepositories = new ArrayList<>();
             for(Rating rating : ratings) {
                 RatingResponse ratingResponse = getRatingResponse(rating);
@@ -69,7 +74,9 @@ public class RatingController {
         return new RatingResponse(
                 rating.getStar(),
                 rating.getComment(),
-                rating.getRateDay()
+                rating.getRateDay(),
+                rating.getBookedRoom().getGuestFullName(),
+                rating.getBookedRoom().getRoom().getRoomType()
         );
     }
 }

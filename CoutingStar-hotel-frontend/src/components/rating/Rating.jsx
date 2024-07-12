@@ -3,7 +3,11 @@ import "./rating.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faStar } from "@fortawesome/free-solid-svg-icons";
 import { AuthContext } from "../utils/AuthProvider";
-import { addNewRating, checkIfUserCanComment } from "../utils/ApiFunction";
+import {
+  addNewRating,
+  checkIfUserCanComment,
+  getAllRatingByHotelId,
+} from "../utils/ApiFunction";
 
 const Rating = ({ hotelId, onClose }) => {
   const { user } = useContext(AuthContext);
@@ -12,6 +16,16 @@ const Rating = ({ hotelId, onClose }) => {
   const [newStars, setNewStars] = useState(0);
   const [canComment, setCanComment] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [ratings, setRatings] = useState([
+    {
+      id: "",
+      star: "",
+      comment: "",
+      rateDay: "",
+      userName: "",
+      roomType: ""
+    },
+  ]);
 
   const userId = localStorage.getItem("userId");
 
@@ -25,31 +39,18 @@ const Rating = ({ hotelId, onClose }) => {
           console.error(error);
         });
     }
+    getAllRatings(hotelId);
   }, [userId, hotelId]);
 
-  const comments = [
-    {
-      name: "Nguyễn Văn A",
-      stars: 5,
-      comment: "Phòng sạch sẽ, dịch vụ tốt.",
-      date: "2024-06-15",
-      roomType: "Phòng Deluxe",
-    },
-    {
-      name: "Trần Thị B",
-      stars: 4,
-      comment: "Giá cả hợp lý, nhân viên thân thiện.",
-      date: "2024-06-10",
-      roomType: "Phòng Standard",
-    },
-    {
-      name: "Lê Thị C",
-      stars: 5,
-      comment: "Vị trí thuận tiện, gần trung tâm.",
-      date: "2024-06-05",
-      roomType: "Phòng Superior",
-    },
-  ];
+  const getAllRatings = async (hotelId) => {
+    try {
+      const ratings = await getAllRatingByHotelId(hotelId);
+      console.log(ratings);
+      setRatings(ratings);
+    } catch (error) {
+      console.error("Error fetching ratings:", error.message);
+    }
+  };
 
   const handleStarClick = (stars) => {
     setNewStars(stars);
@@ -57,7 +58,7 @@ const Rating = ({ hotelId, onClose }) => {
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
-    setSubmitting(true); // Bắt đầu gửi đánh giá
+    setSubmitting(true);
 
     try {
       const rateDay = new Date().toISOString();
@@ -83,6 +84,11 @@ const Rating = ({ hotelId, onClose }) => {
     }
   };
 
+  const formatDate = (dateArray) => {
+    const [year, month, day] = dateArray;
+    return `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
+  };
+
   console.log("Check if can comment: " + isLoggedIn + " " + canComment);
 
   return (
@@ -105,27 +111,23 @@ const Rating = ({ hotelId, onClose }) => {
               <FontAwesomeIcon icon={faStar} />
             </div>
           </div>
-          <div className="totalComments">{comments.length} nhận xét</div>
+          <div className="totalComments">{ratings.length} nhận xét</div>
         </div>
         <div className="ratingReviews">
           <h3>Nhận xét</h3>
           <div className="reviewList">
-            {comments.map((comment, index) => (
+            {ratings.map((rating, index) => (
               <div className="reviewItem" key={index}>
-                <p className="reviewUser">{comment.name}</p>
+                <p className="reviewUser">{rating.userName}</p>
                 <div className="reviewStars">
-                  {Array(comment.stars)
-                    .fill()
-                    .map((_, i) => (
-                      <FontAwesomeIcon icon={faStar} key={i} />
-                    ))}
+                  {Array.from({ length: rating.star }, (_, i) => (
+                    <FontAwesomeIcon icon={faStar} key={i} />
+                  ))}
                 </div>
-                <p className="reviewText">{comment.comment}</p>
+                <p className="reviewText">{rating.comment}</p>
                 <div className="reviewDetails">
-                  <p className="reviewRoomType">
-                    Loại phòng: {comment.roomType}
-                  </p>
-                  <p className="reviewDate">{comment.date}</p>
+                  <p className="reviewRoomType">Loại phòng: {rating.roomType}</p>
+                  <p className="reviewDate">{formatDate(rating.rateDay)}</p>
                 </div>
               </div>
             ))}
@@ -166,7 +168,10 @@ const Rating = ({ hotelId, onClose }) => {
               </div>
             </form>
           ) : (
-            <div className="remindText">Bạn phải đăng nhặp và đặt phòng (và chưa đánh giá) để có thể đánh giá.</div>
+            <div className="remindText">
+              Bạn phải đăng nhặp và đặt phòng (và chưa đánh giá) để có thể đánh
+              giá.
+            </div>
           )}
         </div>
       </div>
