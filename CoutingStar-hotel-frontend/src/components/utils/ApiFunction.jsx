@@ -13,10 +13,11 @@ export const getHeader = () =>{
 }
 
 /* Add new hotel function */
-export async function addHotel(userId, hotelName, city, hotelDescription, phoneNumber, photo) {
+export async function addHotel(userId, hotelName, city, hotelLocation, hotelDescription, phoneNumber, photo) {
 	const formData = new FormData()
 	formData.append("hotelName", hotelName)
 	formData.append("city", city)
+	formData.append("hotelLocation", hotelLocation)
 	formData.append("hotelDescription", hotelDescription)
 	formData.append("phoneNumber", phoneNumber)
 	formData.append("photo", photo)
@@ -279,6 +280,19 @@ export async function getAvailableRooms(checkInDate, checkOutDate, roomType) {
 export async function registerUser(registration) {
 	try {
 	  const response = await api.post("/auth/register-user", registration);
+	  return response.data;
+	} catch (error) {
+	  if (error.response && error.response.data) {
+		throw new Error(JSON.stringify(error.response.data));
+	  } else {
+		throw new Error(`User registration error: ${error.message}`);
+	  }
+	}
+  }
+
+  export async function registerHotelOwner(registration) {
+	try {
+	  const response = await api.post("/auth/register-hotelOwner", registration);
 	  return response.data;
 	} catch (error) {
 	  if (error.response && error.response.data) {

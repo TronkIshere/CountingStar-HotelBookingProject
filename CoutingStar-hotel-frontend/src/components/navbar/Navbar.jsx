@@ -77,7 +77,8 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
             </div>
           ) : (
             <>
-              <button className="postHotelButton">Đăng phòng của bạn</button>
+              <button className="postHotelButton">
+                <RouterLink className="hotelRegistrationButton" to={`/hotelRegistration`}>Đăng phòng của bạn</RouterLink></button>
               <button className="navButton" onClick={onRegisterClick}>
                 <ScrollLink
                   to="register"
@@ -89,14 +90,7 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
                 </ScrollLink>
               </button>
               <button onClick={onLoginClick} className="navButton">
-                <RouterLink
-                  to="/"
-                  smooth={true}
-                  duration={500}
-                  className="navLink"
-                >
                   Đăng nhập
-                </RouterLink>
               </button>
             </>
           )}

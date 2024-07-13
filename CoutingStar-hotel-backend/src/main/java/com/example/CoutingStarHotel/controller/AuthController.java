@@ -4,6 +4,7 @@ import com.example.CoutingStarHotel.exception.UserAlreadyExistsException;
 import com.example.CoutingStarHotel.model.User;
 import com.example.CoutingStarHotel.request.LoginRequest;
 import com.example.CoutingStarHotel.response.JwtResponse;
+import com.example.CoutingStarHotel.response.UserResponse;
 import com.example.CoutingStarHotel.security.jwt.JwtUtils;
 import com.example.CoutingStarHotel.security.user.HotelUserDetails;
 import com.example.CoutingStarHotel.service.IUserService;
@@ -35,6 +36,18 @@ public class AuthController {
         try{
             userService.registerUser(user);
             return ResponseEntity.ok("Registration successful!");
+
+        }catch (UserAlreadyExistsException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/register-hotelOwner")
+    public ResponseEntity<?> registerHotelOwner(@RequestBody User user){
+        try{
+            User registeredUser = userService.registerHotelOwner(user);
+            UserResponse userIdResponse = new UserResponse(registeredUser.getId());
+            return ResponseEntity.ok(userIdResponse);
 
         }catch (UserAlreadyExistsException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());

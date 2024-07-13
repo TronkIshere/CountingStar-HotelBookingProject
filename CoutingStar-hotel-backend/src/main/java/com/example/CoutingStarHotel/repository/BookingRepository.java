@@ -23,7 +23,7 @@ public interface BookingRepository extends JpaRepository<BookedRoom, Long> {
     @Query("SELECT COUNT(r) > 0 FROM Rating r WHERE r.user.id = :userId AND r.bookedRoom.room.hotel.id = :hotelId")
     boolean hasCommented(Long userId, Long hotelId);
 
-    @Query("SELECT MIN(br.bookingId) FROM BookedRoom br LEFT JOIN br.ratings r " +
+    @Query("SELECT MIN(br.bookingId) FROM BookedRoom br LEFT JOIN br.rating r " +
             "WHERE br.user.id = :userId " +
             "AND br.room.hotel.id = :hotelId " +
             "AND r.id IS NULL")

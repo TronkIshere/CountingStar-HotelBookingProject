@@ -1,7 +1,9 @@
 package com.example.CoutingStarHotel.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,6 +18,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "bookingId")
 public class BookedRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,7 +51,6 @@ public class BookedRoom {
     @Column(name = "confirmation_Code")
     private String bookingConfirmationCode;
 
-    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private Room room;
@@ -57,16 +59,15 @@ public class BookedRoom {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @JsonManagedReference
     @OneToOne(mappedBy = "bookedRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Rating ratings;
+    private Rating rating;
 
     public void calculateTotalNumberOfGuest() {
         this.totalNumOfGuest = this.NumOfAdults + NumOfChildren;
     }
 
     public void setNumOfAdults(int numOfAdults) {
-          NumOfAdults = numOfAdults;
+        NumOfAdults = numOfAdults;
         calculateTotalNumberOfGuest();
     }
 

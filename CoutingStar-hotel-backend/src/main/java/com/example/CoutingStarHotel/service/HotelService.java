@@ -28,12 +28,15 @@ public class HotelService implements IHotelService{
     public String addHotel(Long userId,
                            String hotelName,
                            String city,
+                           String hotelLocation,
                            String hotelDescription,
                            String phoneNumber,
                            MultipartFile photo) throws IOException, SQLException {
+        System.out.println("==========Add Hotel is running==========");
         Hotel hotel = new Hotel();
         hotel.setHotelName(hotelName);
         hotel.setCity(city);
+        hotel.setHotelLocation(hotelLocation);
         hotel.setHotelDescription(hotelDescription);
         hotel.setPhoneNumber(phoneNumber);
         if(!photo.isEmpty()) {
@@ -44,7 +47,7 @@ public class HotelService implements IHotelService{
 
         User user = userRepository.findById(userId).get();
         user.addHotel(hotel);
-
+        hotelRepository.save(hotel);
         return user.getLastName();
     }
 

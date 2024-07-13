@@ -1,6 +1,8 @@
 package com.example.CoutingStarHotel.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.sql.ast.tree.expression.Star;
@@ -15,6 +17,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Rating {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -23,12 +26,10 @@ public class Rating {
     private String comment;
     private LocalDate rateDay;
 
-    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @JsonBackReference
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bookedRoom_id")
     private BookedRoom bookedRoom;

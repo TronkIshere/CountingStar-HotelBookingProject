@@ -31,12 +31,13 @@ public class HotelController {
     private final IRatingService ratingService;
     @PostMapping("/{userId}/addHotel")
     public ResponseEntity<?> addHotel(@PathVariable Long userId,
-                                      @RequestParam("hotelName") String hotelName,
-                                      @RequestParam("city") String city,
-                                      @RequestParam("hotelDescription") String hotelDescription,
-                                      @RequestParam("phoneNumber") String phoneNumber,
-                                      @RequestParam("photo") MultipartFile photo) throws SQLException, IOException {
-        String hotelOwnerName = hotelService.addHotel(userId, hotelName, city, hotelDescription, phoneNumber, photo);
+                                      @RequestParam String hotelName,
+                                      @RequestParam String city,
+                                      @RequestParam String hotelLocation,
+                                      @RequestParam String hotelDescription,
+                                      @RequestParam String phoneNumber,
+                                      @RequestParam MultipartFile photo) throws SQLException, IOException {
+        String hotelOwnerName = hotelService.addHotel(userId, hotelName, city, hotelLocation, hotelDescription, phoneNumber, photo);
         return ResponseEntity.ok(hotelOwnerName);
     }
     @GetMapping("/all-hotels")

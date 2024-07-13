@@ -73,7 +73,7 @@ const SearchItem = ({ hotel }) => {
       <div className="siDetails">
         <div className="siRating">
           <span>{hotel.ratingText}</span>
-          <button>{hotel.rating}</button>
+          <button>{hotel.averageNumberOfHotelStars}</button>
         </div>
         <div className="siDetailTexts">
           <span className="siPrice">${lowestPrice.price}-{highestPrice.price}</span>
