@@ -14,7 +14,7 @@ const UserProfile = () => {
     firstName: "",
     lastName: "",
     phoneNumber: "",
-    roles: [{ id: "", name: "" }],
+    roles: [{ name: "" }],
   });
 
   const [bookings, setBookings] = useState([

@@ -72,18 +72,6 @@ public class HotelController {
         }).orElseThrow(() -> new ResourceNotFoundException("hotel not found"));
     }
 
-    @GetMapping("/hotel/{hotelId}/hotelLowestPrice")
-    public ResponseEntity<Long> getHotelLowestPriceByHotelId(@PathVariable Long hotelId){
-        Long hotelLowestPrice = hotelService.getHotelLowestPriceByHotelId(hotelId);
-        return ResponseEntity.ok(hotelLowestPrice);
-    }
-
-    @GetMapping("/hotel/{hotelId}/hotelHighestPrice")
-    public ResponseEntity<Long> getHotelHighestPriceByHotelId(@PathVariable Long hotelId){
-        Long hotelHighestPrice = hotelService.getHotelHighestPriceByHotelId(hotelId);
-        return ResponseEntity.ok(hotelHighestPrice);
-    }
-
     @GetMapping("/{city}")
     public ResponseEntity<List<HotelResponse>> getHotelsByCity(@PathVariable String city){
         List<Hotel> hotels = hotelService.getAllHotelsByCity(city);
@@ -124,6 +112,14 @@ public class HotelController {
             }
         }
 
+        double averageNumberOfHotelStars = hotelService.averageNumberOfHotelStars(hotel.getId());
+        Long lowestPrice
+                = hotelService.getHotelLowestPriceByHotelId(hotel.getId())
+                != null ? hotelService.getHotelLowestPriceByHotelId(hotel.getId()) : 0;
+        Long highestPrice
+                = hotelService.getHotelHighestPriceByHotelId(hotel.getId())
+                != null ? hotelService.getHotelHighestPriceByHotelId(hotel.getId()) : 0;
+
         return new HotelResponse(
                 hotel.getId(),
                 hotel.getHotelName(),
@@ -132,18 +128,10 @@ public class HotelController {
                 hotel.getHotelDescription(),
                 hotel.getPhoneNumber(),
                 photoBytes,
-                AverageNumberOfHotelStars(hotel.getId())
+                averageNumberOfHotelStars,
+                lowestPrice,
+                highestPrice
         );
     }
 
-    private double AverageNumberOfHotelStars(Long hotelId){
-        double result = 0;
-        int count = 0;
-        List<Rating> ratings = ratingService.getAllRatingByHotelId(hotelId);
-        for(Rating rating: ratings){
-            result += rating.getStar();
-            count++;
-        }
-        return result/count;
-    }
 }

@@ -24,6 +24,8 @@ public interface IHotelService {
 
     Optional<Hotel> getHotelById(Long hotelId);
 
+    double averageNumberOfHotelStars(Long hotelId);
+
     Long getHotelLowestPriceByHotelId(Long hotelId);
 
     Long getHotelHighestPriceByHotelId(Long hotelId);

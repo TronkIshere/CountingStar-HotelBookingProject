@@ -1,8 +1,8 @@
 package com.example.CoutingStarHotel.service;
 
-import com.example.CoutingStarHotel.exception.InternalServerException;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.model.Hotel;
+import com.example.CoutingStarHotel.model.Rating;
 import com.example.CoutingStarHotel.model.User;
 import com.example.CoutingStarHotel.repository.HotelRepository;
 import com.example.CoutingStarHotel.repository.UserRepository;
@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 public class HotelService implements IHotelService{
     private final HotelRepository hotelRepository;
     private final UserRepository userRepository;
+    private final RatingService ratingService;
 
     @Override
     public String addHotel(Long userId,
@@ -32,7 +33,6 @@ public class HotelService implements IHotelService{
                            String hotelDescription,
                            String phoneNumber,
                            MultipartFile photo) throws IOException, SQLException {
-        System.out.println("==========Add Hotel is running==========");
         Hotel hotel = new Hotel();
         hotel.setHotelName(hotelName);
         hotel.setCity(city);
@@ -55,6 +55,18 @@ public class HotelService implements IHotelService{
     public Optional<Hotel> getHotelById(Long hotelId) {
         return Optional.ofNullable(hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId)));
+    }
+
+    @Override
+    public double averageNumberOfHotelStars(Long hotelId){
+        double result = 0;
+        int count = 0;
+        List<Rating> ratings = ratingService.getAllRatingByHotelId(hotelId);
+        for(Rating rating: ratings){
+            result += rating.getStar();
+            count++;
+        }
+        return result/count;
     }
 
     @Override

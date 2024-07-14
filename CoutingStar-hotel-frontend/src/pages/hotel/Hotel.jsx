@@ -38,12 +38,8 @@ const Hotel = () => {
     phoneNumber: "",
     photo: "",
     averageNumberOfHotelStars: "",
-  });
-  const [lowestPrice, setLowestPrice] = useState({
-    price: "",
-  });
-  const [highestPrice, setHighestPrice] = useState({
-    price: "",
+    lowestPrice: "",
+    highestPrice: ""
   });
 
   const { hotelId } = useParams();
@@ -61,50 +57,6 @@ const Hotel = () => {
           setIsLoading(false);
         });
     }, 2000);
-  }, [hotelId]);
-
-  useEffect(() => {
-    const fetchLowestPrice = async () => {
-      try {
-        const success = await getLowestPriceByHotelId(hotelId);
-        if (success) {
-          console.log(success);
-          const lowestPrice = success;
-          setLowestPrice({ price: lowestPrice });
-        } else {
-          setErrorMessage("Error fetching the lowest price.");
-        }
-      } catch (error) {
-        setErrorMessage("Error fetching the lowest price.");
-      }
-      setTimeout(() => {
-        setErrorMessage("");
-      }, 4000);
-    };
-
-    fetchLowestPrice();
-  }, [hotelId]);
-
-  useEffect(() => {
-    const fetchHighestPrice = async () => {
-      try {
-        const success = await getHighestPriceByHotelId(hotelId);
-        if (success) {
-          console.log(success);
-          const highestPrice = success;
-          setHighestPrice({ price: highestPrice });
-        } else {
-          setErrorMessage("Error fetching the highest price.");
-        }
-      } catch (error) {
-        setErrorMessage("Error fetching the highest price.");
-      }
-      setTimeout(() => {
-        setErrorMessage("");
-      }, 4000);
-    };
-
-    fetchHighestPrice();
   }, [hotelId]);
 
   const photos = [
@@ -226,7 +178,7 @@ const Hotel = () => {
               </span>
               <h2>
                 <b>
-                  Từ ${lowestPrice.price}-{highestPrice.price}
+                  Từ ${hotelInfo.lowestPrice}-{hotelInfo.highestPrice}
                 </b>{" "}
                 (1 đêm)
               </h2>
