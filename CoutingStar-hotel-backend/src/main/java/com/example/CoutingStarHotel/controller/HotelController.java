@@ -10,6 +10,7 @@ import com.example.CoutingStarHotel.service.IHotelService;
 import com.example.CoutingStarHotel.service.IRatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -93,6 +94,7 @@ public class HotelController {
     }
 
     @PutMapping("/hotel/{hotelId}/hotelInformationUpdate")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public ResponseEntity<HotelResponse> updateHotel(@PathVariable Long hotelId,
                                                      @RequestParam String hotelName,
                                                      @RequestParam String city,
@@ -106,6 +108,7 @@ public class HotelController {
     }
 
     @DeleteMapping("/hotel/{hotelId}/delete")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public void deleteHotel(@PathVariable Long hotelId){
         hotelService.deleteHotel(hotelId);
     }

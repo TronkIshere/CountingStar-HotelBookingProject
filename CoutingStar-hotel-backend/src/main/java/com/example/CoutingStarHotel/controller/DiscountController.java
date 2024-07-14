@@ -9,6 +9,7 @@ import io.jsonwebtoken.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -21,6 +22,7 @@ import java.util.Optional;
 public class DiscountController {
     private final IDiscountService discountService;
     @PostMapping("/discount/{roomId}/addDiscount")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     private ResponseEntity<?> addDiscount(@PathVariable Long roomId,
                                           @RequestBody Discount discountRequest) throws SQLException, IOException {
         try{
@@ -41,6 +43,7 @@ public class DiscountController {
     }
 
     @PutMapping("/update/{discountId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public ResponseEntity<DiscountResponse> updateDiscount(@PathVariable Long discountId,
                                                            @RequestParam(required = false) int percentDiscount,
                                                            @RequestParam(required = false) String discountDescription) throws SQLException, java.io.IOException {
@@ -50,6 +53,7 @@ public class DiscountController {
     }
 
     @DeleteMapping("/discount/{discount}/deleteDiscount")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     private ResponseEntity<Void> deleteDiscount(@PathVariable Long discountId){
         discountService.deleteDiscount(discountId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
