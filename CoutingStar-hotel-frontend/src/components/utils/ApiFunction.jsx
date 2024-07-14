@@ -49,20 +49,11 @@ export async function getHotelById(hotelId) {
 	}
 }
 
-export async function getLowestPriceByHotelId(hotelId){
-	try{
-		const response = await api.get(`hotels/hotel/${hotelId}/hotelLowestPrice`)
+export async function getFiveHotelForHomePage() {
+	try {
+		const response = await api.get(`/hotels/homepage`)
 		return response.data
-	} catch (error){
-		throw new Error("Error fetching hotels")
-	}
-}
-
-export async function getHighestPriceByHotelId(hotelId){
-	try{
-		const response = await api.get(`hotels/hotel/${hotelId}/hotelHighestPrice`)
-		return response.data
-	} catch (error){
+	} catch (error) {
 		throw new Error("Error fetching hotels")
 	}
 }

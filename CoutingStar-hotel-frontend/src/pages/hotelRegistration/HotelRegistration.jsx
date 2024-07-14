@@ -82,7 +82,7 @@ const HotelRegistration = () => {
     const selectedImage = e.target.files[0];
     setHotel({ ...hotel, photo: selectedImage });
     setImagePreview(URL.createObjectURL(selectedImage));
-  }
+  };
 
   return (
     <div className="container">
@@ -156,14 +156,22 @@ const HotelRegistration = () => {
         </div>
         <div className="form-group">
           <label>Thành phố:</label>
-          <input
-            type="text"
-            name="city"
-            value={hotel.city}
-            onChange={handleHotelChange}
-            required
-          />
         </div>
+        <select
+          name="city"
+          className="selectBar"
+          value={hotel.city}
+          onChange={handleHotelChange}
+        >
+          <option value="" disabled>
+            Bạn muốn đi đâu?
+          </option>
+          <option value="Ho Chi Minh">Hồ Chí Minh</option>
+          <option value="Ha Noi">Hà Nội</option>
+          <option value="Da Lat">Đà Lạt</option>
+          <option value="Nha Trang">Nha Trang</option>
+          <option value="Vung Tau">Vũng Tàu</option>
+        </select>
         <div className="form-group">
           <label>Địa chỉ:</label>
           <input
@@ -206,7 +214,6 @@ const HotelRegistration = () => {
               <img className="inputImg" src={imagePreview} alt="Preview" />
             </div>
           )}
-
         </div>
 
         <button type="submit" className="postHotelButton">

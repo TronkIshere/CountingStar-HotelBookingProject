@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./searchItem.css";
 import { Link } from "react-router-dom";
-import { getHighestPriceByHotelId, getLowestPriceByHotelId } from "../utils/ApiFunction";
 
 const SearchItem = ({ hotel }) => {
 

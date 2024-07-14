@@ -1,68 +1,58 @@
-import React from "react";
-import './featuredProperties.css'
+import React, { useEffect, useState } from "react";
+import "./featuredProperties.css";
 import khachsan1 from "../../assets/featuredProperties-img/khachsan1.jpg";
 import khachsan2 from "../../assets/featuredProperties-img/khachsan2.jpg";
 import khachsan3 from "../../assets/featuredProperties-img/khachsan3.jpg";
 import khachsan4 from "../../assets/featuredProperties-img/khachsan4.jpg";
 import khachsan5 from "../../assets/featuredProperties-img/khachsan5.jpg";
+import { getFiveHotelForHomePage } from "../utils/ApiFunction";
+import { Link } from "react-router-dom";
 
 const FeaturedProperties = () => {
+  const [hotels, setHotels] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    getFiveHotelForHomePage()
+      .then((response) => {
+        setHotels(response);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+        setIsLoading(false);
+      });
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <div className="fp">
-      <div className="fpItem">
-        <img src={khachsan1} alt="" className="fpImg" />
-        <span className="fpName">Aparthotel Stare Miasto</span>
-        <span className="fpName">Madrid</span>
-        <span className="fpName">Sstarting from $120</span>
-        <div className="fpRating">
-          <button>8.9</button>
-          <span>Excellent</span>
+      {hotels.map((hotel, index) => (
+        <div key={index} className="fpItem">
+          <Link className="linkForm" to={`/hotels/hotel/${hotel.id}`}>
+            <img
+              src={`data:image/jpeg;base64, ${hotel.photo}`}
+              alt=""
+              className="fpImg"
+            />
+            <span className="fpName">{hotel.hotelName}</span>
+            <span className="fpName">{hotel.city}</span>
+            <span className="fpName">Giá từ ${hotel.lowestPrice}</span>
+            <div className="fpRating">
+              <button>{hotel.averageNumberOfHotelStars}</button>
+              <span>Trên 5 sao</span>
+            </div>
+          </Link>
         </div>
-      </div>
-
-      <div className="fpItem">
-        <img src={khachsan2} alt="" className="fpImg" />
-        <span className="fpName">Aparthotel Stare Miasto</span>
-        <span className="fpName">Madrid</span>
-        <span className="fpName">Sstarting from $120</span>
-        <div className="fpRating">
-          <button>8.9</button>
-          <span>Excellent</span>
-        </div>
-      </div>
-
-      <div className="fpItem">
-        <img src={khachsan3} alt="" className="fpImg" />
-        <span className="fpName">Aparthotel Stare Miasto</span>
-        <span className="fpName">Madrid</span>
-        <span className="fpName">Sstarting from $120</span>
-        <div className="fpRating">
-          <button>8.9</button>
-          <span>Excellent</span>
-        </div>
-      </div>
-
-      <div className="fpItem">
-        <img src={khachsan4} alt="" className="fpImg" />
-        <span className="fpName">Aparthotel Stare Miasto</span>
-        <span className="fpName">Madrid</span>
-        <span className="fpName">Sstarting from $120</span>
-        <div className="fpRating">
-          <button>8.9</button>
-          <span>Excellent</span>
-        </div>
-      </div>
-
-      <div className="fpItem">
-        <img src={khachsan5} alt="" className="fpImg" />
-        <span className="fpName">Aparthotel Stare Miasto</span>
-        <span className="fpName">Madrid</span>
-        <span className="fpName">Sstarting from $120</span>
-        <div className="fpRating">
-          <button>8.9</button>
-          <span>Excellent</span>
-        </div>
-      </div>
+      ))}
     </div>
   );
 };

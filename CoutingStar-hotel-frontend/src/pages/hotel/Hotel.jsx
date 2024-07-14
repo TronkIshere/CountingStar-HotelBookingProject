@@ -17,9 +17,7 @@ import RoomList from "../../components/room/roomList/RoomList";
 import Register from "../../components/register/Register";
 import Rating from "../../components/rating/Rating";
 import {
-  getHighestPriceByHotelId,
-  getHotelById,
-  getLowestPriceByHotelId,
+  getHotelById
 } from "../../components/utils/ApiFunction";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../../components/utils/AuthProvider";

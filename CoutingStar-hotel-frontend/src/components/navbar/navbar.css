@@ -35,6 +35,7 @@
   color: #003580;
   font-weight: 500;
   background-color: white;
+  font-weight: 600;
 }
 
 .navButton:hover {
@@ -123,7 +124,8 @@
 
 .navLink {
   text-decoration: none;
-  color: black;
+  color: #003580;
+  font-weight: 600;
 }
 
 .hotelRegistrationButton{
