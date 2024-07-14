@@ -7,8 +7,10 @@ import { format } from "date-fns";
 import { DateRange } from "react-date-range";
 import SearchItem from "../../components/searchItem/SearchItem";
 import { getHotelsByCity } from "../../components/utils/ApiFunction";
+import Register from "../../components/register/Register";
 
 const List = () => {
+  const userId = localStorage.getItem("userId");
   const location = useLocation();
   const {
     destination: initialDestination = "",
@@ -155,6 +157,7 @@ const List = () => {
           </div>
         </div>
       </div>
+          {userId ? <div></div> : <Register />}
     </div>
   );
 };

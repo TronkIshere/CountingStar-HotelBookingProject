@@ -156,22 +156,23 @@ const HotelRegistration = () => {
         </div>
         <div className="form-group">
           <label>Thành phố:</label>
+          <select
+            name="city"
+            className="selectBar"
+            value={hotel.city}
+            onChange={handleHotelChange}
+            required
+          >
+            <option value="" disabled>
+              Bạn muốn đi đâu?
+            </option>
+            <option value="Hồ Chí Minh">Hồ Chí Minh</option>
+            <option value="Hà Nội">Hà Nội</option>
+            <option value="Đà Lạt">Đà Lạt</option>
+            <option value="Nha Trang">Nha Trang</option>
+            <option value="Vũng Tàu">Vũng Tàu</option>
+          </select>
         </div>
-        <select
-          name="city"
-          className="selectBar"
-          value={hotel.city}
-          onChange={handleHotelChange}
-        >
-          <option value="" disabled>
-            Bạn muốn đi đâu?
-          </option>
-          <option value="Ho Chi Minh">Hồ Chí Minh</option>
-          <option value="Ha Noi">Hà Nội</option>
-          <option value="Da Lat">Đà Lạt</option>
-          <option value="Nha Trang">Nha Trang</option>
-          <option value="Vung Tau">Vũng Tàu</option>
-        </select>
         <div className="form-group">
           <label>Địa chỉ:</label>
           <input
