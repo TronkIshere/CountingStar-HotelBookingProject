@@ -45,7 +45,7 @@ const FeaturedProperties = () => {
             />
             <span className="fpName">{hotel.hotelName}</span>
             <span className="fpName">{hotel.city}</span>
-            <span className="fpName">Giá từ ${hotel.lowestPrice}</span>
+            <span className="fpName fpPrice">Giá từ ${hotel.lowestPrice}</span>
             <div className="fpRating">
               <button>{hotel.averageNumberOfHotelStars}</button>
               <span>Trên 5 sao</span>

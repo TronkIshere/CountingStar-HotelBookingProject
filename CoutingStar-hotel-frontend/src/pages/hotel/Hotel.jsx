@@ -112,7 +112,7 @@ const Hotel = () => {
               onClick={() => handleMove("l")}
             />
             <div className="sliderWrapper">
-              <img src={photos[slideNumber].src} alt="" className="sliderImg" />
+              <img src={`data:image/jpeg;base64,${hotelInfo.photo}`} alt="" className="sliderImg" />
             </div>
             <FontAwesomeIcon
               icon={faCircleArrowRight}
@@ -152,7 +152,8 @@ const Hotel = () => {
             Hãy đặt ngay để tận hưởng khoảng khắc tuyệt vời tại khách sạn
           </span>
           <div className="hotelImages">
-            {photos.map((photo, i) => (
+            <img className="hotelImg" src={`data:image/jpeg;base64,${hotelInfo.photo}`}/>
+            {/* {photos.map((photo, i) => (
               <div className="hotelImgWrapper" key={i}>
                 <img
                   onClick={() => handleOpen(i)}
@@ -161,7 +162,7 @@ const Hotel = () => {
                   className="hotelImg"
                 />
               </div>
-            ))}
+            ))} */}
           </div>
 
           <div className="hotelDetails">

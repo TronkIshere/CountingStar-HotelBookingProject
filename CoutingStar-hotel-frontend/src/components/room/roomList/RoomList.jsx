@@ -58,7 +58,7 @@ const RoomList = ({ hotelId }) => {
                 <td>{room.roomDescription}</td>
                 <td>${room.roomPrice}</td>
                 <td>Đánh giá</td>
-                <td>
+                <td className="lastTd">
                   <button
                     className="bookButton"
                     onClick={() => handleBookClick(room.id)}

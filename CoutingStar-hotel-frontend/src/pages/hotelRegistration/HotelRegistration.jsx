@@ -164,7 +164,7 @@ const HotelRegistration = () => {
             required
           >
             <option value="" disabled>
-              Bạn muốn đi đâu?
+              Khách sạn bạn ở thành phố nào?
             </option>
             <option value="Hồ Chí Minh">Hồ Chí Minh</option>
             <option value="Hà Nội">Hà Nội</option>

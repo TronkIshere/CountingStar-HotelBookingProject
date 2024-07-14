@@ -51,3 +51,8 @@
     flex-direction: column;
     gap: 5px;
 }
+
+.fpPrice{
+    font-weight: 400;
+    color: #28a745;
+}
