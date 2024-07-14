@@ -38,6 +38,7 @@ const UserProfile = () => {
     const fetchUser = async () => {
       try {
         const userData = await getUserByEmail(userEmail, token);
+        console.log("userData: ", userData)
         setUser(userData);
       } catch (error) {
         console.error(error);

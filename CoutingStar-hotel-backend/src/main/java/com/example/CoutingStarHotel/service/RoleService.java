@@ -9,6 +9,7 @@ import com.example.CoutingStarHotel.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +42,11 @@ public class RoleService implements IRoleService{
     @Override
     public Role findByName(String name) {
         return roleReponsitory.findByName(name).get();
+    }
+
+    @Override
+    public Collection<Role> findAllRoleByUserId(Long userId) {
+        return roleReponsitory.findByUserId(userId);
     }
 
     @Override

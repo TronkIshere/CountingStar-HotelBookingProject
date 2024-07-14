@@ -1,6 +1,8 @@
 package com.example.CoutingStarHotel.controller;
 
 import com.example.CoutingStarHotel.model.User;
+import com.example.CoutingStarHotel.response.UserResponse;
+import com.example.CoutingStarHotel.service.IRoleService;
 import com.example.CoutingStarHotel.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final IUserService userService;
+    private final IRoleService roleService;
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<User>> getUsers(){
@@ -27,7 +30,8 @@ public class UserController {
     public ResponseEntity<?> getUserByEmail(@PathVariable("email") String email){
         try{
             User theUser = userService.getUser(email);
-            return ResponseEntity.ok(theUser);
+            UserResponse userResponse = new UserResponse(theUser);
+            return ResponseEntity.ok(userResponse);
         }catch (UsernameNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch (Exception e){
