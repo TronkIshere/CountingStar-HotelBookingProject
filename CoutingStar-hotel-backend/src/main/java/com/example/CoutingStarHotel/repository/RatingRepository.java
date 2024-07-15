@@ -14,4 +14,12 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
             "JOIN ro.hotel h " +
             "WHERE h.id = :hotelId")
     List<Rating> getAllRatingByHotelId(Long hotelId);
+
+
+    @Query("SELECT r FROM Rating r " +
+            "JOIN r.bookedRoom br " +
+            "JOIN br.room ro " +
+            "WHERE ro.id = :roomId")
+    List<Rating> getAllRatingByRoomId(Long roomId);
+
 }

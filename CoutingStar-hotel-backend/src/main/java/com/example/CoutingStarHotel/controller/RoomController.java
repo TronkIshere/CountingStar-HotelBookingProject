@@ -113,25 +113,6 @@ public class RoomController {
         }).orElseThrow(() -> new ResourceNotFoundException("Room not found"));
     }
 
-    private RoomResponse getRoomResponse(Room room) {
-        byte[] photoBytes = null;
-        Blob photoBlob = room.getPhoto();
-        if (photoBlob != null) {
-            try {
-                photoBytes = photoBlob.getBytes(1, (int) photoBlob.length());
-            } catch (SQLException e) {
-                throw new PhotoRetrievalExcetion("Error retrieving photo");
-            }
-        }
-        return new RoomResponse(
-                room.getId(),
-                room.getRoomType(),
-                room.getRoomPrice(),
-                room.getRoomDescription(),
-                room.isBooked(),
-                photoBytes);
-    }
-
     private List<BookedRoom> getAllBookingByRoomId(Long roomId) {
         return bookingService.getAllBookingsByRoomId(roomId);
     }
@@ -157,6 +138,29 @@ public class RoomController {
         }else{
             return ResponseEntity.ok(roomResponses);
         }
+    }
+
+    private RoomResponse getRoomResponse(Room room) {
+        byte[] photoBytes = null;
+        Blob photoBlob = room.getPhoto();
+        if (photoBlob != null) {
+            try {
+                photoBytes = photoBlob.getBytes(1, (int) photoBlob.length());
+            } catch (SQLException e) {
+                throw new PhotoRetrievalExcetion("Error retrieving photo");
+            }
+        }
+
+        double averageNumberOfRoomStars = roomService.averageNumberOfRoomStars(room.getId());
+
+        return new RoomResponse(
+                room.getId(),
+                room.getRoomType(),
+                room.getRoomPrice(),
+                room.getRoomDescription(),
+                room.isBooked(),
+                photoBytes,
+                averageNumberOfRoomStars);
     }
 }
 

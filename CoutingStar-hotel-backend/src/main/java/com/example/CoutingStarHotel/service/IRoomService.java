@@ -28,4 +28,6 @@ public interface IRoomService {
     List<Room> getAvailableRooms(LocalDate checkInDate, LocalDate checkOutDate, String roomType);
 
     List<Room> getRoomByHotelId(Long hotelId);
+
+    double averageNumberOfRoomStars(Long roomId);
 }

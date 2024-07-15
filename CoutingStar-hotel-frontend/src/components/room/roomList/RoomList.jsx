@@ -2,40 +2,41 @@ import React, { useEffect, useState } from "react";
 import "./roomList.css";
 import BookingForm from "../../bookingForm/BookingForm";
 import { getRoomsByHotelId } from "../../utils/ApiFunction";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-regular-svg-icons";
 
 const RoomList = ({ hotelId }) => {
-  const [selectedRoom, setSelectedRoom] = useState(null)
-  const [rooms, setRooms] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [rooms, setRooms] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const handleBookClick = (roomId) => {
-    setSelectedRoom(roomId)
+    setSelectedRoom(roomId);
   };
 
   const handleCloseModal = () => {
-    setSelectedRoom(null)
+    setSelectedRoom(null);
   };
 
   useEffect(() => {
     setIsLoading(true);
     getRoomsByHotelId(hotelId)
       .then((response) => {
-        console.log("Rooms data:", response)
-        setRooms(response)
-        setIsLoading(false)
+        console.log("Rooms data:", response);
+        setRooms(response);
+        setIsLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching rooms:", error)
-        setError(error)
-        setIsLoading(false)
+        console.error("Error fetching rooms:", error);
+        setError(error);
+        setIsLoading(false);
       });
-  }, [hotelId])
+  }, [hotelId]);
 
   if (isLoading) {
-    return <div>Đang kiểm tra phòng...</div>
+    return <div>Đang kiểm tra phòng...</div>;
   }
-
 
   return (
     <div className="roomListContainer">
@@ -57,7 +58,10 @@ const RoomList = ({ hotelId }) => {
                 <td>{room.roomType}</td>
                 <td>{room.roomDescription}</td>
                 <td>${room.roomPrice}</td>
-                <td>Đánh giá</td>
+                <td>
+                  {room.averageNumberOfRoomStars} / 5
+                  <div>Sao</div>
+                </td>
                 <td className="lastTd">
                   <button
                     className="bookButton"

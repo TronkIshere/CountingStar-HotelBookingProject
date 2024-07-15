@@ -68,4 +68,10 @@ public class RatingService implements IRatingService{
         List<Rating> ratingList = ratingRepository.getAllRatingByHotelId(hotelId);
         return ratingList;
     }
+
+    @Override
+    public List<Rating> getAllRatingByRoomId(Long roomId) {
+        List<Rating> ratingList = ratingRepository.getAllRatingByRoomId(roomId);
+        return ratingList;
+    }
 }

@@ -1,8 +1,8 @@
 package com.example.CoutingStarHotel.service;
 
-import com.example.CoutingStarHotel.exception.InternalServerException;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.model.Hotel;
+import com.example.CoutingStarHotel.model.Rating;
 import com.example.CoutingStarHotel.model.Room;
 import com.example.CoutingStarHotel.repository.HotelRepository;
 import com.example.CoutingStarHotel.repository.RoomRepository;
@@ -24,6 +24,7 @@ import java.util.Optional;
 public class RoomService implements IRoomService{
     private final RoomRepository roomRepository;
     private final HotelRepository hotelRepository;
+    private final RatingService ratingService;
     @Override
     public Room addNewRoom(MultipartFile file, String roomType, BigDecimal roomPrice, String roomDescription, Long hotelId) throws SQLException, IOException {
         Room room = new Room();
@@ -101,5 +102,17 @@ public class RoomService implements IRoomService{
     @Override
     public List<Room> getRoomByHotelId(Long hotelId) {
         return roomRepository.findRoomsByHotelId(hotelId);
+    }
+
+    @Override
+    public double averageNumberOfRoomStars(Long roomId){
+        double result = 0;
+        int count = 0;
+        List<Rating> ratings = ratingService.getAllRatingByRoomId(roomId);
+        for(Rating rating: ratings){
+            result += rating.getStar();
+            count++;
+        }
+        return result/count;
     }
 }

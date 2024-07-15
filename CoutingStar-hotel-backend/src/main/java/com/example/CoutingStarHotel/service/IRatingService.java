@@ -15,4 +15,6 @@ public interface IRatingService {
     boolean checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(Long userId, Long hotelId);
 
     List<Rating> getAllRatingByHotelId(Long hotelId);
+
+    List<Rating> getAllRatingByRoomId(Long roomId);
 }
