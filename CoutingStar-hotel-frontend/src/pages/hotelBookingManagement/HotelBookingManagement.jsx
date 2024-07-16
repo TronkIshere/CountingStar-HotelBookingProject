@@ -3,6 +3,7 @@ import "./hotelBookingManagement.css";
 import BookingDelete from "../../components/bookingRoom/bookingDelete/BookingDelete";
 import BookingUpdate from "../../components/bookingRoom/bookingUpdate/BookingUpdate";
 import { getBookingByHotelId } from "../../components/utils/ApiFunction";
+import { useParams } from "react-router-dom";
 
 const HotelBookingManagement = () => {
   const [bookings, setBookings] = useState([
@@ -21,7 +22,7 @@ const HotelBookingManagement = () => {
     },
   ]);
 
-  const hotelId = localStorage.getItem("userHotelId");
+  const { hotelId } = useParams();
 
   useEffect(() => {
     const fetchBookings = async () => {

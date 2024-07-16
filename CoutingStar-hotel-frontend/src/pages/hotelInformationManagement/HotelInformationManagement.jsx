@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./hotelInformationManagement.css";
 import { getHotelById, updateHotel } from "../../components/utils/ApiFunction";
+import { useParams } from "react-router-dom";
 
 const HotelInformationManagement = () => {
   const [hotel, setHotel] = useState({
@@ -27,7 +28,7 @@ const HotelInformationManagement = () => {
     setHotel({ ...hotel, [name]: value })
   };
 
-  const hotelId = localStorage.getItem("userHotelId")
+  const { hotelId } = useParams();
 
   useEffect(() => {
     const fetchRoom = async () => {

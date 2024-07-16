@@ -12,13 +12,12 @@ import {
   faPhone,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-scroll"; // Import Link từ react-scroll
+import { Link as ScrollLink } from "react-scroll";
+import { Link as RouterLink } from "react-router-dom";
 import RoomList from "../../components/room/roomList/RoomList";
 import Register from "../../components/register/Register";
 import Rating from "../../components/rating/Rating";
-import {
-  getHotelById
-} from "../../components/utils/ApiFunction";
+import { getHotelById } from "../../components/utils/ApiFunction";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../../components/utils/AuthProvider";
 
@@ -37,7 +36,7 @@ const Hotel = () => {
     photo: "",
     averageNumberOfHotelStars: "",
     lowestPrice: "",
-    highestPrice: ""
+    highestPrice: "",
   });
 
   const { hotelId } = useParams();
@@ -95,6 +94,8 @@ const Hotel = () => {
     setSlideNumber(newSlideNumber);
   };
 
+  const userRole = localStorage.getItem("userRole");
+
   return (
     <div>
       <Header type="list" />
@@ -112,7 +113,11 @@ const Hotel = () => {
               onClick={() => handleMove("l")}
             />
             <div className="sliderWrapper">
-              <img src={`data:image/jpeg;base64,${hotelInfo.photo}`} alt="" className="sliderImg" />
+              <img
+                src={`data:image/jpeg;base64,${hotelInfo.photo}`}
+                alt=""
+                className="sliderImg"
+              />
             </div>
             <FontAwesomeIcon
               icon={faCircleArrowRight}
@@ -125,10 +130,27 @@ const Hotel = () => {
           <Rating hotelId={hotelInfo.id} onClose={() => setRatingOpen(false)} />
         )}
         <div className="hotelWrapper">
-          {/* Sử dụng Link từ react-scroll để cuộn đến RoomList */}
-          <Link to="roomList" smooth={true} duration={500}>
+          <ScrollLink to="roomList" smooth={true} duration={500}>
             <button className="bookNow">Hãy đặt ngay!</button>
-          </Link>
+          </ScrollLink>
+
+          {userRole === "ROLE_ADMIN" && (
+            <div className="adminTbale">
+              <h1>Bảng điều chỉnh khách sạn của Admin</h1>
+              <div className="adminButtonPatten">
+                <RouterLink to={`/hotel/${hotelInfo.id}/hotelRoomManagement`}>
+                  <button className="adminButton">Quản lý phòng</button>
+                </RouterLink>
+                <RouterLink to={`/hotel/${hotelInfo.id}/hotelBookingManagement`}>
+                  <button className="adminButton">Quản lý phòng được đặt</button>
+                </RouterLink>
+                <RouterLink to={`/hotel/${hotelInfo.id}/hotelInformationManagement`}>
+                  <button className="adminButton">Quản lý thông tin khách sạn</button>
+                </RouterLink>
+              </div>
+            </div>
+          )}
+
           <h1 className="hotelTitle">{hotelInfo.hotelName}</h1>
           <div className="hotelAddressAndContact">
             <FontAwesomeIcon icon={faLocationDot} />
@@ -152,7 +174,10 @@ const Hotel = () => {
             Hãy đặt ngay để tận hưởng khoảng khắc tuyệt vời tại khách sạn
           </span>
           <div className="hotelImages">
-            <img className="hotelImg" src={`data:image/jpeg;base64,${hotelInfo.photo}`}/>
+            <img
+              className="hotelImg"
+              src={`data:image/jpeg;base64,${hotelInfo.photo}`}
+            />
             {/* {photos.map((photo, i) => (
               <div className="hotelImgWrapper" key={i}>
                 <img

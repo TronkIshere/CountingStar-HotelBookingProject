@@ -29,7 +29,9 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
     <div className="navbar">
       <div className="navContainer">
         <span className="logo">
-          <RouterLink className="logo" to={`/`}>CoutingStar</RouterLink>
+          <RouterLink className="logo" to={`/`}>
+            CoutingStar
+          </RouterLink>
         </span>
         <div className="navItems">
           {userId ? (
@@ -45,6 +47,13 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
                     </li>
                     {userRole === "ROLE_HOTEL_OWNER" && (
                       <>
+                        <li className="navButtonLi">
+                          <RouterLink
+                            to={`hotels/hotel/${hotelId}`}
+                          >
+                            Khách sạn của bạn
+                          </RouterLink>
+                        </li>
                         <li className="navButtonLi">
                           <RouterLink
                             to={`/hotel/${hotelId}/hotelRoomManagement`}
@@ -78,7 +87,13 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
           ) : (
             <>
               <button className="postHotelButton">
-                <RouterLink className="hotelRegistrationButton" to={`/hotelRegistration`}>Đăng phòng của bạn</RouterLink></button>
+                <RouterLink
+                  className="hotelRegistrationButton"
+                  to={`/hotelRegistration`}
+                >
+                  Đăng phòng của bạn
+                </RouterLink>
+              </button>
               <button className="navButton" onClick={onRegisterClick}>
                 <ScrollLink
                   to="register"
@@ -90,7 +105,7 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
                 </ScrollLink>
               </button>
               <button onClick={onLoginClick} className="navButton">
-                  Đăng nhập
+                Đăng nhập
               </button>
             </>
           )}

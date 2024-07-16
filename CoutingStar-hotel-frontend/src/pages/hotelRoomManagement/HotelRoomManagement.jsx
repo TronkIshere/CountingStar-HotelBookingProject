@@ -4,6 +4,7 @@ import AddRoom from "../../components/room/addRoom/AddRoom";
 import UpdateRoom from "../../components/room/updateRoom/UpdateRoom";
 import DeleteRoom from "../../components/room/deleteRoom/DeleteRoom";
 import { getRoomsByHotelId } from "../../components/utils/ApiFunction";
+import { useParams } from "react-router-dom";
 
 const HotelRoomManagement = () => {
   const [rooms, setRooms] = useState([]);
@@ -12,12 +13,11 @@ const HotelRoomManagement = () => {
   const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const userHotelId = localStorage.getItem("userHotelId")
-
+  const { hotelId } = useParams();
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const roomsData = await getRoomsByHotelId(userHotelId);
+        const roomsData = await getRoomsByHotelId(hotelId);
         setRooms(roomsData)
       } catch (error) {
         console.error(error)
@@ -25,7 +25,7 @@ const HotelRoomManagement = () => {
     }
 
     fetchRooms()
-  }, [userHotelId])
+  }, [hotelId])
 
   const handleAddRoom = (newRoom) => {
     setRooms([...rooms, newRoom])
@@ -93,7 +93,7 @@ const HotelRoomManagement = () => {
               <td>{room.roomType}</td>
               <td>{room.roomDescription}</td>
               <td>{room.roomPrice}</td>
-              <td>none</td>
+              <td>{room.averageNumberOfRoomStars} / 5</td>
               <td>
                 <button
                   className="editButton"
