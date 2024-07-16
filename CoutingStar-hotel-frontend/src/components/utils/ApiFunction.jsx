@@ -23,11 +23,7 @@ export async function addHotel(userId, hotelName, city, hotelLocation, hotelDesc
 	formData.append("photo", photo)
 
 	const response = await api.post(`/hotels/${userId}/addHotel`, formData)
-	if (response.status === 201) {
-		return true
-	} else {
-		return false
-	}
+	return response;
 }
 
 /* Get all hotels by city */

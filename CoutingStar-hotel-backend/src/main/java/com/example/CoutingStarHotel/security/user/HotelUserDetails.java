@@ -24,19 +24,23 @@ public class HotelUserDetails implements UserDetails {
     private String phoneNumber;
     private Collection<GrantedAuthority> authorities;
     private Long hotelId;
-    public static HotelUserDetails buildUserDetails(User user){
+    public static HotelUserDetails buildUserDetails(User user) {
         List<GrantedAuthority> authorities = user.getRoles()
                 .stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
+
+        Long hotelId = user.getHotel() != null ? user.getHotel().getId() : null;
+        System.out.println("HotelId: " + hotelId);
         return new HotelUserDetails(
                 user.getId(),
                 user.getEmail(),
                 user.getPassword(),
                 user.getPhoneNumber(),
                 authorities,
-                user.getHotel().getId());
+                hotelId);
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;

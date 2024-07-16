@@ -31,31 +31,42 @@ const HotelRegistration = () => {
     e.preventDefault();
     try {
       const hotelOwner = await registerHotelOwner(user);
-      console.log(hotel);
-      const added = await addHotel(
-        hotelOwner.id,
-        hotel.hotelName,
-        hotel.city,
-        hotel.hotelLocation,
-        hotel.description,
-        hotel.hotelPhone,
-        hotel.photo
-      );
-      if (added) {
-        setSuccessMessage("Hotel registered successfully!");
-      } else {
-        setErrorMessage("Failed to register hotel.");
+  
+      try {
+        const response = await addHotel(
+          hotelOwner.id,
+          hotel.hotelName,
+          hotel.city,
+          hotel.hotelLocation,
+          hotel.description,
+          hotel.hotelPhone,
+          hotel.photo
+        );
+  
+        if (response.status === 200 || response.status === 201) {
+          setSuccessMessage(response.data || "Hotel registered successfully!");
+        } else {
+          setErrorMessage(response.data || "Failed to register hotel.");
+        }
+      } catch (addHotelError) {
+        let errorMessage = "Failed to register hotel: ";
+        if (addHotelError.response && addHotelError.response.data) {
+          errorMessage += JSON.stringify(addHotelError.response.data);
+        } else {
+          errorMessage += addHotelError.message;
+        }
+        setErrorMessage(errorMessage);
       }
-    } catch (error) {
-      console.error("Registration error:", error);
-      let errorMessage = "Registration error: ";
-      if (error.response && error.response.data) {
-        errorMessage += JSON.stringify(error.response.data);
+    } catch (registerHotelOwnerError) {
+      let errorMessage = "Failed to register hotel owner: ";
+      if (registerHotelOwnerError.response && registerHotelOwnerError.response.data) {
+        errorMessage += JSON.stringify(registerHotelOwnerError.response.data);
       } else {
-        errorMessage += error.message;
+        errorMessage += registerHotelOwnerError.message;
       }
       setErrorMessage(errorMessage);
     }
+  
     setTimeout(() => {
       setErrorMessage("");
       setSuccessMessage("");

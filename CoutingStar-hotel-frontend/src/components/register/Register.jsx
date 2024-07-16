@@ -22,6 +22,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const result = await registerUser(registration);
+      console.log(registration)
       setSuccessMessage(result);
       setErrorMessage("");
       setRegistration({

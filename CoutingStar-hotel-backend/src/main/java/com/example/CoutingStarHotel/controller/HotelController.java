@@ -1,5 +1,6 @@
 package com.example.CoutingStarHotel.controller;
 
+import com.example.CoutingStarHotel.exception.InvalidHotelRequestException;
 import com.example.CoutingStarHotel.exception.PhotoRetrievalExcetion;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.model.Hotel;
@@ -9,6 +10,7 @@ import com.example.CoutingStarHotel.response.HotelResponse;
 import com.example.CoutingStarHotel.service.IHotelService;
 import com.example.CoutingStarHotel.service.IRatingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +40,12 @@ public class HotelController {
                                       @RequestParam String hotelDescription,
                                       @RequestParam String phoneNumber,
                                       @RequestParam MultipartFile photo) throws SQLException, IOException {
-        String hotelOwnerName = hotelService.addHotel(userId, hotelName, city, hotelLocation, hotelDescription, phoneNumber, photo);
-        return ResponseEntity.ok(hotelOwnerName);
+        try {
+            hotelService.addHotel(userId, hotelName, city, hotelLocation, hotelDescription, phoneNumber, photo);
+            return ResponseEntity.ok("Đã đăng ký thành công");
+        } catch (InvalidHotelRequestException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
     }
     @GetMapping("/all-hotels")
     public ResponseEntity<List<HotelResponse>> getAllHotels(){
@@ -69,7 +75,7 @@ public class HotelController {
         return theHotel.map(room -> {
             HotelResponse hotelResponse = getHotelResponse(room);
             return  ResponseEntity.ok(Optional.of(hotelResponse));
-        }).orElseThrow(() -> new ResourceNotFoundException("hotel not found"));
+        }).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khách sạn"));
     }
 
     @GetMapping("/{city}")
