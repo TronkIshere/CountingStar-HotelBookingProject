@@ -1,15 +1,11 @@
 package com.example.CoutingStarHotel.response;
 
-import com.example.CoutingStarHotel.model.Room;
-import com.example.CoutingStarHotel.model.User;
-import com.example.CoutingStarHotel.service.HotelService;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import com.example.CoutingStarHotel.entities.Room;
+import com.example.CoutingStarHotel.entities.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
 
-import java.sql.Blob;
 import java.util.List;
 
 @Data

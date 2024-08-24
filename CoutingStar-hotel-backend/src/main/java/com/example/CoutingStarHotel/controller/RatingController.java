@@ -1,8 +1,8 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.model.Rating;
+import com.example.CoutingStarHotel.entities.Rating;
 import com.example.CoutingStarHotel.response.RatingResponse;
-import com.example.CoutingStarHotel.service.RatingService;
+import com.example.CoutingStarHotel.services.impl.RatingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @CrossOrigin("http://localhost:5173")
@@ -18,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/ratings")
 public class RatingController {
-    private final RatingService ratingService;
+    private final RatingServiceImpl ratingServiceImpl;
     @PostMapping("/add/hotel/{hotelId}/user/{userId}/addRating")
     public ResponseEntity<RatingResponse> addNewRating(@PathVariable Long hotelId,
                                                        @PathVariable Long userId,
@@ -27,7 +26,7 @@ public class RatingController {
                                                        @RequestParam("rateDay")String rateDay){
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         LocalDate formatRateDay = LocalDate.parse(rateDay, dateTimeFormatter);
-        Rating rating = ratingService.saveRating(hotelId, userId , star, comment, formatRateDay);
+        Rating rating = ratingServiceImpl.saveRating(hotelId, userId , star, comment, formatRateDay);
         RatingResponse ratingResponse = new RatingResponse
                 (rating.getStar(),
                         rating.getComment(),
@@ -40,7 +39,7 @@ public class RatingController {
 
     @GetMapping("/hotel/{hotelId}")
         public ResponseEntity<List<RatingResponse>> getAllRatingByRoomId(@PathVariable Long hotelId){
-            List<Rating> ratings = ratingService.getAllRatingByHotelId(hotelId);
+            List<Rating> ratings = ratingServiceImpl.getAllRatingByHotelId(hotelId);
             List<RatingResponse> ratingRepositories = new ArrayList<>();
             for(Rating rating : ratings) {
                 RatingResponse ratingResponse = getRatingResponse(rating);
@@ -52,7 +51,7 @@ public class RatingController {
     @GetMapping("/hotel/{hotelId}/CheckUserRating/{userId}")
     public ResponseEntity<Boolean> checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(@PathVariable Long userId,
                                                                                                          @PathVariable Long hotelId){
-        boolean result = ratingService.checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(userId, hotelId);
+        boolean result = ratingServiceImpl.checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(userId, hotelId);
         return ResponseEntity.ok(result);
     }
 
@@ -60,14 +59,14 @@ public class RatingController {
     public ResponseEntity<RatingResponse> updateRating(@PathVariable Long ratingId,
                                                        @RequestParam("start") int star,
                                                        @RequestParam("comment") String comment){
-        Rating rating = ratingService.updateRating(ratingId, star, comment);
+        Rating rating = ratingServiceImpl.updateRating(ratingId, star, comment);
         RatingResponse ratingResponse = getRatingResponse(rating);
         return ResponseEntity.ok(ratingResponse);
     }
 
     @DeleteMapping("/delete/{ratingId}")
     public void deleteRating(@PathVariable Long ratingId) {
-        ratingService.deleteRating(ratingId);
+        ratingServiceImpl.deleteRating(ratingId);
     }
 
     private RatingResponse getRatingResponse(Rating rating){

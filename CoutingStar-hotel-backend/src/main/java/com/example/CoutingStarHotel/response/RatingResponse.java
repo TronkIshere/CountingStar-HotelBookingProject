@@ -1,13 +1,9 @@
 package com.example.CoutingStarHotel.response;
 
-import com.example.CoutingStarHotel.model.BookedRoom;
-import com.example.CoutingStarHotel.model.User;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor

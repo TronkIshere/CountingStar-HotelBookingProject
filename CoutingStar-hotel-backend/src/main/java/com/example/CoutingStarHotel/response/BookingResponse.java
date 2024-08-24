@@ -1,6 +1,6 @@
 package com.example.CoutingStarHotel.response;
 
-import com.example.CoutingStarHotel.model.User;
+import com.example.CoutingStarHotel.entities.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;

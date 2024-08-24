@@ -1,7 +1,6 @@
 package com.example.CoutingStarHotel.response;
 
-import com.example.CoutingStarHotel.model.*;
-import com.example.CoutingStarHotel.service.IRoleService;
+import com.example.CoutingStarHotel.entities.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

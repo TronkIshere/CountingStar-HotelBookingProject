@@ -1,13 +1,13 @@
 package com.example.CoutingStarHotel.controller;
 
 import com.example.CoutingStarHotel.exception.UserAlreadyExistsException;
-import com.example.CoutingStarHotel.model.User;
+import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.request.LoginRequest;
 import com.example.CoutingStarHotel.response.JwtResponse;
 import com.example.CoutingStarHotel.response.UserResponse;
 import com.example.CoutingStarHotel.security.jwt.JwtUtils;
 import com.example.CoutingStarHotel.security.user.HotelUserDetails;
-import com.example.CoutingStarHotel.service.IUserService;
+import com.example.CoutingStarHotel.services.impl.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ import java.util.List;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    private final IUserService userService;
+    private final UserServiceImpl userService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     @PostMapping("/register-user")

@@ -1,6 +1,6 @@
 package com.example.CoutingStarHotel.response;
 
-import com.example.CoutingStarHotel.model.Room;
+import com.example.CoutingStarHotel.entities.Room;
 
 public class DiscountResponse {
     private Long id;

@@ -2,22 +2,20 @@ package com.example.CoutingStarHotel.controller;
 
 import com.example.CoutingStarHotel.exception.InvalidBookingRequestException;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
-import com.example.CoutingStarHotel.model.BookedRoom;
-import com.example.CoutingStarHotel.model.Room;
+import com.example.CoutingStarHotel.entities.BookedRoom;
+import com.example.CoutingStarHotel.entities.Room;
 import com.example.CoutingStarHotel.response.BookingResponse;
 import com.example.CoutingStarHotel.response.RoomResponse;
-import com.example.CoutingStarHotel.service.IBookingService;
-import com.example.CoutingStarHotel.service.IRoomService;
+import com.example.CoutingStarHotel.services.impl.BookingServiceImpl;
+import com.example.CoutingStarHotel.services.impl.RoomServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,11 +24,11 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/bookings")
 public class BookingController {
-    private final IBookingService bookingService;
-    private final IRoomService roomService;
+    private final BookingServiceImpl bookingServiceImpl;
+    private final RoomServiceImpl roomServiceImpl;
     @GetMapping("/all-bookings")
     public ResponseEntity<List<BookingResponse>> getAllBookings(){
-        List<BookedRoom> bookings = bookingService.getAllBookings();
+        List<BookedRoom> bookings = bookingServiceImpl.getAllBookings();
         List<BookingResponse> bookingResponses = new ArrayList<>();
         for (BookedRoom booking : bookings){
             BookingResponse bookingResponse = getBookingResponse(booking);
@@ -42,7 +40,7 @@ public class BookingController {
     @GetMapping("/confirmation/{confirmationCode}")
     public ResponseEntity<?> getBookingByConfirmationCode(@PathVariable String confirmationCode){
         try{
-            BookedRoom booking = bookingService.findByBookingConfirmationCode(confirmationCode);
+            BookedRoom booking = bookingServiceImpl.findByBookingConfirmationCode(confirmationCode);
             BookingResponse bookingResponse = getBookingResponse(booking);
             return ResponseEntity.ok(bookingResponse);
         }catch (ResourceNotFoundException ex){
@@ -53,7 +51,7 @@ public class BookingController {
     @GetMapping("/booking/{bookingId}")
     public ResponseEntity<?> getBookingByBookingId(@PathVariable Long bookingId){
         try{
-            BookedRoom booking = bookingService.findByBookingId(bookingId);
+            BookedRoom booking = bookingServiceImpl.findByBookingId(bookingId);
             BookingResponse bookingResponse = getBookingResponse(booking);
             return ResponseEntity.ok(bookingResponse);
         }catch (ResourceNotFoundException ex){
@@ -63,7 +61,7 @@ public class BookingController {
 
     @GetMapping("/hotel/{hotelId}/booking")
     public ResponseEntity<List<BookingResponse>> getBookingByHotelId(@PathVariable Long hotelId){
-        List<BookedRoom> bookings = bookingService.getAllBookingsByHotelId(hotelId);
+        List<BookedRoom> bookings = bookingServiceImpl.getAllBookingsByHotelId(hotelId);
         List<BookingResponse> bookingResponses = new ArrayList<>();
         for (BookedRoom booking : bookings){
             BookingResponse bookingResponse = getBookingResponse(booking);
@@ -77,7 +75,7 @@ public class BookingController {
                                          @RequestBody BookedRoom bookingRequest,
                                          @RequestParam(required = false) Long userId){
         try{
-            String confirmationCode = bookingService.saveBooking(roomId, bookingRequest, userId);
+            String confirmationCode = bookingServiceImpl.saveBooking(roomId, bookingRequest, userId);
             return ResponseEntity.ok(
                     "Room booked successfully, Your booking confirmation code is :" + confirmationCode);
 
@@ -97,7 +95,7 @@ public class BookingController {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy,M,d");
         LocalDate checkInLocalDate = LocalDate.parse(checkInDate, dateTimeFormatter);
         LocalDate checkOutLocalDate = LocalDate.parse(checkOutDate, dateTimeFormatter);
-        BookedRoom bookedRoom = bookingService.updateBooked(bookingId, checkInLocalDate, checkOutLocalDate,
+        BookedRoom bookedRoom = bookingServiceImpl.updateBooked(bookingId, checkInLocalDate, checkOutLocalDate,
                 guestEmail, guestPhoneNumber, guestFullName, totalNumOfGuest);
         BookingResponse bookingResponse = getBookingResponse(bookedRoom);
         return  ResponseEntity.ok(bookingResponse);
@@ -105,7 +103,7 @@ public class BookingController {
 
     @GetMapping("/user/{userId}/bookings")
     public ResponseEntity<List<BookingResponse>> getBookingsByUserId(@PathVariable Long userId) {
-        List<BookedRoom> bookings = bookingService.getBookingsByUserId(userId);
+        List<BookedRoom> bookings = bookingServiceImpl.getBookingsByUserId(userId);
         List<BookingResponse> bookingResponses = bookings.stream()
                 .map(this::getBookingResponse)
                 .collect(Collectors.toList());
@@ -114,11 +112,11 @@ public class BookingController {
 
     @DeleteMapping("/booking/{bookingId}/delete")
     public void cancelBooking(@PathVariable Long bookingId) {
-        bookingService.cancelBooking(bookingId);
+        bookingServiceImpl.cancelBooking(bookingId);
     }
 
     private BookingResponse getBookingResponse(BookedRoom booking) {
-        Room theRoom = roomService.getRoomById(booking.getRoom().getId()).get();
+        Room theRoom = roomServiceImpl.getRoomById(booking.getRoom().getId()).get();
         RoomResponse room = new RoomResponse(
                 theRoom.getId(),
                 theRoom.getRoomType(),

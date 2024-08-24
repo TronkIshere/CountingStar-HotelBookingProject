@@ -2,9 +2,9 @@ package com.example.CoutingStarHotel.controller;
 
 import com.example.CoutingStarHotel.exception.InvalidDiscountRequestException;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
-import com.example.CoutingStarHotel.model.Discount;
+import com.example.CoutingStarHotel.entities.Discount;
 import com.example.CoutingStarHotel.response.DiscountResponse;
-import com.example.CoutingStarHotel.service.IDiscountService;
+import com.example.CoutingStarHotel.services.impl.DiscountServiceImpl;
 import io.jsonwebtoken.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,13 +20,13 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/discounts")
 public class DiscountController {
-    private final IDiscountService discountService;
+    private final DiscountServiceImpl discountServiceImpl;
     @PostMapping("/discount/{roomId}/addDiscount")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     private ResponseEntity<?> addDiscount(@PathVariable Long roomId,
                                           @RequestBody Discount discountRequest) throws SQLException, IOException {
         try{
-            discountService.addDiscount(roomId, discountRequest);
+            discountServiceImpl.addDiscount(roomId, discountRequest);
             return ResponseEntity.ok("Your discount have been set successfully");
         } catch (InvalidDiscountRequestException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
@@ -35,7 +35,7 @@ public class DiscountController {
 
     @GetMapping("/discount/{roomId}")
     private ResponseEntity<Optional<DiscountResponse>> getDiscountByRoomId(@PathVariable Long roomId){
-        Optional<Discount> theDiscount = discountService.getDiscountByRoomId(roomId);
+        Optional<Discount> theDiscount = discountServiceImpl.getDiscountByRoomId(roomId);
         return theDiscount.map(discount -> {
             DiscountResponse discountResponse = getDiscountResponse(discount);
             return  ResponseEntity.ok(Optional.of(discountResponse));
@@ -47,7 +47,7 @@ public class DiscountController {
     public ResponseEntity<DiscountResponse> updateDiscount(@PathVariable Long discountId,
                                                            @RequestParam(required = false) int percentDiscount,
                                                            @RequestParam(required = false) String discountDescription) throws SQLException, java.io.IOException {
-        Discount discount = discountService.updateDiscount(discountId, percentDiscount, discountDescription);
+        Discount discount = discountServiceImpl.updateDiscount(discountId, percentDiscount, discountDescription);
         DiscountResponse discountResponse = getDiscountResponse(discount);
         return ResponseEntity.ok(discountResponse);
     }
@@ -55,7 +55,7 @@ public class DiscountController {
     @DeleteMapping("/discount/{discount}/deleteDiscount")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     private ResponseEntity<Void> deleteDiscount(@PathVariable Long discountId){
-        discountService.deleteDiscount(discountId);
+        discountServiceImpl.deleteDiscount(discountId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

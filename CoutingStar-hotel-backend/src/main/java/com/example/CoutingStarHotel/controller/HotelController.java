@@ -3,12 +3,9 @@ package com.example.CoutingStarHotel.controller;
 import com.example.CoutingStarHotel.exception.InvalidHotelRequestException;
 import com.example.CoutingStarHotel.exception.PhotoRetrievalExcetion;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
-import com.example.CoutingStarHotel.model.Hotel;
-import com.example.CoutingStarHotel.model.Rating;
-import com.example.CoutingStarHotel.model.Room;
+import com.example.CoutingStarHotel.entities.Hotel;
 import com.example.CoutingStarHotel.response.HotelResponse;
-import com.example.CoutingStarHotel.service.IHotelService;
-import com.example.CoutingStarHotel.service.IRatingService;
+import com.example.CoutingStarHotel.services.impl.HotelServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +13,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -30,8 +26,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/hotels")
 public class HotelController {
-    private final IHotelService hotelService;
-    private final IRatingService ratingService;
+    private final HotelServiceImpl hotelServiceImpl;
     @PostMapping("/{userId}/addHotel")
     public ResponseEntity<?> addHotel(@PathVariable Long userId,
                                       @RequestParam String hotelName,
@@ -41,7 +36,7 @@ public class HotelController {
                                       @RequestParam String phoneNumber,
                                       @RequestParam MultipartFile photo) throws SQLException, IOException {
         try {
-            hotelService.addHotel(userId, hotelName, city, hotelLocation, hotelDescription, phoneNumber, photo);
+            hotelServiceImpl.addHotel(userId, hotelName, city, hotelLocation, hotelDescription, phoneNumber, photo);
             return ResponseEntity.ok("Đã đăng ký thành công");
         } catch (InvalidHotelRequestException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
@@ -49,7 +44,7 @@ public class HotelController {
     }
     @GetMapping("/all-hotels")
     public ResponseEntity<List<HotelResponse>> getAllHotels(){
-        List<Hotel> hotels = hotelService.getAllHotels();
+        List<Hotel> hotels = hotelServiceImpl.getAllHotels();
         List<HotelResponse> hotelResponses = new ArrayList<>();
         for (Hotel hotel : hotels){
             HotelResponse hotelResponse = getHotelResponse(hotel);
@@ -60,7 +55,7 @@ public class HotelController {
 
     @GetMapping("/homepage")
     public ResponseEntity<List<HotelResponse>> getFiveHotelForHomePage(){
-        List<Hotel> hotels = hotelService.getFiveHotelForHomePage();
+        List<Hotel> hotels = hotelServiceImpl.getFiveHotelForHomePage();
         List<HotelResponse> hotelResponses = new ArrayList<>();
         for (Hotel hotel : hotels){
             HotelResponse hotelResponse = getHotelResponse(hotel);
@@ -71,7 +66,7 @@ public class HotelController {
 
     @GetMapping("/hotel/{hotelId}")
     public ResponseEntity<Optional<HotelResponse>> getHotelById(@PathVariable Long hotelId){
-        Optional<Hotel> theHotel = hotelService.getHotelById(hotelId);
+        Optional<Hotel> theHotel = hotelServiceImpl.getHotelById(hotelId);
         return theHotel.map(room -> {
             HotelResponse hotelResponse = getHotelResponse(room);
             return  ResponseEntity.ok(Optional.of(hotelResponse));
@@ -80,7 +75,7 @@ public class HotelController {
 
     @GetMapping("/{city}")
     public ResponseEntity<List<HotelResponse>> getHotelsByCity(@PathVariable String city){
-        List<Hotel> hotels = hotelService.getAllHotelsByCity(city);
+        List<Hotel> hotels = hotelServiceImpl.getAllHotelsByCity(city);
         List<HotelResponse> hotelResponses = hotels.stream()
                 .map(this::getHotelResponse)
                 .collect(Collectors.toList());
@@ -96,7 +91,7 @@ public class HotelController {
                                                      @RequestParam String hotelDescription,
                                                      @RequestParam String phoneNumber,
                                                      @RequestParam(required = false) MultipartFile photo) throws IOException, SQLException {
-        Hotel theHotel = hotelService.updateHotel(hotelId, hotelName, hotelLocation, hotelDescription, phoneNumber, city, photo);
+        Hotel theHotel = hotelServiceImpl.updateHotel(hotelId, hotelName, hotelLocation, hotelDescription, phoneNumber, city, photo);
         HotelResponse hotelResponse = getHotelResponse(theHotel);
         return ResponseEntity.ok(hotelResponse);
     }
@@ -104,7 +99,7 @@ public class HotelController {
     @DeleteMapping("/hotel/{hotelId}/delete")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public void deleteHotel(@PathVariable Long hotelId){
-        hotelService.deleteHotel(hotelId);
+        hotelServiceImpl.deleteHotel(hotelId);
     }
 
     private HotelResponse getHotelResponse(Hotel hotel){
@@ -118,13 +113,13 @@ public class HotelController {
             }
         }
 
-        double averageNumberOfHotelStars = hotelService.averageNumberOfHotelStars(hotel.getId());
+        double averageNumberOfHotelStars = hotelServiceImpl.averageNumberOfHotelStars(hotel.getId());
         Long lowestPrice
-                = hotelService.getHotelLowestPriceByHotelId(hotel.getId())
-                != null ? hotelService.getHotelLowestPriceByHotelId(hotel.getId()) : 0;
+                = hotelServiceImpl.getHotelLowestPriceByHotelId(hotel.getId())
+                != null ? hotelServiceImpl.getHotelLowestPriceByHotelId(hotel.getId()) : 0;
         Long highestPrice
-                = hotelService.getHotelHighestPriceByHotelId(hotel.getId())
-                != null ? hotelService.getHotelHighestPriceByHotelId(hotel.getId()) : 0;
+                = hotelServiceImpl.getHotelHighestPriceByHotelId(hotel.getId())
+                != null ? hotelServiceImpl.getHotelHighestPriceByHotelId(hotel.getId()) : 0;
 
         return new HotelResponse(
                 hotel.getId(),

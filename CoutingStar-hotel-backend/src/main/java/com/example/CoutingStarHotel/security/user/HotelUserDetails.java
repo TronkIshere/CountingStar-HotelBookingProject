@@ -1,6 +1,6 @@
 package com.example.CoutingStarHotel.security.user;
 
-import com.example.CoutingStarHotel.model.User;
+import com.example.CoutingStarHotel.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

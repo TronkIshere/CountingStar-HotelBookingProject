@@ -1,9 +1,8 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.model.User;
+import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.response.UserResponse;
-import com.example.CoutingStarHotel.service.IRoleService;
-import com.example.CoutingStarHotel.service.IUserService;
+import com.example.CoutingStarHotel.services.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,19 +16,18 @@ import java.util.List;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final IUserService userService;
-    private final IRoleService roleService;
+    private final UserServiceImpl userServiceImpl;
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<User>> getUsers(){
-        return new ResponseEntity<>(userService.getUsers(), HttpStatus.FOUND);
+        return new ResponseEntity<>(userServiceImpl.getUsers(), HttpStatus.FOUND);
     }
 
     @GetMapping("/{email}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public ResponseEntity<?> getUserByEmail(@PathVariable("email") String email){
         try{
-            User theUser = userService.getUser(email);
+            User theUser = userServiceImpl.getUser(email);
             UserResponse userResponse = new UserResponse(theUser);
             return ResponseEntity.ok(userResponse);
         }catch (UsernameNotFoundException e){
@@ -43,7 +41,7 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_USER') or hasRole('ROLE_HOTEL_OWNER') and #email == principal.username)")
     public ResponseEntity<String> deleteUser(@PathVariable("userId") String email){
         try{
-            userService.deleteUser(email);
+            userServiceImpl.deleteUser(email);
             return ResponseEntity.ok("User deleted successfully");
         }catch (UsernameNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

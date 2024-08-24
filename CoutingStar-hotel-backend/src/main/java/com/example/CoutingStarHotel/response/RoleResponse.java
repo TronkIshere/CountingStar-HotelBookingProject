@@ -1,8 +1,7 @@
 package com.example.CoutingStarHotel.response;
 
-import com.example.CoutingStarHotel.model.Role;
-import com.example.CoutingStarHotel.model.User;
-import jakarta.persistence.ManyToMany;
+import com.example.CoutingStarHotel.entities.Role;
+import com.example.CoutingStarHotel.entities.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

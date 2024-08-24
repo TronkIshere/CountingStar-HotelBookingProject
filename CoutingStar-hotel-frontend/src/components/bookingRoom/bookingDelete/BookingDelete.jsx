@@ -19,15 +19,15 @@ const BookingDelete = ({ bookingId, handleDeleteBooking, onClose }) => {
     <div className="modal">
       <div className="modalContent">
         <div className="modalHeader">
-          <h2>Xác nhận xóa đặt phòng</h2>
+          <h2>Confirm room deletion</h2>
           <span className="close" onClick={onClose}>&times;</span>
         </div>
         <div className="modalBody">
-          <p>Bạn có chắc chắn muốn xóa đặt phòng không?</p>
+          <p>Are you sure you want to delete your booking?</p>
         </div>
         <div className="modalFooter">
-          <button className="deleteButton" onClick={handleDeleteBookingById}>Xóa</button>
-          <button className="cancelButton" onClick={onClose}>Hủy</button>
+          <button className="deleteButton" onClick={handleDeleteBookingById}>Delete</button>
+          <button className="cancelButton" onClick={onClose}>Cancle</button>
         </div>
       </div>
     </div>
