@@ -1,0 +1,75 @@
+.container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chartsGroup {
+    display: flex;
+    justify-content: space-between; 
+    align-items: flex-start; 
+    flex-wrap: wrap; 
+    margin-top: 20px; 
+    gap: 20px; 
+}
+
+.chartContainer {
+    flex: 1; 
+    min-width: 700px; 
+    height: 400px; 
+    padding: 20px;
+    box-sizing: border-box; 
+    text-align: center; 
+    background-color: white; 
+    border-radius: 8px; 
+}
+
+.overViewThisMonth {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    background-color: white; 
+    width: 100%; 
+    margin-bottom: 20px; 
+    gap: 20px; 
+}
+
+.overViewThisMonthItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    width: 180px; 
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+}
+
+.overViewInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.infoNumber {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #333;
+}
+
+.infoText {
+    font-size: 16px;
+    color: #555;
+}
+
+.overViewNumber {
+    font-size: 18px;
+    font-weight: bold;
+    color: #28a745; 
+}

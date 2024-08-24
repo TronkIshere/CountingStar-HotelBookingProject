@@ -28,11 +28,19 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
   return (
     <div className="navbar">
       <div className="navContainer">
-        <span className="logo">
-          <RouterLink className="logo" to={`/`}>
-            CoutingStar
-          </RouterLink>
-        </span>
+        <div className="navItems">
+          <span className="logo">
+            <RouterLink className="logo" to={`/`}>
+              CoutingStar
+            </RouterLink>
+          </span>
+          <div className="buttonForAdmin">
+          {userRole === "ROLE_ADMIN" && (
+            <RouterLink to={`/user/admin`} className="buttonAdminText">Admin</RouterLink>
+          )}
+          </div>
+        </div>
+
         <div className="navItems">
           {userId ? (
             <div className="accountContainer">
@@ -48,9 +56,7 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
                     {userRole === "ROLE_HOTEL_OWNER" && (
                       <>
                         <li className="navButtonLi">
-                          <RouterLink
-                            to={`hotels/hotel/${hotelId}`}
-                          >
+                          <RouterLink to={`hotels/hotel/${hotelId}`}>
                             Khách sạn của bạn
                           </RouterLink>
                         </li>
@@ -73,6 +79,13 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
                             to={`/hotel/${hotelId}/hotelInformationManagement`}
                           >
                             Quản lý khách sạn
+                          </RouterLink>
+                        </li>
+                        <li className="navButtonLi">
+                          <RouterLink
+                            to={`/hotel/hotelOwner`}
+                          >
+                            Xem doanh thu
                           </RouterLink>
                         </li>
                       </>

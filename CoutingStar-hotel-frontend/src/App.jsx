@@ -13,6 +13,8 @@ import HotelRoomManagement from "./pages/hotelRoomManagement/HotelRoomManagement
 import HotelInformationManagement from "./pages/hotelInformationManagement/HotelInformationManagement";
 import HotelBookingManagement from "./pages/hotelBookingManagement/HotelBookingManagement";
 import { AuthProvider } from "./components/utils/AuthProvider";
+import Admin from "./pages/admin/Admin";
+import HotelOwner from "./pages/hotelOwner/HotelOwner";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -44,6 +46,8 @@ function App() {
             element={<HotelBookingManagement />}
           />
           <Route path="/hotel/:hotelId/hotelInformationManagement" element={<HotelInformationManagement />} />
+          <Route path="/user/admin" element={<Admin />} />
+          <Route path="/hotel/hotelOwner" element={<HotelOwner />} />
         </Routes>
         <Footer />
       </BrowserRouter>
