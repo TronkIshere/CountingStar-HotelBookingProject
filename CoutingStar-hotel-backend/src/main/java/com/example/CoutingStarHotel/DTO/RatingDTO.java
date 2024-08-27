@@ -1,4 +1,4 @@
-package com.example.CoutingStarHotel.response;
+package com.example.CoutingStarHotel.DTO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-public class RatingResponse {
+public class RatingDTO {
     private Long id;
     private int star;
     private String comment;
@@ -15,7 +15,7 @@ public class RatingResponse {
     private String userName;
     private String roomType;
 
-    public RatingResponse(int star, String comment, LocalDate rateDay, String userName, String roomType) {
+    public RatingDTO(int star, String comment, LocalDate rateDay, String userName, String roomType) {
         this.star = star;
         this.comment = comment;
         this.rateDay = rateDay;

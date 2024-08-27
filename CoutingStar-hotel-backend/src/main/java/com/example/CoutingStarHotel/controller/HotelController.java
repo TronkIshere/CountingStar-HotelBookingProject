@@ -1,10 +1,12 @@
 package com.example.CoutingStarHotel.controller;
 
+import com.example.CoutingStarHotel.DTO.BarChartDTO;
+import com.example.CoutingStarHotel.DTO.PieChartDTO;
 import com.example.CoutingStarHotel.exception.InvalidHotelRequestException;
 import com.example.CoutingStarHotel.exception.PhotoRetrievalExcetion;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.entities.Hotel;
-import com.example.CoutingStarHotel.response.HotelResponse;
+import com.example.CoutingStarHotel.DTO.HotelDTO;
 import com.example.CoutingStarHotel.services.impl.HotelServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,58 +45,71 @@ public class HotelController {
         }
     }
     @GetMapping("/all-hotels")
-    public ResponseEntity<List<HotelResponse>> getAllHotels(){
+    public ResponseEntity<List<HotelDTO>> getAllHotels(){
         List<Hotel> hotels = hotelServiceImpl.getAllHotels();
-        List<HotelResponse> hotelResponses = new ArrayList<>();
+        List<HotelDTO> hotelResponses = new ArrayList<>();
         for (Hotel hotel : hotels){
-            HotelResponse hotelResponse = getHotelResponse(hotel);
+            HotelDTO hotelResponse = getHotelResponse(hotel);
             hotelResponses.add(hotelResponse);
         }
         return ResponseEntity.ok(hotelResponses);
     }
 
     @GetMapping("/homepage")
-    public ResponseEntity<List<HotelResponse>> getFiveHotelForHomePage(){
+    public ResponseEntity<List<HotelDTO>> getFiveHotelForHomePage(){
         List<Hotel> hotels = hotelServiceImpl.getFiveHotelForHomePage();
-        List<HotelResponse> hotelResponses = new ArrayList<>();
+        List<HotelDTO> hotelResponses = new ArrayList<>();
         for (Hotel hotel : hotels){
-            HotelResponse hotelResponse = getHotelResponse(hotel);
+            HotelDTO hotelResponse = getHotelResponse(hotel);
             hotelResponses.add(hotelResponse);
         }
         return ResponseEntity.ok(hotelResponses);
     }
 
     @GetMapping("/hotel/{hotelId}")
-    public ResponseEntity<Optional<HotelResponse>> getHotelById(@PathVariable Long hotelId){
+    public ResponseEntity<Optional<HotelDTO>> getHotelById(@PathVariable Long hotelId){
         Optional<Hotel> theHotel = hotelServiceImpl.getHotelById(hotelId);
         return theHotel.map(room -> {
-            HotelResponse hotelResponse = getHotelResponse(room);
+            HotelDTO hotelResponse = getHotelResponse(room);
             return  ResponseEntity.ok(Optional.of(hotelResponse));
         }).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khách sạn"));
     }
 
     @GetMapping("/{city}")
-    public ResponseEntity<List<HotelResponse>> getHotelsByCity(@PathVariable String city){
+    public ResponseEntity<List<HotelDTO>> getHotelsByCity(@PathVariable String city){
         List<Hotel> hotels = hotelServiceImpl.getAllHotelsByCity(city);
-        List<HotelResponse> hotelResponses = hotels.stream()
+        List<HotelDTO> hotelResponses = hotels.stream()
                 .map(this::getHotelResponse)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(hotelResponses);
     }
 
+    @GetMapping("/PieChart")
+    public ResponseEntity<List<PieChartDTO>> getDataForPieChart(){
+        List<PieChartDTO> PieChartData = hotelServiceImpl.getNumberOfHotelByEachCity();
+        return ResponseEntity.ok(PieChartData);
+    }
+
+    @GetMapping("/BarChart")
+    public ResponseEntity<List<BarChartDTO>> getDataForBarChart(){
+        List<BarChartDTO> barChartData = hotelServiceImpl.getHotelRevenueByEachCity();
+        return ResponseEntity.ok(barChartData);
+    }
+
     @PutMapping("/hotel/{hotelId}/hotelInformationUpdate")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
-    public ResponseEntity<HotelResponse> updateHotel(@PathVariable Long hotelId,
-                                                     @RequestParam String hotelName,
-                                                     @RequestParam String city,
-                                                     @RequestParam String hotelLocation,
-                                                     @RequestParam String hotelDescription,
-                                                     @RequestParam String phoneNumber,
-                                                     @RequestParam(required = false) MultipartFile photo) throws IOException, SQLException {
+    public ResponseEntity<HotelDTO> updateHotel(@PathVariable Long hotelId,
+                                                @RequestParam String hotelName,
+                                                @RequestParam String city,
+                                                @RequestParam String hotelLocation,
+                                                @RequestParam String hotelDescription,
+                                                @RequestParam String phoneNumber,
+                                                @RequestParam(required = false) MultipartFile photo) throws IOException, SQLException {
         Hotel theHotel = hotelServiceImpl.updateHotel(hotelId, hotelName, hotelLocation, hotelDescription, phoneNumber, city, photo);
-        HotelResponse hotelResponse = getHotelResponse(theHotel);
+        HotelDTO hotelResponse = getHotelResponse(theHotel);
         return ResponseEntity.ok(hotelResponse);
     }
+
 
     @DeleteMapping("/hotel/{hotelId}/delete")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
@@ -102,7 +117,7 @@ public class HotelController {
         hotelServiceImpl.deleteHotel(hotelId);
     }
 
-    private HotelResponse getHotelResponse(Hotel hotel){
+    private HotelDTO getHotelResponse(Hotel hotel){
         byte[] photoBytes = null;
         Blob photoBlob = hotel.getPhoto();
         if (photoBlob != null) {
@@ -121,7 +136,7 @@ public class HotelController {
                 = hotelServiceImpl.getHotelHighestPriceByHotelId(hotel.getId())
                 != null ? hotelServiceImpl.getHotelHighestPriceByHotelId(hotel.getId()) : 0;
 
-        return new HotelResponse(
+        return new HotelDTO(
                 hotel.getId(),
                 hotel.getHotelName(),
                 hotel.getCity(),

@@ -3,7 +3,7 @@ package com.example.CoutingStarHotel.controller;
 import com.example.CoutingStarHotel.exception.InvalidDiscountRequestException;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.entities.Discount;
-import com.example.CoutingStarHotel.response.DiscountResponse;
+import com.example.CoutingStarHotel.DTO.DiscountDTO;
 import com.example.CoutingStarHotel.services.impl.DiscountServiceImpl;
 import io.jsonwebtoken.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -34,21 +34,21 @@ public class DiscountController {
     }
 
     @GetMapping("/discount/{roomId}")
-    private ResponseEntity<Optional<DiscountResponse>> getDiscountByRoomId(@PathVariable Long roomId){
+    private ResponseEntity<Optional<DiscountDTO>> getDiscountByRoomId(@PathVariable Long roomId){
         Optional<Discount> theDiscount = discountServiceImpl.getDiscountByRoomId(roomId);
         return theDiscount.map(discount -> {
-            DiscountResponse discountResponse = getDiscountResponse(discount);
+            DiscountDTO discountResponse = getDiscountResponse(discount);
             return  ResponseEntity.ok(Optional.of(discountResponse));
         }).orElseThrow(() -> new ResourceNotFoundException("Discount not exist"));
     }
 
     @PutMapping("/update/{discountId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
-    public ResponseEntity<DiscountResponse> updateDiscount(@PathVariable Long discountId,
-                                                           @RequestParam(required = false) int percentDiscount,
-                                                           @RequestParam(required = false) String discountDescription) throws SQLException, java.io.IOException {
+    public ResponseEntity<DiscountDTO> updateDiscount(@PathVariable Long discountId,
+                                                      @RequestParam(required = false) int percentDiscount,
+                                                      @RequestParam(required = false) String discountDescription) throws SQLException, java.io.IOException {
         Discount discount = discountServiceImpl.updateDiscount(discountId, percentDiscount, discountDescription);
-        DiscountResponse discountResponse = getDiscountResponse(discount);
+        DiscountDTO discountResponse = getDiscountResponse(discount);
         return ResponseEntity.ok(discountResponse);
     }
 
@@ -59,8 +59,8 @@ public class DiscountController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    private DiscountResponse getDiscountResponse(Discount discount){
-        return new DiscountResponse(
+    private DiscountDTO getDiscountResponse(Discount discount){
+        return new DiscountDTO(
                 discount.getId(),
                 discount.getPercentDiscount(),
                 discount.getDiscountDescription()

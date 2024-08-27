@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -58,6 +59,8 @@ public class BookedRoom {
 
     @OneToOne(mappedBy = "bookedRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Rating rating;
+
+    private BigDecimal totalAmount;
 
     public void calculateTotalNumberOfGuest() {
         this.totalNumOfGuest = this.NumOfAdults + NumOfChildren;

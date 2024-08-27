@@ -1,4 +1,4 @@
-package com.example.CoutingStarHotel.response;
+package com.example.CoutingStarHotel.DTO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,25 +9,25 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class RoomResponse {
+public class RoomDTO {
     private Long id;
     private String roomType;
     private BigDecimal roomPrice;
     private boolean isBooked;
     private String photo;
     private String roomDescription;
-    private List<BookingResponse>bookings;
+    private List<BookingDTO>bookings;
     private double averageNumberOfRoomStars;
 
-    public RoomResponse(Long id, String roomType, BigDecimal roomPrice, String roomDescription) {
+    public RoomDTO(Long id, String roomType, BigDecimal roomPrice, String roomDescription) {
         this.id = id;
         this.roomType = roomType;
         this.roomPrice = roomPrice;
         this.roomDescription = roomDescription;
     }
 
-    public RoomResponse(Long id, String roomType, BigDecimal roomPrice, String roomDescription, boolean isBooked,
-                        byte[] photoBytes, double averageNumberOfRoomStars) {
+    public RoomDTO(Long id, String roomType, BigDecimal roomPrice, String roomDescription, boolean isBooked,
+                   byte[] photoBytes, double averageNumberOfRoomStars) {
         this.id = id;
         this.roomType = roomType;
         this.roomPrice = roomPrice;

@@ -3,8 +3,8 @@ package com.example.CoutingStarHotel.controller;
 import com.example.CoutingStarHotel.exception.UserAlreadyExistsException;
 import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.request.LoginRequest;
-import com.example.CoutingStarHotel.response.JwtResponse;
-import com.example.CoutingStarHotel.response.UserResponse;
+import com.example.CoutingStarHotel.DTO.JwtDTO;
+import com.example.CoutingStarHotel.DTO.UserDTO;
 import com.example.CoutingStarHotel.security.jwt.JwtUtils;
 import com.example.CoutingStarHotel.security.user.HotelUserDetails;
 import com.example.CoutingStarHotel.services.impl.UserServiceImpl;
@@ -46,7 +46,7 @@ public class AuthController {
     public ResponseEntity<?> registerHotelOwner(@RequestBody User user){
         try{
             User registeredUser = userService.registerHotelOwner(user);
-            UserResponse userIdResponse = new UserResponse(registeredUser.getId());
+            UserDTO userIdResponse = new UserDTO(registeredUser.getId());
             return ResponseEntity.ok(userIdResponse);
 
         }catch (UserAlreadyExistsException e){
@@ -65,7 +65,7 @@ public class AuthController {
         List<String> roles = userDetails.getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority).toList();
 
-        return ResponseEntity.ok(new JwtResponse(
+        return ResponseEntity.ok(new JwtDTO(
                 userDetails.getId(),
                 userDetails.getEmail(),
                 jwt,

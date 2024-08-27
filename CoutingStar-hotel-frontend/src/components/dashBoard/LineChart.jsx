@@ -5,57 +5,63 @@ const LineChart = () => {
 
     const data = [
         {
-            id: "japan",
+            id: "Region A - Revenue",
             color: "hsl(24, 70%, 50%)",
             data: [
-                { x: "plane", y: 120 },
-                { x: "helicopter", y: 80 },
-                { x: "boat", y: 70 },
-                { x: "train", y: 100 },
-                { x: "subway", y: 90 },
-                { x: "bus", y: 50 },
-                { x: "car", y: 80 },
-                { x: "moto", y: 60 },
-                { x: "bicycle", y: 70 },
-                { x: "horse", y: 90 },
-                { x: "skateboard", y: 100 },
-                { x: "others", y: 50 }
+                { x: "Q1", y: 120000 },
+                { x: "Q2", y: 150000 },
+                { x: "Q3", y: 130000 },
+                { x: "Q4", y: 160000 }
             ]
         },
         {
-            id: "france",
+            id: "Region A - Hotels",
+            color: "hsl(24, 70%, 30%)",
+            data: [
+                { x: "Q1", y: 10 },
+                { x: "Q2", y: 12 },
+                { x: "Q3", y: 14 },
+                { x: "Q4", y: 16 }
+            ]
+        },
+        {
+            id: "Region B - Revenue",
             color: "hsl(180, 70%, 50%)",
             data: [
-                { x: "plane", y: 100 },
-                { x: "helicopter", y: 50 },
-                { x: "boat", y: 60 },
-                { x: "train", y: 90 },
-                { x: "subway", y: 70 },
-                { x: "bus", y: 40 },
-                { x: "car", y: 60 },
-                { x: "moto", y: 40 },
-                { x: "bicycle", y: 50 },
-                { x: "horse", y: 70 },
-                { x: "skateboard", y: 90 },
-                { x: "others", y: 30 }
+                { x: "Q1", y: 90000 },
+                { x: "Q2", y: 120000 },
+                { x: "Q3", y: 110000 },
+                { x: "Q4", y: 140000 }
             ]
         },
         {
-            id: "us",
+            id: "Region B - Hotels",
+            color: "hsl(180, 70%, 30%)",
+            data: [
+                { x: "Q1", y: 8 },
+                { x: "Q2", y: 9 },
+                { x: "Q3", y: 11 },
+                { x: "Q4", y: 13 }
+            ]
+        },
+        {
+            id: "Region C - Revenue",
             color: "hsl(130, 70%, 50%)",
             data: [
-                { x: "plane", y: 80 },
-                { x: "helicopter", y: 60 },
-                { x: "boat", y: 70 },
-                { x: "train", y: 80 },
-                { x: "subway", y: 60 },
-                { x: "bus", y: 30 },
-                { x: "car", y: 50 },
-                { x: "moto", y: 30 },
-                { x: "bicycle", y: 40 },
-                { x: "horse", y: 60 },
-                { x: "skateboard", y: 70 },
-                { x: "others", y: 20 }
+                { x: "Q1", y: 80000 },
+                { x: "Q2", y: 100000 },
+                { x: "Q3", y: 95000 },
+                { x: "Q4", y: 110000 }
+            ]
+        },
+        {
+            id: "Region C - Hotels",
+            color: "hsl(130, 70%, 30%)",
+            data: [
+                { x: "Q1", y: 6 },
+                { x: "Q2", y: 7 },
+                { x: "Q3", y: 9 },
+                { x: "Q4", y: 10 }
             ]
         }
     ];

@@ -1,5 +1,7 @@
 package com.example.CoutingStarHotel.repositories;
 
+import com.example.CoutingStarHotel.DTO.BarChartDTO;
+import com.example.CoutingStarHotel.DTO.PieChartDTO;
 import com.example.CoutingStarHotel.entities.Hotel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,4 +21,14 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
     @Query("SELECT h FROM Hotel h ORDER BY RAND()")
     List<Hotel> getFiveHotelForHomePage();
+
+    @Query("SELECT new com.example.CoutingStarHotel.DTO.PieChartDTO(h.city, COUNT(h)) " +
+            "FROM Hotel h " +
+            "GROUP BY h.city")
+    List<PieChartDTO> findNumberOfHotelsByCity();
+
+    @Query("SELECT new com.example.CoutingStarHotel.DTO.BarChartDTO(h.city, SUM(b.totalAmount)) " +
+            "FROM Hotel h JOIN h.rooms r JOIN r.bookings b " +
+            "GROUP BY h.city")
+    List<BarChartDTO> findRevenueByEachCity();
 }

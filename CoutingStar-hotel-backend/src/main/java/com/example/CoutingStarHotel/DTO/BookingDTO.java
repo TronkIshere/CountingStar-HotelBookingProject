@@ -1,4 +1,4 @@
-package com.example.CoutingStarHotel.response;
+package com.example.CoutingStarHotel.DTO;
 
 import com.example.CoutingStarHotel.entities.User;
 import lombok.Data;
@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-public class BookingResponse {
+public class BookingDTO {
     private Long bookingId;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
@@ -18,19 +18,19 @@ public class BookingResponse {
     private int numOfChildren;
     private int totalNumOfGuest;
     private String bookingConfirmationCode;
-    private RoomResponse room;
+    private RoomDTO room;
     private User user;
 
-    public BookingResponse(Long bookingId,
-                           LocalDate checkInDate,
-                           LocalDate checkOutDate,
-                           String bookingConfirmationCode,
-                           String guestEmail,
-                           String guestPhoneNumber,
-                           int numOfAdults,
-                           int numOfChildren,
-                           int totalNumOfGuest,
-                           String guestFullName, RoomResponse room) {
+    public BookingDTO(Long bookingId,
+                      LocalDate checkInDate,
+                      LocalDate checkOutDate,
+                      String bookingConfirmationCode,
+                      String guestEmail,
+                      String guestPhoneNumber,
+                      int numOfAdults,
+                      int numOfChildren,
+                      int totalNumOfGuest,
+                      String guestFullName, RoomDTO room) {
         this.bookingId = bookingId;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;

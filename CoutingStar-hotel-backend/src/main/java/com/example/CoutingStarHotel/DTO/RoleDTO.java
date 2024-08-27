@@ -1,4 +1,4 @@
-package com.example.CoutingStarHotel.response;
+package com.example.CoutingStarHotel.DTO;
 
 import com.example.CoutingStarHotel.entities.Role;
 import com.example.CoutingStarHotel.entities.User;
@@ -10,12 +10,12 @@ import java.util.HashSet;
 
 @Data
 @NoArgsConstructor
-public class RoleResponse {
+public class RoleDTO {
     private Long id;
     private String name;
     private Collection<User> users = new HashSet<>();
 
-    public RoleResponse(Role role) {
+    public RoleDTO(Role role) {
         this.name = role.getName();
     }
 }

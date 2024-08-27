@@ -21,6 +21,9 @@
   border-radius: 10px;
   text-align: center;
   position: relative;
+  max-height: 80%;
+  overflow-y: auto;
+  scrollbar-width: none;
 }
 
 .modalHeader {

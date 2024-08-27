@@ -4,8 +4,8 @@ import com.example.CoutingStarHotel.exception.InvalidBookingRequestException;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.entities.BookedRoom;
 import com.example.CoutingStarHotel.entities.Room;
-import com.example.CoutingStarHotel.response.BookingResponse;
-import com.example.CoutingStarHotel.response.RoomResponse;
+import com.example.CoutingStarHotel.DTO.BookingDTO;
+import com.example.CoutingStarHotel.DTO.RoomDTO;
 import com.example.CoutingStarHotel.services.impl.BookingServiceImpl;
 import com.example.CoutingStarHotel.services.impl.RoomServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +27,11 @@ public class BookingController {
     private final BookingServiceImpl bookingServiceImpl;
     private final RoomServiceImpl roomServiceImpl;
     @GetMapping("/all-bookings")
-    public ResponseEntity<List<BookingResponse>> getAllBookings(){
+    public ResponseEntity<List<BookingDTO>> getAllBookings(){
         List<BookedRoom> bookings = bookingServiceImpl.getAllBookings();
-        List<BookingResponse> bookingResponses = new ArrayList<>();
+        List<BookingDTO> bookingResponses = new ArrayList<>();
         for (BookedRoom booking : bookings){
-            BookingResponse bookingResponse = getBookingResponse(booking);
+            BookingDTO bookingResponse = getBookingResponse(booking);
             bookingResponses.add(bookingResponse);
         }
         return ResponseEntity.ok(bookingResponses);
@@ -41,7 +41,7 @@ public class BookingController {
     public ResponseEntity<?> getBookingByConfirmationCode(@PathVariable String confirmationCode){
         try{
             BookedRoom booking = bookingServiceImpl.findByBookingConfirmationCode(confirmationCode);
-            BookingResponse bookingResponse = getBookingResponse(booking);
+            BookingDTO bookingResponse = getBookingResponse(booking);
             return ResponseEntity.ok(bookingResponse);
         }catch (ResourceNotFoundException ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
@@ -52,7 +52,7 @@ public class BookingController {
     public ResponseEntity<?> getBookingByBookingId(@PathVariable Long bookingId){
         try{
             BookedRoom booking = bookingServiceImpl.findByBookingId(bookingId);
-            BookingResponse bookingResponse = getBookingResponse(booking);
+            BookingDTO bookingResponse = getBookingResponse(booking);
             return ResponseEntity.ok(bookingResponse);
         }catch (ResourceNotFoundException ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
@@ -60,11 +60,11 @@ public class BookingController {
     }
 
     @GetMapping("/hotel/{hotelId}/booking")
-    public ResponseEntity<List<BookingResponse>> getBookingByHotelId(@PathVariable Long hotelId){
+    public ResponseEntity<List<BookingDTO>> getBookingByHotelId(@PathVariable Long hotelId){
         List<BookedRoom> bookings = bookingServiceImpl.getAllBookingsByHotelId(hotelId);
-        List<BookingResponse> bookingResponses = new ArrayList<>();
+        List<BookingDTO> bookingResponses = new ArrayList<>();
         for (BookedRoom booking : bookings){
-            BookingResponse bookingResponse = getBookingResponse(booking);
+            BookingDTO bookingResponse = getBookingResponse(booking);
             bookingResponses.add(bookingResponse);
         }
         return ResponseEntity.ok(bookingResponses);
@@ -85,26 +85,26 @@ public class BookingController {
     }
 
     @PutMapping("/booking/{bookingId}/update")
-    public ResponseEntity<BookingResponse> updateBooking(@PathVariable Long bookingId,
-                                                         @RequestParam String checkInDate,
-                                                         @RequestParam String checkOutDate,
-                                                         @RequestParam String guestEmail,
-                                                         @RequestParam String guestPhoneNumber,
-                                                         @RequestParam String guestFullName,
-                                                         @RequestParam int totalNumOfGuest){
+    public ResponseEntity<BookingDTO> updateBooking(@PathVariable Long bookingId,
+                                                    @RequestParam String checkInDate,
+                                                    @RequestParam String checkOutDate,
+                                                    @RequestParam String guestEmail,
+                                                    @RequestParam String guestPhoneNumber,
+                                                    @RequestParam String guestFullName,
+                                                    @RequestParam int totalNumOfGuest){
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy,M,d");
         LocalDate checkInLocalDate = LocalDate.parse(checkInDate, dateTimeFormatter);
         LocalDate checkOutLocalDate = LocalDate.parse(checkOutDate, dateTimeFormatter);
         BookedRoom bookedRoom = bookingServiceImpl.updateBooked(bookingId, checkInLocalDate, checkOutLocalDate,
                 guestEmail, guestPhoneNumber, guestFullName, totalNumOfGuest);
-        BookingResponse bookingResponse = getBookingResponse(bookedRoom);
+        BookingDTO bookingResponse = getBookingResponse(bookedRoom);
         return  ResponseEntity.ok(bookingResponse);
     }
 
     @GetMapping("/user/{userId}/bookings")
-    public ResponseEntity<List<BookingResponse>> getBookingsByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<BookingDTO>> getBookingsByUserId(@PathVariable Long userId) {
         List<BookedRoom> bookings = bookingServiceImpl.getBookingsByUserId(userId);
-        List<BookingResponse> bookingResponses = bookings.stream()
+        List<BookingDTO> bookingResponses = bookings.stream()
                 .map(this::getBookingResponse)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(bookingResponses);
@@ -115,14 +115,14 @@ public class BookingController {
         bookingServiceImpl.cancelBooking(bookingId);
     }
 
-    private BookingResponse getBookingResponse(BookedRoom booking) {
+    private BookingDTO getBookingResponse(BookedRoom booking) {
         Room theRoom = roomServiceImpl.getRoomById(booking.getRoom().getId()).get();
-        RoomResponse room = new RoomResponse(
+        RoomDTO room = new RoomDTO(
                 theRoom.getId(),
                 theRoom.getRoomType(),
                 theRoom.getRoomPrice(),
                 theRoom.getRoomDescription());
-        return new BookingResponse(
+        return new BookingDTO(
                 booking.getBookingId(),
                 booking.getCheckInDate(),
                 booking.getCheckOutDate(),

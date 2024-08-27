@@ -1,14 +1,14 @@
-package com.example.CoutingStarHotel.response;
+package com.example.CoutingStarHotel.DTO;
 
 import com.example.CoutingStarHotel.entities.Room;
 
-public class DiscountResponse {
+public class DiscountDTO {
     private Long id;
     private int percentDiscount;
     private String discountDescription;
     private Room room;
 
-    public DiscountResponse(Long id, int percentDiscount, String discountDescription) {
+    public DiscountDTO(Long id, int percentDiscount, String discountDescription) {
         this.id = id;
         this.percentDiscount = percentDiscount;
         this.discountDescription = discountDescription;

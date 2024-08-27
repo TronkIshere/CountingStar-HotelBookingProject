@@ -1,4 +1,4 @@
-package com.example.CoutingStarHotel.response;
+package com.example.CoutingStarHotel.DTO;
 
 import com.example.CoutingStarHotel.entities.Room;
 import com.example.CoutingStarHotel.entities.User;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class HotelResponse {
+public class HotelDTO {
     private Long id;
     private String hotelName;
     private String city;
@@ -23,7 +23,7 @@ public class HotelResponse {
     private double averageNumberOfHotelStars;
     private Long lowestPrice;
     private Long highestPrice;
-    public HotelResponse(Long id, String hotelName, String city, String hotelLocation, String hotelDescription, String phoneNumber, byte[] photoBytes) {
+    public HotelDTO(Long id, String hotelName, String city, String hotelLocation, String hotelDescription, String phoneNumber, byte[] photoBytes) {
         this.id = id;
         this.hotelName = hotelName;
         this.city = city;
@@ -33,7 +33,7 @@ public class HotelResponse {
         this.photo = photoBytes != null ? Base64.encodeBase64String(photoBytes) : null;
     }
 
-    public HotelResponse(Long id, String hotelName, String city, String hotelLocation, String hotelDescription, String phoneNumber, byte[] photoBytes, double averageNumberOfHotelStars, Long lowestPrice, Long highestPrice) {
+    public HotelDTO(Long id, String hotelName, String city, String hotelLocation, String hotelDescription, String phoneNumber, byte[] photoBytes, double averageNumberOfHotelStars, Long lowestPrice, Long highestPrice) {
         this.id = id;
         this.hotelName = hotelName;
         this.city = city;

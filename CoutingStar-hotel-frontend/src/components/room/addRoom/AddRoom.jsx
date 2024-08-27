@@ -39,6 +39,7 @@ const AddRoom = ({ onClose }) => {
     e.preventDefault();
     try {
       const success = await addRoom(newRoom.photo, newRoom.roomType, newRoom.roomPrice, newRoom.roomDescription, hotelId);
+      console.log(success)
       if (success !== undefined) {
         setSuccessMessage("Thêm phòng mới thành công!")
         setNewRoom({ photo: null, roomType: "", roomPrice: "", roomDescription: "" })

@@ -1,4 +1,4 @@
-package com.example.CoutingStarHotel.response;
+package com.example.CoutingStarHotel.DTO;
 
 import com.example.CoutingStarHotel.entities.*;
 import lombok.Data;
@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
-public class UserResponse {
+public class UserDTO {
 
     private Long id;
     private String firstName;
@@ -19,16 +19,16 @@ public class UserResponse {
     private String email;
     private String password;
     private String phoneNumber;
-    private Collection<RoleResponse> roles = new HashSet<>();
+    private Collection<RoleDTO> roles = new HashSet<>();
     private Set<BookedRoom> bookedRooms = new HashSet<>();
     private Hotel hotel;
     private List<Rating> rating;
 
-    public UserResponse(Long id){
+    public UserDTO(Long id){
         this.id = id;
     }
 
-    public UserResponse(User user) {
+    public UserDTO(User user) {
         this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
@@ -36,7 +36,7 @@ public class UserResponse {
         this.password = user.getPassword();
         this.phoneNumber = user.getPhoneNumber();
         for (Role role : user.getRoles()) {
-            this.roles.add(new RoleResponse(role));
+            this.roles.add(new RoleDTO(role));
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.example.CoutingStarHotel.services;
 
+import com.example.CoutingStarHotel.DTO.BarChartDTO;
+import com.example.CoutingStarHotel.DTO.PieChartDTO;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.entities.Hotel;
 import com.example.CoutingStarHotel.entities.Rating;
@@ -83,6 +85,18 @@ public class HotelService implements HotelServiceImpl {
     @Override
     public List<Hotel> getFiveHotelForHomePage() {
         return hotelRepository.getFiveHotelForHomePage().stream().limit(5).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PieChartDTO> getNumberOfHotelByEachCity() {
+        List<PieChartDTO> numberOfHotelByEachCity = hotelRepository.findNumberOfHotelsByCity();
+        return numberOfHotelByEachCity;
+    }
+
+    @Override
+    public List<BarChartDTO> getHotelRevenueByEachCity() {
+        List<BarChartDTO> revenueByEachCity = hotelRepository.findRevenueByEachCity();
+        return revenueByEachCity;
     }
 
     @Override

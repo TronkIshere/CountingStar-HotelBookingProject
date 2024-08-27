@@ -54,6 +54,24 @@ export async function getFiveHotelForHomePage() {
 	}
 }
 
+export async function getDataForPieChart(){
+	try{
+		const response = await api.get("/hotels/PieChart")
+		return response.data
+	} catch(error) {
+		throw new Error("Error fetching rooms")
+	}
+}
+
+export async function getDataForBarChart(){
+	try{
+		const response = await api.get("/hotels/BarChart")
+		return response.data
+	} catch(error) {
+		throw new Error("Error fetching rooms")
+	}
+}
+
 /* Update hotel informtaion */
 export async function updateHotel(hotelId, hotelData){
 	const formData = new FormData()
@@ -85,8 +103,10 @@ export async function addRoom(photo, roomType, roomPrice, roomDescription, hotel
 	formData.append("roomType", roomType)
 	formData.append("roomPrice", roomPrice)
 	formData.append("roomDescription", roomDescription)
-
-	const response = await api.post(`/rooms/add/new-room/${hotelId}`, formData)
+	console.log(roomType)
+	const response = await api.post(`/rooms/add/new-room/${hotelId}`, formData, {
+		headers: getHeader()
+	})
 	if (response.status === 201) {
 		return true
 	} else {
@@ -114,6 +134,7 @@ export async function getAllRooms(){
 		throw new Error("Error fetching rooms")
 	}
 }
+
 /* This function deletes a room by the Id */
 export async function deleteRoom(roomId) {
 	try {
@@ -133,7 +154,12 @@ export async function updateRoom(roomId, roomData){
 	formData.append("roomDescription", roomData.roomDescription)
 	formData.append("roomPrice", roomData.roomPrice)
 	formData.append("photo", roomData.photo)
-	const response = await api.put(`/rooms/update/${roomId}`, formData)
+	console.log(roomData.roomType)
+	console.log(roomData.roomDescription)
+	console.log(roomData.roomPrice)
+	const response = await api.put(`/rooms/update/${roomId}`, formData, {
+		headers: getHeader()
+	})
 	return response
 }
 

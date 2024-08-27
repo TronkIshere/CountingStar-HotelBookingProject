@@ -1,7 +1,7 @@
 package com.example.CoutingStarHotel.controller;
 
 import com.example.CoutingStarHotel.entities.User;
-import com.example.CoutingStarHotel.response.UserResponse;
+import com.example.CoutingStarHotel.DTO.UserDTO;
 import com.example.CoutingStarHotel.services.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ public class UserController {
     public ResponseEntity<?> getUserByEmail(@PathVariable("email") String email){
         try{
             User theUser = userServiceImpl.getUser(email);
-            UserResponse userResponse = new UserResponse(theUser);
+            UserDTO userResponse = new UserDTO(theUser);
             return ResponseEntity.ok(userResponse);
         }catch (UsernameNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

@@ -1,5 +1,7 @@
 package com.example.CoutingStarHotel.services.impl;
 
+import com.example.CoutingStarHotel.DTO.BarChartDTO;
+import com.example.CoutingStarHotel.DTO.PieChartDTO;
 import com.example.CoutingStarHotel.entities.Hotel;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,4 +33,8 @@ public interface HotelServiceImpl {
     Long getHotelHighestPriceByHotelId(Long hotelId);
 
     List<Hotel> getFiveHotelForHomePage();
+
+    List<PieChartDTO> getNumberOfHotelByEachCity();
+
+    List<BarChartDTO> getHotelRevenueByEachCity();
 }

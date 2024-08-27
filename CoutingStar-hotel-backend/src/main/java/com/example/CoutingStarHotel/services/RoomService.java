@@ -28,6 +28,7 @@ public class RoomService implements RoomServiceImpl {
     private final RatingService ratingService;
     @Override
     public Room addNewRoom(MultipartFile file, String roomType, BigDecimal roomPrice, String roomDescription, Long hotelId) throws SQLException, IOException {
+        System.out.println("===========Is Running===========");
         Room room = new Room();
         room.setRoomType(roomType);
         room.setRoomPrice(roomPrice);

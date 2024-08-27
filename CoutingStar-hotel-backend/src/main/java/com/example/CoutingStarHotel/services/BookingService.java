@@ -12,7 +12,11 @@ import com.example.CoutingStarHotel.services.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -53,6 +57,13 @@ public class BookingService implements BookingServiceImpl {
         boolean roomIsAvailable = roomIsAvailable(bookingRequest, existingBookings);
         if (roomIsAvailable){
             room.addBooking(bookingRequest);
+
+            long bookingDays = ChronoUnit.DAYS.between(bookingRequest.getCheckInDate(), bookingRequest.getCheckOutDate());
+            BigDecimal roomPrice = room.getRoomPrice();
+            BigDecimal daysBigDecimal = BigDecimal.valueOf(bookingDays);
+            BigDecimal totalAmount = daysBigDecimal.multiply(roomPrice);
+
+            bookingRequest.setTotalAmount(totalAmount);
             bookingRepository.save(bookingRequest);
         } else {
             throw new InvalidBookingRequestException("Sorry, This room is not available for the selected dates;");

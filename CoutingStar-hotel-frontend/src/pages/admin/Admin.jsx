@@ -4,6 +4,7 @@ import "./admin.css";
 import PieChart from "../../components/dashBoard/PieChart";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBed, faHouse, faPencil, faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import BarChart from "../../components/dashBoard/BarChart";
 
 const Admin = () => {
   return (
@@ -59,7 +60,7 @@ const Admin = () => {
       <div className="chartsGroup">
         <div className="chartContainer">
           <p>Doanh thu của từng thành phố</p>
-          <LineChart />
+          <BarChart />
         </div>
         <div className="chartContainer">
           <p>Tổng số khách sạn của từng thành phố</p>

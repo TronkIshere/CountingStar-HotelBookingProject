@@ -43,7 +43,6 @@ const UpdateRoom = ({ roomId, handleUpdateRoom, onClose }) => {
     e.preventDefault()
     try {
       const response = await updateRoom(roomId, room)
-      console.log(response)
       if (response.status === 200) {
         setSuccessMessage("Chỉnh sửa phòng thành công!!!")
         const updatedRoomData = await getRoomById(roomId)
