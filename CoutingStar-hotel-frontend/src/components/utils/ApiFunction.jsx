@@ -55,7 +55,7 @@ export async function getFiveHotelForHomePage() {
 
 export async function getDataForPieChart(){
 	try{
-		const response = await api.get("/hotels/PieChart")
+		const response = await api.get("/dashboard/PieChart")
 		return response.data
 	} catch(error) {
 		throw new Error("Error fetching rooms")
@@ -64,7 +64,7 @@ export async function getDataForPieChart(){
 
 export async function getDataForBarChart(){
 	try{
-		const response = await api.get("/hotels/BarChart")
+		const response = await api.get("/dashboard/BarChart")
 		return response.data
 	} catch(error) {
 		throw new Error("Error fetching rooms")

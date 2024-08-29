@@ -10,6 +10,7 @@ import com.example.CoutingStarHotel.repositories.HotelRepository;
 import com.example.CoutingStarHotel.repositories.UserRepository;
 import com.example.CoutingStarHotel.services.impl.HotelServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -153,6 +154,7 @@ public class HotelService implements HotelServiceImpl {
             Blob photoBlob = new SerialBlob(photoBytes);
             hotel.setPhoto(photoBlob);
         }
+        hotel.setRegisterDay(LocalDate.now());
         return hotelRepository.save(hotel);
     }
 

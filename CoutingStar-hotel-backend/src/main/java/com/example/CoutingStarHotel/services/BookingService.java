@@ -104,6 +104,7 @@ class BookingService implements BookingServiceImpl {
         if (guestPhoneNumber != null) bookedRoom.setGuestPhoneNumber(guestPhoneNumber);
         if (guestFullName != null) bookedRoom.setGuestFullName(guestFullName);
         if (totalNumOfGuest > 0) bookedRoom.setTotalNumOfGuest(totalNumOfGuest);
+        bookedRoom.setBookingDay(LocalDate.now());
         return bookingRepository.save(bookedRoom);
     }
 
