@@ -419,3 +419,12 @@ export async function getDataForBarChart(){
 		throw new Error("Error fetching data")
 	}
 }
+
+export async function getDiscountNotExpired(){
+	try{
+		const response = await api.get("/discounts/getAllDiscount")
+		return response.data
+	} catch(error) {
+		throw new Error("Error fetching data")
+	}
+}

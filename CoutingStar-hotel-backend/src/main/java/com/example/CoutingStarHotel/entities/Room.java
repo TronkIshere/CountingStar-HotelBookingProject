@@ -37,9 +37,6 @@ public class Room {
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
 
-    @OneToOne(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Discount discount;
-
     public Room() {
         this.bookings = new ArrayList<>();
     }
@@ -55,7 +52,4 @@ public class Room {
         booking.setBookingConfirmationCode(bookingCode);
     }
 
-    public void addDiscount(Discount discount){
-        discount.setRoom(this);
-    }
 }

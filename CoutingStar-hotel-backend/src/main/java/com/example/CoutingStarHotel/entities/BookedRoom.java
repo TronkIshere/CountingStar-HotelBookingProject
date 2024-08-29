@@ -51,6 +51,8 @@ public class BookedRoom {
 
     private LocalDate bookingDay;
 
+    private BigDecimal totalAmount;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private Room room;
@@ -62,7 +64,9 @@ public class BookedRoom {
     @OneToOne(mappedBy = "bookedRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Rating rating;
 
-    private BigDecimal totalAmount;
+    @OneToOne(mappedBy = "bookedRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private RedeemedDiscount redeemedDiscount;
+
 
     public void calculateTotalNumberOfGuest() {
         this.totalNumOfGuest = this.NumOfAdults + NumOfChildren;

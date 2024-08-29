@@ -1,0 +1,27 @@
+package com.example.CoutingStarHotel.entities;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class RedeemedDiscount {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private boolean isUsed;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Discount_id")
+    private Discount discount;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "User_id")
+    private User user;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bookedRoom_id")
+    private BookedRoom bookedRoom;
+}

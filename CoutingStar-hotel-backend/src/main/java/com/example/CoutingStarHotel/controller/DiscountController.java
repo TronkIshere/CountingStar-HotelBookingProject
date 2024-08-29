@@ -13,6 +13,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin("http://localhost:5173")
@@ -21,33 +24,35 @@ import java.util.Optional;
 @RequestMapping("/discounts")
 public class DiscountController {
     private final DiscountServiceImpl discountServiceImpl;
-    @PostMapping("/discount/{roomId}/addDiscount")
+    @PostMapping("/discount//addDiscount")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
-    private ResponseEntity<?> addDiscount(@PathVariable Long roomId,
-                                          @RequestBody Discount discountRequest) throws SQLException, IOException {
+    private ResponseEntity<?> addDiscount(@RequestBody Discount discountRequest) throws SQLException, IOException {
         try{
-            discountServiceImpl.addDiscount(roomId, discountRequest);
+            discountServiceImpl.addDiscount(discountRequest);
             return ResponseEntity.ok("Your discount have been set successfully");
         } catch (InvalidDiscountRequestException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
 
-    @GetMapping("/discount/{roomId}")
-    private ResponseEntity<Optional<DiscountDTO>> getDiscountByRoomId(@PathVariable Long roomId){
-        Optional<Discount> theDiscount = discountServiceImpl.getDiscountByRoomId(roomId);
-        return theDiscount.map(discount -> {
+    @GetMapping("/getAllDiscount")
+    public ResponseEntity<List<DiscountDTO>> getDiscountNotExpired(){
+        List<Discount> discounts = discountServiceImpl.getDiscountNotExpired();
+        List<DiscountDTO> discountDTOS = new ArrayList<>();
+        for(Discount discount : discounts){
             DiscountDTO discountResponse = getDiscountResponse(discount);
-            return  ResponseEntity.ok(Optional.of(discountResponse));
-        }).orElseThrow(() -> new ResourceNotFoundException("Discount not exist"));
+            discountDTOS.add(discountResponse);
+        }
+        return ResponseEntity.ok(discountDTOS);
     }
 
     @PutMapping("/update/{discountId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public ResponseEntity<DiscountDTO> updateDiscount(@PathVariable Long discountId,
-                                                      @RequestParam(required = false) int percentDiscount,
-                                                      @RequestParam(required = false) String discountDescription) throws SQLException, java.io.IOException {
-        Discount discount = discountServiceImpl.updateDiscount(discountId, percentDiscount, discountDescription);
+                                                      @RequestParam int percentDiscount,
+                                                      @RequestParam String discountDescription,
+                                                      @RequestParam LocalDate expirationDate) throws SQLException, java.io.IOException {
+        Discount discount = discountServiceImpl.updateDiscount(discountId, percentDiscount, discountDescription, expirationDate);
         DiscountDTO discountResponse = getDiscountResponse(discount);
         return ResponseEntity.ok(discountResponse);
     }
@@ -62,8 +67,11 @@ public class DiscountController {
     private DiscountDTO getDiscountResponse(Discount discount){
         return new DiscountDTO(
                 discount.getId(),
+                discount.getDiscountName(),
                 discount.getPercentDiscount(),
-                discount.getDiscountDescription()
+                discount.getDiscountDescription(),
+                discount.getCreateDate(),
+                discount.getExpirationDate()
         );
     }
 }

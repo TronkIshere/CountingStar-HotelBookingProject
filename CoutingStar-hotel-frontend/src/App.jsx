@@ -15,6 +15,7 @@ import HotelBookingManagement from "./pages/hotelBookingManagement/HotelBookingM
 import { AuthProvider } from "./components/utils/AuthProvider";
 import Admin from "./pages/admin/Admin";
 import HotelOwner from "./pages/hotelOwner/HotelOwner";
+import Discount from "./pages/Discount/Discount";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -34,6 +35,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/hotels" element={<List />} />
+          <Route path="/discount" element={<Discount />} />
           <Route path="/hotels/hotel/:hotelId" element={<Hotel />} />
           <Route path="/user/:userId" element={<UserProfile />} />
           <Route path="/hotelRegistration" element={<HotelRegistration />} />

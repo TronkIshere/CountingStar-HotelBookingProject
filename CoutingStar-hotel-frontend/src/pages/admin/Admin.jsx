@@ -67,11 +67,11 @@ const Admin = () => {
         <div className="overViewThisMonthItem">
           <div className="overViewInfo">
             <FontAwesomeIcon icon={faPencil} />
-            <div className="infoNumber">{dashboardData.totalNumberOfComments.toFixed(2)}</div>
+            <div className="infoNumber">{dashboardData.totalNumberOfComments}</div>
             <div className="infoText">Bình luận đã được viết</div>
           </div>
           <div className="overViewNumber">
-            +{dashboardData.percentageOfCommentsIncreaseDuringTheMonth}%
+            +{dashboardData.percentageOfCommentsIncreaseDuringTheMonth.toFixed(2)}%
           </div>
         </div>
       </div>

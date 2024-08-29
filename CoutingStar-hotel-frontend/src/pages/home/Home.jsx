@@ -6,6 +6,7 @@ import PropertyList from "../../components/propertyList/PropertyList";
 import FeaturedProperties from "../../components/featuredProperties/FeaturedProperties";
 import Register from "../../components/register/Register";
 import { AuthContext } from "../../components/utils/AuthProvider";
+import Discount from "../../components/discount/Discount";
 
 const Home = () => {
   const userId = localStorage.getItem("userId");
@@ -17,6 +18,8 @@ const Home = () => {
         <Featured />
         <h1 className="homeTitle">Những lợi ích chúng tôi mang lại</h1>
         <PropertyList />
+        <h1 className="homeTitle">Săn mã giảm giá mua du lịch</h1>
+        <Discount/>
         <h1 className="homeTitle">Những khách sạn đang được yêu thích</h1>
         <FeaturedProperties />
         {userId ? <div></div> : <Register />}

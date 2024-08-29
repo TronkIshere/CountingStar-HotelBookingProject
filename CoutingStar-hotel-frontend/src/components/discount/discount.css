@@ -1,0 +1,41 @@
+.discountBanner {
+    width: 100%;
+    max-width: 1024px;
+    gap: 20px;
+    z-index: 1;
+    height: 170px;
+    background-image: url(../../assets/discount-img/pexels-photo-440731.jpeg);
+    background-size: cover;
+    background-position: center;
+    color: white;
+    border-radius: 15px;
+}
+
+.discountBannerContent{
+    padding-left: 2rem;
+    height: 90%;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+}
+
+.discountBannerTitle {
+    font-size: 1.6rem;
+    color: white;
+    font-weight: bold;
+}
+
+.discountButton {
+    background-color: #003580;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.discountButton:hover {
+    background-color: #002d6b;
+}
