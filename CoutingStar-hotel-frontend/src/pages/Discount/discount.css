@@ -66,3 +66,9 @@ button:hover {
   font-size: 14px;
   margin-top: 10px;
 }
+
+.discountAdminButton{
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}

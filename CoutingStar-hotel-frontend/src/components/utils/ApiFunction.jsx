@@ -428,3 +428,52 @@ export async function getDiscountNotExpired(){
 		throw new Error("Error fetching data")
 	}
 }
+
+export async function getDiscountById(discountId){
+	try{
+		const response = await api.get(`/discounts/getDiscountById/${discountId}`)
+		return response.data 
+	} catch(error) {
+		throw new Error("Error feching data")
+	}
+}
+
+export async function addDiscount(discountName, percentDiscount, discountDescription, expirationDate) {
+	const formData = new FormData()
+	formData.append("discountName", discountName)
+	formData.append("percentDiscount", percentDiscount)
+	formData.append("discountDescription", discountDescription)
+	formData.append("expirationDate", expirationDate)
+	const response = await api.post("/discounts/addDiscount", formData, {
+		headers: getHeader()
+	})
+	if (response.status === 201) {
+		return true
+	} else {
+		return false
+	}
+}
+
+export async function updateDiscount(discountId, updatedDiscount){
+	const formData = new FormData()
+	formData.append("discountName", updatedDiscount.discountName)
+	formData.append("percentDiscount", updatedDiscount.percentDiscount)
+	formData.append("discountDescription", updatedDiscount.discountDescription)
+	formData.append("expirationDate", updatedDiscount.expirationDate)
+	const result = await api.put(`/discounts/update/${discountId}`, formData, {
+		headers: getHeader()
+	})
+	return result
+}
+
+export async function deleteDiscount(discountId){
+	try {
+		const response = await api.delete(`/discounts/delete/${discountId}`, {
+			headers: getHeader()
+		})
+		return response.data
+	} catch (error) {
+		return error.message
+	}
+}
+

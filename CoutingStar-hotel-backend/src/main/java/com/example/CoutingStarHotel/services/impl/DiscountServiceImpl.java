@@ -11,7 +11,9 @@ public interface DiscountServiceImpl {
 
     void deleteDiscount(Long discount);
 
-    Discount updateDiscount(Long discountId, int percentDiscount, String discountDescription, LocalDate expirationDate);
+    Discount updateDiscount(Long discountId, String discountName, int percentDiscount, String discountDescription, LocalDate expirationDate);
 
     List<Discount> getDiscountNotExpired();
+
+    Optional<Discount> getDiscountById(Long discountId);
 }

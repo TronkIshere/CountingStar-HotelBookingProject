@@ -1,5 +1,7 @@
 package com.example.CoutingStarHotel.controller;
 
+import com.example.CoutingStarHotel.DTO.RoomDTO;
+import com.example.CoutingStarHotel.entities.Room;
 import com.example.CoutingStarHotel.exception.InvalidDiscountRequestException;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.entities.Discount;
@@ -24,10 +26,19 @@ import java.util.Optional;
 @RequestMapping("/discounts")
 public class DiscountController {
     private final DiscountServiceImpl discountServiceImpl;
-    @PostMapping("/discount//addDiscount")
+    @PostMapping("/addDiscount")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
-    private ResponseEntity<?> addDiscount(@RequestBody Discount discountRequest) throws SQLException, IOException {
+    public ResponseEntity<?> addDiscount( @RequestParam("discountName") String discountName,
+                                          @RequestParam("percentDiscount") Integer percentDiscount,
+                                          @RequestParam("discountDescription") String discountDescription,
+                                          @RequestParam("expirationDate") LocalDate expirationDate) throws SQLException, IOException {
         try{
+            Discount discountRequest = new Discount();
+            discountRequest.setDiscountName(discountName);
+            discountRequest.setPercentDiscount(percentDiscount);
+            discountRequest.setDiscountDescription(discountDescription);
+            discountRequest.setExpirationDate(expirationDate);
+            discountRequest.setCreateDate(LocalDate.now());
             discountServiceImpl.addDiscount(discountRequest);
             return ResponseEntity.ok("Your discount have been set successfully");
         } catch (InvalidDiscountRequestException ex) {
@@ -46,21 +57,31 @@ public class DiscountController {
         return ResponseEntity.ok(discountDTOS);
     }
 
+    @GetMapping("/getDiscountById/{discountId}")
+    public ResponseEntity<Optional<DiscountDTO>> getDiscountById(@PathVariable Long discountId){
+        Optional<Discount> discountDTO = discountServiceImpl.getDiscountById(discountId);
+        return discountDTO.map(discount -> {
+            DiscountDTO discountResponse = getDiscountResponse(discount);
+            return  ResponseEntity.ok(Optional.of(discountResponse));
+        }).orElseThrow(() -> new ResourceNotFoundException("Room not found"));
+    }
+
     @PutMapping("/update/{discountId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public ResponseEntity<DiscountDTO> updateDiscount(@PathVariable Long discountId,
+                                                      @RequestParam String discountName,
                                                       @RequestParam int percentDiscount,
                                                       @RequestParam String discountDescription,
                                                       @RequestParam LocalDate expirationDate) throws SQLException, java.io.IOException {
-        Discount discount = discountServiceImpl.updateDiscount(discountId, percentDiscount, discountDescription, expirationDate);
+        Discount discount = discountServiceImpl.updateDiscount(discountId, discountName, percentDiscount, discountDescription, expirationDate);
         DiscountDTO discountResponse = getDiscountResponse(discount);
         return ResponseEntity.ok(discountResponse);
     }
 
-    @DeleteMapping("/discount/{discount}/deleteDiscount")
+    @DeleteMapping("/delete/{discountId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
-    private ResponseEntity<Void> deleteDiscount(@PathVariable Long discountId){
-        discountServiceImpl.deleteDiscount(discountId);
+    public ResponseEntity<Void> deleteDiscount(@PathVariable Long discountId){
+            discountServiceImpl.deleteDiscount(discountId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
