@@ -59,7 +59,7 @@ const BarChart = () => {
             fill={[
                 {
                     match: {
-                        id: 'revenue'
+                        id: ''
                     },
                     id: 'dots'
                 }
@@ -76,7 +76,7 @@ const BarChart = () => {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: 'City',
+                legend: 'Thành phố',
                 legendPosition: 'middle',
                 legendOffset: 32
             }}
@@ -84,7 +84,7 @@ const BarChart = () => {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: 'Revenue',
+                legend: 'Doanh thu',
                 legendPosition: 'middle',
                 legendOffset: -40
             }}

@@ -53,24 +53,6 @@ export async function getFiveHotelForHomePage() {
 	}
 }
 
-export async function getDataForPieChart(){
-	try{
-		const response = await api.get("/dashboard/PieChart")
-		return response.data
-	} catch(error) {
-		throw new Error("Error fetching rooms")
-	}
-}
-
-export async function getDataForBarChart(){
-	try{
-		const response = await api.get("/dashboard/BarChart")
-		return response.data
-	} catch(error) {
-		throw new Error("Error fetching rooms")
-	}
-}
-
 /* Update hotel informtaion */
 export async function updateHotel(hotelId, hotelData){
 	const formData = new FormData()
@@ -408,5 +390,32 @@ export async function getAllRatingByHotelId(hotelId){
 		return response.data
 	} catch (error) {
 		throw new Error("Faild to fetch Rating")
+	}
+}
+
+export async function getDataForDashBoardMonthIncreased() {
+	try {
+		const response = await api.get(`/dashboard/dashBoardMonthIncreased`)
+		return response.data
+	} catch (error) {
+		throw new Error("Error fetching dashboard data")
+	}
+}
+
+export async function getDataForPieChart(){
+	try{
+		const response = await api.get("/dashboard/PieChart")
+		return response.data
+	} catch(error) {
+		throw new Error("Error fetching data")
+	}
+}
+
+export async function getDataForBarChart(){
+	try{
+		const response = await api.get("/dashboard/BarChart")
+		return response.data
+	} catch(error) {
+		throw new Error("Error fetching data")
 	}
 }
