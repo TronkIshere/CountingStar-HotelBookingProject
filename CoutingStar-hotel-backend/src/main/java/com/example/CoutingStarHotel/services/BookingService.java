@@ -10,6 +10,7 @@ import com.example.CoutingStarHotel.services.impl.BookingServiceImpl;
 import com.example.CoutingStarHotel.services.impl.RoomServiceImpl;
 import com.example.CoutingStarHotel.services.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -21,7 +22,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BookingService implements BookingServiceImpl {
+public
+class BookingService implements BookingServiceImpl {
     private final BookingRepository bookingRepository;
     private final RoomServiceImpl roomService;
     private final UserServiceImpl userService;
@@ -103,6 +105,23 @@ public class BookingService implements BookingServiceImpl {
         if (guestFullName != null) bookedRoom.setGuestFullName(guestFullName);
         if (totalNumOfGuest > 0) bookedRoom.setTotalNumOfGuest(totalNumOfGuest);
         return bookingRepository.save(bookedRoom);
+    }
+
+    @Override
+    public int getTotalNumberOfBookedRooms() {
+        return bookingRepository.getTotalNumberOfBookedRooms();
+    }
+
+    @Override
+    public double getPercentageOfBookedRoomsIncreasedDuringTheMonth() {
+        LocalDate today = LocalDate.now();
+        LocalDate firstDayOfThisMonth = today.withDayOfMonth(1);
+        LocalDate firstDayOfNextMonth = firstDayOfThisMonth.plusMonths(1);
+
+        int totalBookedRooms = bookingRepository.getTotalNumberOfBookedRooms();
+        int BookedRoomsAddedThisMonth = bookingRepository.getBookedRoomsAddedDuringPeriod(firstDayOfThisMonth, firstDayOfNextMonth);
+
+        return (BookedRoomsAddedThisMonth * 100.0) / totalBookedRooms;
     }
 
     private boolean roomIsAvailable(BookedRoom bookingRequest, List<BookedRoom> existingBookings) {

@@ -3,7 +3,9 @@ package com.example.CoutingStarHotel.repositories;
 import com.example.CoutingStarHotel.entities.Rating;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface RatingRepository extends JpaRepository<Rating, Long> {
@@ -22,4 +24,9 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
             "WHERE ro.id = :roomId")
     List<Rating> getAllRatingByRoomId(Long roomId);
 
+    @Query("SELECT COUNT(r) FROM Rating r")
+    int getTotalNumberOfComments();
+
+    @Query("SELECT COUNT(r) FROM Rating r WHERE r.rateDay >= :startDate AND r.rateDay < :endDate")
+    int getUsersAddedDuringPeriod(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 }

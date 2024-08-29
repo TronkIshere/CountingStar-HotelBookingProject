@@ -49,7 +49,7 @@ const Admin = () => {
           <div className="overViewInfo">
             <FontAwesomeIcon icon={faPencil} />
             <div className="infoNumber">556</div>
-            <div className="infoText">Bài viết đã được đăng</div>
+            <div className="infoText">Bình luận đã được viết</div>
           </div>
           <div className="overViewNumber">
             +1,2%

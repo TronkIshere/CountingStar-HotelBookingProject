@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -68,4 +69,22 @@ public class UserService implements UserServiceImpl {
         return Optional.ofNullable(userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found")));
     }
+
+    @Override
+    public int getTotalNumberOfUsers() {
+        return userRepository.getTotalNumberOfUsers();
+    }
+
+    @Override
+    public double getPercentageOfUsersIncreasedDuringTheMonth() {
+        LocalDate today = LocalDate.now();
+        LocalDate firstDayOfThisMonth = today.withDayOfMonth(1);
+        LocalDate firstDayOfNextMonth = firstDayOfThisMonth.plusMonths(1);
+
+        int totalUsers = userRepository.getTotalNumberOfUsers();
+        int UsersAddedThisMonth = userRepository.getUsersAddedDuringPeriod(firstDayOfThisMonth, firstDayOfNextMonth);
+
+        return (UsersAddedThisMonth * 100.0) / totalUsers;
+    }
+
 }

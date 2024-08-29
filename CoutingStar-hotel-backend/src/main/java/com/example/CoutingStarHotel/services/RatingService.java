@@ -75,4 +75,21 @@ public class RatingService implements RatingServiceImpl {
         List<Rating> ratingList = ratingRepository.getAllRatingByRoomId(roomId);
         return ratingList;
     }
+
+    @Override
+    public int getTotalNumberOfComments() {
+        return ratingRepository.getTotalNumberOfComments();
+    }
+
+    @Override
+    public double getPercentageOfCommentsIncreaseDuringTheMonth() {
+        LocalDate today = LocalDate.now();
+        LocalDate firstDayOfThisMonth = today.withDayOfMonth(1);
+        LocalDate firstDayOfNextMonth = firstDayOfThisMonth.plusMonths(1);
+
+        int totalRatings = ratingRepository.getTotalNumberOfComments();
+        int RatingsAddedThisMonth = ratingRepository.getUsersAddedDuringPeriod(firstDayOfThisMonth, firstDayOfNextMonth);
+
+        return (RatingsAddedThisMonth * 100.0) / totalRatings;
+    }
 }

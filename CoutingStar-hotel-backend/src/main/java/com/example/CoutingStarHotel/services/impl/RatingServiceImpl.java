@@ -17,4 +17,8 @@ public interface RatingServiceImpl {
     List<Rating> getAllRatingByHotelId(Long hotelId);
 
     List<Rating> getAllRatingByRoomId(Long roomId);
+
+    int getTotalNumberOfComments();
+
+    double getPercentageOfCommentsIncreaseDuringTheMonth();
 }

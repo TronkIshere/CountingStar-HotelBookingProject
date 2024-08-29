@@ -17,6 +17,7 @@ import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -97,6 +98,23 @@ public class HotelService implements HotelServiceImpl {
     public List<BarChartDTO> getHotelRevenueByEachCity() {
         List<BarChartDTO> revenueByEachCity = hotelRepository.findRevenueByEachCity();
         return revenueByEachCity;
+    }
+
+    @Override
+    public int getTotalNumberOfHotels() {
+        return hotelRepository.getTotalNumberOfHotels();
+    }
+
+    @Override
+    public double getPercentageOfHotelsIncreasedDuringTheMonth() {
+        LocalDate today = LocalDate.now();
+        LocalDate firstDayOfThisMonth = today.withDayOfMonth(1);
+        LocalDate firstDayOfNextMonth = firstDayOfThisMonth.plusMonths(1);
+
+        int totalHotels = hotelRepository.getTotalNumberOfHotels();
+        int hotelsAddedThisMonth = hotelRepository.getHotelsAddedDuringPeriod(firstDayOfThisMonth, firstDayOfNextMonth);
+
+        return (hotelsAddedThisMonth * 100.0) / totalHotels;
     }
 
     @Override

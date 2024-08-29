@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
@@ -31,4 +32,11 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
             "FROM Hotel h JOIN h.rooms r JOIN r.bookings b " +
             "GROUP BY h.city")
     List<BarChartDTO> findRevenueByEachCity();
+
+    @Query("SELECT COUNT(h) FROM Hotel h")
+    int getTotalNumberOfHotels();
+
+    @Query("SELECT COUNT(h) FROM Hotel h WHERE h.registerDay >= :startDate AND h.registerDay < :endDate")
+    int getHotelsAddedDuringPeriod(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
 }

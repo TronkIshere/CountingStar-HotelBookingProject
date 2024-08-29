@@ -3,7 +3,9 @@ package com.example.CoutingStarHotel.repositories;
 import com.example.CoutingStarHotel.entities.BookedRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,4 +30,10 @@ public interface BookingRepository extends JpaRepository<BookedRoom, Long> {
             "AND br.room.hotel.id = :hotelId " +
             "AND r.id IS NULL")
     Long findRoomUserHasBookedAndNotComment(Long hotelId, Long userId);
+
+    @Query("SELECT COUNT(b) FROM BookedRoom b")
+    int getTotalNumberOfBookedRooms();
+
+    @Query("SELECT COUNT(b) FROM BookedRoom b WHERE b.bookingDay >= :startDate AND b.bookingDay < :endDate")
+    int getBookedRoomsAddedDuringPeriod(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 }

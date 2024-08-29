@@ -84,18 +84,6 @@ public class HotelController {
         return ResponseEntity.ok(hotelResponses);
     }
 
-    @GetMapping("/PieChart")
-    public ResponseEntity<List<PieChartDTO>> getDataForPieChart(){
-        List<PieChartDTO> PieChartData = hotelServiceImpl.getNumberOfHotelByEachCity();
-        return ResponseEntity.ok(PieChartData);
-    }
-
-    @GetMapping("/BarChart")
-    public ResponseEntity<List<BarChartDTO>> getDataForBarChart(){
-        List<BarChartDTO> barChartData = hotelServiceImpl.getHotelRevenueByEachCity();
-        return ResponseEntity.ok(barChartData);
-    }
-
     @PutMapping("/hotel/{hotelId}/hotelInformationUpdate")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public ResponseEntity<HotelDTO> updateHotel(@PathVariable Long hotelId,

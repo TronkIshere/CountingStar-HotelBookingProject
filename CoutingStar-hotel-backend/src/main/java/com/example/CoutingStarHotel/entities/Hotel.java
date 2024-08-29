@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Blob;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,7 @@ public class Hotel {
     private String hotelLocation;
     private String hotelDescription;
     private String phoneNumber;
+    private LocalDate registerDay;
 
     @Lob
     @JsonIgnore

@@ -37,4 +37,8 @@ public interface HotelServiceImpl {
     List<PieChartDTO> getNumberOfHotelByEachCity();
 
     List<BarChartDTO> getHotelRevenueByEachCity();
+
+    int getTotalNumberOfHotels();
+
+    double getPercentageOfHotelsIncreasedDuringTheMonth();
 }

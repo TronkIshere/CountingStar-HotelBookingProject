@@ -15,4 +15,8 @@ public interface UserServiceImpl {
     User getUser(String email);
 
     Optional<User> getUserById(Long userId);
+
+    int getTotalNumberOfUsers();
+
+    double getPercentageOfUsersIncreasedDuringTheMonth();
 }

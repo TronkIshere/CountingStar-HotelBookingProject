@@ -23,4 +23,8 @@ public interface BookingServiceImpl {
     BookedRoom findByBookingId(Long bookingId);
 
     BookedRoom updateBooked(Long bookingId, LocalDate checkInDate, LocalDate checkOutDate, String guestEmail, String guestPhoneNumber, String guestFullName, int totalNumOfGuest);
+
+    int getTotalNumberOfBookedRooms();
+
+    double getPercentageOfBookedRoomsIncreasedDuringTheMonth();
 }

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -26,6 +27,7 @@ public class User {
     private String email;
     private String password;
     private String phoneNumber;
+    private LocalDate registerDay;
 
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = {CascadeType.PERSIST,
