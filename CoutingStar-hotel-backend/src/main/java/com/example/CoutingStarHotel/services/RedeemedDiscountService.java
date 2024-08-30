@@ -24,7 +24,7 @@ public class RedeemedDiscountService implements RedeemedDiscountServiceImpl {
         User user = userRepository.findById(userId).get();
 
         if (redeemedDiscountRepository.existsByUserIdAndDiscountId(userId, discountId)) {
-            throw new InvalidBookingRequestException("Người dùng đã nhận mã giảm giá này rồi");
+            throw new InvalidBookingRequestException("Người dùng đã nhận mã giảm giá này rồi, hãy kiếm mã giảm giá khác");
         }
 
         RedeemedDiscount redeemedDiscount = new RedeemedDiscount();

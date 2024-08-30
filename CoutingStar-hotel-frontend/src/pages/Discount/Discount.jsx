@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./discount.css";
-import { getDiscountNotExpired, addRedeemedDiscount } from "../../components/utils/ApiFunction";
+import {
+  getDiscountNotExpired,
+  addRedeemedDiscount,
+} from "../../components/utils/ApiFunction";
 import AddDiscount from "../../components/discount/addDiscount/AddDiscount";
 import UpdateDiscount from "../../components/discount/updateDiscount/UpdateDiscount";
 import DeleteDiscount from "../../components/discount/deleteDiscount/DeleteDiscount";
@@ -13,7 +16,7 @@ const Discount = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedDiscountId, setSelectedDiscountId] = useState(null);
   const userRole = localStorage.getItem("userRole");
-  const userId = localStorage.getItem("UserId");
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     const fetchDiscounts = async () => {
@@ -75,14 +78,13 @@ const Discount = () => {
 
   const handleRedeemDiscount = async (discountId) => {
     try {
-      const success = await addRedeemedDiscount(discountId, userId);
-      if (success) {
+      const response = await addRedeemedDiscount(discountId, userId);
+      if (response.status === 200) {
         alert("Mã giảm giá đã được nhận thành công!");
-      } else {
-        alert("Bạn đã nhận mã giảm giá này rồi.");
       }
     } catch (error) {
-      console.error("Error redeeming discount:", error.message);
+      // Hiển thị thông báo lỗi cụ thể
+      alert("Có lỗi xảy ra khi nhận mã giảm giá: " + error.message);
     }
   };
 
@@ -102,13 +104,22 @@ const Discount = () => {
             <div className="discountContent">
               <div className="discountLeftContent">
                 <div className="discountName">{discount.discountName}</div>
-                <div className="percentDiscount">{discount.percentDiscount}%</div>
-                <div className="discountDescription">{discount.discountDescription}</div>
+                <div className="percentDiscount">
+                  {discount.percentDiscount}%
+                </div>
+                <div className="discountDescription">
+                  {discount.discountDescription}
+                </div>
               </div>
               <div className="discountRightContent">
-                <button onClick={() => handleRedeemDiscount(discount.id)}>Nhận ngay!</button>
+                <button onClick={() => handleRedeemDiscount(discount.id)}>
+                  Nhận ngay!
+                </button>
                 <div className="expirationDate">
-                  Ngày hết hạn: {new Date(discount.expirationDate).toLocaleDateString("vi-VN")}
+                  Ngày hết hạn:{" "}
+                  {new Date(discount.expirationDate).toLocaleDateString(
+                    "vi-VN"
+                  )}
                 </div>
               </div>
               {userRole === "ROLE_ADMIN" && (
@@ -135,7 +146,10 @@ const Discount = () => {
       )}
       {errorMessage && <div className="error">{errorMessage}</div>}
       {isAddModalOpen && (
-        <AddDiscount onClose={handleCloseAddModal} handleAddDiscount={handleAddDiscount} />
+        <AddDiscount
+          onClose={handleCloseAddModal}
+          handleAddDiscount={handleAddDiscount}
+        />
       )}
       {isUpdateModalOpen && selectedDiscountId && (
         <UpdateDiscount

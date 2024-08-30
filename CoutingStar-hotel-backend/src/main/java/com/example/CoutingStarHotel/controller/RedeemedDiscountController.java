@@ -3,6 +3,7 @@ package com.example.CoutingStarHotel.controller;
 import com.example.CoutingStarHotel.exception.InvalidBookingRequestException;
 import com.example.CoutingStarHotel.services.impl.RedeemedDiscountServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ public class RedeemedDiscountController {
             return ResponseEntity.ok("Đã nhận được mã giảm giá");
 
         }catch (InvalidBookingRequestException e){
+            System.out.println(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

@@ -474,11 +474,18 @@ export async function deleteDiscount(discountId){
 
 export async function addRedeemedDiscount(discountId, userId) {
 	try {
-		const response = await fetch(`/api/redeemedDiscount/add/${discountId}/${userId}`)
-		return response.data;
+		const response = await api.post(`/redeemedDiscount/add/${discountId}/${userId}`);
+		
+		// Kiểm tra nếu response không phải là OK (status 200)
+		if (response.status !== 200) {
+		  const errorText = await response.data || response.text();  // Lấy nội dung lỗi từ response
+		  throw new Error(errorText || 'Unknown error');
+		}
+		
+		return response;
 	  } catch (error) {
-		console.error("API error:", error.message);
-		return error.message;
+		console.error('Error in addRedeemedDiscount:', error.message);
+		throw error;  // Ném lỗi lên để handleRedeemDiscount xử lý
 	  }
 }
 
