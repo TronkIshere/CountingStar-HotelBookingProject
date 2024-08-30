@@ -1,5 +1,5 @@
 package com.example.CoutingStarHotel.services.impl;
 
 public interface RedeemedDiscountServiceImpl {
-    void createRedeemedDiscountByUserId(Long discountId, Long userId);
+    void addRedeemedDiscountByUserId(Long discountId, Long userId);
 }

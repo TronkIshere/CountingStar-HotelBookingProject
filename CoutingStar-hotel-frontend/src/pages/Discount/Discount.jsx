@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./discount.css";
-import { getDiscountNotExpired } from "../../components/utils/ApiFunction";
+import { getDiscountNotExpired, addRedeemedDiscount } from "../../components/utils/ApiFunction";
 import AddDiscount from "../../components/discount/addDiscount/AddDiscount";
 import UpdateDiscount from "../../components/discount/updateDiscount/UpdateDiscount";
 import DeleteDiscount from "../../components/discount/deleteDiscount/DeleteDiscount";
@@ -13,6 +13,7 @@ const Discount = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedDiscountId, setSelectedDiscountId] = useState(null);
   const userRole = localStorage.getItem("userRole");
+  const userId = localStorage.getItem("UserId");
 
   useEffect(() => {
     const fetchDiscounts = async () => {
@@ -72,6 +73,19 @@ const Discount = () => {
     setIsDeleteModalOpen(false);
   };
 
+  const handleRedeemDiscount = async (discountId) => {
+    try {
+      const success = await addRedeemedDiscount(discountId, userId);
+      if (success) {
+        alert("Mã giảm giá đã được nhận thành công!");
+      } else {
+        alert("Bạn đã nhận mã giảm giá này rồi.");
+      }
+    } catch (error) {
+      console.error("Error redeeming discount:", error.message);
+    }
+  };
+
   return (
     <div className="container">
       {userRole === "ROLE_ADMIN" && (
@@ -92,7 +106,7 @@ const Discount = () => {
                 <div className="discountDescription">{discount.discountDescription}</div>
               </div>
               <div className="discountRightContent">
-                <button>Nhận ngay!</button>
+                <button onClick={() => handleRedeemDiscount(discount.id)}>Nhận ngay!</button>
                 <div className="expirationDate">
                   Ngày hết hạn: {new Date(discount.expirationDate).toLocaleDateString("vi-VN")}
                 </div>

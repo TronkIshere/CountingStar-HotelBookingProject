@@ -166,11 +166,6 @@ export async function getRoomsByHotelId(hotelId){
 /* This function saves a new booking to the databse */
 export async function bookRoom(roomId, booking, userId) {
     try {
-
-		console.log(roomId)
-		console.log(booking)
-		console.log(userId)
-
         const response = await api.post(
 			`/bookings/room/${roomId}/booking?userId=${userId}`,
 			booking, 
@@ -475,5 +470,15 @@ export async function deleteDiscount(discountId){
 	} catch (error) {
 		return error.message
 	}
+}
+
+export async function addRedeemedDiscount(discountId, userId) {
+	try {
+		const response = await fetch(`/api/redeemedDiscount/add/${discountId}/${userId}`)
+		return response.data;
+	  } catch (error) {
+		console.error("API error:", error.message);
+		return error.message;
+	  }
 }
 

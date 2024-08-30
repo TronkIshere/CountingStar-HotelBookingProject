@@ -13,11 +13,11 @@ public class RedeemedDiscount {
     private Long id;
     private boolean isUsed;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Discount_id")
     private Discount discount;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "User_id")
     private User user;
 

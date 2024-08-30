@@ -46,8 +46,8 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rating> rating;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private RedeemedDiscount redeemedDiscount;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<RedeemedDiscount> redeemedDiscount;
 
     public void addBooking(BookedRoom booking) {
         if (bookedRooms == null) {

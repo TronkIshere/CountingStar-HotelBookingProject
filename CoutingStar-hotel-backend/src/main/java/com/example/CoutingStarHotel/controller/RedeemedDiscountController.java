@@ -6,17 +6,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+
 @CrossOrigin("http://localhost:5173")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/redeemedDiscount")
 public class RedeemedDiscountController {
     private final RedeemedDiscountServiceImpl redeemedDiscountServiceImpl;
-    @GetMapping("/get/{discountId}/{userId}")
-    private ResponseEntity<?> createRedeemedDiscountByUserId(@PathVariable Long userId,
-                                                             @PathVariable Long discountId){
+    @PostMapping("/add/{discountId}/{userId}")
+    public ResponseEntity<?> addRedeemedDiscountByUserId(@PathVariable Long userId,
+                                                         @PathVariable Long discountId){
         try{
-            redeemedDiscountServiceImpl.createRedeemedDiscountByUserId(discountId,userId);
+            redeemedDiscountServiceImpl.addRedeemedDiscountByUserId(discountId,userId);
             return ResponseEntity.ok("Đã nhận được mã giảm giá");
 
         }catch (InvalidBookingRequestException e){

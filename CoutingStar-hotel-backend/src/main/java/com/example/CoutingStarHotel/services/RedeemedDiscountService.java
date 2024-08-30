@@ -3,6 +3,7 @@ package com.example.CoutingStarHotel.services;
 import com.example.CoutingStarHotel.entities.Discount;
 import com.example.CoutingStarHotel.entities.RedeemedDiscount;
 import com.example.CoutingStarHotel.entities.User;
+import com.example.CoutingStarHotel.exception.InvalidBookingRequestException;
 import com.example.CoutingStarHotel.repositories.DiscountRepository;
 import com.example.CoutingStarHotel.repositories.RedeemedDiscountRepository;
 import com.example.CoutingStarHotel.repositories.UserRepository;
@@ -18,9 +19,14 @@ public class RedeemedDiscountService implements RedeemedDiscountServiceImpl {
     private final UserRepository userRepository;
 
     @Override
-    public void createRedeemedDiscountByUserId(Long discountId, Long userId) {
+    public void addRedeemedDiscountByUserId(Long discountId, Long userId) {
         Discount discount = discountRepository.findById(discountId).get();
         User user = userRepository.findById(userId).get();
+
+        if (redeemedDiscountRepository.existsByUserIdAndDiscountId(userId, discountId)) {
+            throw new InvalidBookingRequestException("Người dùng đã nhận mã giảm giá này rồi");
+        }
+
         RedeemedDiscount redeemedDiscount = new RedeemedDiscount();
         user.addRedeemedDiscount(redeemedDiscount);
         discount.addRedeemedDiscount(redeemedDiscount);

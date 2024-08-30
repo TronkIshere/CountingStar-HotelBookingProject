@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,8 +24,8 @@ public class Discount {
     private LocalDate createDate;
     private LocalDate expirationDate;
 
-    @OneToOne(mappedBy = "discount", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private RedeemedDiscount redeemedDiscount;
+    @OneToMany(mappedBy = "discount", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<RedeemedDiscount> redeemedDiscount;
 
     public void addRedeemedDiscount(RedeemedDiscount redeemedDiscount) {
         redeemedDiscount.setDiscount(this);
