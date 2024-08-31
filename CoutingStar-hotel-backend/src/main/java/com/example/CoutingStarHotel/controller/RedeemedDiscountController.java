@@ -23,7 +23,7 @@ public class RedeemedDiscountController {
             return ResponseEntity.ok("Đã nhận được mã giảm giá");
 
         }catch (InvalidBookingRequestException e){
-            System.out.println(e.getMessage());
+            System.out.println(ResponseEntity.badRequest().body(e.getMessage()));
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

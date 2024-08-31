@@ -80,7 +80,7 @@ const Discount = () => {
     try {
       const response = await addRedeemedDiscount(discountId, userId);
       if (response.status === 200) {
-        alert("Mã giảm giá đã được nhận thành công!");
+        alert(response.message);
       }
     } catch (error) {
       // Hiển thị thông báo lỗi cụ thể

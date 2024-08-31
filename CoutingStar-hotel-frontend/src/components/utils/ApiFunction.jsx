@@ -478,14 +478,20 @@ export async function addRedeemedDiscount(discountId, userId) {
 		
 		// Kiểm tra nếu response không phải là OK (status 200)
 		if (response.status !== 200) {
-		  const errorText = await response.data || response.text();  // Lấy nội dung lỗi từ response
-		  throw new Error(errorText || 'Unknown error');
+		  const errorText = response.data || response.statusText;  // Lấy nội dung lỗi từ response
+		  throw new Error(errorText);
 		}
 		
 		return response;
 	  } catch (error) {
-		console.error('Error in addRedeemedDiscount:', error.message);
-		throw error;  // Ném lỗi lên để handleRedeemDiscount xử lý
+		// Kiểm tra nếu lỗi có phản hồi từ server
+		if (error.response && error.response.data) {
+		  console.error('Error in addRedeemedDiscount:', error.response.data);
+		  throw new Error(error.response.data);  // Trả về lỗi từ server
+		} else {
+		  console.error('Error in addRedeemedDiscount:', error.message);
+		  throw new Error('Có lỗi xảy ra khi thực hiện yêu cầu.');
+		}
 	  }
-}
+   }
 
