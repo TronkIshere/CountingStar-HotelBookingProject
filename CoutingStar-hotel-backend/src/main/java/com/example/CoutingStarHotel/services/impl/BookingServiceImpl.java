@@ -10,7 +10,7 @@ public interface BookingServiceImpl {
 
     BookedRoom findByBookingConfirmationCode(String confirmationCode);
 
-    String saveBooking(Long roomId, BookedRoom bookingRequest, Long UserId);
+    String saveBooking(Long roomId, BookedRoom bookingRequest, Long UserId, Long RedeemedDiscountId);
 
     void cancelBooking(Long bookingId);
 

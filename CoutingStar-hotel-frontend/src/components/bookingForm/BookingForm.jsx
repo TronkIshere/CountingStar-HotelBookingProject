@@ -2,11 +2,19 @@ import React, { useState, useEffect } from "react";
 import "./bookingForm.css";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
-import { getRoomById, getUserByEmail, bookRoom } from "../utils/ApiFunction";
+import { getRoomById, getUserByEmail, bookRoom, getAllRedeemedDiscountByUserId } from "../utils/ApiFunction";
 import moment from "moment";
 
 const BookingForm = ({ roomId, onClose }) => {
   const [openDate, setOpenDate] = useState(false);
+  const [redeemedDiscounts, setRedeemedDiscounts] = useState([]);
+  const [selectedDiscount, setSelectedDiscount] = useState(null);
+  const [totalPayment, setTotalPayment] = useState(0);
+  const [error, setError] = useState("");
+  const userEmail = localStorage.getItem("userEmail");
+  const userId = localStorage.getItem("userId");
+  const [adults, setAdults] = useState(1);
+  const [children, setChildren] = useState(0);
   const [date, setDate] = useState([
     {
       startDate: new Date(),
@@ -28,11 +36,6 @@ const BookingForm = ({ roomId, onClose }) => {
     email: "",
     phoneNumber: "",
   });
-  const [totalPayment, setTotalPayment] = useState(0);
-  const [error, setError] = useState("");
-
-  const userEmail = localStorage.getItem("userEmail");
-  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     if (userEmail) {
@@ -49,20 +52,35 @@ const BookingForm = ({ roomId, onClose }) => {
   }, [userEmail]);
 
   useEffect(() => {
+    if (userId) {
+      const fetchUserRedeemedDiscount = async () => {
+        try {
+          const response = await getAllRedeemedDiscountByUserId(userId);
+          console.log(response)
+          setRedeemedDiscounts(response);
+        } catch (error) {
+          console.error("Error fetching user:", error.message);
+          setError(error.message);
+        }
+      };
+      fetchUserRedeemedDiscount();
+    }
+  }, [userId]);
+
+  useEffect(() => {
     const fetchRoom = async () => {
       try {
         const response = await getRoomById(roomId);
         setRoomInfo(response);
       } catch (error) {
         console.error("Error fetching room:", error.message);
+        setError(error.message);
       }
     };
 
     fetchRoom();
   }, [roomId]);
 
-  const [adults, setAdults] = useState(1);
-  const [children, setChildren] = useState(0);
 
   useEffect(() => {
     const storedCheckInDate = localStorage.getItem("checkInDate");
@@ -87,10 +105,26 @@ const BookingForm = ({ roomId, onClose }) => {
 
   const handleDateChange = (item) => {
     setDate([item.selection]);
-    updateTotalPayment(item.selection.startDate, item.selection.endDate);
+    updateTotalPayment(item.selection.startDate, item.selection.endDate, selectedDiscount);
+  };
+
+  const handleDiscountChange = (e) => {
+    const selectedDiscountId = e.target.value;
+
+    // Nếu chọn phần tử đầu tiên, đặt mã giảm giá là null
+    if (selectedDiscountId === "") {
+      setSelectedDiscount(null);
+      updateTotalPayment(date[0].startDate, date[0].endDate, null);
+    } else {
+      const discount = redeemedDiscounts.find(d => d.id === parseInt(selectedDiscountId, 10));
+      setSelectedDiscount(discount);
+      updateTotalPayment(date[0].startDate, date[0].endDate, discount);
+    }
+    console.log(selectedDiscountId)
   };
 
   const handleSubmit = async () => {
+    // Tạo đối tượng booking với discountId là id của discount hoặc null nếu không chọn mã giảm giá
     const booking = {
       guestFullName: `${user.firstName} ${user.lastName}`,
       checkInDate: date[0].startDate.toISOString(),
@@ -99,11 +133,13 @@ const BookingForm = ({ roomId, onClose }) => {
       guestEmail: user.email,
       numOfAdults: adults,
       numOfChildren: children,
-      totalPayment: calculatePayment(date[0].startDate, date[0].endDate),
+      totalPayment: calculatePayment(date[0].startDate, date[0].endDate, selectedDiscount),
+      discountId: selectedDiscount ? selectedDiscount.id : null, // Truyền discountId hoặc null
     };
 
     try {
-      await bookRoom(roomId, booking, userId);
+      const redeemedDiscountId = booking.discountId ? parseInt(booking.discountId, 10) : null;
+      await bookRoom(roomId, booking, userId, redeemedDiscountId);
       localStorage.setItem("checkInDate", booking.checkInDate);
       localStorage.setItem("checkOutDate", booking.checkOutDate);
       localStorage.setItem("adults", adults);
@@ -115,16 +151,20 @@ const BookingForm = ({ roomId, onClose }) => {
     }
   };
 
-  const calculatePayment = (checkInDate, checkOutDate) => {
+  const calculatePayment = (checkInDate, checkOutDate, discount) => {
     const checkIn = moment(checkInDate);
     const checkOut = moment(checkOutDate);
     const diffInDays = checkOut.diff(checkIn, "days");
     const price = room.roomPrice ? room.roomPrice : 0;
-    return diffInDays * price;
+    const total = diffInDays * price;
+    if (discount) {
+      return total - (total * discount.percentDiscount / 100);
+    }
+    return total;
   };
 
-  const updateTotalPayment = (checkInDate, checkOutDate) => {
-    const total = calculatePayment(checkInDate, checkOutDate);
+  const updateTotalPayment = (checkInDate, checkOutDate, discount = selectedDiscount) => {
+    const total = calculatePayment(checkInDate, checkOutDate, discount);
     setTotalPayment(total);
   };
 
@@ -222,21 +262,25 @@ const BookingForm = ({ roomId, onClose }) => {
                 onChange={handleDateChange}
                 moveRangeOnFirstSelection={false}
                 ranges={date}
-                className="date"
-                minDate={new Date()}
               />
             )}
           </div>
-        </div>
-        <div className="totalPayment">
+          <select onChange={handleDiscountChange}>
+            <option value="">Chọn mã giảm giá (nếu có)</option>
+            {redeemedDiscounts.map((discount) => (
+              <option key={discount.id} value={discount.id}>
+                {discount.discountName} ({discount.percentDiscount}%) {discount.used ? " - Đã sử dụng" : ""}
+              </option>
+            ))}
+          </select>
           <p>
-            <strong>Tổng số tiền:</strong> {totalPayment} $
+            <strong>Tổng thanh toán:</strong> {totalPayment} VND
           </p>
-          {error && <p className="error">{error}</p>}
+          <button onClick={handleSubmit} className="submitButton">
+            Đặt phòng
+          </button>
         </div>
-        <button className="submitButton" onClick={handleSubmit}>
-          Đặt phòng
-        </button>
+        {error && <p className="error">{error}</p>}
       </div>
     </div>
   );

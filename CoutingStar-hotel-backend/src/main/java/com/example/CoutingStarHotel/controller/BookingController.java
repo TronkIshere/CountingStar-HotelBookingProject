@@ -73,9 +73,11 @@ public class BookingController {
     @PostMapping("/room/{roomId}/booking")
     public ResponseEntity<?> saveBooking(@PathVariable Long roomId,
                                          @RequestBody BookedRoom bookingRequest,
-                                         @RequestParam(required = false) Long userId){
+                                         @RequestParam(required = false) Long userId,
+                                         @RequestParam(required = false) Long redeemedDiscountId){
         try{
-            String confirmationCode = bookingServiceImpl.saveBooking(roomId, bookingRequest, userId);
+            System.out.println("RedeemedDiscountId: " + redeemedDiscountId);
+            String confirmationCode = bookingServiceImpl.saveBooking(roomId, bookingRequest, userId, redeemedDiscountId);
             return ResponseEntity.ok(
                     "Room booked successfully, Your booking confirmation code is :" + confirmationCode);
 

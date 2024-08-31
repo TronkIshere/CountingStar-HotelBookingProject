@@ -164,10 +164,10 @@ export async function getRoomsByHotelId(hotelId){
 }
 
 /* This function saves a new booking to the databse */
-export async function bookRoom(roomId, booking, userId) {
+export async function bookRoom(roomId, booking, userId, redeemedDiscountId) {
     try {
         const response = await api.post(
-			`/bookings/room/${roomId}/booking?userId=${userId}`,
+			`/bookings/room/${roomId}/booking?userId=${userId}&redeemedDiscountId=${redeemedDiscountId}`,
 			booking, 
 			{headers: getHeader()}
 		);
@@ -494,4 +494,14 @@ export async function addRedeemedDiscount(discountId, userId) {
 		}
 	  }
    }
+
+   export async function getAllRedeemedDiscountByUserId(userId){
+	try{
+		const response = await api.get(`/redeemedDiscount/list/${userId}`)
+		return response.data 
+	} catch(error) {
+		throw new Error("Error feching data")
+	}
+}
+
 

@@ -97,4 +97,8 @@ public class BookedRoom {
     public void addComment(Rating rating) {
         rating.setBookedRoom(this);
     }
+
+    public void addDiscount(RedeemedDiscount redeemedDiscount) {
+        redeemedDiscount.setBookedRoom(this);
+    }
 }

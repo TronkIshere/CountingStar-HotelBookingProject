@@ -1,4 +1,4 @@
-/* CSS Styling */
+/* bookingForm.css */
 .modal_overlay {
   position: fixed;
   top: 0;
@@ -14,70 +14,64 @@
 
 .bookingForm {
   background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   text-align: center;
   max-width: 600px;
-  width: 90%;
+  width: 100%;
   position: relative;
+
+  max-height: 80%;
+  overflow-y: auto;
+  scrollbar-width: none;
 }
 
 .bookingForm h1 {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   color: #0071c2;
-}
-
-.bookingForm p {
-  text-align: left;
-  margin: 10px 0;
-}
-
-.bookingForm img {
-  width: 100%;
-  height: auto;
-  border-radius: 5px;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 .roomContent {
   display: flex;
   gap: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
-.roomImg {
-  flex: 1;
+.roomImg img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
 }
 
-.roomDetail {
-  flex: 2;
+.roomDetail p {
   text-align: left;
+  margin: 10px 0;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 .userInfoInput {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 15px;
   margin-bottom: 20px;
 }
 
 .userInfoInput input {
-  height: 40px;
+  height: 45px;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 16px;
 }
 
 .dateSelection {
-  height: 40px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-  display: inline-block;
-  width: 100%;
-  cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-bottom: 20px;
 }
 
 .date {
@@ -87,9 +81,33 @@
   z-index: 1000;
   background: white;
   border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+}
+
+.discountSelection {
+  margin-bottom: 20px;
+}
+
+.discountSelection select {
+  width: 100%;
+  height: 45px;
   padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.totalPayment {
+  margin: 20px 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.errorMessage {
+  color: red;
+  margin-bottom: 20px;
 }
 
 .submitButton {
@@ -99,9 +117,9 @@
   color: white;
   font-weight: 500;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .submitButton:hover {
@@ -123,4 +141,5 @@
   width: 100%;
   padding: 10px;
   font-size: 16px;
+  cursor: pointer;
 }

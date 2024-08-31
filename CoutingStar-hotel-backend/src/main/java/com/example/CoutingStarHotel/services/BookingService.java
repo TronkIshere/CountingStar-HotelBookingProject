@@ -1,12 +1,15 @@
 package com.example.CoutingStarHotel.services;
 
+import com.example.CoutingStarHotel.entities.RedeemedDiscount;
 import com.example.CoutingStarHotel.exception.InvalidBookingRequestException;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.entities.BookedRoom;
 import com.example.CoutingStarHotel.entities.Room;
 import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.repositories.BookingRepository;
+import com.example.CoutingStarHotel.repositories.RedeemedDiscountRepository;
 import com.example.CoutingStarHotel.services.impl.BookingServiceImpl;
+import com.example.CoutingStarHotel.services.impl.RedeemedDiscountServiceImpl;
 import com.example.CoutingStarHotel.services.impl.RoomServiceImpl;
 import com.example.CoutingStarHotel.services.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +30,8 @@ class BookingService implements BookingServiceImpl {
     private final BookingRepository bookingRepository;
     private final RoomServiceImpl roomService;
     private final UserServiceImpl userService;
-
+    private final RedeemedDiscountServiceImpl redeemedDiscountService;
+    private final RedeemedDiscountRepository redeemedDiscountRepository;
 
     @Override
     public List<BookedRoom> getAllBookings() {
@@ -44,7 +48,7 @@ class BookingService implements BookingServiceImpl {
     }
 
     @Override
-    public String saveBooking(Long roomId, BookedRoom bookingRequest, Long userId) {
+    public String saveBooking(Long roomId, BookedRoom bookingRequest, Long userId, Long RedeemedDiscountId) {
         if (bookingRequest.getCheckOutDate().isBefore(bookingRequest.getCheckInDate())){
             throw new InvalidBookingRequestException("Check-in date must come before check-out date");
         }
@@ -59,12 +63,23 @@ class BookingService implements BookingServiceImpl {
         boolean roomIsAvailable = roomIsAvailable(bookingRequest, existingBookings);
         if (roomIsAvailable){
             room.addBooking(bookingRequest);
-
             long bookingDays = ChronoUnit.DAYS.between(bookingRequest.getCheckInDate(), bookingRequest.getCheckOutDate());
             BigDecimal roomPrice = room.getRoomPrice();
             BigDecimal daysBigDecimal = BigDecimal.valueOf(bookingDays);
             BigDecimal totalAmount = daysBigDecimal.multiply(roomPrice);
 
+            if(RedeemedDiscountId != null){
+                RedeemedDiscount redeemedDiscount = redeemedDiscountService.findRedeemedDiscountById(RedeemedDiscountId);
+                if(redeemedDiscount.isUsed()) {
+                    throw new InvalidBookingRequestException("Mã giảm giá đã được sử dụng, hãy chọn cái khác!");
+                }
+                BigDecimal discountPercent = BigDecimal.valueOf(redeemedDiscount.getDiscount().getPercentDiscount());
+                BigDecimal discountAmount = totalAmount.multiply(discountPercent).divide(BigDecimal.valueOf(100));
+                totalAmount = totalAmount.subtract(discountAmount);
+                redeemedDiscount.setUsed(true);
+                bookingRequest.addDiscount(redeemedDiscount);
+                redeemedDiscountRepository.save(redeemedDiscount);
+            }
             bookingRequest.setTotalAmount(totalAmount);
             bookingRepository.save(bookingRequest);
         } else {
