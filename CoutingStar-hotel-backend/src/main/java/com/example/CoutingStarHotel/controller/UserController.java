@@ -2,7 +2,7 @@ package com.example.CoutingStarHotel.controller;
 
 import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.DTO.UserDTO;
-import com.example.CoutingStarHotel.services.impl.UserServiceImpl;
+import com.example.CoutingStarHotel.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,18 +16,18 @@ import java.util.List;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<User>> getUsers(){
-        return new ResponseEntity<>(userServiceImpl.getUsers(), HttpStatus.FOUND);
+        return new ResponseEntity<>(userService.getUsers(), HttpStatus.FOUND);
     }
 
     @GetMapping("/{email}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public ResponseEntity<?> getUserByEmail(@PathVariable("email") String email){
         try{
-            User theUser = userServiceImpl.getUser(email);
+            User theUser = userService.getUser(email);
             UserDTO userResponse = new UserDTO(theUser);
             return ResponseEntity.ok(userResponse);
         }catch (UsernameNotFoundException e){
@@ -41,7 +41,7 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_USER') or hasRole('ROLE_HOTEL_OWNER') and #email == principal.username)")
     public ResponseEntity<String> deleteUser(@PathVariable("userId") String email){
         try{
-            userServiceImpl.deleteUser(email);
+            userService.deleteUser(email);
             return ResponseEntity.ok("User deleted successfully");
         }catch (UsernameNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

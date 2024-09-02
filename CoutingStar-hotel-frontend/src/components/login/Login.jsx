@@ -33,6 +33,13 @@ const Login = ({ onClose }) => {
       setErrorMessage("");
     }, 4000);
   };
+  const googleLogin = () => {
+    window.location.href = "http://localhost:9192/oauth2/authorization/google"
+  }
+
+  const githubLogin = () => {
+    window.location.href = "http://localhost:9192/oauth2/authorization/github"
+  }
 
   return (
     <div className="modal_overlay" onClick={onClose}>
@@ -60,6 +67,9 @@ const Login = ({ onClose }) => {
         <button type="submit" className="loginButton">Đăng nhập</button>
         {errorMessage && <div className="error">{errorMessage}</div>}
       </form>
+      <button onClick={googleLogin}>Đăng nhập bằng google</button>
+      hoặc 
+      <button onClick={githubLogin}>Đăng nhập bằng github</button>
     </div>
   );
 };

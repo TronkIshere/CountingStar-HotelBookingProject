@@ -3,7 +3,7 @@ package com.example.CoutingStarHotel.controller;
 import com.example.CoutingStarHotel.DTO.RedeemedDiscountDTO;
 import com.example.CoutingStarHotel.entities.RedeemedDiscount;
 import com.example.CoutingStarHotel.exception.InvalidBookingRequestException;
-import com.example.CoutingStarHotel.services.impl.RedeemedDiscountServiceImpl;
+import com.example.CoutingStarHotel.services.RedeemedDiscountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +16,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/redeemedDiscount")
 public class RedeemedDiscountController {
-    private final RedeemedDiscountServiceImpl redeemedDiscountServiceImpl;
+    private final RedeemedDiscountService redeemedDiscountService;
     @PostMapping("/add/{discountId}/{userId}")
     public ResponseEntity<?> addRedeemedDiscountByUserId(@PathVariable Long userId,
                                                          @PathVariable Long discountId){
         try{
-            redeemedDiscountServiceImpl.addRedeemedDiscountByUserId(discountId,userId);
+            redeemedDiscountService.addRedeemedDiscountByUserId(discountId,userId);
             return ResponseEntity.ok("Đã nhận được mã giảm giá");
 
         }catch (InvalidBookingRequestException e){
@@ -34,7 +34,7 @@ public class RedeemedDiscountController {
     public ResponseEntity<?> getAllRedeemedDiscountByUserId(@PathVariable Long userId){
         try{
             System.out.println(userId);
-            List<RedeemedDiscount> redeemedDiscounts = redeemedDiscountServiceImpl.getAllRedeemedDiscountByUserId(userId);
+            List<RedeemedDiscount> redeemedDiscounts = redeemedDiscountService.getAllRedeemedDiscountByUserId(userId);
             List<RedeemedDiscountDTO> redeemedDiscountDTOS = new ArrayList<>();
             for(RedeemedDiscount redeemedDiscount : redeemedDiscounts) {
                 RedeemedDiscountDTO ratingResponse = getRedeemedDiscountDTO(redeemedDiscount);

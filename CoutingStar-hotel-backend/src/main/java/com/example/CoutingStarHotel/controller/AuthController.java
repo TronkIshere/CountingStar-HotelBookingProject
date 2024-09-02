@@ -7,7 +7,7 @@ import com.example.CoutingStarHotel.DTO.JwtDTO;
 import com.example.CoutingStarHotel.DTO.UserDTO;
 import com.example.CoutingStarHotel.security.jwt.JwtUtils;
 import com.example.CoutingStarHotel.security.user.HotelUserDetails;
-import com.example.CoutingStarHotel.services.impl.UserServiceImpl;
+import com.example.CoutingStarHotel.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ import java.util.List;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    private final UserServiceImpl userService;
+    private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     @PostMapping("/register-user")

@@ -3,10 +3,10 @@ package com.example.CoutingStarHotel.controller;
 import com.example.CoutingStarHotel.DTO.BarChartDTO;
 import com.example.CoutingStarHotel.DTO.DashBoardMonthIncreasedDTO;
 import com.example.CoutingStarHotel.DTO.PieChartDTO;
-import com.example.CoutingStarHotel.services.impl.BookingServiceImpl;
-import com.example.CoutingStarHotel.services.impl.HotelServiceImpl;
-import com.example.CoutingStarHotel.services.impl.RatingServiceImpl;
-import com.example.CoutingStarHotel.services.impl.UserServiceImpl;
+import com.example.CoutingStarHotel.services.BookingService;
+import com.example.CoutingStarHotel.services.HotelService;
+import com.example.CoutingStarHotel.services.RatingService;
+import com.example.CoutingStarHotel.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,34 +21,33 @@ import java.util.List;
 @RestController
 @RequestMapping("/dashboard")
 public class DashboardController {
-    private final UserServiceImpl userServiceImpl;
-
-    private final HotelServiceImpl hotelServiceImpl;
-    private final BookingServiceImpl bookingServiceImpl;
-    private final RatingServiceImpl ratingServiceImpl;
+    private final UserService userService;
+    private final HotelService hotelService;
+    private final BookingService bookingService;
+    private final RatingService ratingService;
     @GetMapping("/PieChart")
     public ResponseEntity<List<PieChartDTO>> getDataForPieChart(){
-        List<PieChartDTO> PieChartData = hotelServiceImpl.getNumberOfHotelByEachCity();
+        List<PieChartDTO> PieChartData = hotelService.getNumberOfHotelByEachCity();
         return ResponseEntity.ok(PieChartData);
     }
 
     @GetMapping("/BarChart")
     public ResponseEntity<List<BarChartDTO>> getDataForBarChart(){
-        List<BarChartDTO> barChartData = hotelServiceImpl.getHotelRevenueByEachCity();
+        List<BarChartDTO> barChartData = hotelService.getHotelRevenueByEachCity();
         return ResponseEntity.ok(barChartData);
     }
 
     @GetMapping("/dashBoardMonthIncreased")
     public ResponseEntity<DashBoardMonthIncreasedDTO> getDataForDashBoardMonthIncreased(){
         DashBoardMonthIncreasedDTO dashBoardMonthIncreasedData = new DashBoardMonthIncreasedDTO();
-        dashBoardMonthIncreasedData.setTotalNumberOfUsers(userServiceImpl.getTotalNumberOfUsers());
-        dashBoardMonthIncreasedData.setPercentageOfUsersIncreasedDuringTheMonth(userServiceImpl.getPercentageOfUsersIncreasedDuringTheMonth());
-        dashBoardMonthIncreasedData.setTotalNumberOfHotels(hotelServiceImpl.getTotalNumberOfHotels());
-        dashBoardMonthIncreasedData.setPercentageOfHotelsIncreasedDuringTheMonth(hotelServiceImpl.getPercentageOfHotelsIncreasedDuringTheMonth());
-        dashBoardMonthIncreasedData.setTotalNumberOfBookedRooms(bookingServiceImpl.getTotalNumberOfBookedRooms());
-        dashBoardMonthIncreasedData.setPercentageOfBookedRoomsIncreasedDuringTheMonth(bookingServiceImpl.getPercentageOfBookedRoomsIncreasedDuringTheMonth());
-        dashBoardMonthIncreasedData.setTotalNumberOfComments(ratingServiceImpl.getTotalNumberOfComments());
-        dashBoardMonthIncreasedData.setPercentageOfCommentsIncreaseDuringTheMonth(ratingServiceImpl.getPercentageOfCommentsIncreaseDuringTheMonth());
+        dashBoardMonthIncreasedData.setTotalNumberOfUsers(userService.getTotalNumberOfUsers());
+        dashBoardMonthIncreasedData.setPercentageOfUsersIncreasedDuringTheMonth(userService.getPercentageOfUsersIncreasedDuringTheMonth());
+        dashBoardMonthIncreasedData.setTotalNumberOfHotels(hotelService.getTotalNumberOfHotels());
+        dashBoardMonthIncreasedData.setPercentageOfHotelsIncreasedDuringTheMonth(hotelService.getPercentageOfHotelsIncreasedDuringTheMonth());
+        dashBoardMonthIncreasedData.setTotalNumberOfBookedRooms(bookingService.getTotalNumberOfBookedRooms());
+        dashBoardMonthIncreasedData.setPercentageOfBookedRoomsIncreasedDuringTheMonth(bookingService.getPercentageOfBookedRoomsIncreasedDuringTheMonth());
+        dashBoardMonthIncreasedData.setTotalNumberOfComments(ratingService.getTotalNumberOfComments());
+        dashBoardMonthIncreasedData.setPercentageOfCommentsIncreaseDuringTheMonth(ratingService.getPercentageOfCommentsIncreaseDuringTheMonth());
         return ResponseEntity.ok(dashBoardMonthIncreasedData);
     }
 }
