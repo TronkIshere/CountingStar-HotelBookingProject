@@ -10,6 +10,9 @@ import com.example.CoutingStarHotel.repositories.HotelRepository;
 import com.example.CoutingStarHotel.repositories.UserRepository;
 import com.example.CoutingStarHotel.services.HotelService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -123,8 +126,9 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public List<Hotel> getAllHotelsByCity(String city){
-        return hotelRepository.findAllHotelsByCity(city);
+    public Page<Hotel> getAllHotelsByCity(String city, Integer pageNo, Integer pageSize){
+        Pageable paging = PageRequest.of(pageNo, pageSize);
+        return hotelRepository.findAllHotelsByCity(city, paging);
     }
 
     @Override

@@ -84,3 +84,14 @@
 .listResult{
     flex: 3;
 }
+
+.pagination{
+    display: flex;
+    justify-content: center;
+    padding-bottom: 1rem;
+}
+
+.pagination button.active {
+    background-color: #007bff;
+    color: white;
+}

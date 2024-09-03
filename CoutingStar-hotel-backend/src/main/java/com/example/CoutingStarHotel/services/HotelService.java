@@ -3,6 +3,7 @@ package com.example.CoutingStarHotel.services;
 import com.example.CoutingStarHotel.DTO.BarChartDTO;
 import com.example.CoutingStarHotel.DTO.PieChartDTO;
 import com.example.CoutingStarHotel.entities.Hotel;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ public interface HotelService {
     List<Hotel> getAllHotels();
 
 
-    List<Hotel> getAllHotelsByCity(String city);
+    Page<Hotel> getAllHotelsByCity(String city, Integer pageNo, Integer pageSize);
 
     byte[] getHotelPhotobyHotelId(Long hotelId) throws SQLException;
 

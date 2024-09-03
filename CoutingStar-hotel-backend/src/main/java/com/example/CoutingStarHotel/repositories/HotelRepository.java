@@ -3,6 +3,8 @@ package com.example.CoutingStarHotel.repositories;
 import com.example.CoutingStarHotel.DTO.BarChartDTO;
 import com.example.CoutingStarHotel.DTO.PieChartDTO;
 import com.example.CoutingStarHotel.entities.Hotel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,7 +14,7 @@ import java.util.List;
 
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
     @Query("SELECT distinct h FROM Hotel h WHERE h.city = :city")
-    List<Hotel> findAllHotelsByCity(@Param("city") String city);
+    Page<Hotel> findAllHotelsByCity(@Param("city") String city, Pageable pageable);
 
     @Query("SELECT MIN(r.roomPrice) FROM Room r WHERE r.hotel.id = :hotelId")
     Long getHotelLowestPriceByHotelId(Long hotelId);

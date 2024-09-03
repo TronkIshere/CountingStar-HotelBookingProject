@@ -7,6 +7,7 @@ import com.example.CoutingStarHotel.entities.Hotel;
 import com.example.CoutingStarHotel.DTO.HotelDTO;
 import com.example.CoutingStarHotel.services.HotelService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -74,11 +75,11 @@ public class HotelController {
     }
 
     @GetMapping("/{city}")
-    public ResponseEntity<List<HotelDTO>> getHotelsByCity(@PathVariable String city){
-        List<Hotel> hotels = hotelService.getAllHotelsByCity(city);
-        List<HotelDTO> hotelResponses = hotels.stream()
-                .map(this::getHotelResponse)
-                .collect(Collectors.toList());
+    public ResponseEntity<Page<HotelDTO>> getHotelsByCity(@PathVariable String city,
+                                                          @RequestParam(defaultValue = "0") Integer pageNo,
+                                                          @RequestParam(defaultValue = "5") Integer pageSize){
+        Page<Hotel> hotels = hotelService.getAllHotelsByCity(city, pageNo, pageSize);
+        Page<HotelDTO> hotelResponses = hotels.map(this::getHotelResponse);
         return ResponseEntity.ok(hotelResponses);
     }
 

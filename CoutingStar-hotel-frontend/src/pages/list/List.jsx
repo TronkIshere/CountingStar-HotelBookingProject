@@ -23,20 +23,23 @@ const List = () => {
   const [destination, setDestination] = useState(initialDestination);
   const [date, setDate] = useState(initialDate);
   const [options, setOptions] = useState(initialOptions);
+  const [pageNo, setPageNo] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     fetchHotels();
-  }, []);
-
-  useEffect(() => {
-    setDestination(initialDestination);
-    setDate(initialDate);
-  }, [initialDestination, initialDate]);
+  }, [destination, pageNo, pageSize]);
 
   const fetchHotels = async () => {
     try {
-      const hotelsData = await getHotelsByCity(decodeURIComponent(destination));
-      setHotels(hotelsData);
+      const hotelsData = await getHotelsByCity(
+        decodeURIComponent(destination),
+        pageNo,
+        pageSize
+      );
+      setHotels(hotelsData.content);
+      setTotalPages(hotelsData.totalPages);
     } catch (error) {
       console.error("Error fetching hotels:", error);
     }
@@ -44,6 +47,7 @@ const List = () => {
 
   const handleDestinationChange = (e) => {
     setDestination(e.target.value);
+    setPageNo(0); // Reset về trang đầu khi thay đổi điểm đến
   };
 
   const handleDateChange = (item) => {
@@ -59,6 +63,10 @@ const List = () => {
 
   const handleSearch = () => {
     fetchHotels();
+  };
+
+  const handlePageChange = (newPage) => {
+    setPageNo(newPage);
   };
 
   return (
@@ -148,16 +156,43 @@ const List = () => {
             </div>
             <button onClick={handleSearch}>Tìm kiếm</button>
           </div>
-          <div className="listResult">
-            {hotels.length > 0 ? (
-              hotels.map((hotel) => <SearchItem key={hotel.id} hotel={hotel} />)
-            ) : (
-              <p>No hotels found</p>
-            )}
+          <div className="listResultContainer">
+            <div className="listResult">
+              {hotels.length > 0 ? (
+                hotels.map((hotel) => (
+                  <SearchItem key={hotel.id} hotel={hotel} />
+                ))
+              ) : (
+                <p>Không tìm thấy khách sạn nào cho thành phố "{destination}"</p>
+              )}
+            </div>
+            <div className="pagination">
+              <button
+                onClick={() => handlePageChange(pageNo - 1)}
+                disabled={pageNo === 0}
+              >
+                Trang trước
+              </button>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => handlePageChange(index)}
+                  className={index === pageNo ? "active" : ""}
+                >
+                  {index + 1}
+                </button>
+              ))}
+              <button
+                onClick={() => handlePageChange(pageNo + 1)}
+                disabled={pageNo === totalPages - 1}
+              >
+                Trang sau
+              </button>
+            </div>
           </div>
         </div>
       </div>
-          {userId ? <div></div> : <Register />}
+      {userId ? <div></div> : <Register />}
     </div>
   );
 };

@@ -26,13 +26,16 @@ export async function addHotel(userId, hotelName, city, hotelLocation, hotelDesc
 }
 
 /* Get all hotels by city */
-export async function getHotelsByCity(city) {
-	try {
-		const response = await api.get(`/hotels/${city}`)
-		return response.data
-	} catch (error) {
-		throw new Error("Error fetching hotels")
-	}
+export async function getHotelsByCity(city, pageNo = 0, pageSize = 10) {
+    try {
+        const response = await api.get(`/hotels/${encodeURIComponent(city)}`, {
+            params: { pageNo, pageSize },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching hotels:", error);
+        throw new Error("Error fetching hotels");
+    }
 }
 
 export async function getHotelById(hotelId) {
