@@ -13,6 +13,7 @@ import com.example.CoutingStarHotel.services.RedeemedDiscountService;
 import com.example.CoutingStarHotel.services.RoomService;
 import com.example.CoutingStarHotel.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -55,6 +56,7 @@ class BookingServiceImpl implements BookingService {
             totalAmount = applyDiscountIfValid(redeemedDiscountId, totalAmount, bookingRequest);
         }
         bookingRequest.setTotalAmount(totalAmount);
+        bookingRequest.setBookingDay(LocalDate.now());
         bookingRepository.save(bookingRequest);
         return bookingRequest.getBookingConfirmationCode();
     }

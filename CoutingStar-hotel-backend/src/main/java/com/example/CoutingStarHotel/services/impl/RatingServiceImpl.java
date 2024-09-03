@@ -53,15 +53,8 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public boolean checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(Long userId, Long hotelId) {
-        return hasBookedRoom(userId, hotelId) && !hasCommented(userId, hotelId);
-    }
-
-    public boolean hasBookedRoom(Long userId, Long hotelId){
-        return bookingRepository.hasBookedRoom(userId, hotelId);
-    }
-
-    public boolean hasCommented(Long userId, Long hotelId){
-        return bookingRepository.hasCommented(userId, hotelId);
+        Long bookingId = bookingRepository.findRoomUserHasBookedAndNotComment(hotelId, userId);
+        return bookingId != null;
     }
 
     @Override

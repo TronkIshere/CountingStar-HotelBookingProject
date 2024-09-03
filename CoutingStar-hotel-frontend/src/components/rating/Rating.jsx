@@ -10,8 +10,7 @@ import {
 } from "../utils/ApiFunction";
 
 const Rating = ({ hotelId, onClose }) => {
-  const { user } = useContext(AuthContext);
-  const isLoggedIn = user !== null;
+  const userId = localStorage.getItem("userId");
   const [newComment, setNewComment] = useState("");
   const [newStars, setNewStars] = useState(0);
   const [canComment, setCanComment] = useState(false);
@@ -27,10 +26,8 @@ const Rating = ({ hotelId, onClose }) => {
     },
   ]);
 
-  const userId = localStorage.getItem("userId");
-
   useEffect(() => {
-    if (isLoggedIn) {
+    if (userId) {
       checkIfUserCanComment(userId, hotelId)
         .then((response) => {
           setCanComment(response);
@@ -97,7 +94,7 @@ const Rating = ({ hotelId, onClose }) => {
 
   const averageRating = calculateAverageRating(ratings);
 
-  console.log("Check if can comment: " + isLoggedIn + " " + canComment);
+  console.log("Check if can comment: " + userId + " " + canComment);
 
   return (
     <div className="ratingPopup">
@@ -145,7 +142,7 @@ const Rating = ({ hotelId, onClose }) => {
         </div>
 
         <div className="newReview">
-          {isLoggedIn && canComment ? (
+          {userId && canComment ? (
             <form onSubmit={handleCommentSubmit}>
               <div className="starRating">
                 Hãy chọn số sao đánh giá: &#160;

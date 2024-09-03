@@ -55,8 +55,8 @@ public class HotelController {
     }
 
     @GetMapping("/homepage")
-    public ResponseEntity<List<HotelDTO>> getFiveHotelForHomePage(){
-        List<Hotel> hotels = hotelService.getFiveHotelForHomePage();
+    public ResponseEntity<List<HotelDTO>> getFiveFunkyHotelForHomePage(){
+        List<Hotel> hotels = hotelService.getFiveFunkyHotelForHomePage();
         List<HotelDTO> hotelResponses = new ArrayList<>();
         for (Hotel hotel : hotels){
             HotelDTO hotelResponse = getHotelResponse(hotel);

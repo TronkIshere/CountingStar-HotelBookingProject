@@ -169,11 +169,11 @@ export async function getRoomsByHotelId(hotelId){
 /* This function saves a new booking to the databse */
 export async function bookRoom(roomId, booking, userId, redeemedDiscountId) {
     try {
-        const response = await api.post(
-			`/bookings/room/${roomId}/booking?userId=${userId}&redeemedDiscountId=${redeemedDiscountId}`,
-			booking, 
-			{headers: getHeader()}
-		);
+        let url = `/bookings/room/${roomId}/booking?userId=${userId}`;
+        if (redeemedDiscountId !== null) {
+            url += `&redeemedDiscountId=${redeemedDiscountId}`;
+        }
+        const response = await api.post(url, booking, { headers: getHeader() });
         console.log("API response:", response);
     } catch (error) {
         if (error.response && error.response.data) {
@@ -185,6 +185,7 @@ export async function bookRoom(roomId, booking, userId, redeemedDiscountId) {
         }
     }
 }
+
 
 /* This function gets alll bokings from the database */
 export async function getAllBookings() {

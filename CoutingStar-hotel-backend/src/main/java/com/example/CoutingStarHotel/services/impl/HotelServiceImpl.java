@@ -87,7 +87,7 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public List<Hotel> getFiveHotelForHomePage() {
+    public List<Hotel> getFiveFunkyHotelForHomePage() {
         return hotelRepository.getFiveHotelForHomePage().stream().limit(5).collect(Collectors.toList());
     }
 

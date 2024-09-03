@@ -33,7 +33,7 @@ public interface HotelService {
 
     Long getHotelHighestPriceByHotelId(Long hotelId);
 
-    List<Hotel> getFiveHotelForHomePage();
+    List<Hotel> getFiveFunkyHotelForHomePage();
 
     List<PieChartDTO> getNumberOfHotelByEachCity();
 
