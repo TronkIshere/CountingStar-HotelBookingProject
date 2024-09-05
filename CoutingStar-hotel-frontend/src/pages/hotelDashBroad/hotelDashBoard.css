@@ -1,43 +1,38 @@
-.adminContainer {
+.hotelOwnerContainer {
+    display: flex;
+    justify-content: space-between; 
     padding: 20px;
+    align-items: center;
+    gap: 20px;
+    flex-direction: column;
+}
+
+.hotelOwnerOverViewThisMonth {
+    display: flex;
+    flex-direction: column; 
+    width: 200px; 
+    padding: 20px;
+    border-radius: 8px;
+    background-color: white; 
+    margin-bottom: 20px;
+    gap: 20px; 
+}
+
+.hotelOwnerChartsGroup {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.adminChartsGroup {
-    display: flex;
-    justify-content: space-between; 
-    align-items: flex-start; 
-    flex-wrap: wrap; 
-    margin-top: 20px; 
-    gap: 20px; 
-}
-
-.adminChartContainer {
-    flex: 1; 
-    min-width: 700px; 
-    height: 400px; 
+.hotelOwnerChartContainer {
+    height: 400px;
+    width: 700px; 
     padding: 20px;
-    box-sizing: border-box; 
     text-align: center; 
     background-color: white; 
-    border-radius: 8px; 
 }
 
-.adminOverViewThisMonth {
-    display: flex;
-    justify-content: space-around;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-    background-color: white; 
-    width: 100%; 
-    margin-bottom: 20px; 
-    gap: 20px; 
-}
-
-.adminOverViewThisMonthItem {
+.hotelOwnerOverViewThisMonthItem {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -49,26 +44,33 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
 }
 
-.adminOverViewInfo {
+.hotelOwnerContainerSpilt{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.hotelOwnerOverViewInfo {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 10px;
 }
 
-.adminInfoNumber {
+.hotelOwnerInfoNumber {
     font-size: 28px;
     font-weight: bold;
     margin: 10px 0;
     color: #333;
 }
 
-.adminInfoText {
+.hotelOwnerInfoText {
     font-size: 16px;
     color: #555;
 }
 
-.adminOverViewNumber {
+.hotelOwnerOverViewNumber {
     font-size: 18px;
     font-weight: bold;
     color: #28a745; 

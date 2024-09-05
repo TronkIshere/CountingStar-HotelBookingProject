@@ -394,25 +394,43 @@ export async function getAllRatingByHotelId(hotelId){
 
 export async function getDataForDashBoardMonthIncreased() {
 	try {
-		const response = await api.get(`/dashboard/dashBoardMonthIncreased`)
+		const response = await api.get(`/dashboard/Admin/dashBoardMonthIncreased`)
 		return response.data
 	} catch (error) {
 		throw new Error("Error fetching dashboard data")
 	}
 }
 
-export async function getDataForPieChart(){
+export async function getDataForHotelDashBoardMonthIncreased(hotelId) {
+	try {
+		const response = await api.get(`/dashboard/HotelOwner/dashBoardMonthIncreased/${hotelId}`)
+		return response.data
+	} catch (error) {
+		throw new Error("Error fetching dashboard data")
+	}
+}
+
+export async function getDataForAdminPieChart(){
 	try{
-		const response = await api.get("/dashboard/PieChart")
+		const response = await api.get("/dashboard/Admin/PieChart")
 		return response.data
 	} catch(error) {
 		throw new Error("Error fetching data")
 	}
 }
 
-export async function getDataForBarChart(){
+export async function getDataForHotelOwnerPieChart(hotelId){
 	try{
-		const response = await api.get("/dashboard/BarChart")
+		const response = await api.get(`/dashboard/HotelOwner/PieChart/${hotelId}`)
+		return response.data
+	} catch(error) {
+		throw new Error("Error fetching data")
+	}
+}
+
+export async function getDataForAdminBarChart(){
+	try{
+		const response = await api.get("/dashboard/Admin/BarChart")
 		return response.data
 	} catch(error) {
 		throw new Error("Error fetching data")

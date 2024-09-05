@@ -9,6 +9,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Discount {
@@ -27,4 +28,6 @@ public class Discount {
     public void addRedeemedDiscount(RedeemedDiscount redeemedDiscount) {
         redeemedDiscount.setDiscount(this);
     }
+
+
 }

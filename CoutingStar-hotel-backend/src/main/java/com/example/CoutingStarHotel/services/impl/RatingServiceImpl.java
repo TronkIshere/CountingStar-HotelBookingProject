@@ -85,4 +85,21 @@ public class RatingServiceImpl implements RatingService {
 
         return (RatingsAddedThisMonth * 100.0) / totalRatings;
     }
+
+    @Override
+    public int getTotalRatingInSpecificHotel(Long hotelId) {
+        return ratingRepository.getTotalRatingInSpecificHotel(hotelId);
+    }
+
+    @Override
+    public double getPercentageOfRatingIncreasedDuringTheMonthForHotel(Long hotelId) {
+        LocalDate today = LocalDate.now();
+        LocalDate firstDayOfThisMonth = today.withDayOfMonth(1);
+        LocalDate firstDayOfNextMonth = firstDayOfThisMonth.plusMonths(1);
+
+        int totalRatings = ratingRepository.getTotalRatingInSpecificHotel(hotelId);
+        int RatingsAddedThisMonth = ratingRepository.getRatingsAddedDuringThisPeriod(hotelId, firstDayOfThisMonth, firstDayOfNextMonth);
+
+        return (RatingsAddedThisMonth * 100.0) / totalRatings;
+    }
 }

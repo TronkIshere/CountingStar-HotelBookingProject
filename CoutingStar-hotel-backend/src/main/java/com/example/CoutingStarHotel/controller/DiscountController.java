@@ -31,12 +31,13 @@ public class DiscountController {
                                           @RequestParam("discountDescription") String discountDescription,
                                           @RequestParam("expirationDate") LocalDate expirationDate) throws SQLException, IOException {
         try{
-            Discount discountRequest = new Discount();
-            discountRequest.setDiscountName(discountName);
-            discountRequest.setPercentDiscount(percentDiscount);
-            discountRequest.setDiscountDescription(discountDescription);
-            discountRequest.setExpirationDate(expirationDate);
-            discountRequest.setCreateDate(LocalDate.now());
+            Discount discountRequest = Discount.builder()
+                    .discountName(discountName)
+                    .percentDiscount(percentDiscount)
+                    .discountDescription(discountDescription)
+                    .expirationDate(expirationDate)
+                    .createDate(LocalDate.now())
+                    .build();
             discountService.addDiscount(discountRequest);
             return ResponseEntity.ok("Your discount have been set successfully");
         } catch (InvalidDiscountRequestException ex) {

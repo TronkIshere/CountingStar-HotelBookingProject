@@ -4,10 +4,30 @@ import PieChart from "../../components/dashBoard/PieChart";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBed, faHouse, faPencil, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import BarChart from "../../components/dashBoard/BarChart";
-import { getDataForDashBoardMonthIncreased } from "../../components/utils/ApiFunction";
+import { getDataForDashBoardMonthIncreased, getDataForAdminPieChart } from "../../components/utils/ApiFunction";
 
 const Admin = () => {
   const [dashboardData, setDashboardData] = useState(null);
+  const [data, setData] = useState([]);
+
+    useEffect(() => {
+        const PieChartData = async () => {
+          try {
+            const response = await getDataForAdminPieChart();
+            const formattedData = response.map(item => ({
+                id: item.cityName,
+                label: item.cityName,
+                value: item.quantity,
+                color: `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`
+            }));
+            setData(formattedData);
+          } catch (error) {
+            console.error("Error fetching Data:", error.message);
+          }
+        };
+    
+        PieChartData();
+      }, []);
 
   useEffect(() => {
     const fetchDashBoardData = async () => {
@@ -27,63 +47,63 @@ const Admin = () => {
   }
 
   return (
-    <div className="container">
+    <div className="adminContainer">
       <h1>CoutingStar DashBoard</h1>
 
-      <div className="overViewThisMonth">
-        <div className="overViewThisMonthItem">
-          <div className="overViewInfo">
+      <div className="adminOverViewThisMonth">
+        <div className="adminOverViewThisMonthItem">
+          <div className="adminOverViewInfo">
             <FontAwesomeIcon icon={faUserCircle} />
-            <div className="infoNumber">{dashboardData.totalNumberOfUsers}</div>
-            <div className="infoText">Tổng số tài khoản</div>
+            <div className="adminInfoNumber">{dashboardData.totalNumberOfUsers}</div>
+            <div className="adminInfoText">Tổng số tài khoản</div>
           </div>
-          <div className="overViewNumber">
+          <div className="adminOverViewNumber">
             +{dashboardData.percentageOfUsersIncreasedDuringTheMonth.toFixed(2)}%
           </div>
         </div>
 
-        <div className="overViewThisMonthItem">
-          <div className="overViewInfo">
+        <div className="adminOverViewThisMonthItem">
+          <div className="adminOverViewInfo">
             <FontAwesomeIcon icon={faHouse} />
-            <div className="infoNumber">{dashboardData.totalNumberOfHotels}</div>
-            <div className="infoText">Tổng số khách sạn</div>
+            <div className="adminInfoNumber">{dashboardData.totalNumberOfHotels}</div>
+            <div className="adminInfoText">Tổng số khách sạn</div>
           </div>
-          <div className="overViewNumber">
+          <div className="adminOverViewNumber">
             +{dashboardData.percentageOfHotelsIncreasedDuringTheMonth.toFixed(2)}%
           </div>
         </div>
 
-        <div className="overViewThisMonthItem">
-          <div className="overViewInfo">
+        <div className="adminOverViewThisMonthItem">
+          <div className="adminOverViewInfo">
             <FontAwesomeIcon icon={faBed} />
-            <div className="infoNumber">{dashboardData.totalNumberOfBookedRooms}</div>
-            <div className="infoText">Tổng số phòng đã đặt</div>
+            <div className="adminInfoNumber">{dashboardData.totalNumberOfBookedRooms}</div>
+            <div className="adminInfoText">Tổng số phòng đã đặt</div>
           </div>
-          <div className="overViewNumber">
+          <div className="adminOverViewNumber">
             +{dashboardData.percentageOfBookedRoomsIncreasedDuringTheMonth.toFixed(2)}%
           </div>
         </div>
 
-        <div className="overViewThisMonthItem">
-          <div className="overViewInfo">
+        <div className="adminOverViewThisMonthItem">
+          <div className="adminOverViewInfo">
             <FontAwesomeIcon icon={faPencil} />
-            <div className="infoNumber">{dashboardData.totalNumberOfComments}</div>
-            <div className="infoText">Bình luận đã được viết</div>
+            <div className="adminInfoNumber">{dashboardData.totalNumberOfComments}</div>
+            <div className="adminInfoText">Bình luận đã được viết</div>
           </div>
-          <div className="overViewNumber">
+          <div className="adminOverViewNumber">
             +{dashboardData.percentageOfCommentsIncreaseDuringTheMonth.toFixed(2)}%
           </div>
         </div>
       </div>
 
-      <div className="chartsGroup">
-        <div className="chartContainer">
+      <div className="adminChartsGroup">
+        <div className="adminChartContainer">
           <p>Doanh thu của từng thành phố</p>
           <BarChart />
         </div>
-        <div className="chartContainer">
+        <div className="adminChartContainer">
           <p>Tổng số khách sạn của từng thành phố</p>
-          <PieChart />
+          <PieChart data={data} />
         </div>
       </div>
     </div>

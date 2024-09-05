@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -118,6 +120,58 @@ public class HotelServiceImpl implements HotelService {
         int hotelsAddedThisMonth = hotelRepository.getHotelsAddedDuringPeriod(firstDayOfThisMonth, firstDayOfNextMonth);
 
         return (hotelsAddedThisMonth * 100.0) / totalHotels;
+    }
+
+    @Override
+    public List<PieChartDTO> getTheRevenceOfEachRoom(Long hotelId) {
+        List<PieChartDTO> revenueByEachRoom = hotelRepository.findRevenueByEachRoom(hotelId);
+        return revenueByEachRoom;
+    }
+
+    @Override
+    public BigDecimal getTotalRevenueInSpecificHotel(Long hotelId) {
+        return hotelRepository.getTotalRevenueInSpecificHotel(hotelId);
+    }
+
+    @Override
+    public double getPercentageOfRevenueIncreasedDuringTheMonthForHotel(Long hotelId) {
+        LocalDate today = LocalDate.now();
+        LocalDate firstDayOfThisMonth = today.withDayOfMonth(1);
+        LocalDate firstDayOfNextMonth = firstDayOfThisMonth.plusMonths(1);
+
+        BigDecimal totalRevenue = hotelRepository.getTotalRevenueInSpecificHotel(hotelId);
+        BigDecimal revenueIncreasedThisMonth = hotelRepository.getHotelRevenueDuringPeriod(hotelId, firstDayOfThisMonth, firstDayOfNextMonth);
+
+        if (revenueIncreasedThisMonth == null) {
+            revenueIncreasedThisMonth = BigDecimal.ZERO;
+        }
+
+        if (totalRevenue.compareTo(BigDecimal.ZERO) > 0) {
+            BigDecimal percentageIncrease = revenueIncreasedThisMonth
+                    .multiply(new BigDecimal(100))
+                    .divide(totalRevenue, 2, RoundingMode.HALF_UP);
+
+            return percentageIncrease.doubleValue();
+        } else {
+            return 0.0;
+        }
+    }
+
+    @Override
+    public int getTotalBookedRoomInSpecificHotel(Long hotelId) {
+        return hotelRepository.getTotalBookedRoomInSpecificHotel(hotelId);
+    }
+
+    @Override
+    public double getPercentageOfBookedIncreasedDuringTheMonthForHotel(Long hotelId) {
+        LocalDate today = LocalDate.now();
+        LocalDate firstDayOfThisMonth = today.withDayOfMonth(1);
+        LocalDate firstDayOfNextMonth = firstDayOfThisMonth.plusMonths(1);
+
+        int totalBookedRooms = hotelRepository.getTotalBookedRoomInSpecificHotel(hotelId);
+        int hotelsAddedThisMonth = hotelRepository.getHotelsBookedDuringPeriod(hotelId, firstDayOfThisMonth, firstDayOfNextMonth);
+
+        return (hotelsAddedThisMonth * 100.0) / totalBookedRooms;
     }
 
     @Override

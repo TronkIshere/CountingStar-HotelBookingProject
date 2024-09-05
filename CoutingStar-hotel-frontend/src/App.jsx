@@ -16,6 +16,7 @@ import { AuthProvider } from "./components/utils/AuthProvider";
 import Admin from "./pages/admin/Admin";
 import HotelOwner from "./pages/hotelOwner/HotelOwner";
 import Discount from "./pages/Discount/Discount";
+import HotelDashBoard from "./pages/hotelDashBroad/HotelDashBroard";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -49,7 +50,7 @@ function App() {
           />
           <Route path="/hotel/:hotelId/hotelInformationManagement" element={<HotelInformationManagement />} />
           <Route path="/user/admin" element={<Admin />} />
-          <Route path="/hotel/hotelOwner" element={<HotelOwner />} />
+          <Route path="/hotel/hotelOwner" element={<HotelDashBoard />} />
         </Routes>
         <Footer />
       </BrowserRouter>

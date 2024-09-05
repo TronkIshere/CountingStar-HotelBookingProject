@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -14,12 +15,11 @@ import java.util.Optional;
 public interface HotelService {
     List<Hotel> getAllHotels();
 
-
     Page<Hotel> getAllHotelsByCity(String city, Integer pageNo, Integer pageSize);
 
-    byte[] getHotelPhotobyHotelId(Long hotelId) throws SQLException;
-
     void deleteHotel(Long hotelId);
+
+    byte[] getHotelPhotobyHotelId(Long hotelId) throws SQLException;
 
     Hotel updateHotel(Long hotelId, String hotelName, String hotelLocation, String hotelDescription, String city, String phoneNumber, MultipartFile photo) throws IOException, SQLException;
 
@@ -42,4 +42,14 @@ public interface HotelService {
     int getTotalNumberOfHotels();
 
     double getPercentageOfHotelsIncreasedDuringTheMonth();
+
+    List<PieChartDTO> getTheRevenceOfEachRoom(Long hotelId);
+
+    BigDecimal getTotalRevenueInSpecificHotel(Long hotelId);
+
+    double getPercentageOfRevenueIncreasedDuringTheMonthForHotel(Long hotelId);
+
+    int getTotalBookedRoomInSpecificHotel(Long hotelId);
+
+    double getPercentageOfBookedIncreasedDuringTheMonthForHotel(Long hotelId);
 }

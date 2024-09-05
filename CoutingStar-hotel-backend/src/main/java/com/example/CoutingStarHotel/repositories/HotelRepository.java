@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -41,4 +42,21 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     @Query("SELECT COUNT(h) FROM Hotel h WHERE h.registerDay >= :startDate AND h.registerDay < :endDate")
     int getHotelsAddedDuringPeriod(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
+    @Query("SELECT new com.example.CoutingStarHotel.DTO.PieChartDTO(r.roomType, SUM(b.totalAmount)) " +
+            "FROM Room r JOIN r.bookings b " +
+            "WHERE r.hotel.id = :hotelId " +
+            "GROUP BY r.roomType")
+    List<PieChartDTO> findRevenueByEachRoom(Long hotelId);
+
+    @Query("SELECT COUNT(b) FROM BookedRoom b WHERE b.room.hotel.id = :hotelId")
+    int getTotalBookedRoomInSpecificHotel(@Param("hotelId")Long hotelId);
+
+    @Query("SELECT COUNT(b) FROM BookedRoom b WHERE b.room.hotel.id = :hotelId AND b.bookingDay >= :firstDayOfThisMonth AND b.bookingDay < :firstDayOfNextMonth")
+    int getHotelsBookedDuringPeriod(@Param("hotelId")Long hotelId,@Param("firstDayOfThisMonth") LocalDate firstDayOfThisMonth,@Param("firstDayOfNextMonth") LocalDate firstDayOfNextMonth);
+
+    @Query("SELECT SUM(b.totalAmount) FROM BookedRoom b WHERE b.room.hotel.id = :hotelId")
+    BigDecimal getTotalRevenueInSpecificHotel(@Param("hotelId")Long hotelId);
+
+    @Query("SELECT SUM(b.totalAmount) FROM BookedRoom b WHERE b.room.hotel.id = :hotelId AND b.bookingDay >= :firstDayOfThisMonth AND b.bookingDay < :firstDayOfNextMonth")
+    BigDecimal getHotelRevenueDuringPeriod(@Param("hotelId")Long hotelId,@Param("firstDayOfThisMonth") LocalDate firstDayOfThisMonth,@Param("firstDayOfNextMonth") LocalDate firstDayOfNextMonth);
 }

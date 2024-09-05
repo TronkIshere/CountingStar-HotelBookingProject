@@ -3,16 +3,10 @@ package com.example.CoutingStarHotel.controller;
 import com.example.CoutingStarHotel.DTO.BarChartDTO;
 import com.example.CoutingStarHotel.DTO.DashBoardMonthIncreasedDTO;
 import com.example.CoutingStarHotel.DTO.PieChartDTO;
-import com.example.CoutingStarHotel.services.BookingService;
-import com.example.CoutingStarHotel.services.HotelService;
-import com.example.CoutingStarHotel.services.RatingService;
-import com.example.CoutingStarHotel.services.UserService;
+import com.example.CoutingStarHotel.services.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,33 +15,35 @@ import java.util.List;
 @RestController
 @RequestMapping("/dashboard")
 public class DashboardController {
-    private final UserService userService;
     private final HotelService hotelService;
-    private final BookingService bookingService;
-    private final RatingService ratingService;
-    @GetMapping("/PieChart")
-    public ResponseEntity<List<PieChartDTO>> getDataForPieChart(){
+    private final DashBoardService dashBoardService;
+    @GetMapping("/Admin/PieChart")
+    public ResponseEntity<List<PieChartDTO>> getDataForAdminPieChart(){
         List<PieChartDTO> PieChartData = hotelService.getNumberOfHotelByEachCity();
         return ResponseEntity.ok(PieChartData);
     }
 
-    @GetMapping("/BarChart")
-    public ResponseEntity<List<BarChartDTO>> getDataForBarChart(){
+    @GetMapping("/Admin/BarChart")
+    public ResponseEntity<List<BarChartDTO>> getDataForAdminBarChart(){
         List<BarChartDTO> barChartData = hotelService.getHotelRevenueByEachCity();
         return ResponseEntity.ok(barChartData);
     }
 
-    @GetMapping("/dashBoardMonthIncreased")
-    public ResponseEntity<DashBoardMonthIncreasedDTO> getDataForDashBoardMonthIncreased(){
-        DashBoardMonthIncreasedDTO dashBoardMonthIncreasedData = new DashBoardMonthIncreasedDTO();
-        dashBoardMonthIncreasedData.setTotalNumberOfUsers(userService.getTotalNumberOfUsers());
-        dashBoardMonthIncreasedData.setPercentageOfUsersIncreasedDuringTheMonth(userService.getPercentageOfUsersIncreasedDuringTheMonth());
-        dashBoardMonthIncreasedData.setTotalNumberOfHotels(hotelService.getTotalNumberOfHotels());
-        dashBoardMonthIncreasedData.setPercentageOfHotelsIncreasedDuringTheMonth(hotelService.getPercentageOfHotelsIncreasedDuringTheMonth());
-        dashBoardMonthIncreasedData.setTotalNumberOfBookedRooms(bookingService.getTotalNumberOfBookedRooms());
-        dashBoardMonthIncreasedData.setPercentageOfBookedRoomsIncreasedDuringTheMonth(bookingService.getPercentageOfBookedRoomsIncreasedDuringTheMonth());
-        dashBoardMonthIncreasedData.setTotalNumberOfComments(ratingService.getTotalNumberOfComments());
-        dashBoardMonthIncreasedData.setPercentageOfCommentsIncreaseDuringTheMonth(ratingService.getPercentageOfCommentsIncreaseDuringTheMonth());
+    @GetMapping("/HotelOwner/PieChart/{hotelId}")
+    public ResponseEntity<List<PieChartDTO>> getDataForAdminPieChartChart(@PathVariable Long hotelId){
+        List<PieChartDTO> barChartData = hotelService.getTheRevenceOfEachRoom(hotelId);
+        return ResponseEntity.ok(barChartData);
+    }
+
+    @GetMapping("/Admin/dashBoardMonthIncreased")
+    public ResponseEntity<DashBoardMonthIncreasedDTO> getDataForAdminDashBoardMonthIncreased(){
+        DashBoardMonthIncreasedDTO dashBoardMonthIncreasedData = dashBoardService.getDataForAdminDashBoardMonthIncreased();
+        return ResponseEntity.ok(dashBoardMonthIncreasedData);
+    }
+
+    @GetMapping("/HotelOwner/dashBoardMonthIncreased/{hotelId}")
+    public ResponseEntity<DashBoardMonthIncreasedDTO> getDataForHotelOwnerMonthIncreased(@PathVariable Long hotelId){
+        DashBoardMonthIncreasedDTO dashBoardMonthIncreasedData = dashBoardService.getDataForHotelOwnerMonthIncreased(hotelId);
         return ResponseEntity.ok(dashBoardMonthIncreasedData);
     }
 }

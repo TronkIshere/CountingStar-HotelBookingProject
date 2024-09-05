@@ -27,4 +27,5 @@ public interface BookingService {
     int getTotalNumberOfBookedRooms();
 
     double getPercentageOfBookedRoomsIncreasedDuringTheMonth();
+
 }

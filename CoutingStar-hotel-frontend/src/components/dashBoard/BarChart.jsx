@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ResponsiveBar } from '@nivo/bar';
-import { getDataForBarChart } from '../utils/ApiFunction';
+import { getDataForAdminBarChart } from '../utils/ApiFunction';
 
 const BarChart = () => {
     const [data, setData] = useState([]);
@@ -8,7 +8,7 @@ const BarChart = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await getDataForBarChart();
+                const response = await getDataForAdminBarChart();
                 console.log(response)
                 const formattedData = response.map(item => ({
                     cityName: item.cityName,

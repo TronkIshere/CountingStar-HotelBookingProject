@@ -21,4 +21,8 @@ public interface RatingService {
     int getTotalNumberOfComments();
 
     double getPercentageOfCommentsIncreaseDuringTheMonth();
+
+    int getTotalRatingInSpecificHotel(Long hotelId);
+
+    double getPercentageOfRatingIncreasedDuringTheMonthForHotel(Long hotelId);
 }

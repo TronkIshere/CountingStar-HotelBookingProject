@@ -29,4 +29,12 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
 
     @Query("SELECT COUNT(r) FROM Rating r WHERE r.rateDay >= :startDate AND r.rateDay < :endDate")
     int getUsersAddedDuringPeriod(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
+    @Query("SELECT COUNT(r) FROM Rating r WHERE r.bookedRoom.room.hotel.id = :hotelId")
+    int getTotalRatingInSpecificHotel(@Param("hotelId") Long hotelId);
+
+    @Query("SELECT COUNT(r) FROM Rating r WHERE r.bookedRoom.room.hotel.id = :hotelId AND r.rateDay >= :startDate AND r.rateDay < :endDate")
+    int getRatingsAddedDuringThisPeriod(@Param("hotelId") Long hotelId,
+                                        @Param("startDate") LocalDate startDate,
+                                        @Param("endDate") LocalDate endDate);
 }

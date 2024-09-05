@@ -1,31 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { ResponsivePie } from '@nivo/pie'
-import { getDataForPieChart } from '../utils/ApiFunction';
 
-const PieChart = () => {
-
-    const [data, setData] = useState([]);
-
-    useEffect(() => {
-        const PieChartData = async () => {
-          try {
-            const response = await getDataForPieChart();
-            const formattedData = response.map(item => ({
-                id: item.cityName,
-                label: item.cityName,
-                value: item.quantity,
-                color: `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`
-            }));
-            setData(formattedData);
-          } catch (error) {
-            console.error("Error fetching Data:", error.message);
-          }
-        };
-    
-        PieChartData();
-      }, []);
-
-    
+const PieChart = ({data}) => {
+    console.log(data)
   return (
     <ResponsivePie
         data={data}

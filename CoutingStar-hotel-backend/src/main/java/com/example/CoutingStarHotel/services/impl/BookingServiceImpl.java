@@ -23,8 +23,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public
-class BookingServiceImpl implements BookingService {
+public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final RoomService roomService;
     private final UserService userService;
