@@ -5,6 +5,7 @@ import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.entities.BookedRoom;
 import com.example.CoutingStarHotel.entities.Room;
 import com.example.CoutingStarHotel.DTO.RoomDTO;
+import com.example.CoutingStarHotel.repositories.RoomRepository;
 import com.example.CoutingStarHotel.services.BookingService;
 import com.example.CoutingStarHotel.services.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,7 @@ import java.util.Optional;
 public class RoomController {
     private final RoomService roomService;
     private final BookingService bookingService;
+    private final RoomRepository roomRepository;
 
     @PostMapping("/add/new-room/{hotelId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
@@ -41,10 +43,8 @@ public class RoomController {
             @RequestParam("roomPrice")BigDecimal roomPrice,
             @RequestParam("roomDescription")String roomDescription,
             @PathVariable Long hotelId) throws SQLException, IOException {
-        System.out.println("===========Is Running===========");
         Room savedRoom = roomService.addNewRoom(photo, roomType, roomPrice, roomDescription, hotelId);
         RoomDTO response = new RoomDTO(savedRoom.getId(), savedRoom.getRoomType(), savedRoom.getRoomPrice(), savedRoom.getRoomDescription());
-
         return ResponseEntity.ok(response);
     }
 

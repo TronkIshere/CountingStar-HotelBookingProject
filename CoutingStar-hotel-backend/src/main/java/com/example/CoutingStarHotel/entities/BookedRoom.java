@@ -18,36 +18,16 @@ public class BookedRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookingId;
-
-    @Column(name = "check_In")
     private LocalDate checkInDate;
-
-    @Column(name = "check_Out")
     private LocalDate checkOutDate;
-
-    @Column(name = "guest_PhoneNumber")
     private String guestPhoneNumber;
-
-    @Column(name = "guest_FullName")
     private String guestFullName;
-
-    @Column(name = "guest_Email")
     private String guestEmail;
-
-    @Column(name = "adults")
     private int NumOfAdults;
-
-    @Column(name = "children")
     private int NumOfChildren;
-
-    @Column(name = "total_guest")
     private int totalNumOfGuest;
-
-    @Column(name = "confirmation_Code")
     private String bookingConfirmationCode;
-
     private LocalDate bookingDay;
-
     private BigDecimal totalAmount;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -63,21 +43,6 @@ public class BookedRoom {
 
     @OneToOne(mappedBy = "bookedRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private RedeemedDiscount redeemedDiscount;
-
-
-    public void calculateTotalNumberOfGuest() {
-        this.totalNumOfGuest = this.NumOfAdults + NumOfChildren;
-    }
-
-    public void setNumOfAdults(int numOfAdults) {
-        NumOfAdults = numOfAdults;
-        calculateTotalNumberOfGuest();
-    }
-
-    public void setNumOfChildren(int numOfChildren) {
-        NumOfChildren = numOfChildren;
-        calculateTotalNumberOfGuest();
-    }
 
     public BookedRoom(String bookingConfirmationCode) {
         this.bookingConfirmationCode = bookingConfirmationCode;
