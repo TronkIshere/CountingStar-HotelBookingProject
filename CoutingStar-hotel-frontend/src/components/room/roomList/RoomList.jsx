@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./roomList.css";
-import BookingForm from "../../bookingForm/BookingForm";
 import { getRoomsByHotelId } from "../../utils/ApiFunction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-regular-svg-icons";
+import BookingForm from "../../bookingRoom/bookingForm/BookingForm";
 
 const RoomList = ({ hotelId }) => {
   const [selectedRoom, setSelectedRoom] = useState(null);

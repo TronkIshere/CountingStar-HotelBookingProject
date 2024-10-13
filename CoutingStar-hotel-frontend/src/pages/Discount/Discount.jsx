@@ -4,9 +4,9 @@ import {
   getDiscountNotExpired,
   addRedeemedDiscount,
 } from "../../components/utils/ApiFunction";
-import AddDiscount from "../../components/discount/addDiscount/AddDiscount";
-import UpdateDiscount from "../../components/discount/updateDiscount/UpdateDiscount";
-import DeleteDiscount from "../../components/discount/deleteDiscount/DeleteDiscount";
+import AddDiscount from "../../components/discountComponent/addDiscount/AddDiscount";
+import UpdateDiscount from "../../components/discountComponent/updateDiscount/UpdateDiscount";
+import DeleteDiscount from "../../components/discountComponent/deleteDiscount/DeleteDiscount";
 
 const Discount = () => {
   const [discounts, setDiscounts] = useState([]);

@@ -1,6 +1,5 @@
 .discountBanner {
     width: 100%;
-    max-width: 1024px;
     gap: 20px;
     z-index: 1;
     height: 170px;
@@ -34,8 +33,4 @@
     cursor: pointer;
     font-weight: 600;
     text-decoration: none;
-}
-
-.discountButton:hover {
-    background-color: #002d6b;
 }

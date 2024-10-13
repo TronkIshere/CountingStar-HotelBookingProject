@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Home from "./pages/home/Home";
+import "bootstrap/dist/css/bootstrap.min.css";
+import HomePage from "./pages/homePage/HomePage";
 import List from "./pages/list/List";
 import Hotel from "./pages/hotel/Hotel";
 import Navbar from "./components/navbar/Navbar";
@@ -14,7 +15,6 @@ import HotelInformationManagement from "./pages/hotelInformationManagement/Hotel
 import HotelBookingManagement from "./pages/hotelBookingManagement/HotelBookingManagement";
 import { AuthProvider } from "./components/utils/AuthProvider";
 import Admin from "./pages/admin/Admin";
-import HotelOwner from "./pages/hotelOwner/HotelOwner";
 import Discount from "./pages/Discount/Discount";
 import HotelDashBoard from "./pages/hotelDashBroad/HotelDashBroard";
 
@@ -34,7 +34,7 @@ function App() {
         <Navbar onLoginClick={handleLoginClick} />
         {showLogin && <Login onClose={handleCloseModal} />}
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/hotels" element={<List />} />
           <Route path="/discount" element={<Discount />} />
           <Route path="/hotels/hotel/:hotelId" element={<Hotel />} />

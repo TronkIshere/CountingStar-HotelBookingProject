@@ -1,17 +1,3 @@
-.featuredItemList {
-  width: 100%;
-  max-width: 1024px;
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  z-index: 1;
-  cursor: pointer;
-}
-
-.top {
-  margin-bottom: 1rem;
-}
-
 .featuredItem {
   position: relative;
   color: white;
@@ -19,6 +5,7 @@
   overflow: hidden;
   height: 250px;
   flex: 1;
+  cursor: pointer;
 }
 
 .featuredImg {

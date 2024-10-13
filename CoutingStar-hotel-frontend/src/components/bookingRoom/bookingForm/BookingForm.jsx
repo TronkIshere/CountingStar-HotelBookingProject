@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./bookingForm.css";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
-import { getRoomById, getUserByEmail, bookRoom, getAllRedeemedDiscountByUserId } from "../utils/ApiFunction";
+import { getRoomById, getUserByEmail, bookRoom, getAllRedeemedDiscountByUserId } from "../../utils/ApiFunction";
 import moment from "moment";
 
 const BookingForm = ({ roomId, onClose }) => {

@@ -153,8 +153,8 @@ h5 {
 }
 
 .white-btn:hover {
-    background-color: transparent;
-    color: var(--primary-color);
+    background-color: var(--secondry-color);
+    color: var(--white-color);
     border-color: var(--primary-color);
 }
 

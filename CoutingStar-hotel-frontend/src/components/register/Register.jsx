@@ -8,7 +8,7 @@ const Register = () => {
     lastName: "",
     email: "",
     password: "",
-    phoneNumber: ""
+    phoneNumber: "",
   });
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -22,7 +22,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const result = await registerUser(registration);
-      console.log(registration)
+      console.log(registration);
       setSuccessMessage(result);
       setErrorMessage("");
       setRegistration({
@@ -33,8 +33,8 @@ const Register = () => {
         phoneNumber: "",
       });
     } catch (error) {
-      console.error('Registration error:', error);
-      let errorMessage = 'Registration error: ';
+      console.error("Registration error:", error);
+      let errorMessage = "Registration error: ";
       if (error.response && error.response.data) {
         errorMessage += JSON.stringify(error.response.data);
       } else {
@@ -50,54 +50,80 @@ const Register = () => {
   };
 
   return (
-    <form id="register" className="mail" onSubmit={handleRegistration}>
-      <h1 className="mailTitle">Save time, save money!</h1>
-      <span className="mailDesc">Đăng ký và hưởng thêm ưu đãi</span>
-      <div className="mailInputContainer">
-        <input
-          type="email"
-          placeholder="Nhập Email"
-          name="email"
-          value={registration.email}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Nhập mật khẩu"
-          name="password"
-          value={registration.password}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Nhập họ và tên đệm"
-          name="lastName"
-          value={registration.lastName}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Nhập số điện thoại"
-          name="phoneNumber"
-          value={registration.phoneNumber}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Nhập tên"
-          name="firstName"
-          value={registration.firstName}
-          onChange={handleInputChange}
-          required
-        />
-        <button className="RegisterButton" type="submit">
-          Đăng ký
-        </button>
+    <form id="register" className="register" onSubmit={handleRegistration}>
+      <h1 className="registerTitle">Save time, save money!</h1>
+      <span className="registerDesc">Đăng ký và hưởng thêm ưu đãi</span>
+      <div className="registerInputContainer">
+        <div className="row">
+          <div className="col-12 col-sm-6">
+            <input
+              className="form-control"
+              type="email"
+              placeholder="Nhập Email"
+              name="email"
+              value={registration.email}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="col-12 col-sm-6">
+            <input
+              className="form-control"
+              type="password"
+              placeholder="Nhập mật khẩu"
+              name="password"
+              value={registration.password}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="row mt-3">
+          <div className="col-12 col-sm-6">
+            <input
+              className="form-control"
+              type="text"
+              placeholder="Nhập họ và tên đệm"
+              name="lastName"
+              value={registration.lastName}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="col-12 col-sm-6">
+            <input
+              className="form-control"
+              type="text"
+              placeholder="Nhập số điện thoại"
+              name="phoneNumber"
+              value={registration.phoneNumber}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="row mt-3">
+          <div className="col-12 col-sm-6">
+            <input
+              className="form-control"
+              type="text"
+              placeholder="Nhập tên"
+              name="firstName"
+              value={registration.firstName}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="col-12 col-sm-6">
+            <button className="white-btn registerButton" type="submit">
+              Đăng ký
+            </button>
+          </div>
+        </div>
       </div>
+
       {errorMessage && <div className="errorMessage">{errorMessage}</div>}
       {successMessage && <div className="successMessage">{successMessage}</div>}
     </form>
