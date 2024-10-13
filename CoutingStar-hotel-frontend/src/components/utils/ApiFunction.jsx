@@ -403,6 +403,7 @@ export async function getDataForDashBoardMonthIncreased() {
 
 export async function getDataForHotelDashBoardMonthIncreased(hotelId) {
 	try {
+		console.log(hotelId)
 		const response = await api.get(`/dashboard/HotelOwner/dashBoardMonthIncreased/${hotelId}`)
 		return response.data
 	} catch (error) {
