@@ -1,13 +1,14 @@
 import React, { useContext, useState } from "react";
-import "./navbar.css";
 import { AuthContext } from "../utils/AuthProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
+import "./navbar.css";
 
 const Navbar = ({ onLoginClick, onRegisterClick }) => {
   const [showAccount, setShowAccount] = useState(false);
+  const [isNavbarOpen, setIsNavbarOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleAccountClick = () => {
@@ -25,106 +26,138 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
     navigate("/", { state: { message: "You have been logged out!" } });
   };
 
-  return (
-    <div className="navbar">
-      <div className="navContainer">
-        <div className="navItems">
-          <span className="logo">
-            <RouterLink className="logo" to={`/`}>
-              CoutingStar
-            </RouterLink>
-          </span>
-          <div className="buttonForAdmin">
-          {userRole === "ROLE_ADMIN" && (
-            <RouterLink to={`/user/admin`} className="buttonAdminText">Admin</RouterLink>
-          )}
-          </div>
-        </div>
+  const toggleNavbar = () => {
+    setIsNavbarOpen((prev) => !prev);
+  };
 
-        <div className="navItems">
-          {userId ? (
-            <div className="accountContainer">
-              <button className="userButton" onClick={handleAccountClick}>
-                <FontAwesomeIcon icon={faUserCircle} />
-              </button>
-              {showAccount && (
+  return (
+    <header>
+      <nav className="navbar navbar-expand-lg navigation-wrap">
+        <div className="container">
+          <a className="navbar-brand" href="/">
+            <h1 className="navbar-brand-logo">CountingStar</h1>
+          </a>
+          <button
+            className="navbar-toggler"
+            type="button"
+            aria-controls="navbarSupportedContent"
+            aria-expanded={isNavbarOpen}
+            aria-label="Toggle navigation"
+            onClick={toggleNavbar}
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div
+            className={`collapse navbar-collapse ${isNavbarOpen ? "show" : ""}`}
+            id="navbarSupportedContent"
+          >
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              {userRole === "ROLE_ADMIN" && (
+                <li className="nav-item">
+                  <RouterLink className="nav-link" to={`/user/admin`}>
+                    Admin
+                  </RouterLink>
+                </li>
+              )}
+            </ul>
+
+            <div className="d-flex align-items-center">
+              {userId ? (
                 <div className="dropdown">
-                  <ul>
-                    <li className="navButtonLi">
-                      <RouterLink to={`/user/${userId}`}>Người dùng</RouterLink>
-                    </li>
-                    {userRole === "ROLE_HOTEL_OWNER" && (
-                      <>
-                        <li className="navButtonLi">
-                          <RouterLink to={`hotels/hotel/${hotelId}`}>
-                            Khách sạn của bạn
-                          </RouterLink>
-                        </li>
-                        <li className="navButtonLi">
-                          <RouterLink
-                            to={`/hotel/${hotelId}/hotelRoomManagement`}
-                          >
-                            Quản lý phòng
-                          </RouterLink>
-                        </li>
-                        <li className="navButtonLi">
-                          <RouterLink
-                            to={`/hotel/${hotelId}/hotelBookingManagement`}
-                          >
-                            Quản lý đặt phòng
-                          </RouterLink>
-                        </li>
-                        <li className="navButtonLi">
-                          <RouterLink
-                            to={`/hotel/${hotelId}/hotelInformationManagement`}
-                          >
-                            Quản lý khách sạn
-                          </RouterLink>
-                        </li>
-                        <li className="navButtonLi">
-                          <RouterLink
-                            to={`/hotel/hotelOwner`}
-                          >
-                            Xem doanh thu
-                          </RouterLink>
-                        </li>
-                      </>
-                    )}
-                    <li className="navButtonLi">
-                      <button onClick={handleLogout}>Đăng xuất</button>
-                    </li>
-                  </ul>
+                  <button
+                    className="btn dropdown-toggle"
+                    id="accountDropdown"
+                    onClick={handleAccountClick}
+                    aria-expanded={showAccount}
+                  >
+                    <FontAwesomeIcon icon={faUserCircle} />
+                  </button>
+                  {showAccount && (
+                    <ul
+                      className="dropdown-menu dropdown-menu-right"
+                      aria-labelledby="accountDropdown"
+                    >
+                      <li>
+                        <RouterLink
+                          className="dropdown-item"
+                          to={`/user/${userId}`}
+                        >
+                          Người dùng
+                        </RouterLink>
+                      </li>
+                      {userRole === "ROLE_HOTEL_OWNER" && (
+                        <>
+                          <li>
+                            <RouterLink
+                              className="dropdown-item"
+                              to={`hotels/hotel/${hotelId}`}
+                            >
+                              Khách sạn của bạn
+                            </RouterLink>
+                          </li>
+                          <li>
+                            <RouterLink
+                              className="dropdown-item"
+                              to={`/hotel/${hotelId}/hotelRoomManagement`}
+                            >
+                              Quản lý phòng
+                            </RouterLink>
+                          </li>
+                          <li>
+                            <RouterLink
+                              className="dropdown-item"
+                              to={`/hotel/${hotelId}/hotelBookingManagement`}
+                            >
+                              Quản lý đặt phòng
+                            </RouterLink>
+                          </li>
+                          <li>
+                            <RouterLink
+                              className="dropdown-item"
+                              to={`/hotel/${hotelId}/hotelInformationManagement`}
+                            >
+                              Quản lý khách sạn
+                            </RouterLink>
+                          </li>
+                          <li>
+                            <RouterLink
+                              className="dropdown-item"
+                              to={`/hotel/hotelOwner`}
+                            >
+                              Xem doanh thu
+                            </RouterLink>
+                          </li>
+                        </>
+                      )}
+                      <li>
+                        <button
+                          className="dropdown-item"
+                          onClick={handleLogout}
+                        >
+                          Đăng xuất
+                        </button>
+                      </li>
+                    </ul>
+                  )}
                 </div>
+              ) : (
+                <>
+                  <RouterLink to={`/hotelRegistration`} className="hotelRegistration-btn me-4">
+                    Đăng phòng của bạn
+                  </RouterLink>
+                  <button className="white-btn me-3 nav-btn" onClick={onRegisterClick}>
+                    Đăng ký
+                  </button>
+                  <button className="white-btn nav-btn" onClick={onLoginClick}>
+                    Đăng nhập
+                  </button>
+                </>
               )}
             </div>
-          ) : (
-            <>
-              <button className="postHotelButton">
-                <RouterLink
-                  className="hotelRegistrationButton"
-                  to={`/hotelRegistration`}
-                >
-                  Đăng phòng của bạn
-                </RouterLink>
-              </button>
-              <button className="navButton" onClick={onRegisterClick}>
-                <ScrollLink
-                  to="register"
-                  smooth={true}
-                  duration={500}
-                  className="navLink"
-                >
-                  Đăng ký
-                </ScrollLink>
-              </button>
-              <button onClick={onLoginClick} className="navButton">
-                Đăng nhập
-              </button>
-            </>
-          )}
+          </div>
         </div>
-      </div>
-    </div>
+      </nav>
+    </header>
   );
 };
 

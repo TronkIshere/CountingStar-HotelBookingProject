@@ -57,6 +57,7 @@ const Register = () => {
         <div className="row">
           <div className="col-12 col-sm-6">
             <input
+              id="email"
               className="form-control"
               type="email"
               placeholder="Nhập Email"

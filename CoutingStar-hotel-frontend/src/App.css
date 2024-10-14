@@ -2,7 +2,7 @@
 
 :root {
     --primary-color: #003580;
-    --secondry-color: #0071c2; 
+    --secondry-color: #0071c2;
     --third-color: #febb02;
     --white-color: #fff;
     --text-color: #555;
@@ -24,12 +24,15 @@ body {
 }
 
 .container {
-    overflow-x: hidden; /* Đảm bảo container cũng không có overflow */
+    overflow-x: hidden;
+    /* Đảm bảo container cũng không có overflow */
 }
 
 .aos-init:not(.aos-animate):after {
-    display: none; /* Ẩn các phần tử chưa có animation */
+    display: none;
+    /* Ẩn các phần tử chưa có animation */
 }
+
 *,
 *:after,
 *:before {
@@ -66,11 +69,11 @@ ol {
     padding: 0;
 }
 
-ul{
+ul {
     list-style-type: none;
-    padding: 0; 
-    margin: 0;  
-  }
+    padding: 0;
+    margin: 0;
+}
 
 
 
@@ -91,7 +94,6 @@ ul{
 h1 {
     font-size: 2.4rem;
     font-weight: 750;
-    margin-bottom: 3rem;
 }
 
 h2 {
@@ -140,7 +142,7 @@ h5 {
     font-size: 0.9375rem;
     font-weight: 600;
     text-transform: capitalize;
-    box-shadow: 0px 2px 10px -1px rgb( 0 0 0 / 19%);
+    box-shadow: 0px 2px 10px -1px rgb(0 0 0 / 19%);
     -webkit-transition: all .4s ease-out 0s;
     -o-transition: all .4s ease-out 0s;
     -moz-transition: all .4s ease-out 0s;
@@ -178,12 +180,14 @@ h5 {
     overflow-x: hidden;
 }
 
+
 @media screen and (max-width: 450px) {
     .main-btn {
         padding: 8px 12px;
     }
-
+    
     .white-btn {
         padding: 8px 12px;
     }
-  }
+}
+

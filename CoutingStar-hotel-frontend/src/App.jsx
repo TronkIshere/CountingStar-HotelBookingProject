@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import HomePage from "./pages/homePage/HomePage";
 import List from "./pages/list/List";
@@ -17,6 +16,7 @@ import { AuthProvider } from "./components/utils/AuthProvider";
 import Admin from "./pages/admin/Admin";
 import Discount from "./pages/Discount/Discount";
 import HotelDashBoard from "./pages/hotelDashBroad/HotelDashBroard";
+import "./App.css";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
