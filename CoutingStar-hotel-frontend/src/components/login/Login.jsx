@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import "./login.css";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from '../utils/ApiFunction';
+import { loginUser } from "../utils/ApiFunction";
 import { AuthContext } from "../utils/AuthProvider";
 
-const Login = ({ onClose }) => {
+const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [login, setLogin] = useState({
     email: "",
@@ -25,7 +25,6 @@ const Login = ({ onClose }) => {
       const token = success.token;
       handleLogin(token);
       navigate("/");
-      onClose();
     } else {
       setErrorMessage("Invalid username or password. Please try again.");
     }
@@ -35,31 +34,80 @@ const Login = ({ onClose }) => {
   };
 
   return (
-    <div className="modal_overlay" onClick={onClose}>
-      <form
-        onSubmit={handleSubmit}
-        className="signInForm"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button className="close_button" onClick={onClose}>x</button>
-        <h1>Đăng nhập</h1>
-        <input
-          type="email"
-          name="email"
-          value={login.email}
-          onChange={handleInputChange}
-          placeholder="Nhập Email"
-        />
-        <input
-          type="password"
-          name="password"
-          value={login.password}
-          onChange={handleInputChange}
-          placeholder="Nhập mật khẩu"
-        />
-        <button type="submit" className="loginButton">Đăng nhập</button>
-        {errorMessage && <div className="error">{errorMessage}</div>}
-      </form>
+    <div
+      className="loginModal modal fade"
+      id="loginModal"
+      tabIndex="-1"
+      aria-labelledby="loginModalLabel"
+      aria-hidden="true"
+    >
+      <div className="modal-dialog">
+        <div className="modal-content">
+          <form onSubmit={handleSubmit}>
+            <div className="modal-header">
+              <h5 className="modal-title" id="loginModalLabel">
+                Đăng nhập
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div className="modal-body">
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label">
+                  Email:
+                </label>
+                <input
+                  type="email"
+                  className="form-control"
+                  id="email"
+                  name="email"
+                  value={login.email}
+                  onChange={handleInputChange}
+                  placeholder="Nhập Email"
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="password" className="form-label">
+                  Mật khẩu:
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  id="password"
+                  name="password"
+                  value={login.password}
+                  onChange={handleInputChange}
+                  placeholder="Nhập mật khẩu"
+                  required
+                />
+              </div>
+              {errorMessage && (
+                <div className="error text-danger">{errorMessage}</div>
+              )}
+            </div>
+
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="white-btn"
+                data-bs-toggle="modal"
+                aria-label="Close"
+              >
+                Đóng
+              </button>
+              <button type="submit" className="main-btn">
+                Đăng nhập
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

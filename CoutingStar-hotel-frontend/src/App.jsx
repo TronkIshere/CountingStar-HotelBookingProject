@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
 import HomePage from "./pages/homePage/HomePage";
 import SearchHotelsPage from "./pages/searchHotelsPage/SearchHotelsPage";
 import Navbar from "./components/navbar/Navbar";
@@ -10,9 +9,11 @@ import Footer from "./components/footer/Footer";
 import { AuthProvider } from "./components/utils/AuthProvider";
 import AdminPage from "./pages/adminPage/AdminPage";
 import Discount from "./pages/Discount/Discount";
-import "./App.css";
 import HotelPage from "./pages/hotelPage/HotelPage";
 import HotelRegistration from "./pages/hotelRegistration/HotelRegistration";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import "./App.css";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);

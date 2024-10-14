@@ -47,9 +47,3 @@
 .show-dropdown {
   display: block; 
 }
-
-@media (min-width: 1200px) {
-  .container {
-      max-width: 1024px;
-  }
-}

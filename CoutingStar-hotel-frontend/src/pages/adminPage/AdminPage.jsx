@@ -50,6 +50,12 @@ const Admin = () => {
             >
               Quản lý khách sạn
             </li>
+            <li
+              className="sidebar-item"
+              onClick={() => setActiveComponent("discountManagement")}
+            >
+              Quản lý mã giảm giá
+            </li>
           </ul>
           </div>
           <div className="col-12 col-sm-12 col-md-10 col-lg-10">
