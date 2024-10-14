@@ -1,11 +1,4 @@
-.content {
-  display: flex;
-  width: 100%;
-  max-width: 1200px;
-}
-
 .profile {
-  width: 30%;
   padding: 20px;
   background-color: whitesmoke;
   border-radius: 10px;
@@ -20,10 +13,6 @@
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 20px;
-}
-
-.profile-info {
-  text-align: left;
 }
 
 .profile-row {
@@ -42,7 +31,7 @@
 }
 
 .booking-history {
-  width: 70%;
+  margin-left: 1rem;
   padding: 20px;
   background-color: whitesmoke;
   border-radius: 10px;

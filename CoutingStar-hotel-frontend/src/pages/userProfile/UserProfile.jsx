@@ -38,7 +38,7 @@ const UserProfile = () => {
     const fetchUser = async () => {
       try {
         const userData = await getUserByEmail(userEmail, token);
-        console.log("userData: ", userData)
+        console.log("userData: ", userData);
         setUser(userData);
       } catch (error) {
         console.error(error);
@@ -83,83 +83,87 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container my-4">
       {errorMessage && <p className="text-danger">{errorMessage}</p>}
       {message && <p className="text-danger">{message}</p>}
       {user ? (
         <div className="content">
-          <div className="profile">
-            <img
-              src="https://themindfulaimanifesto.org/wp-content/uploads/2020/09/male-placeholder-image.jpeg"
-              alt="Profile"
-              className="profile-pic"
-            />
-            <h2>
-              {user.firstName} {user.lastName}
-            </h2>
-            <div className="profile-info">
-              <div className="profile-row">
-                <strong>ID:</strong> <span>{user.id}</span>
-              </div>
-              <div className="profile-row">
-                <strong>Email:</strong> <span>{user.email}</span>
-              </div>
-              <div className="profile-row">
-                <strong>Số điện thoại:</strong> <span>{user.phoneNumber}</span>
-              </div>
-              <div className="profile-row">
-                <strong>vai trò:</strong>{" "}
-                <span>
-                  <ul className="rolesList">
-                  {user.roles.map((role) => (
-                    <li key={role.id}>
-                      {role.name}
-                    </li>
-                  ))}
-                  </ul>
+          <div className="col-12 col-sm-12 col-md-4 col-lg-4">
+            <div className="profile w-100">
+              <img
+                src="https://themindfulaimanifesto.org/wp-content/uploads/2020/09/male-placeholder-image.jpeg"
+                alt="Profile"
+                className="profile-pic"
+              />
+              <h2>
+                {user.firstName} {user.lastName}
+              </h2>
+              <div className="profile-info">
+                <div className="profile-row">
+                  <strong>ID:</strong> <span>{user.id}</span>
+                </div>
+                <div className="profile-row">
+                  <strong>Email:</strong> <span>{user.email}</span>
+                </div>
+                <div className="profile-row">
+                  <strong>Số điện thoại:</strong>{" "}
+                  <span>{user.phoneNumber}</span>
+                </div>
+                <div className="profile-row">
+                  <strong>vai trò:</strong>{" "}
+                  <span>
+                    <ul className="rolesList">
+                      {user.roles.map((role) => (
+                        <li key={role.id}>{role.name}</li>
+                      ))}
+                    </ul>
                   </span>
+                </div>
               </div>
+              <button className="bookButton" onClick={handleDeleteAccount}>
+                Đóng tài khoản
+              </button>
             </div>
-            <button className="bookButton" onClick={handleDeleteAccount}>
-              Đóng tài khoản
-            </button>
           </div>
-          <div className="booking-history">
-            <h4>Lịch sử đặt phòng</h4>
-            {bookings.length > 0 ? (
-              <table className="roomListTable">
-                <thead>
-                  <tr>
-                    <th>ID phòng đã đặt</th>
-                    <th>ID phòng</th>
-                    <th>Loại phòng</th>
-                    <th>Ngày đặt</th>
-                    <th>Ngày trả phòng</th>
-                    <th>Mã xác nhận</th>
-                    <th>Trạng thái</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {bookings.map((booking, index) => (
-                    <tr key={index}>
-                      <td>{booking.bookingId}</td>
-                      <td>{booking.room.id}</td>
-                      <td>{booking.room.roomType}</td>
-                      <td>
-                        {new Date(booking.checkInDate).toLocaleDateString()}
-                      </td>
-                      <td>
-                        {new Date(booking.checkOutDate).toLocaleDateString()}
-                      </td>
-                      <td>{booking.bookingConfirmationCode}</td>
-                      <td className="text-success">{booking.status}</td>
+
+          <div className="col-12 col-sm-12 col-md-8 col-lg-8">
+            <div className="booking-history w-100">
+              <h4>Lịch sử đặt phòng</h4>
+              {bookings.length > 0 ? (
+                <table className="roomListTable">
+                  <thead>
+                    <tr>
+                      <th>ID phòng đã đặt</th>
+                      <th>ID phòng</th>
+                      <th>Loại phòng</th>
+                      <th>Ngày đặt</th>
+                      <th>Ngày trả phòng</th>
+                      <th>Mã xác nhận</th>
+                      <th>Trạng thái</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <p>Bạn đã đặt phòng chưa?.</p>
-            )}
+                  </thead>
+                  <tbody>
+                    {bookings.map((booking, index) => (
+                      <tr key={index}>
+                        <td>{booking.bookingId}</td>
+                        <td>{booking.room.id}</td>
+                        <td>{booking.room.roomType}</td>
+                        <td>
+                          {new Date(booking.checkInDate).toLocaleDateString()}
+                        </td>
+                        <td>
+                          {new Date(booking.checkOutDate).toLocaleDateString()}
+                        </td>
+                        <td>{booking.bookingConfirmationCode}</td>
+                        <td className="text-success">{booking.status}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p>Bạn đã đặt phòng chưa?.</p>
+              )}
+            </div>
           </div>
         </div>
       ) : (

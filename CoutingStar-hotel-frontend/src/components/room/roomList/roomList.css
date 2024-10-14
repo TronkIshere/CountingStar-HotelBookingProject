@@ -3,17 +3,6 @@
   width: 100%;
   max-width: 1200px;
 }
-
-.profile {
-  width: 30%;
-  padding: 20px;
-  background-color: whitesmoke;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  margin-right: 20px;
-}
-
 .profile-pic {
   width: 150px;
   height: 150px;
@@ -39,16 +28,6 @@
 .profile-row span,
 .profile-row ul {
   width: 70%;
-}
-
-.booking-history {
-  width: 70%;
-  padding: 20px;
-  background-color: whitesmoke;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
-  max-height: 600px;
 }
 
 .roomListTable {
