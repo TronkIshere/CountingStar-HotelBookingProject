@@ -3,25 +3,32 @@ import { AuthContext } from "../utils/AuthProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
+import { Link as ScrollLink } from "react-scroll";
 import "./navbar.css";
 
 const Navbar = ({ onLoginClick, onRegisterClick }) => {
   const [showAccount, setShowAccount] = useState(false);
+  const [isNavbarOpen, setIsNavbarOpen] = useState(false);
   const navigate = useNavigate();
-  const auth = useContext(AuthContext);
 
   const handleAccountClick = () => {
     setShowAccount(!showAccount);
   };
+
+  const userRole = localStorage.getItem("userRole");
+  const userId = localStorage.getItem("userId");
+  const hotelId = localStorage.getItem("userHotelId");
+
+  const auth = useContext(AuthContext);
 
   const handleLogout = () => {
     auth.handleLogout();
     navigate("/", { state: { message: "You have been logged out!" } });
   };
 
-  const userRole = localStorage.getItem("userRole");
-  const userId = localStorage.getItem("userId");
-  const hotelId = localStorage.getItem("userHotelId");
+  const toggleNavbar = () => {
+    setIsNavbarOpen((prev) => !prev);
+  };
 
   return (
     <header>
@@ -30,9 +37,33 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
           <a className="navbar-brand" href="/">
             <h1 className="navbar-brand-logo">CountingStar</h1>
           </a>
-          <div className="d-flex align-items-center">
-            {userId ? (
-              <div className="dropdown">
+          <button
+            className="navbar-toggler"
+            type="button"
+            aria-controls="navbarSupportedContent"
+            aria-expanded={isNavbarOpen}
+            aria-label="Toggle navigation"
+            onClick={toggleNavbar}
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div
+            className={`collapse navbar-collapse ${isNavbarOpen ? "show" : ""}`}
+            id="navbarSupportedContent"
+          >
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              {userRole === "ROLE_ADMIN" && (
+                <li className="nav-item">
+                  <RouterLink className="nav-link admin-btn" to={`/user/admin`}>
+                    Admin
+                  </RouterLink>
+                </li>
+              )}
+            </ul>
+
+            <div className="d-flex align-items-center">
+              {userId ? (
+                <div className="dropdown">
                 <button
                   className="btn"
                   id="accountDropdown"
@@ -58,17 +89,26 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
                         </RouterLink>
                       </li>
                       <li>
-                        <RouterLink className="dropdown-item" to={`/hotel/${hotelId}/hotelRoomManagement`}>
+                        <RouterLink
+                          className="dropdown-item"
+                          to={`/hotel/${hotelId}/hotelRoomManagement`}
+                        >
                           Quản lý phòng
                         </RouterLink>
                       </li>
                       <li>
-                        <RouterLink className="dropdown-item" to={`/hotel/${hotelId}/hotelBookingManagement`}>
+                        <RouterLink
+                          className="dropdown-item"
+                          to={`/hotel/${hotelId}/hotelBookingManagement`}
+                        >
                           Quản lý đặt phòng
                         </RouterLink>
                       </li>
                       <li>
-                        <RouterLink className="dropdown-item" to={`/hotel/${hotelId}/hotelInformationManagement`}>
+                        <RouterLink
+                          className="dropdown-item"
+                          to={`/hotel/${hotelId}/hotelInformationManagement`}
+                        >
                           Quản lý khách sạn
                         </RouterLink>
                       </li>
@@ -86,19 +126,20 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
                   </li>
                 </ul>
               </div>
-            ) : (
-              <>
-                <RouterLink to={`/hotelRegistration`} className="hotelRegistration-btn me-4">
-                  Đăng phòng của bạn
-                </RouterLink>
-                <button className="white-btn me-3 nav-btn" onClick={onRegisterClick}>
-                  Đăng ký
-                </button>
-                <button className="white-btn nav-btn" onClick={onLoginClick}>
-                  Đăng nhập
-                </button>
-              </>
-            )}
+              ) : (
+                <>
+                  <RouterLink to={`/hotelRegistration`} className="hotelRegistration-btn me-4">
+                    Đăng phòng của bạn
+                  </RouterLink>
+                  <button className="white-btn me-3 nav-btn" onClick={onRegisterClick}>
+                    Đăng ký
+                  </button>
+                  <button className="white-btn nav-btn" onClick={onLoginClick}>
+                    Đăng nhập
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </nav>

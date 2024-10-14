@@ -2,15 +2,16 @@
   height: 70px;
   background-color: #003580;
   position: relative;
+  
 }
 
-.navigation-wrap .nav-btn {
+.navigation-wrap .nav-btn{
   border-radius: 10px;
   line-height: 20px;
   padding: 10px 20px;
 }
 
-.navigation-wrap .navbar-brand h1 {
+.navigation-wrap .navbar-brand h1{
   font-weight: 500;
   font-size: 1.8rem;
   text-decoration: none;
@@ -28,38 +29,27 @@
 .navigation-wrap .userIcon {
   color: var(--white-color);
   font-size: 2rem;
-  cursor: pointer; /* Add cursor pointer for better UX */
 }
 
-.dropdown {
-  position: relative;
+.navigation-wrap .container {
+  overflow-x: visible;
 }
-
-
 
 .dropdown-menu {
   display: none;
   position: absolute;
-  top: 120%; /* Adjust position below the userIcon */
-  right: 0;
-  background-color: #fff;
+  top: 100%;
   border: 1px solid #ccc;
   border-radius: 4px;
-  min-width: 200px; /* Wider dropdown */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  z-index: 1000; /* Ensure it's above other components */
-}
-
-.dropdown-menu .dropdown-item {
-  padding: 10px 20px;
-  color: #333;
-  text-align: left;
-}
-
-.dropdown-menu .dropdown-item:hover {
-  background-color: #f0f0f0;
+  min-width: 150px;
 }
 
 .show-dropdown {
-  display: block;
+  display: block; 
+}
+
+@media (min-width: 1200px) {
+  .container {
+      max-width: 1024px;
+  }
 }

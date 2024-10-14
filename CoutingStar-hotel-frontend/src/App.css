@@ -25,12 +25,10 @@ body {
 
 .container {
     overflow-x: hidden;
-    /* Đảm bảo container cũng không có overflow */
 }
 
 .aos-init:not(.aos-animate):after {
     display: none;
-    /* Ẩn các phần tử chưa có animation */
 }
 
 *,
