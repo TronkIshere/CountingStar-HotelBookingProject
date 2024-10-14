@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import "./hotel.css";
-import Navbar from "../../components/navbar/Navbar";
+import "./hotelPage.css";
 import Header from "../../components/header/Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {

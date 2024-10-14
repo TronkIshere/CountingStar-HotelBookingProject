@@ -2,21 +2,17 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import HomePage from "./pages/homePage/HomePage";
 import SearchHotelsPage from "./pages/searchHotelsPage/SearchHotelsPage";
-import Hotel from "./pages/hotel/Hotel";
 import Navbar from "./components/navbar/Navbar";
 import { useState } from "react";
 import Login from "./components/login/Login";
 import UserProfile from "./pages/userProfile/UserProfile";
 import Footer from "./components/footer/Footer";
-import HotelRegistration from "./pages/hotelRegistration/HotelRegistration";
-import HotelRoomManagement from "./pages/hotelRoomManagement/HotelRoomManagement";
-import HotelInformationManagement from "./pages/hotelInformationManagement/HotelInformationManagement";
-import HotelBookingManagement from "./pages/hotelBookingManagement/HotelBookingManagement";
 import { AuthProvider } from "./components/utils/AuthProvider";
-import Admin from "./pages/admin/Admin";
+import AdminPage from "./pages/adminPage/AdminPage";
 import Discount from "./pages/Discount/Discount";
-import HotelDashBoard from "./pages/hotelDashBroad/HotelDashBroard";
 import "./App.css";
+import HotelPage from "./pages/hotelPage/HotelPage";
+import HotelRegistration from "./pages/hotelRegistration/HotelRegistration";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -38,20 +34,10 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/hotels" element={<SearchHotelsPage />} />
           <Route path="/discount" element={<Discount />} />
-          <Route path="/hotels/hotel/:hotelId" element={<Hotel />} />
+          <Route path="/hotels/hotel/:hotelId" element={<HotelPage />} />
           <Route path="/user/:userId" element={<UserProfile />} />
           <Route path="/hotelRegistration" element={<HotelRegistration />} />
-          <Route
-            path="/hotel/:hotelId/HotelRoomManagement"
-            element={<HotelRoomManagement />}
-          />
-          <Route
-            path="/hotel/:hotelId/hotelBookingManagement"
-            element={<HotelBookingManagement />}
-          />
-          <Route path="/hotel/:hotelId/hotelInformationManagement" element={<HotelInformationManagement />} />
-          <Route path="/user/admin" element={<Admin />} />
-          <Route path="/hotel/hotelOwner" element={<HotelDashBoard />} />
+          <Route path="/user/admin" element={<AdminPage />} />
         </Routes>
 
         <Footer />

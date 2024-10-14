@@ -1,0 +1,45 @@
+.dashboard h1 {
+    font-size: 2rem;
+}
+
+.dashboard .adminChartContainer {
+    height: 400px; 
+    padding: 20px;
+    box-sizing: border-box; 
+}
+
+.dashboard .adminOverViewThisMonth {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    background-color: white; 
+    width: 100%; 
+    margin-bottom: 20px; 
+    gap: 20px; 
+}
+
+.dashboard .adminOverViewThisMonthItem {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    width: 180px; 
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+}
+
+.dashboard .adminInfoNumber {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #333;
+}
+
+.dashboard .adminInfoText {
+    font-size: 16px;
+    color: #555;
+}
+
+.dashboard .adminOverViewNumber {
+    font-size: 18px;
+    font-weight: bold;
+    color: #28a745; 
+}
