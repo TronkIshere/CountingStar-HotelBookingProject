@@ -1,83 +1,73 @@
 .header {
   background-color: #003580;
   color: white;
-  display: flex;
-  justify-content: center;
   position: relative;
+  padding-bottom: 4rem;
 }
 
-.headerContainer {
-  width: 100%;
-  max-width: 1024px;
-  margin: 20px 0px 100px 0px;
-}
-
-.headerContainer.listMode {
-  margin: 20px 0px 0px 0px;
-}
-
-.headerList {
+.header .headerList {
   display: flex;
   gap: 40px;
   margin-bottom: 50px;
 }
 
-.headerListItem {
+.header .headerListItem {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.headerListItem.active {
+.header .headerListItem.active {
   border: 1px solid white;
   padding: 10px;
   border-radius: 20px;
 }
 
-.headerDesc {
+.header .headerDesc {
   margin: 20px 0px;
 }
 
-.headerBtn {
+.header .headerBtn {
   background-color: #0071c2;
   color: white;
   font-weight: 500;
   border: none;
   padding: 10px;
   cursor: pointer;
+  width: 100%;
 }
 
-.headerSearch {
+
+.header .headerSearch {
   height: 3rem;
   background-color: white;
   border: 3px solid #febb02;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  padding: 10px 0px;
   border-radius: 5px;
   position: absolute;
   bottom: -25px;
   width: 100%;
-  max-width: 1024px;
+  max-width: 1000px; 
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
-.headerIcon {
+.header .headerIcon {
   color: lightgray;
 }
 
-.headerSearchItem {
+.header .headerSearchItem {
   display: flex;
   align-items: center;
-  gap: 10px;
+  height: 100%;
+  padding-left: 20px;
 }
 
-.headerSearchInput {
+.header .headerSearchInput {
   border: none;
   outline: none;
 }
 
-.headerSearchSelect {
+.header .headerSearchSelect {
   border: none;
   outline: none;
   width: 200px;
@@ -85,44 +75,29 @@
   font-size: 1rem;
 }
 
-.headerSearchText {
+.header .headerSearchText {
   color: black;
   cursor: pointer;
 }
 
-.headerSearchSelect option {
+.header .headerSearchSelect option {
   padding: 10px;
   background-color: #f0f0f0;
 }
 
-.headerSearchSelect option:hover {
-  background-color: #e0e0e0;
-}
 
-.headerSearchSelect option:disabled {
-  color: gray;
-}
-
-.headerSearchSelect option:first-child {
-  color: gray;
-}
-
-.headerSearchSelect option:not(:first-child) {
-  padding-left: 20px;
-}
-
-.locationIcon {
+.header .locationIcon {
   font-size: 1rem;
   margin-right: 5px;
 }
 
-.date {
+.header .date {
   position: absolute;
   top: 50px;
   z-index: 2;
 }
 
-.options {
+.header .options {
   z-index: 2;
   position: absolute;
   top: 50px;
@@ -133,14 +108,14 @@
   box-shadow: 0px 0px 10px -5px rgba(0, 0, 0, 0.4);
 }
 
-.optionItem {
+.header .optionItem {
   width: 200px;
   display: flex;
   justify-content: space-between;
   margin: 10px;
 }
 
-.optionCounter {
+.header .optionCounter {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -148,7 +123,7 @@
   color: black;
 }
 
-.optionCounterButton {
+.header .optionCounterButton {
   width: 30px;
   height: 30px;
   border: 1px solid #0071c2;
@@ -157,6 +132,38 @@
   background-color: white;
 }
 
-.optionCounterButton:disabled {
+.header .optionCounterButton:disabled {
   cursor: not-allowed;
+}
+
+@media (max-width: 1196px) {
+  .header .headerSearch {
+    max-width: 935px;
+  }
+  
+  .header .headerSearchItem {
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 980px) {
+  .header .headerSearch {
+    max-width: 700px;
+  }
+  .header .headerSearchItem {
+    height: auto;
+  }
+}
+
+@media (max-width: 770px) {
+  .header {
+    padding-bottom: 8rem;
+  }
+  .header .headerSearch {
+    max-width: 520px;
+    height: auto;
+  }
+  .header .headerSearchItem{
+    font-size: 1.1rem;
+  }
 }
