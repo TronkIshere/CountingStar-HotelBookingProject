@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 const Discount = () => {
   return (
-    <div className="discount mt-5">
+    <div className="discount mt-4">
       <div className="container">
           <h1 className="homeTitle mb-4">Săn mã giảm giá mua du lịch</h1>
         <div className="discountBanner">

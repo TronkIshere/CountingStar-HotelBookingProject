@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import HomePage from "./pages/homePage/HomePage";
-import List from "./pages/list/List";
+import SearchHotelsPage from "./pages/searchHotelsPage/SearchHotelsPage";
 import Hotel from "./pages/hotel/Hotel";
 import Navbar from "./components/navbar/Navbar";
 import { useState } from "react";
@@ -33,9 +33,10 @@ function App() {
       <BrowserRouter>
         <Navbar onLoginClick={handleLoginClick} />
         {showLogin && <Login onClose={handleCloseModal} />}
+
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/hotels" element={<List />} />
+          <Route path="/hotels" element={<SearchHotelsPage />} />
           <Route path="/discount" element={<Discount />} />
           <Route path="/hotels/hotel/:hotelId" element={<Hotel />} />
           <Route path="/user/:userId" element={<UserProfile />} />
@@ -52,6 +53,7 @@ function App() {
           <Route path="/user/admin" element={<Admin />} />
           <Route path="/hotel/hotelOwner" element={<HotelDashBoard />} />
         </Routes>
+
         <Footer />
       </BrowserRouter>
     </AuthProvider>
