@@ -350,7 +350,7 @@ export async function getUserProfile(userId, token) {
 
 export async function getAllUserExceptAminRole(pageNo = 0, pageSize = 16) {
   try {
-    const response = await api.get(`users/getAllUserExceptAminRole/`, {
+    const response = await api.get(`users/getAllUserExceptAminRole`, {
       headers: getHeader(),
       params: { pageNo, pageSize },
     });
