@@ -96,9 +96,8 @@ const Hotel = () => {
   const userRole = localStorage.getItem("userRole");
 
   return (
-    <div>
-      <Header type="list" />
-      <div className="hotelContainer">
+    <div className="hotelPage">
+      <div className="container my-4">
         {open && (
           <div className="slider">
             <FontAwesomeIcon
@@ -128,29 +127,18 @@ const Hotel = () => {
         {ratingOpen && (
           <Rating hotelId={hotelInfo.id} onClose={() => setRatingOpen(false)} />
         )}
+
         <div className="hotelWrapper">
-          <ScrollLink to="roomList" smooth={true} duration={500}>
-            <button className="bookNow">Hãy đặt ngay!</button>
-          </ScrollLink>
-
-          {userRole === "ROLE_ADMIN" && (
-            <div className="adminTbale">
-              <h1>Bảng điều chỉnh khách sạn của Admin</h1>
-              <div className="adminButtonPatten">
-                <RouterLink to={`/hotel/${hotelInfo.id}/hotelRoomManagement`}>
-                  <button className="adminButton">Quản lý phòng</button>
-                </RouterLink>
-                <RouterLink to={`/hotel/${hotelInfo.id}/hotelBookingManagement`}>
-                  <button className="adminButton">Quản lý phòng được đặt</button>
-                </RouterLink>
-                <RouterLink to={`/hotel/${hotelInfo.id}/hotelInformationManagement`}>
-                  <button className="adminButton">Quản lý thông tin khách sạn</button>
-                </RouterLink>
-              </div>
+          <div className="row d-flex align-items-center">
+            <div className="col-12 col-sm-12 col-md-6 col-lg-6">
+              <h1 className="hotelTitle">{hotelInfo.hotelName}</h1>
             </div>
-          )}
-
-          <h1 className="hotelTitle">{hotelInfo.hotelName}</h1>
+            <div className="col-12 col-sm-12 col-md-6 col-lg-6 d-flex justify-content-end align-items-end">
+              <ScrollLink to="roomList" smooth={true} duration={500}>
+                <button className="main-btn">Hãy đặt ngay!</button>
+              </ScrollLink>
+            </div>
+          </div>
           <div className="hotelAddressAndContact">
             <FontAwesomeIcon icon={faLocationDot} />
             <span>{hotelInfo.hotelLocation}</span>
@@ -190,28 +178,36 @@ const Hotel = () => {
           </div>
 
           <div className="hotelDetails">
-            <div className="hotelDetailsTexts">
-              <h1 className="hotelTitle">Tổng quan khách sạn</h1>
-              <p className="hotelDesc">{hotelInfo.hotelDescription}</p>
-            </div>
-            <div className="hotelDetailsPrice">
-              <h1>Nơi tuyệt vời để thuê!</h1>
-              <span>
-                Nằm tại thành phố Hồ Chí Minh, khách sạn này có số điểm là 9.8!
-              </span>
-              <h2>
-                <b>
-                  Từ ${hotelInfo.lowestPrice}-{hotelInfo.highestPrice}
-                </b>{" "}
-                (1 đêm)
-              </h2>
-              <button>Đặt phòng ngay!</button>
+            <div className="row">
+              <div className="col-12 col-sm-12 col-md-9 col-lg-9">
+                <div className="hotelDetailsTexts">
+                  <h1 className="hotelTitle">Tổng quan khách sạn</h1>
+                  <p className="hotelDesc">{hotelInfo.hotelDescription}</p>
+                </div>
+              </div>
+              <div className="col-12 col-sm-12 col-md-3 col-lg-3">
+                <div className="hotelDetailsPrice">
+                  <h1>Nơi tuyệt vời để thuê!</h1>
+                  <span>
+                    Nằm tại thành phố Hồ Chí Minh, khách sạn này có số điểm là
+                    9.8!
+                  </span>
+                  <h2>
+                    <b>
+                      Từ ${hotelInfo.lowestPrice}-{hotelInfo.highestPrice}
+                    </b>{" "}
+                    (1 đêm)
+                  </h2>
+                  <button className="main-btn">Đặt phòng ngay!</button>
+                </div>
+              </div>
             </div>
           </div>
           <div id="roomList">
             <RoomList hotelId={hotelInfo.id} />
           </div>
         </div>
+
         {userId ? <div></div> : <Register />}
       </div>
     </div>
