@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from "../utils/ApiFunction";
 import { AuthContext } from "../utils/AuthProvider";
 
-const Login = () => {
+const Login = ({ onClose }) => { // Nhận props onClose
   const [errorMessage, setErrorMessage] = useState("");
   const [login, setLogin] = useState({
     email: "",
@@ -24,7 +24,8 @@ const Login = () => {
     if (success) {
       const token = success.token;
       handleLogin(token);
-      navigate("/");
+      onClose(); // Gọi hàm onClose để đóng modal
+      navigate("/"); // Điều hướng sau khi đăng nhập thành công
     } else {
       setErrorMessage("Invalid username or password. Please try again.");
     }
@@ -35,11 +36,11 @@ const Login = () => {
 
   return (
     <div
-      className="loginModal modal fade"
-      id="loginModal"
+      className="loginModal modal fade show" // Thêm class 'show' để đảm bảo modal hiển thị
+      style={{ display: 'block' }} // Đặt display block khi modal hiển thị
       tabIndex="-1"
       aria-labelledby="loginModalLabel"
-      aria-hidden="true"
+      aria-hidden="false" // Thay đổi thành false khi modal hiển thị
     >
       <div className="modal-dialog">
         <div className="modal-content">
@@ -51,7 +52,7 @@ const Login = () => {
               <button
                 type="button"
                 className="btn-close"
-                data-bs-dismiss="modal"
+                onClick={onClose} // Gọi hàm onClose để đóng modal
                 aria-label="Close"
               ></button>
             </div>
@@ -96,7 +97,7 @@ const Login = () => {
               <button
                 type="button"
                 className="white-btn"
-                data-bs-toggle="modal"
+                onClick={onClose} // Gọi hàm onClose để đóng modal
                 aria-label="Close"
               >
                 Đóng

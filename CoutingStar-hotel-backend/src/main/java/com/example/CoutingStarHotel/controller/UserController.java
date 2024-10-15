@@ -39,9 +39,9 @@ public class UserController {
     }
 
     @GetMapping("/getAllUserExceptAminRole")
-    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> getAllUserExceptAminRole(@RequestParam(defaultValue = "0") Integer pageNo,
-                                                      @RequestParam(defaultValue = "16") Integer pageSize){
+                                                      @RequestParam(defaultValue = "8") Integer pageSize){
         try{
             Page<User> users = userService.getAllUserExceptAdminRole(pageNo, pageSize);
             Page<UserDTO> userResponse = users.map(this::getUserDTO);
@@ -54,9 +54,9 @@ public class UserController {
     }
 
     @GetMapping("/searchUserByKeyWord/{keyWord}")
-    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> searchUserByKeyWord(@RequestParam(defaultValue = "0") Integer pageNo,
-                                                 @RequestParam(defaultValue = "16") Integer pageSize,
+                                                 @RequestParam(defaultValue = "8") Integer pageSize,
                                                  @PathVariable String keyWord){
         try{
             Page<User> users = userService.searchUserByKeyWord(pageNo, pageSize, keyWord);

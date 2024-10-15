@@ -11,6 +11,15 @@ const Navbar = () => {
   const [showAccount, setShowAccount] = useState(false);
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handleAccountClick = () => {
     setShowAccount(!showAccount);
@@ -147,15 +156,10 @@ const Navbar = () => {
                     Đăng phòng của bạn
                   </RouterLink>
                   <button className="white-btn me-3 nav-btn">Đăng ký</button>
-                  <button
-                    type="button"
-                    className="white-btn nav-btn"
-                    data-bs-toggle="modal"
-                    data-bs-target="#loginModal"
-                  >
+                  <button onClick={handleOpenModal} className="white-btn nav-btn">
                     Đăng nhập
                   </button>
-                  <Login/>
+                  {isModalOpen && <Login onClose={handleCloseModal} />}
                 </>
               )}
             </div>

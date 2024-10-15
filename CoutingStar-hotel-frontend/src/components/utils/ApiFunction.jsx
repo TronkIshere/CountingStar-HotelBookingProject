@@ -348,7 +348,7 @@ export async function getUserProfile(userId, token) {
   }
 }
 
-export async function getAllUserExceptAminRole(pageNo = 0, pageSize = 16) {
+export async function getAllUserExceptAminRole(pageNo = 0, pageSize = 8) {
   try {
     const response = await api.get(`users/getAllUserExceptAminRole`, {
       headers: getHeader(),
@@ -360,7 +360,7 @@ export async function getAllUserExceptAminRole(pageNo = 0, pageSize = 16) {
   }
 }
 
-export async function searchUserByKeyWord(pageNo = 0, pageSize = 16, keyword) {
+export async function searchUserByKeyWord(pageNo = 0, pageSize = 8, keyword) {
   try {
     const response = await api.get(`users/searchUserByKeyWord/${encodeURIComponent(keyword)}`, {
       headers: getHeader(),

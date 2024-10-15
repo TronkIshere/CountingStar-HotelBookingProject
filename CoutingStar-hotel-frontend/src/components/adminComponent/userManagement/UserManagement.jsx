@@ -8,7 +8,7 @@ const UserManagement = () => {
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
 
-  const fetchUsers = async (pageNo = 0, pageSize = 16, keyword = "") => {
+  const fetchUsers = async (pageNo = 0, pageSize = 8, keyword = "") => {
     let usersData;
     if (keyword) {
       usersData = await searchUserByKeyWord(pageNo, pageSize, keyword);
@@ -20,12 +20,12 @@ const UserManagement = () => {
   };
 
   useEffect(() => {
-    fetchUsers(page, 16, searchKeyword);
+    fetchUsers(page, 8, searchKeyword);
   }, [page, searchKeyword]);
 
   const handleSearch = () => {
     setPage(0);
-    fetchUsers(0, 16, searchKeyword);
+    fetchUsers(0, 8, searchKeyword);
   };
 
   const handlePageChange = (newPage) => {
