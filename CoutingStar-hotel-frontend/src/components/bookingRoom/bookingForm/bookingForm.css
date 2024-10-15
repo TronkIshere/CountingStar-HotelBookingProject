@@ -1,43 +1,8 @@
-/* bookingForm.css */
-.modal_overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.bookingForm {
-  background-color: white;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  max-width: 600px;
-  width: 100%;
-  position: relative;
-
-  max-height: 80%;
-  overflow-y: auto;
-  scrollbar-width: none;
-}
-
 .bookingForm h1 {
   margin-bottom: 25px;
   color: #0071c2;
   font-size: 24px;
   font-weight: bold;
-}
-
-.roomContent {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 25px;
 }
 
 .roomImg img {
@@ -51,21 +16,6 @@
   margin: 10px 0;
   font-size: 16px;
   line-height: 1.5;
-}
-
-.userInfoInput {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.userInfoInput input {
-  height: 45px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
 }
 
 .dateSelection {
@@ -86,19 +36,6 @@
   padding: 15px;
 }
 
-.discountSelection {
-  margin-bottom: 20px;
-}
-
-.discountSelection select {
-  width: 100%;
-  height: 45px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
-}
-
 .totalPayment {
   margin: 20px 0;
   font-size: 18px;
@@ -108,31 +45,5 @@
 .errorMessage {
   color: red;
   margin-bottom: 20px;
-}
-
-.submitButton {
-  width: 100%;
-  height: 50px;
-  background-color: #0071c2;
-  color: white;
-  font-weight: 500;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-.submitButton:hover {
-  background-color: #005fa3;
-}
-
-.closeButton {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
 }
 

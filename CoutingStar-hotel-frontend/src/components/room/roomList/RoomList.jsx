@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./roomList.css";
 import { getRoomsByHotelId } from "../../utils/ApiFunction";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-regular-svg-icons";
 import BookingForm from "../../bookingRoom/bookingForm/BookingForm";
 
 const RoomList = ({ hotelId }) => {
@@ -11,24 +9,14 @@ const RoomList = ({ hotelId }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const handleBookClick = (roomId) => {
-    setSelectedRoom(roomId);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedRoom(null);
-  };
-
   useEffect(() => {
     setIsLoading(true);
     getRoomsByHotelId(hotelId)
       .then((response) => {
-        console.log("Rooms data:", response);
         setRooms(response);
         setIsLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching rooms:", error);
         setError(error);
         setIsLoading(false);
       });
@@ -58,14 +46,14 @@ const RoomList = ({ hotelId }) => {
                 <td>{room.roomType}</td>
                 <td>{room.roomDescription}</td>
                 <td>${room.roomPrice}</td>
-                <td>
-                  {room.averageNumberOfRoomStars} / 5
-                  <div>Sao</div>
-                </td>
+                <td>{room.averageNumberOfRoomStars} / 5</td>
                 <td className="lastTd">
                   <button
-                    className="bookButton"
-                    onClick={() => handleBookClick(room.id)}
+                    type="button"
+                    className="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#bookingModal"
+                    onClick={() => setSelectedRoom(room.roomId)}
                   >
                     Đặt
                   </button>
@@ -80,9 +68,7 @@ const RoomList = ({ hotelId }) => {
           )}
         </tbody>
       </table>
-      {selectedRoom && (
-        <BookingForm roomId={selectedRoom} onClose={handleCloseModal} />
-      )}
+      <BookingForm roomId={selectedRoom} />
     </div>
   );
 };

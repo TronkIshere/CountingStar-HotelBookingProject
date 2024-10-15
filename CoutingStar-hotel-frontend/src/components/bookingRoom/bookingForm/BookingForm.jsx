@@ -2,10 +2,15 @@ import React, { useState, useEffect } from "react";
 import "./bookingForm.css";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
-import { getRoomById, getUserByEmail, bookRoom, getAllRedeemedDiscountByUserId } from "../../utils/ApiFunction";
+import {
+  getRoomById,
+  getUserByEmail,
+  bookRoom,
+  getAllRedeemedDiscountByUserId,
+} from "../../utils/ApiFunction";
 import moment from "moment";
 
-const BookingForm = ({ roomId, onClose }) => {
+const BookingForm = ({ roomId }) => {
   const [openDate, setOpenDate] = useState(false);
   const [redeemedDiscounts, setRedeemedDiscounts] = useState([]);
   const [selectedDiscount, setSelectedDiscount] = useState(null);
@@ -56,7 +61,7 @@ const BookingForm = ({ roomId, onClose }) => {
       const fetchUserRedeemedDiscount = async () => {
         try {
           const response = await getAllRedeemedDiscountByUserId(userId);
-          console.log(response)
+          console.log(response);
           setRedeemedDiscounts(response);
         } catch (error) {
           console.error("Error fetching user:", error.message);
@@ -81,7 +86,6 @@ const BookingForm = ({ roomId, onClose }) => {
     fetchRoom();
   }, [roomId]);
 
-
   useEffect(() => {
     const storedCheckInDate = localStorage.getItem("checkInDate");
     const storedCheckOutDate = localStorage.getItem("checkOutDate");
@@ -105,7 +109,11 @@ const BookingForm = ({ roomId, onClose }) => {
 
   const handleDateChange = (item) => {
     setDate([item.selection]);
-    updateTotalPayment(item.selection.startDate, item.selection.endDate, selectedDiscount);
+    updateTotalPayment(
+      item.selection.startDate,
+      item.selection.endDate,
+      selectedDiscount
+    );
   };
 
   const handleDiscountChange = (e) => {
@@ -116,11 +124,13 @@ const BookingForm = ({ roomId, onClose }) => {
       setSelectedDiscount(null);
       updateTotalPayment(date[0].startDate, date[0].endDate, null);
     } else {
-      const discount = redeemedDiscounts.find(d => d.id === parseInt(selectedDiscountId, 10));
+      const discount = redeemedDiscounts.find(
+        (d) => d.id === parseInt(selectedDiscountId, 10)
+      );
       setSelectedDiscount(discount);
       updateTotalPayment(date[0].startDate, date[0].endDate, discount);
     }
-    console.log(selectedDiscountId)
+    console.log(selectedDiscountId);
   };
 
   const handleSubmit = async () => {
@@ -133,12 +143,18 @@ const BookingForm = ({ roomId, onClose }) => {
       guestEmail: user.email,
       numOfAdults: adults,
       numOfChildren: children,
-      totalPayment: calculatePayment(date[0].startDate, date[0].endDate, selectedDiscount),
+      totalPayment: calculatePayment(
+        date[0].startDate,
+        date[0].endDate,
+        selectedDiscount
+      ),
       discountId: selectedDiscount ? selectedDiscount.id : null, // Truyền discountId hoặc null
     };
 
     try {
-      const redeemedDiscountId = booking.discountId ? parseInt(booking.discountId, 10) : null;
+      const redeemedDiscountId = booking.discountId
+        ? parseInt(booking.discountId, 10)
+        : null;
       await bookRoom(roomId, booking, userId, redeemedDiscountId);
       localStorage.setItem("checkInDate", booking.checkInDate);
       localStorage.setItem("checkOutDate", booking.checkOutDate);
@@ -158,12 +174,16 @@ const BookingForm = ({ roomId, onClose }) => {
     const price = room.roomPrice ? room.roomPrice : 0;
     const total = diffInDays * price;
     if (discount) {
-      return total - (total * discount.percentDiscount / 100);
+      return total - (total * discount.percentDiscount) / 100;
     }
     return total;
   };
 
-  const updateTotalPayment = (checkInDate, checkOutDate, discount = selectedDiscount) => {
+  const updateTotalPayment = (
+    checkInDate,
+    checkOutDate,
+    discount = selectedDiscount
+  ) => {
     const total = calculatePayment(checkInDate, checkOutDate, discount);
     setTotalPayment(total);
   };
@@ -177,110 +197,200 @@ const BookingForm = ({ roomId, onClose }) => {
   };
 
   return (
-    <div className="modal_overlay" onClick={onClose}>
-      <div className="bookingForm" onClick={(e) => e.stopPropagation()}>
-        <button className="closeButton" onClick={onClose}>
-          ×
-        </button>
-        <h1>Đặt phòng</h1>
-        <div className="roomContent">
-          <div className="roomImg">
-            <img
-              src={`data:image/png;base64, ${room.photo}`}
-              alt={room.roomType}
-            />
+    <div
+      className="modal fade"
+      id="bookingModal"
+      tabIndex="-1"
+      aria-labelledby="bookingModalLabel"
+      aria-hidden="true"
+    >
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title" id="bookingModalLabel">
+              Đặt phòng
+            </h5>
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
-          <div className="roomDetail">
-            <p>
-              <strong>Loại phòng:</strong> {room.roomType}
-            </p>
-            <p>
-              <strong>Miêu tả:</strong> {room.roomDescription}
-            </p>
-            <p>
-              <strong>Giá tiền:</strong> {room.roomPrice}
-            </p>
-            <p>
-              <strong>Đánh giá:</strong> {room.rating}
-            </p>
+          <div className="modal-body">
+            <div className="roomContent mb-3">
+              <div className="row">
+                <div className="col-12 col-sm-12 col-md-4 col-lg-4">
+                  <div className="roomImg">
+                    <img
+                      src={`data:image/png;base64, ${room.photo}`}
+                      alt={room.roomType}
+                      className="img-fluid"
+                    />
+                  </div>
+                </div>
+                <div className="col-12 col-sm-12 col-md-8 col-lg-8">
+                  <div className="roomDetail">
+                    <p>
+                      <strong>Loại phòng:</strong> {room.roomType}
+                    </p>
+                    <p>
+                      <strong>Miêu tả:</strong> {room.roomDescription}
+                    </p>
+                    <p>
+                      <strong>Giá tiền:</strong> {room.roomPrice}
+                    </p>
+                    <p>
+                      <strong>Đánh giá:</strong> {room.rating}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="userInfoInput">
+              <div className="row">
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label htmlFor="email">Email</label>
+                    <input
+                      type="text"
+                      id="email"
+                      name="email"
+                      placeholder="Nhập Email"
+                      value={user.email}
+                      onChange={handleInputChange}
+                      className="form-control mb-2"
+                    />
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label htmlFor="firstName">Tên</label>
+                    <input
+                      type="text"
+                      id="firstName"
+                      name="firstName"
+                      placeholder="Nhập tên"
+                      value={user.firstName}
+                      onChange={handleInputChange}
+                      className="form-control mb-2"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label htmlFor="lastName">Họ và tên đệm</label>
+                    <input
+                      type="text"
+                      id="lastName"
+                      name="lastName"
+                      placeholder="Nhập họ và tên đệm"
+                      value={user.lastName}
+                      onChange={handleInputChange}
+                      className="form-control mb-2"
+                    />
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label htmlFor="phoneNumber">Số điện thoại</label>
+                    <input
+                      type="text"
+                      id="phoneNumber"
+                      name="phoneNumber"
+                      placeholder="Nhập số điện thoại"
+                      value={user.phoneNumber}
+                      onChange={handleInputChange}
+                      className="form-control mb-2"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label htmlFor="adults">Số người lớn</label>
+                    <input
+                      type="number"
+                      id="adults"
+                      placeholder="Nhập số người lớn"
+                      value={adults}
+                      onChange={(e) => setAdults(parseInt(e.target.value, 10))}
+                      className="form-control mb-2"
+                    />
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label htmlFor="children">Số trẻ em</label>
+                    <input
+                      type="number"
+                      id="children"
+                      placeholder="Nhập số trẻ em"
+                      value={children}
+                      onChange={(e) =>
+                        setChildren(parseInt(e.target.value, 10))
+                      }
+                      className="form-control mb-2"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="form-group mb-2">
+                <label htmlFor="dateRange">Ngày đặt</label>
+                <span
+                  onClick={() => setOpenDate(!openDate)}
+                  className="form-control"
+                >
+                  {`${format(date[0].startDate, "MM/dd/yyyy")} đến ${format(
+                    date[0].endDate,
+                    "MM/dd/yyyy"
+                  )}`}
+                </span>
+                {openDate && (
+                  <DateRange
+                    editableDateInputs={true}
+                    onChange={handleDateChange}
+                    moveRangeOnFirstSelection={false}
+                    ranges={date}
+                  />
+                )}
+              </div>
+
+              <div className="form-group mb-2">
+                <label htmlFor="discount">Mã giảm giá</label>
+                <select
+                  onChange={handleDiscountChange}
+                  id="discount"
+                  className="form-select mb-2"
+                >
+                  <option value="">Chọn mã giảm giá (nếu có)</option>
+                  {redeemedDiscounts.map((discount) => (
+                    <option key={discount.id} value={discount.id}>
+                      {discount.discountName} ({discount.percentDiscount}%)
+                      {discount.used ? " - Đã sử dụng" : ""}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <p>
+                <strong>Tổng thanh toán:</strong> {totalPayment} VND
+              </p>
+
+              <button onClick={handleSubmit} className="main-btn">
+                Đặt phòng
+              </button>
+
+              {error && <p className="text-danger">{error}</p>}
+            </div>
           </div>
         </div>
-        <div className="userInfoInput">
-          <input
-            type="text"
-            name="email"
-            placeholder="Nhập Email"
-            value={user.email}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="firstName"
-            placeholder="Nhập tên"
-            value={user.firstName}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="lastName"
-            placeholder="Nhập họ và tên đệm"
-            value={user.lastName}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="phoneNumber"
-            placeholder="Nhập số điện thoại"
-            value={user.phoneNumber}
-            onChange={handleInputChange}
-          />
-          <input
-            type="number"
-            placeholder="Nhập số người lớn"
-            value={adults}
-            onChange={(e) => setAdults(parseInt(e.target.value, 10))}
-          />
-          <input
-            type="number"
-            placeholder="Nhập số trẻ em"
-            value={children}
-            onChange={(e) => setChildren(parseInt(e.target.value, 10))}
-          />
-          <div className="dateSelection">
-            <span
-              onClick={() => setOpenDate(!openDate)}
-              className="headerSearchText"
-            >
-              {`${format(date[0].startDate, "MM/dd/yyyy")} đến ${format(
-                date[0].endDate,
-                "MM/dd/yyyy"
-              )}`}
-            </span>
-            {openDate && (
-              <DateRange
-                editableDateInputs={true}
-                onChange={handleDateChange}
-                moveRangeOnFirstSelection={false}
-                ranges={date}
-              />
-            )}
-          </div>
-          <select onChange={handleDiscountChange}>
-            <option value="">Chọn mã giảm giá (nếu có)</option>
-            {redeemedDiscounts.map((discount) => (
-              <option key={discount.id} value={discount.id}>
-                {discount.discountName} ({discount.percentDiscount}%) {discount.used ? " - Đã sử dụng" : ""}
-              </option>
-            ))}
-          </select>
-          <p>
-            <strong>Tổng thanh toán:</strong> {totalPayment} VND
-          </p>
-          <button onClick={handleSubmit} className="submitButton">
-            Đặt phòng
-          </button>
-        </div>
-        {error && <p className="error">{error}</p>}
       </div>
     </div>
   );
