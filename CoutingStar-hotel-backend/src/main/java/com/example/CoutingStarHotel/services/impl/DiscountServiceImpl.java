@@ -7,6 +7,9 @@ import com.example.CoutingStarHotel.repositories.RoomRepository;
 import com.example.CoutingStarHotel.services.DiscountService;
 import com.example.CoutingStarHotel.services.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -36,14 +39,27 @@ public class DiscountServiceImpl implements DiscountService {
     }
 
     @Override
-    public List<Discount> getDiscountNotExpired() {
-        return discountRepository.getDiscountNotExpired(LocalDate.now());
+    public Page<Discount> getDiscountNotExpired(Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return discountRepository.getDiscountNotExpired(pageable, LocalDate.now());
     }
 
     @Override
     public Optional<Discount> getDiscountById(Long discountId) {
         return Optional.ofNullable(discountRepository.findById(discountId)
                 .orElseThrow(() -> new ResourceNotFoundException("discount not found")));
+    }
+
+    @Override
+    public Page<Discount> getAllDiscount(Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return discountRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Discount> getDiscountByKeyword(Integer pageNo, Integer pageSize, String keyword) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return discountRepository.getDiscountByKeyword(pageable, keyword);
     }
 
     @Override

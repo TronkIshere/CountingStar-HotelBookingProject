@@ -7,6 +7,7 @@ import com.example.CoutingStarHotel.DTO.DiscountDTO;
 import com.example.CoutingStarHotel.services.DiscountService;
 import io.jsonwebtoken.io.IOException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,13 +47,27 @@ public class DiscountController {
     }
 
     @GetMapping("/getAllDiscount")
-    public ResponseEntity<List<DiscountDTO>> getDiscountNotExpired(){
-        List<Discount> discounts = discountService.getDiscountNotExpired();
-        List<DiscountDTO> discountDTOS = new ArrayList<>();
-        for(Discount discount : discounts){
-            DiscountDTO discountResponse = getDiscountResponse(discount);
-            discountDTOS.add(discountResponse);
-        }
+    public ResponseEntity<Page<DiscountDTO>> getAllDiscount(@RequestParam(defaultValue = "0") Integer pageNo,
+                                                                   @RequestParam(defaultValue = "8") Integer pageSize){
+        Page<Discount> discounts = discountService.getAllDiscount(pageNo, pageSize);
+        Page<DiscountDTO> discountDTOS = discounts.map(this::getDiscountResponse);
+        return ResponseEntity.ok(discountDTOS);
+    }
+
+    @GetMapping("/getDiscountNotExpired")
+    public ResponseEntity<Page<DiscountDTO>> getDiscountNotExpired(@RequestParam(defaultValue = "0") Integer pageNo,
+                                                                   @RequestParam(defaultValue = "8") Integer pageSize){
+        Page<Discount> discounts = discountService.getDiscountNotExpired(pageNo, pageSize);
+        Page<DiscountDTO> discountDTOS = discounts.map(this::getDiscountResponse);
+        return ResponseEntity.ok(discountDTOS);
+    }
+
+    @GetMapping("/getDiscountByKeyword/{keyword}")
+    public ResponseEntity<Page<DiscountDTO>> getDiscountByKeyword(@RequestParam(defaultValue = "0") Integer pageNo,
+                                                                   @RequestParam(defaultValue = "8") Integer pageSize,
+                                                                   @PathVariable String keyword){
+        Page<Discount> discounts = discountService.getDiscountByKeyword(pageNo, pageSize, keyword);
+        Page<DiscountDTO> discountDTOS = discounts.map(this::getDiscountResponse);
         return ResponseEntity.ok(discountDTOS);
     }
 

@@ -1,0 +1,40 @@
+.discountManagement {
+    padding: 20px;
+}
+
+.discountManagement .searchDiscount-bar {
+    margin-bottom: 20px;
+}
+
+.discountManagement .form-label {
+    font-size: 1.1rem;
+}
+
+.discountManagement button {
+    padding: 8px 16px;
+}
+
+.discountManagement .table {
+    min-height: 50vh;
+    background-color: #ffffff; 
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-collapse: collapse;
+}
+
+.discountManagement .table th, 
+.discountManagement .table td {
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #dee2e6;
+    padding: 8px; 
+}
+
+.discountManagement .table th {
+    background-color: #f8f9fa; 
+}
+
+.discountManagement .table td .btn {
+    margin-right: 5px;
+}

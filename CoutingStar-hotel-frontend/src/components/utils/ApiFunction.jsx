@@ -49,9 +49,12 @@ export async function getAllHotels(pageNo = 0, pageSize = 8) {
 
 export async function getHotelByKeyword(pageNo = 0, pageSize = 8, keyword) {
   try {
-    const response = await api.get(`/hotels/getHotelByKeyword/${encodeURIComponent(keyword)}`, {
-      params: { pageNo, pageSize },
-    });
+    const response = await api.get(
+      `/hotels/getHotelByKeyword/${encodeURIComponent(keyword)}`,
+      {
+        params: { pageNo, pageSize },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching hotels:", error);
@@ -515,9 +518,40 @@ export async function getDataForAdminBarChart() {
 // **********************
 // DISCOUNT FUNCTION
 // **********************
-export async function getDiscountNotExpired() {
+
+export async function getAllDiscount(pageNo = 0, pageSize = 8) {
   try {
-    const response = await api.get("/discounts/getAllDiscount");
+    const response = await api.get("/discounts/getAllDiscount", {
+      headers: getHeader(),
+      params: { pageNo, pageSize },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error("Error fetching data");
+  }
+}
+
+export async function getDiscountNotExpired(pageNo = 0, pageSize = 8) {
+  try {
+    const response = await api.get("/discounts/getDiscountNotExpired", {
+      headers: getHeader(),
+      params: { pageNo, pageSize },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error("Error fetching data");
+  }
+}
+
+export async function getDiscountByKeyword(pageNo = 0, pageSize = 8, keyword) {
+  try {
+    const response = await api.get(
+      `/discounts/getDiscountByKeyword/${encodeURIComponent(keyword)}`,
+      {
+        headers: getHeader(),
+        params: { pageNo, pageSize },
+      }
+    );
     return response.data;
   } catch (error) {
     throw new Error("Error fetching data");
