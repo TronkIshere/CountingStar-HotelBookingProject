@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./dashbroad.css";
+import "./dashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBed,
@@ -7,12 +7,12 @@ import {
   faPencil,
   faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import BarChart from "../dashBoard/BarChart";
+import BarChart from "../../dashBoard/BarChart";
 import {
   getDataForDashBoardMonthIncreased,
   getDataForAdminPieChart,
-} from "../utils/ApiFunction";
-import PieChart from "../dashBoard/PieChart";
+} from "../../utils/ApiFunction";
+import PieChart from "../../dashBoard/PieChart";
 
 const DashBoard = () => {
   const [dashboardData, setDashboardData] = useState(null);

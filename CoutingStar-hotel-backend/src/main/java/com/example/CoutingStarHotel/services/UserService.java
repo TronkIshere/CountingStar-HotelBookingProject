@@ -1,6 +1,7 @@
 package com.example.CoutingStarHotel.services;
 
 import com.example.CoutingStarHotel.entities.User;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,4 +20,8 @@ public interface UserService {
     int getTotalNumberOfUsers();
 
     double getPercentageOfUsersIncreasedDuringTheMonth();
+
+    Page<User> getAllUserExceptAdminRole(Integer pageNo, Integer pageSize);
+
+    Page<User> searchUserByKeyWord(Integer pageNo, Integer pageSize, String keyWord);
 }

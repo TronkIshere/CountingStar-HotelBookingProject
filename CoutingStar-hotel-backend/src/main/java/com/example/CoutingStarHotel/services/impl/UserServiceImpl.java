@@ -7,6 +7,9 @@ import com.example.CoutingStarHotel.repositories.UserRepository;
 import com.example.CoutingStarHotel.services.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -88,4 +91,15 @@ public class UserServiceImpl implements UserService {
         return (UsersAddedThisMonth * 100.0) / totalUsers;
     }
 
+    @Override
+    public Page<User> getAllUserExceptAdminRole(Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return userRepository.getAllUserExceptAdminRole(pageable);
+    }
+
+    @Override
+    public Page<User> searchUserByKeyWord(Integer pageNo, Integer pageSize, String keyWord) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return userRepository.searchUserByKeyWord(pageable, keyWord);
+    }
 }

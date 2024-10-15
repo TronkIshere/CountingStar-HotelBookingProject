@@ -1,0 +1,43 @@
+.userManagement {
+    padding: 20px;
+}
+
+.userManagement .searchUser-bar {
+    margin-bottom: 20px;
+}
+
+.userManagement .form-label {
+    font-size: 1.1rem;
+}
+
+.userManagement button {
+    padding: 8px 16px;
+}
+
+.table {
+    min-height: 50vh;
+}
+
+.userManagement .table {
+    background-color: #ffffff; 
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-collapse: collapse;
+}
+
+.userManagement .table th, 
+.userManagement .table td {
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #dee2e6;
+    padding: 8px; 
+}
+
+.userManagement .table th {
+    background-color: #f8f9fa; 
+}
+
+.userManagement .table td .btn {
+    margin-right: 5px;
+}

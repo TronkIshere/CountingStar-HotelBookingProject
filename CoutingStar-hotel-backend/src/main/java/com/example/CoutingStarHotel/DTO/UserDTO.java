@@ -39,4 +39,12 @@ public class UserDTO {
             this.roles.add(new RoleDTO(role));
         }
     }
+
+    public UserDTO(Long id, String firstName, String lastName, String email, String phoneNumber) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
 }
