@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./hotelManagement.css";
-import { getAllHotels, getHotelByKeyword } from "../../utils/ApiFunction"; 
+import { getAllHotels, getHotelByKeyword } from "../../utils/ApiFunction";
+import EditHotel from "./hotelManagementComponent/editHotel/EditHotel";
+import DeleteHotel from "./hotelManagementComponent/deleteHotel/DeleteHotel";
 
 const HotelManagement = () => {
   const [hotels, setHotels] = useState([]);
@@ -16,20 +18,18 @@ const HotelManagement = () => {
       } else {
         hotelsData = await getAllHotels(pageNo, pageSize);
       }
-      
-      // Check if the data has the expected structure
+
       if (hotelsData && hotelsData.content) {
         setHotels(hotelsData.content);
         setTotalPages(hotelsData.totalPages);
       } else {
-        // Handle the case where the data structure is not as expected
         setHotels([]);
         setTotalPages(1);
       }
     } catch (error) {
       console.error("Error fetching hotels:", error);
-      setHotels([]); // Reset the hotels state on error
-      setTotalPages(1); // Reset total pages on error
+      setHotels([]);
+      setTotalPages(1);
     }
   };
 
@@ -46,6 +46,16 @@ const HotelManagement = () => {
     if (newPage >= 0 && newPage < totalPages) {
       setPage(newPage);
     }
+  };
+
+  const [currentHotelId, setCurrentHotelId] = useState(null);
+
+  const handleEditClick = (id) => {
+    setCurrentHotelId(id);
+  };
+
+  const handleDeleteClick = (id) => {
+    setCurrentHotelId(id);
   };
 
   return (
@@ -100,8 +110,24 @@ const HotelManagement = () => {
                   <td>{hotel.hotelLocation}</td>
                   <td>{hotel.phoneNumber}</td>
                   <td>
-                    <button className="btn btn-primary btn-sm">Chỉnh sửa</button>
-                    <button className="btn btn-danger btn-sm">Xóa</button>
+                    <button
+                      className="btn btn-primary btn-sm"
+                      data-bs-toggle="modal"
+                      data-bs-target="#editHotelModel"
+                      onClick={() => handleEditClick(hotel.id)}
+                    >
+                      Chỉnh sửa
+                    </button>
+                    <EditHotel hotelId={currentHotelId} />
+                    <button
+                      className="btn btn-danger btn-sm"
+                      data-bs-toggle="modal"
+                      data-bs-target="#deleteHotelModal"
+                      onClick={() => handleDeleteClick(hotel.id)}
+                    >
+                      Xóa
+                    </button>
+                    <DeleteHotel hotelId={currentHotelId} />
                   </td>
                 </tr>
               ))}
@@ -119,13 +145,23 @@ const HotelManagement = () => {
                   </button>
                 </li>
                 {Array.from({ length: totalPages }, (_, i) => (
-                  <li key={i} className={`page-item ${page === i ? "active" : ""}`}>
-                    <button className="page-link" onClick={() => handlePageChange(i)}>
+                  <li
+                    key={i}
+                    className={`page-item ${page === i ? "active" : ""}`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => handlePageChange(i)}
+                    >
                       {i + 1}
                     </button>
                   </li>
                 ))}
-                <li className={`page-item ${page === totalPages - 1 ? "disabled" : ""}`}>
+                <li
+                  className={`page-item ${
+                    page === totalPages - 1 ? "disabled" : ""
+                  }`}
+                >
                   <button
                     className="page-link"
                     onClick={() => handlePageChange(page + 1)}

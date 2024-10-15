@@ -1,0 +1,57 @@
+.editHotelModel .modal-dialog {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 45%;
+    margin: auto;
+}
+
+.editHotelModel label{
+    width: 100%;
+}
+
+.editHotelModel .modal-content {
+    width: 100%;
+    max-width: 1200px;
+}
+
+.editHotelModel .modal-header {
+    background: var(--primary-color);
+}
+
+.editHotelModel .modal-header h5 {
+    color: var(--white-color);
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.editHotelModel .modal-header button {
+    color: var(--white-color);
+}
+
+.editHotelModel .image-preview-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.editHotelModel .image-item {
+    width: 100%;
+}
+
+.editHotelModel .image-preview {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.editHotelModel label {
+    text-align: left;
+}
+
+.editHotelModel .alert {
+    margin-top: 20px;
+}
