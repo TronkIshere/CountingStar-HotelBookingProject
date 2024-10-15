@@ -59,4 +59,12 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
     @Query("SELECT SUM(b.totalAmount) FROM BookedRoom b WHERE b.room.hotel.id = :hotelId AND b.bookingDay >= :firstDayOfThisMonth AND b.bookingDay < :firstDayOfNextMonth")
     BigDecimal getHotelRevenueDuringPeriod(@Param("hotelId")Long hotelId,@Param("firstDayOfThisMonth") LocalDate firstDayOfThisMonth,@Param("firstDayOfNextMonth") LocalDate firstDayOfNextMonth);
+
+    @Query("SELECT h FROM Hotel h WHERE lower(h.city) LIKE lower(concat('%', :keyword, '%')) OR " +
+            "lower(h.hotelDescription) LIKE lower(concat('%', :keyword, '%')) OR " +
+            "lower(h.hotelLocation) LIKE lower(concat('%', :keyword, '%')) OR " +
+            "lower(h.hotelName) LIKE lower(concat('%', :keyword, '%')) OR " +
+            "cast(h.id as string) LIKE lower(concat('%', :keyword, '%')) OR " +
+            "cast(h.phoneNumber as string) LIKE lower(concat('%', :keyword, '%'))")
+    Page<Hotel> getHotelByKeyword(Pageable pageable, String keyword);
 }

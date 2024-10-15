@@ -35,6 +35,30 @@ export async function addHotel(
   return response;
 }
 
+export async function getAllHotels(pageNo = 0, pageSize = 8) {
+  try {
+    const response = await api.get(`/hotels/all-hotels`, {
+      params: { pageNo, pageSize },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching hotels:", error);
+    throw new Error("Error fetching hotels");
+  }
+}
+
+export async function getHotelByKeyword(pageNo = 0, pageSize = 8, keyword) {
+  try {
+    const response = await api.get(`/hotels/getHotelByKeyword/${encodeURIComponent(keyword)}`, {
+      params: { pageNo, pageSize },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching hotels:", error);
+    throw new Error("Error fetching hotels");
+  }
+}
+
 export async function getHotelsByCity(city, pageNo = 0, pageSize = 10) {
   try {
     const response = await api.get(`/hotels/${encodeURIComponent(city)}`, {
@@ -362,10 +386,13 @@ export async function getAllUserExceptAminRole(pageNo = 0, pageSize = 8) {
 
 export async function searchUserByKeyWord(pageNo = 0, pageSize = 8, keyword) {
   try {
-    const response = await api.get(`users/searchUserByKeyWord/${encodeURIComponent(keyword)}`, {
-      headers: getHeader(),
-      params: { pageNo, pageSize },
-    });
+    const response = await api.get(
+      `users/searchUserByKeyWord/${encodeURIComponent(keyword)}`,
+      {
+        headers: getHeader(),
+        params: { pageNo, pageSize },
+      }
+    );
     return response.data;
   } catch (error) {
     throw error;

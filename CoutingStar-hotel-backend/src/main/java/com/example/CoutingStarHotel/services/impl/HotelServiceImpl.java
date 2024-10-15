@@ -175,8 +175,15 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public List<Hotel> getAllHotels(){
-        return hotelRepository.findAll();
+    public Page<Hotel> getHotelByKeyword(Integer pageNo, Integer pageSize, String keyword) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return hotelRepository.getHotelByKeyword(pageable, keyword);
+    }
+
+    @Override
+    public Page<Hotel> getAllHotels(Integer pageNo, Integer pageSize){
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return hotelRepository.findAll(pageable);
     }
 
     @Override

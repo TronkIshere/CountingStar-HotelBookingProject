@@ -44,13 +44,19 @@ public class HotelController {
         }
     }
     @GetMapping("/all-hotels")
-    public ResponseEntity<List<HotelDTO>> getAllHotels(){
-        List<Hotel> hotels = hotelService.getAllHotels();
-        List<HotelDTO> hotelResponses = new ArrayList<>();
-        for (Hotel hotel : hotels){
-            HotelDTO hotelResponse = getHotelResponse(hotel);
-            hotelResponses.add(hotelResponse);
-        }
+    public ResponseEntity<Page<HotelDTO>> getAllHotels(@RequestParam(defaultValue = "0") Integer pageNo,
+                                                       @RequestParam(defaultValue = "8") Integer pageSize){
+        Page<Hotel> hotels = hotelService.getAllHotels(pageNo, pageSize);
+        Page<HotelDTO> hotelResponses = hotels.map(this::getHotelResponse);
+        return ResponseEntity.ok(hotelResponses);
+    }
+
+    @GetMapping("/getHotelByKeyword/{keyword}")
+    public ResponseEntity<Page<HotelDTO>> getHotelByKeyword(@RequestParam(defaultValue = "0") Integer pageNo,
+                                                            @RequestParam(defaultValue = "8") Integer pageSize,
+                                                            @PathVariable String keyword){
+        Page<Hotel> hotels = hotelService.getHotelByKeyword(pageNo, pageSize, keyword);
+        Page<HotelDTO> hotelResponses = hotels.map(this::getHotelResponse);
         return ResponseEntity.ok(hotelResponses);
     }
 

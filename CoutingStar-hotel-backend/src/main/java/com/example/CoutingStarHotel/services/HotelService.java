@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface HotelService {
-    List<Hotel> getAllHotels();
+    Page<Hotel> getAllHotels(Integer pageNo, Integer pageSize);
 
     Page<Hotel> getAllHotelsByCity(String city, Integer pageNo, Integer pageSize);
 
@@ -52,4 +52,6 @@ public interface HotelService {
     int getTotalBookedRoomInSpecificHotel(Long hotelId);
 
     double getPercentageOfBookedIncreasedDuringTheMonthForHotel(Long hotelId);
+
+    Page<Hotel> getHotelByKeyword(Integer pageNo, Integer pageSize, String keyword);
 }
