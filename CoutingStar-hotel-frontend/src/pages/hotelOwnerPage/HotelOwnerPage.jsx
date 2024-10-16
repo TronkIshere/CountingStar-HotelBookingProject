@@ -5,6 +5,7 @@ import HotelDashBoard from "../../components/hotelManagementComponent/hotelDashB
 import { AuthContext } from "../../components/utils/AuthProvider";
 import HotelRoomManagement from "../../components/hotelManagementComponent/hotelRoomManagement/HotelRoomManagement";
 import HotelBookingManagement from "../../components/hotelManagementComponent/hotelBookingManagement/HotelBookingManagement";
+import HotelInformationManagement from "../../components/hotelManagementComponent/hotelInformationManagement/HotelInformationManagement";
 
 const HotelOwnerPage = () => {
   const [activeComponent, setActiveComponent] = useState(null);
@@ -24,8 +25,10 @@ const HotelOwnerPage = () => {
         return <HotelDashBoard />;
       case "hotelRoomManagement":
         return <HotelRoomManagement />;
-        case "hotelBookingManagement":
+      case "hotelBookingManagement":
         return <HotelBookingManagement />;
+      case "hotelInformationManagement":
+        return <HotelInformationManagement />;
       default:
         return <HotelDashBoard />;
     }
@@ -51,7 +54,7 @@ const HotelOwnerPage = () => {
               </li>
               <li
                 className="sidebar-item"
-                onClick={() => setActiveComponent("hotelIfnomationManagement")}
+                onClick={() => setActiveComponent("hotelInformationManagement")}
               >
                 Quản lý thông tin khách sạn
               </li>

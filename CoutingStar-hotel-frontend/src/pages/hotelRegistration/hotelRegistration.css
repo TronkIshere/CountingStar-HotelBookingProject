@@ -1,4 +1,4 @@
-.form {
+.hotelRegistration .form {
   width: 100%;
   max-width: 600px;
   background-color: #f9f9f9;
@@ -7,42 +7,42 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
+.hotelRegistration h2 {
   margin-bottom: 20px;
   color: #003580;
 }
 
-.form-group {
+.hotelRegistration .form-group {
   margin-bottom: 15px;
 }
 
-.form-group label {
+.hotelRegistration .form-group label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
 }
 
-.form-group input,
-.form-group textarea,
-.form-group select {
+.hotelRegistration .form-group input,
+.hotelRegistration .form-group textarea,
+.hotelRegistration .form-group select {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
-  font-size: 1rem; 
+  font-size: 1rem;
 }
 
-textarea {
+.hotelRegistration textarea {
   resize: vertical;
 }
 
-.select-wrapper {
+.hotelRegistration .select-wrapper {
   position: relative;
   width: 100%;
 }
 
-.select-wrapper select {
+.hotelRegistration .select-wrapper select {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -56,7 +56,7 @@ textarea {
   outline: none;
 }
 
-.select-wrapper::after {
+.hotelRegistration .select-wrapper::after {
   content: "\\25BC";
   position: absolute;
   top: 50%;
@@ -65,7 +65,7 @@ textarea {
   pointer-events: none;
 }
 
-.postHotelButton {
+.hotelRegistration .postHotelButton {
   border: none;
   background-color: #003580;
   font-size: 1.2rem;
@@ -77,12 +77,12 @@ textarea {
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.postHotelButton:hover {
+.hotelRegistration .postHotelButton:hover {
   background-color: #00214d;
   transform: scale(1.05);
 }
 
-.selectBar{
+.hotelRegistration .selectBar {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
