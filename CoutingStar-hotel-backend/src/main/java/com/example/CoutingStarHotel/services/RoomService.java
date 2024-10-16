@@ -1,6 +1,7 @@
 package com.example.CoutingStarHotel.services;
 
 import com.example.CoutingStarHotel.entities.Room;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -27,7 +28,9 @@ public interface RoomService {
 
     List<Room> getAvailableRooms(LocalDate checkInDate, LocalDate checkOutDate, String roomType);
 
-    List<Room> getRoomByHotelId(Long hotelId);
+    Page<Room> getRoomByHotelId(Long hotelId, Integer pageNo, Integer pageSize);
 
     double averageNumberOfRoomStars(Long roomId);
+
+    Page<Room> getAllRoomByKeywordAndHotelId(Integer pageNo, Integer pageSize, String keyword, Long hotelId);
 }

@@ -9,6 +9,10 @@
     gap: 20px; 
 }
 
+.hotelDashBoard h1 {
+    font-size: 1.8rem;
+}
+
 .hotelDashBoard .hotelOwnerChartsGroup {
     display: flex;
     flex-direction: column;

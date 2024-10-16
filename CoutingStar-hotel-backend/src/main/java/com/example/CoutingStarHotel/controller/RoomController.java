@@ -1,15 +1,16 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.exception.PhotoRetrievalExcetion;
-import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
+import com.example.CoutingStarHotel.DTO.RoomDTO;
 import com.example.CoutingStarHotel.entities.BookedRoom;
 import com.example.CoutingStarHotel.entities.Room;
-import com.example.CoutingStarHotel.DTO.RoomDTO;
+import com.example.CoutingStarHotel.exception.PhotoRetrievalExcetion;
+import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.repositories.RoomRepository;
 import com.example.CoutingStarHotel.services.BookingService;
 import com.example.CoutingStarHotel.services.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,18 +55,10 @@ public class RoomController {
     }
 
     @GetMapping("/{hotelId}")
-    public ResponseEntity<List<RoomDTO>> getRoomsByHotelId(@PathVariable Long hotelId) throws SQLException{
-        List<Room> rooms = roomService.getRoomByHotelId(hotelId);
-        List<RoomDTO> roomResponses = new ArrayList<>();
-        for(Room room : rooms){
-            byte[] photoBytes = roomService.getRoomPhotoByRoomId(room.getId());
-            if(photoBytes != null && photoBytes.length > 0) {
-                String base64Photo = Base64.encodeBase64String(photoBytes);
-                RoomDTO roomResponse = getRoomResponse(room);
-                roomResponse.setPhoto(base64Photo);
-                roomResponses.add(roomResponse);
-            }
-        }
+    public ResponseEntity<Page<RoomDTO>> getRoomsByHotelId(@PathVariable Long hotelId, @RequestParam(defaultValue = "0") Integer pageNo,
+                                                           @RequestParam(defaultValue = "8") Integer pageSize) throws SQLException{
+        Page<Room> rooms = roomService.getRoomByHotelId(hotelId, pageNo, pageSize);
+        Page<RoomDTO> roomResponses = rooms.map(this::getRoomResponse);
         return ResponseEntity.ok(roomResponses);
     }
 
@@ -82,6 +75,16 @@ public class RoomController {
                 roomResponses.add(roomResponse);
             }
         }
+        return ResponseEntity.ok(roomResponses);
+    }
+
+    @GetMapping("/getAllRoomByKeyword/{hotelId}/{keyword}")
+    public ResponseEntity<Page<RoomDTO>> getAllRoomByKeywordAndHotelId(@RequestParam(defaultValue = "0") Integer pageNo,
+                                                             @RequestParam(defaultValue = "8") Integer pageSize,
+                                                             @PathVariable String keyword,
+                                                             @PathVariable Long hotelId) {
+        Page<Room> rooms = roomService.getAllRoomByKeywordAndHotelId(pageNo, pageSize, keyword, hotelId);
+        Page<RoomDTO> roomResponses = rooms.map(this::getRoomResponse);
         return ResponseEntity.ok(roomResponses);
     }
 

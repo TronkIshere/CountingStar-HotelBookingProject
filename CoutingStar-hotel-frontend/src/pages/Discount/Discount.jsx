@@ -4,9 +4,6 @@ import {
   getDiscountNotExpired,
   addRedeemedDiscount,
 } from "../../components/utils/ApiFunction";
-import AddDiscount from "../../components/discountComponent/addDiscount/AddDiscount";
-import UpdateDiscount from "../../components/discountComponent/updateDiscount/UpdateDiscount";
-import DeleteDiscount from "../../components/discountComponent/deleteDiscount/DeleteDiscount";
 
 const Discount = () => {
   const [discounts, setDiscounts] = useState([]);
@@ -145,26 +142,6 @@ const Discount = () => {
         <div>Không có mã giảm giá nào khả dụng</div>
       )}
       {errorMessage && <div className="error">{errorMessage}</div>}
-      {isAddModalOpen && (
-        <AddDiscount
-          onClose={handleCloseAddModal}
-          handleAddDiscount={handleAddDiscount}
-        />
-      )}
-      {isUpdateModalOpen && selectedDiscountId && (
-        <UpdateDiscount
-          discountId={selectedDiscountId}
-          onClose={handleCloseUpdateModal}
-          handleUpdateDiscount={handleUpdateDiscount}
-        />
-      )}
-      {isDeleteModalOpen && selectedDiscountId && (
-        <DeleteDiscount
-          discountId={selectedDiscountId}
-          onClose={handleCloseDeleteModal}
-          handleDeleteDiscount={handleDeleteDiscount}
-        />
-      )}
     </div>
   );
 };

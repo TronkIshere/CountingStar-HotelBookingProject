@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./hotelOwnerPage.css"
+import "./hotelOwnerPage.css";
 import HotelDashBoard from "../../components/hotelManagementComponent/hotelDashBroad/HotelDashBroard";
 import { AuthContext } from "../../components/utils/AuthProvider";
+import HotelRoomManagement from "../../components/hotelManagementComponent/hotelRoomManagement/HotelRoomManagement";
 
 const HotelOwnerPage = () => {
   const [activeComponent, setActiveComponent] = useState(null);
@@ -20,6 +21,8 @@ const HotelOwnerPage = () => {
     switch (activeComponent) {
       case "hotelDashBoard":
         return <HotelDashBoard />;
+      case "hotelRoomManagement":
+        return <HotelRoomManagement />;
       default:
         return <HotelDashBoard />;
     }

@@ -8,6 +8,9 @@ import com.example.CoutingStarHotel.repositories.HotelRepository;
 import com.example.CoutingStarHotel.repositories.RoomRepository;
 import com.example.CoutingStarHotel.services.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,7 +31,6 @@ public class RoomServiceImpl implements RoomService {
     private final RatingServiceImpl ratingService;
     @Override
     public Room addNewRoom(MultipartFile file, String roomType, BigDecimal roomPrice, String roomDescription, Long hotelId) throws SQLException, IOException {
-        System.out.println("===========Is Running===========");
         Room room = new Room();
         room.setRoomType(roomType);
         room.setRoomPrice(roomPrice);
@@ -102,8 +104,9 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> getRoomByHotelId(Long hotelId) {
-        return roomRepository.findRoomsByHotelId(hotelId);
+    public Page<Room> getRoomByHotelId(Long hotelId, Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return roomRepository.findRoomsByHotelId(hotelId, pageable);
     }
 
     @Override
@@ -116,5 +119,11 @@ public class RoomServiceImpl implements RoomService {
             count++;
         }
         return result/count;
+    }
+
+    @Override
+    public Page<Room> getAllRoomByKeywordAndHotelId(Integer pageNo, Integer pageSize, String keyword, Long hotelId) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return roomRepository.getAllRoomByKeywordAndHotelId(pageable, keyword, hotelId);
     }
 }
