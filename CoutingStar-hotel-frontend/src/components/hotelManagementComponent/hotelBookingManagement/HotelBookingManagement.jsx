@@ -1,46 +1,41 @@
 import React, { useEffect, useState } from "react";
 import "./hotelBookingManagement.css";
-import BookingDelete from "../../components/bookingRoom/bookingDelete/BookingDelete";
-import BookingUpdate from "../../components/bookingRoom/bookingUpdate/BookingUpdate";
-import { getAllRedeemedDiscountByUserId, getBookingByHotelId } from "../../components/utils/ApiFunction";
+import { getBookingByHotelId, getAllBookingByKeywordAndHotelId } from "../../../components/utils/ApiFunction";
 import { useParams } from "react-router-dom";
+import DeleteBooking from "./deleteBooking/DeleteBooking";
+import UpdateBooking from "./updateBooking/UpdateBooking";
 
 const HotelBookingManagement = () => {
-  const [bookings, setBookings] = useState([
-    {
-      bookingId: "",
-      checkInDate: "",
-      checkOutDate: "",
-      bookingConfirmationCode: "",
-      totalNumOfGuest: "",
-
-      room: { id: "", roomType: "" },
-
-      guestEmail: "",
-      guestPhoneNumber: "",
-      guestFullName: "",
-    },
-  ]);
-
-  const { hotelId } = useParams();
-
-  useEffect(() => {
-    const fetchBookings = async () => {
-      try {
-        const response = await getBookingByHotelId(hotelId);
-        setBookings(response);
-      } catch (error) {
-        console.error("Error fetching bookings:", error.message);
-        setErrorMessage(error.message);
-      }
-    };
-
-    fetchBookings();
-  }, [hotelId]);
-
+  const [bookings, setBookings] = useState([]);
+  const [searchKeyword, setSearchKeyword] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const { hotelId } = useParams();
+
+  const fetchBookings = async (keyword = "") => {
+    try {
+      let response;
+      if (keyword) {
+        response = await getAllBookingByKeywordAndHotelId(0, 8, hotelId, keyword);
+      } else {
+        response = await getBookingByHotelId(0, 8, hotelId);
+      }
+      setBookings(response.content || []);
+    } catch (error) {
+      console.error("Error fetching bookings:", error.message);
+      setErrorMessage(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchBookings();
+  }, [hotelId]);
+
+  const handleSearch = () => {
+    fetchBookings(searchKeyword);
+  };
 
   const handleOpenDeleteModal = (bookingId) => {
     setSelectedBookingId(bookingId);
@@ -77,9 +72,35 @@ const HotelBookingManagement = () => {
   };
 
   return (
-    <div className="bookingListContainer">
+    <div className="bookingManagement">
       <h1>Quản lý đặt phòng</h1>
-      <table className="bookingListTable">
+
+      <div className="searchBooking-bar">
+        <div className="row">
+          <div className="col-md-5">
+            <div className="mb-3">
+              <label htmlFor="booking-keyword" className="form-label">
+                Nhập từ khóa tìm đặt phòng:
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="booking-keyword"
+                placeholder="Nhập từ khóa"
+                value={searchKeyword}
+                onChange={(e) => setSearchKeyword(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="col-md-2 d-flex align-items-center">
+            <button className="main-btn" onClick={handleSearch}>
+              Tìm <i className="bi bi-search"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <table className="table table-striped">
         <thead>
           <tr>
             <th>ID Đặt Phòng</th>
@@ -92,54 +113,62 @@ const HotelBookingManagement = () => {
             <th>Số Điện Thoại</th>
             <th>Tên Người Đặt</th>
             <th>Tổng Số Người</th>
-            <th></th>
+            <th>Hành động</th>
           </tr>
         </thead>
         <tbody>
-          {bookings.map((booking, index) => (
-            <tr key={index}>
-              <td>{booking.bookingId}</td>
-              <td>{booking.room.id}</td>
-              <td>{booking.room.roomType}</td>
-              <td>{booking.checkInDate}</td>
-              <td>{booking.checkOutDate}</td>
-              <td>{booking.bookingConfirmationCode}</td>
-              <td>{booking.guestEmail}</td>
-              <td>{booking.guestPhoneNumber}</td>
-              <td>{booking.guestFullName}</td>
-              <td>{booking.totalNumOfGuest}</td>
-              <td>
-                <button
-                  className="updateButton"
-                  onClick={() => handleOpenUpdateModal(booking.bookingId)}
-                >
-                  Chỉnh sửa
-                </button>
-                <button
-                  className="deleteButton"
-                  onClick={() => handleOpenDeleteModal(booking.bookingId)}
-                >
-                  Xóa
-                </button>
-              </td>
+          {bookings.length > 0 ? (
+            bookings.map((booking) => (
+              <tr key={booking.bookingId}>
+                <td>{booking.bookingId}</td>
+                <td>{booking.room.id}</td>
+                <td>{booking.room.roomType}</td>
+                <td>{booking.checkInDate}</td>
+                <td>{booking.checkOutDate}</td>
+                <td>{booking.bookingConfirmationCode}</td>
+                <td>{booking.guestEmail}</td>
+                <td>{booking.guestPhoneNumber}</td>
+                <td>{booking.guestFullName}</td>
+                <td>{booking.totalNumOfGuest}</td>
+                <td>
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => handleOpenUpdateModal(booking.bookingId)}
+                  >
+                    Chỉnh sửa
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => handleOpenDeleteModal(booking.bookingId)}
+                  >
+                    Xóa
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="11">Không có dữ liệu đặt phòng</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
+
       {isDeleteModalOpen && selectedBookingId && (
-        <BookingDelete
+        <DeleteBooking
           bookingId={selectedBookingId}
           handleDeleteBooking={handleDeleteBooking}
           onClose={handleCloseDeleteModal}
         />
       )}
       {isUpdateModalOpen && selectedBookingId && (
-        <BookingUpdate
+        <UpdateBooking
           bookingId={selectedBookingId}
           handleUpdateBooking={handleUpdateBooking}
           onClose={handleCloseUpdateModal}
         />
       )}
+      {errorMessage && <p className="error">{errorMessage}</p>}
     </div>
   );
 };

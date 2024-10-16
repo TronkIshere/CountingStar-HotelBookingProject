@@ -62,7 +62,12 @@ export async function getHotelByKeyword(pageNo = 0, pageSize = 8, keyword) {
   }
 }
 
-export async function getAllRoomByKeywordAndHotelId(pageNo = 0, pageSize = 8, keyword, hotelId) {
+export async function getAllRoomByKeywordAndHotelId(
+  pageNo = 0,
+  pageSize = 8,
+  keyword,
+  hotelId
+) {
   try {
     const response = await api.get(
       `/hotels/getHotelByKeyword/${hotelId}/${encodeURIComponent(keyword)}`,
@@ -268,9 +273,36 @@ export async function getBookingByConfirmationCode(confirmationCode) {
   }
 }
 
-export async function getBookingByHotelId(hotelId) {
+export async function getBookingByHotelId(pageNo = 0, pageSize = 8, hotelId) {
   try {
-    const result = await api.get(`/bookings/hotel/${hotelId}/booking`);
+    const result = await api.get(`/bookings/hotel/${hotelId}/booking`, {
+      params: { pageNo, pageSize },
+    });
+    return result.data;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      throw new Error(error.response.data);
+    } else {
+      throw new Error(`Error find booking:  ${error.message}`);
+    }
+  }
+}
+
+export async function getAllBookingByKeywordAndHotelId(
+  pageNo = 0,
+  pageSize = 8,
+  hotelId,
+  keyword
+) {
+  try {
+    const result = await api.get(
+      `/bookings/getAllBookingByKeywordAndHotelId/${hotelId}/${encodeURIComponent(
+        keyword
+      )}`,
+      {
+        params: { pageNo, pageSize },
+      }
+    );
     return result.data;
   } catch (error) {
     if (error.response && error.response.data) {

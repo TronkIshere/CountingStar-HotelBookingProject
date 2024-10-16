@@ -4,6 +4,7 @@ import "./hotelOwnerPage.css";
 import HotelDashBoard from "../../components/hotelManagementComponent/hotelDashBroad/HotelDashBroard";
 import { AuthContext } from "../../components/utils/AuthProvider";
 import HotelRoomManagement from "../../components/hotelManagementComponent/hotelRoomManagement/HotelRoomManagement";
+import HotelBookingManagement from "../../components/hotelManagementComponent/hotelBookingManagement/HotelBookingManagement";
 
 const HotelOwnerPage = () => {
   const [activeComponent, setActiveComponent] = useState(null);
@@ -23,6 +24,8 @@ const HotelOwnerPage = () => {
         return <HotelDashBoard />;
       case "hotelRoomManagement":
         return <HotelRoomManagement />;
+        case "hotelBookingManagement":
+        return <HotelBookingManagement />;
       default:
         return <HotelDashBoard />;
     }

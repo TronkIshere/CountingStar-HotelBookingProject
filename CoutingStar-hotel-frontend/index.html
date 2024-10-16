@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -21,41 +21,37 @@
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
 
-     <!-- javascript jquery -->
-     <script
-     src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-   ></script>
-   <!-- owl carousel min.js -->
-   <script
-     src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
-   ></script>
-   <!-- owl carousel init -->
-   <script>
-     $(document).ready(function(){
-       $(".owl-carousel").owlCarousel({
-         loop: true,
-         margin: 10,
-         nav: true,
-         responsive: {
-           0: {
-             items: 1,
-           },
-           600: {
-             items: 2,
-           },
-           700: {
-             items: 3,
-           },
-           1000: {
-             items: 4,
-           },
-         },
-       });
-     });
-   </script>
-   <!-- fix overflow-x aos error -->
+    <!-- javascript jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- owl carousel min.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <!-- owl carousel init -->
+    <script>
+      $(document).ready(function () {
+        $(".owl-carousel").owlCarousel({
+          loop: true,
+          margin: 10,
+          nav: true,
+          responsive: {
+            0: {
+              items: 1,
+            },
+            600: {
+              items: 2,
+            },
+            700: {
+              items: 3,
+            },
+            1000: {
+              items: 4,
+            },
+          },
+        });
+      });
+    </script>
+    <!-- fix overflow-x aos error -->
     <script type="text/javascript">
-     $(`[data-aos]`).parent().addClass(`detele_extra_space`);
+      $(`[data-aos]`).parent().addClass(`detele_extra_space`);
     </script>
   </body>
 </html>

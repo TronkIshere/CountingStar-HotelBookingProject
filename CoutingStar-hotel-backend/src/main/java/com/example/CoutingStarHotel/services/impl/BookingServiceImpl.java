@@ -14,6 +14,9 @@ import com.example.CoutingStarHotel.services.RoomService;
 import com.example.CoutingStarHotel.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cglib.core.Local;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -31,8 +34,9 @@ public class BookingServiceImpl implements BookingService {
     private final RedeemedDiscountRepository redeemedDiscountRepository;
 
     @Override
-    public List<BookedRoom> getAllBookings() {
-        return bookingRepository.findAll();
+    public Page<BookedRoom> getAllBookings(Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return bookingRepository.findAll(pageable);
     }
     @Override
     public void cancelBooking(Long bookingId) {
@@ -72,8 +76,9 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookedRoom> getAllBookingsByHotelId(Long hotelId) {
-        return bookingRepository.findByHotelId(hotelId);
+    public Page<BookedRoom> getAllBookingsByHotelId(Integer pageNo, Integer pageSize, Long hotelId) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return bookingRepository.findByHotelId(pageable, hotelId);
     }
 
     @Override
@@ -110,6 +115,12 @@ public class BookingServiceImpl implements BookingService {
         int BookedRoomsAddedThisMonth = bookingRepository.getBookedRoomsAddedDuringPeriod(firstDayOfThisMonth, firstDayOfNextMonth);
 
         return (BookedRoomsAddedThisMonth * 100.0) / totalBookedRooms;
+    }
+
+    @Override
+    public Page<BookedRoom> getAllBookingByKeywordAndHotelId(Integer pageNo, Integer pageSize, Long hotelId, String keyword) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return bookingRepository.getAllBookingByKeywordAndHotelId(pageable, hotelId, keyword);
     }
 
     private void validateBookingDates(BookedRoom bookingRequest) {

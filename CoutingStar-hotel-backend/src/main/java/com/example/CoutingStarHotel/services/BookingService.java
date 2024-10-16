@@ -1,12 +1,13 @@
 package com.example.CoutingStarHotel.services;
 
 import com.example.CoutingStarHotel.entities.BookedRoom;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface BookingService {
-    List<BookedRoom> getAllBookings();
+    Page<BookedRoom> getAllBookings(Integer pageNo, Integer pageSize);
 
     BookedRoom findByBookingConfirmationCode(String confirmationCode);
 
@@ -18,7 +19,7 @@ public interface BookingService {
 
     List<BookedRoom> getBookingsByUserId(Long userId);
 
-    List<BookedRoom> getAllBookingsByHotelId(Long hotelId);
+    Page<BookedRoom> getAllBookingsByHotelId(Integer pageNo, Integer pageSize, Long hotelId);
 
     BookedRoom findByBookingId(Long bookingId);
 
@@ -28,4 +29,5 @@ public interface BookingService {
 
     double getPercentageOfBookedRoomsIncreasedDuringTheMonth();
 
+    Page<BookedRoom> getAllBookingByKeywordAndHotelId(Integer pageNo, Integer pageSize, Long hotelId, String keyword);
 }

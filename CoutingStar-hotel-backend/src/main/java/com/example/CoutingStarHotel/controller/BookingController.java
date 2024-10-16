@@ -9,6 +9,7 @@ import com.example.CoutingStarHotel.DTO.RoomDTO;
 import com.example.CoutingStarHotel.services.BookingService;
 import com.example.CoutingStarHotel.services.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,13 +28,20 @@ public class BookingController {
     private final BookingService bookingService;
     private final RoomService roomService;
     @GetMapping("/all-bookings")
-    public ResponseEntity<List<BookingDTO>> getAllBookings(){
-        List<BookedRoom> bookings = bookingService.getAllBookings();
-        List<BookingDTO> bookingResponses = new ArrayList<>();
-        for (BookedRoom booking : bookings){
-            BookingDTO bookingResponse = getBookingResponse(booking);
-            bookingResponses.add(bookingResponse);
-        }
+    public ResponseEntity<Page<BookingDTO>> getAllBookings(@RequestParam(defaultValue = "0") Integer pageNo,
+                                                           @RequestParam(defaultValue = "8") Integer pageSize){
+        Page<BookedRoom> bookings = bookingService.getAllBookings(pageNo, pageSize);
+        Page<BookingDTO> bookingResponses = bookings.map(this::getBookingResponse);
+        return ResponseEntity.ok(bookingResponses);
+    }
+
+    @GetMapping("/getAllBookingByKeywordAndHotelId/{hotelId}/{keyword}")
+    public ResponseEntity<Page<BookingDTO>> getAllBookingByKeywordAndHotelId(@RequestParam(defaultValue = "0") Integer pageNo,
+                                                           @RequestParam(defaultValue = "8") Integer pageSize,
+                                                           @PathVariable Long hotelId,
+                                                           @PathVariable String keyword){
+        Page<BookedRoom> bookings = bookingService.getAllBookingByKeywordAndHotelId(pageNo, pageSize, hotelId, keyword);
+        Page<BookingDTO> bookingResponses = bookings.map(this::getBookingResponse);
         return ResponseEntity.ok(bookingResponses);
     }
 
@@ -60,13 +68,11 @@ public class BookingController {
     }
 
     @GetMapping("/hotel/{hotelId}/booking")
-    public ResponseEntity<List<BookingDTO>> getBookingByHotelId(@PathVariable Long hotelId){
-        List<BookedRoom> bookings = bookingService.getAllBookingsByHotelId(hotelId);
-        List<BookingDTO> bookingResponses = new ArrayList<>();
-        for (BookedRoom booking : bookings){
-            BookingDTO bookingResponse = getBookingResponse(booking);
-            bookingResponses.add(bookingResponse);
-        }
+    public ResponseEntity<Page<BookingDTO>> getBookingByHotelId(@PathVariable Long hotelId,
+                                                                @RequestParam(defaultValue = "0") Integer pageNo,
+                                                                @RequestParam(defaultValue = "8") Integer pageSize){
+        Page<BookedRoom> bookings = bookingService.getAllBookingsByHotelId(pageNo, pageSize, hotelId);
+        Page<BookingDTO> bookingResponses = bookings.map(this::getBookingResponse);
         return ResponseEntity.ok(bookingResponses);
     }
 
