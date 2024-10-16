@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./discountManagement.css";
 import { getAllDiscount, getDiscountByKeyword } from "../../utils/ApiFunction";
+import EditDiscount from "./discountManagementComponent/editDiscount/EditDiscount";
+import DeleteDiscount from "./discountManagementComponent/deleteDiscount/DeleteDiscount";
 
 const DiscountManagement = () => {
   const [discounts, setDiscounts] = useState([]);
@@ -46,6 +48,16 @@ const DiscountManagement = () => {
     }
   };
 
+  const [currentDiscountId, setCurrenDiscountId] = useState(null);
+
+  const handleEditClick = (id) => {
+    setCurrenDiscountId(id);
+  };
+
+  const handleDeleteClick = (id) => {
+    setCurrenDiscountId(id);
+  };
+
   return (
     <div className="discountManagement">
       <div className="container">
@@ -74,11 +86,8 @@ const DiscountManagement = () => {
                 </button>
               </div>
             </div>
-
           </div>
-            <button className="main-btn">
-              Thêm mã giảm giá 
-            </button>
+          <button className="main-btn">Thêm mã giảm giá</button>
         </div>
 
         <div className="searchDiscountList">
@@ -106,10 +115,24 @@ const DiscountManagement = () => {
                     {new Date(discount.expirationDate).toLocaleDateString()}
                   </td>
                   <td>
-                    <button className="btn btn-primary btn-sm">
+                    <button
+                      className="btn btn-primary btn-sm"
+                      data-bs-toggle="modal"
+                      data-bs-target="#editDiscountModal"
+                      onClick={() => handleEditClick(discount.id)}
+                    >
                       Chỉnh sửa
                     </button>
-                    <button className="btn btn-danger btn-sm">Xóa</button>
+                    <EditDiscount discountId={currentDiscountId} />
+                    <button
+                      className="btn btn-danger btn-sm"
+                      data-bs-toggle="modal"
+                      data-bs-target="#deleteDiscountModal"
+                      onClick={() => handleDeleteClick(discount.id)}
+                    >
+                      Xóa
+                    </button>
+                    <DeleteDiscount discountId={currentDiscountId} />
                   </td>
                 </tr>
               ))}

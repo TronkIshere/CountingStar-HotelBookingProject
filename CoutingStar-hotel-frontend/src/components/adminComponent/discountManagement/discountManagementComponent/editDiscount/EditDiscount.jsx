@@ -1,5 +1,6 @@
-import React from 'react'
-import { getDiscountById } from "../../../components/utils/ApiFunction";
+import React, { useEffect, useState } from "react";
+import { getDiscountById, updateDiscount } from "../../../../utils/ApiFunction";
+import "./editDiscount.css";
 
 const EditDiscount = ({ discountId }) => {
   const [discountName, setDiscountName] = useState("");
@@ -14,7 +15,6 @@ const EditDiscount = ({ discountId }) => {
     const fetchDiscountData = async () => {
       try {
         const discountData = await getDiscountById(discountId);
-        console.log(discountData);
         setDiscountName(discountData.discountName);
         setPercentDiscount(discountData.percentDiscount);
         setDiscountDescription(discountData.discountDescription);
@@ -33,6 +33,13 @@ const EditDiscount = ({ discountId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      await updateDiscount(discountId, {
+        discountName,
+        percentDiscount,
+        discountDescription,
+        createDate,
+        expirationDate,
+      });
       setSuccessMessage("Discount updated successfully!");
       setError("");
     } catch (error) {
@@ -47,61 +54,103 @@ const EditDiscount = ({ discountId }) => {
   };
 
   return (
-    <div className="editDiscountModel">
-      <form onSubmit={handleSubmit}>
-        <h5>Edit Discount</h5>
+    <div
+      className="editDiscount modal fade"
+      id="editDiscountModal"
+      tabIndex="-1"
+      aria-labelledby="editDiscountModalLabel"
+      aria-hidden="true"
+    >
+      <div className="modal-dialog">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title" id="editDiscountModalLabel">
+              Edit Discount
+            </h5>
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div className="modal-body">
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label className="form-label">Discount Name:</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={discountName}
+                  onChange={(e) => setDiscountName(e.target.value)}
+                  required
+                />
+              </div>
 
-        <div>
-          <label>Discount Name:</label>
-          <input
-            type="text"
-            value={discountName}
-            onChange={(e) => setDiscountName(e.target.value)}
-            required
-          />
+              <div className="mb-3">
+                <label className="form-label">Percent Discount:</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={percentDiscount}
+                  onChange={(e) => setPercentDiscount(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">Discount Description:</label>
+                <textarea
+                  className="form-control"
+                  value={discountDescription}
+                  onChange={(e) => setDiscountDescription(e.target.value)}
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">Create Date:</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  value={createDate}
+                  onChange={(e) => setCreateDate(e.target.value)}
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">Expiration Date:</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  value={expirationDate}
+                  onChange={(e) => setExpirationDate(e.target.value)}
+                />
+              </div>
+
+              {error && <p className="text-danger">{error}</p>}
+              {successMessage && (
+                <p className="text-success">{successMessage}</p>
+              )}
+
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn white-btn"
+                  data-bs-dismiss="modal"
+                >
+                  Đóng
+                </button>
+                <button
+                  type="button"
+                  className="btn main-btn"
+                >
+                  Cập nhật
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-
-        <div>
-          <label>Percent Discount:</label>
-          <input
-            type="number"
-            value={percentDiscount}
-            onChange={(e) => setPercentDiscount(e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label>Discount Description:</label>
-          <textarea
-            value={discountDescription}
-            onChange={(e) => setDiscountDescription(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <label>Create Date:</label>
-          <input
-            type="date"
-            value={createDate}
-            onChange={(e) => setCreateDate(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <label>Expiration Date:</label>
-          <input
-            type="date"
-            value={expirationDate}
-            onChange={(e) => setExpirationDate(e.target.value)}
-          />
-        </div>
-
-        {error && <p className="text-danger">{error}</p>}
-        {successMessage && <p className="text-success">{successMessage}</p>}
-
-        <button type="submit">Save Changes</button>
-      </form>
+      </div>
     </div>
   );
 };
