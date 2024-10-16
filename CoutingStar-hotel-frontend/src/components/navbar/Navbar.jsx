@@ -109,33 +109,9 @@ const Navbar = () => {
                         <li>
                           <RouterLink
                             className="dropdown-item"
-                            to={`/hotel/${hotelId}/hotelRoomManagement`}
-                          >
-                            Quản lý phòng
-                          </RouterLink>
-                        </li>
-                        <li>
-                          <RouterLink
-                            className="dropdown-item"
-                            to={`/hotel/${hotelId}/hotelBookingManagement`}
-                          >
-                            Quản lý đặt phòng
-                          </RouterLink>
-                        </li>
-                        <li>
-                          <RouterLink
-                            className="dropdown-item"
-                            to={`/hotel/${hotelId}/hotelInformationManagement`}
+                            to={`/hotels/hotelOwnerPage/${hotelId}`}
                           >
                             Quản lý khách sạn
-                          </RouterLink>
-                        </li>
-                        <li>
-                          <RouterLink
-                            className="dropdown-item"
-                            to={`/hotel/hotelOwner`}
-                          >
-                            Xem doanh thu
                           </RouterLink>
                         </li>
                       </>

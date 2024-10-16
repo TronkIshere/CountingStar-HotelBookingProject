@@ -14,6 +14,7 @@ import HotelRegistration from "./pages/hotelRegistration/HotelRegistration";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./App.css";
+import HotelOwnerPage from "./pages/hotelOwnerPage/HotelOwnerPage";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -35,10 +36,11 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/hotels" element={<SearchHotelsPage />} />
           <Route path="/discount" element={<Discount />} />
-          <Route path="/hotels/hotel/:hotelId" element={<HotelPage />} />
           <Route path="/user/:userId" element={<UserProfile />} />
-          <Route path="/hotelRegistration" element={<HotelRegistration />} />
           <Route path="/user/admin" element={<AdminPage />} />
+          <Route path="/hotels/hotel/:hotelId" element={<HotelPage />} />
+          <Route path="/hotelRegistration" element={<HotelRegistration />} />
+          <Route path="/hotels/hotelOwnerPage/:hotelId" element={<HotelOwnerPage />} />
         </Routes>
 
         <Footer />

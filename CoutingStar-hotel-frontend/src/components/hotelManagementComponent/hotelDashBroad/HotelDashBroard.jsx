@@ -2,22 +2,20 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBed,
-  faHouse,
   faPaperPlane,
   faPencil,
-  faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import PieChart from "../../components/dashBoard/PieChart";
+import PieChart from "../../../components/dashBoard/PieChart";
 import "./hotelDashBoard.css";
 import {
   getDataForHotelDashBoardMonthIncreased,
   getDataForHotelOwnerPieChart,
-} from "../../components/utils/ApiFunction";
+} from "../../../components/utils/ApiFunction";
 
 const HotelDashBoard = () => {
   const userHotelId = localStorage.getItem("userHotelId");
   const [data, setData] = useState([]);
-  const [dashboardData, setDashboardData] = useState(null);
+  const [dashboardData, setDashboardData] = useState(null); // Initial state is null
 
   useEffect(() => {
     const PieChartData = async () => {
@@ -36,7 +34,7 @@ const HotelDashBoard = () => {
     };
 
     PieChartData();
-  }, []);
+  }, [userHotelId]);
 
   useEffect(() => {
     const fetchDashBoardData = async () => {
@@ -51,62 +49,72 @@ const HotelDashBoard = () => {
     };
 
     fetchDashBoardData();
-  }, []);
+  }, [userHotelId]);
+
+  if (!dashboardData) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <div className="hotelOwnerContainer">
-      <h1>DashBoard Chủ Khách Sạn</h1>
-      <div className="hotelOwnerContainerSpilt">
-        {/* Overview Section on the left */}
-        <div className="hotelOwnerOverViewThisMonth">
-          <div className="hotelOwnerOverViewThisMonthItem">
-            <div className="hotelOwnerOverViewInfo">
-              <FontAwesomeIcon icon={faBed} />
-              <div className="hotelOwnerInfoNumber">
-                {dashboardData.totalBookedRoomInSpecificHotel}
+    <div className="hotelDashBoard">
+      <div className="container">
+        <h1>Bảng tổng quan</h1>
+        <div className="row d-flex align-items-center justify-content-around">
+          <div className="col-12 col-sm-12 col-md-4 col-lg-4">
+            <div className="hotelOwnerOverViewThisMonth">
+              <div className="hotelOwnerOverViewThisMonthItem">
+                <div className="hotelOwnerOverViewInfo">
+                  <FontAwesomeIcon icon={faBed} />
+                  <div className="hotelOwnerInfoNumber">
+                    {dashboardData.totalBookedRoomInSpecificHotel}
+                  </div>
+                  <div className="hotelOwnerInfoText">Tổng số phòng đã đặt</div>
+                </div>
+                <div className="hotelOwnerOverViewNumber">
+                  +{dashboardData.percentageOfBookedIncreasedDuringTheMonth}%
+                </div>
               </div>
-              <div className="hotelOwnerInfoText">Tổng số phòng đã đặt</div>
-            </div>
-            <div className="hotelOwnerOverViewNumber">
-              +{dashboardData.percentageOfBookedIncreasedDuringTheMonth}%
+
+              <div className="hotelOwnerOverViewThisMonthItem">
+                <div className="hotelOwnerOverViewInfo">
+                  <FontAwesomeIcon icon={faPencil} />
+                  <div className="hotelOwnerInfoNumber">
+                    {dashboardData.totalRatingInSpecificHotel}
+                  </div>
+                  <div className="hotelOwnerInfoText">Tổng bình luận</div>
+                </div>
+                <div className="hotelOwnerOverViewNumber">
+                  +{dashboardData.percentageOfRatingIncreasedDuringTheMonth}%
+                </div>
+              </div>
+
+              <div className="hotelOwnerOverViewThisMonthItem">
+                <div className="hotelOwnerOverViewInfo">
+                  <FontAwesomeIcon icon={faPaperPlane} />
+                  <div className="hotelOwnerInfoNumber">
+                    {dashboardData.totalRevenueInSpecificHotel.toLocaleString(
+                      "vi-VN",
+                      {
+                        style: "currency",
+                        currency: "VND",
+                      }
+                    )}
+                  </div>
+                  <div className="hotelOwnerInfoText">Tổng số Doanh Thu</div>
+                </div>
+                <div className="hotelOwnerOverViewNumber">
+                  +{dashboardData.percentageOfRevenueIncreasedDuringTheMonth}%
+                </div>
+              </div>
             </div>
           </div>
-
-          <div className="hotelOwnerOverViewThisMonthItem">
-            <div className="hotelOwnerOverViewInfo">
-              <FontAwesomeIcon icon={faPencil} />
-              <div className="hotelOwnerInfoNumber">
-                {dashboardData.totalRatingInSpecificHotel}
-              </div>
-              <div className="hotelOwnerInfoText">Tổng bình luận</div>
-            </div>
-            <div className="hotelOwnerOverViewNumber">
-              +{dashboardData.percentageOfRatingIncreasedDuringTheMonth}%
+          <div className="col-12 col-sm-12 col-md-8 col-lg-8">
+          <div className="hotelOwnerChartsGroup">
+            <div className="hotelOwnerChartContainer">
+              <p>Tổng số khách sạn của từng thành phố</p>
+              <PieChart data={data} />
             </div>
           </div>
-
-          <div className="hotelOwnerOverViewThisMonthItem">
-            <div className="hotelOwnerOverViewInfo">
-              <FontAwesomeIcon icon={faPaperPlane} />
-              <div className="hotelOwnerInfoNumber">
-                {dashboardData.totalRevenueInSpecificHotel.toLocaleString(
-                  "vi-VN",
-                  { style: "currency", currency: "VND" }
-                )}
-              </div>
-              <div className="hotelOwnerInfoText">Tổng số Doanh Thu</div>
-            </div>
-            <div className="hotelOwnerOverViewNumber">
-              +{dashboardData.percentageOfRevenueIncreasedDuringTheMonth}%
-            </div>
-          </div>
-        </div>
-
-        {/* Chart Section on the right */}
-        <div className="hotelOwnerChartsGroup">
-          <div className="hotelOwnerChartContainer">
-            <p>Tổng số khách sạn của từng thành phố</p>
-            <PieChart data={data} />
           </div>
         </div>
       </div>

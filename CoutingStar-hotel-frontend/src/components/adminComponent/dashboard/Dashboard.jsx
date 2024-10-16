@@ -56,7 +56,7 @@ const DashBoard = () => {
 
   return (
     <div className="dashboard">
-      <h1>Bảng doanh thu</h1>
+      <h1>Tổng quan</h1>
 
       <div className="adminOverViewThisMonth">
         <div className="row">

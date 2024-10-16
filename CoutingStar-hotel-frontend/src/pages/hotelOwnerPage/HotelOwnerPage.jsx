@@ -1,13 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import "./adminPage.css";
-import DashBoard from "../../components/adminComponent/dashboard/Dashboard";
 import { useNavigate } from "react-router-dom";
+import "./hotelOwnerPage.css"
+import HotelDashBoard from "../../components/hotelManagementComponent/hotelDashBroad/HotelDashBroard";
 import { AuthContext } from "../../components/utils/AuthProvider";
-import UserManagement from "../../components/adminComponent/userManagement/UserManagement";
-import HotelManagement from "../../components/adminComponent/hotelManagement/HotelManagement";
-import DiscountManagement from "../../components/adminComponent/discountManagement/DiscountManagement";
 
-const Admin = () => {
+const HotelOwnerPage = () => {
   const [activeComponent, setActiveComponent] = useState(null);
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
@@ -21,21 +18,14 @@ const Admin = () => {
 
   const renderComponent = () => {
     switch (activeComponent) {
-      case "dashboard":
-        return <DashBoard />;
-      case "userManagement":
-        return <UserManagement />;
-      case "hotelManagement":
-        return <HotelManagement />;
-      case "discountManagement":
-        return <DiscountManagement />;
+      case "hotelDashBoard":
+        return <HotelDashBoard />;
       default:
-        return <DashBoard />;
+        return <HotelDashBoard />;
     }
   };
-
   return (
-    <div className="adminPage my-4">
+    <div className="hotelOwnerPage my-4">
       <div className="container-fluid">
         <div className="row">
           <div className="col-12 col-sm-12 col-md-2 col-lg-2">
@@ -43,27 +33,27 @@ const Admin = () => {
               <div className="sidebar-list-header">Quản lý</div>
               <li
                 className="sidebar-item"
-                onClick={() => setActiveComponent("dashboard")}
+                onClick={() => setActiveComponent("hotelDashBoard")}
               >
-                Bảng tổng quản
+                Bảng Tổng quan
               </li>
               <li
                 className="sidebar-item"
-                onClick={() => setActiveComponent("userManagement")}
+                onClick={() => setActiveComponent("hotelBookingManagement")}
               >
-                Quản lý người dùng
+                Quản lý đặt phòng
               </li>
               <li
                 className="sidebar-item"
-                onClick={() => setActiveComponent("hotelManagement")}
+                onClick={() => setActiveComponent("hotelIfnomationManagement")}
               >
-                Quản lý khách sạn
+                Quản lý thông tin khách sạn
               </li>
               <li
                 className="sidebar-item"
-                onClick={() => setActiveComponent("discountManagement")}
+                onClick={() => setActiveComponent("hotelRoomManagement")}
               >
-                Quản lý mã giảm giá
+                Quản lý phòng
               </li>
             </ul>
           </div>
@@ -76,4 +66,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default HotelOwnerPage;

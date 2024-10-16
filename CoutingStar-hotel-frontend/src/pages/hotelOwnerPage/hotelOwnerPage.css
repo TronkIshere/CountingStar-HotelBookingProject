@@ -1,0 +1,22 @@
+.hotelOwnerPage .sidebar-list-header {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+.hotelOwnerPage .sidebar {
+    border-right: 2px solid var(--primary-color);
+}
+
+
+.hotelOwnerPage .sidebar-list .sidebar-item {
+    transition: color 0.3s ease;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 6px 0 6px 8px;
+}
+
+.hotelOwnerPage .sidebar-list .sidebar-item:hover {
+    color: var(--primary-color);
+}
