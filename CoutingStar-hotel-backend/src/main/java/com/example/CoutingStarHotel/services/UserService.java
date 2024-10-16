@@ -24,4 +24,8 @@ public interface UserService {
     Page<User> getAllUserExceptAdminRole(Integer pageNo, Integer pageSize);
 
     Page<User> searchUserByKeyWord(Integer pageNo, Integer pageSize, String keyWord);
+
+    User getUserByUserId(Long userId);
+
+    User updateUser(Long userId, String firstName, String lastName, String email, String phoneNumber);
 }

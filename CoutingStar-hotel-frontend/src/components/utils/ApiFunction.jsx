@@ -364,6 +364,17 @@ export async function loginUser(login) {
   }
 }
 
+export async function getUserByUserId(userId) {
+  try {
+    const response = await api.get(`users/getUserByUserId/${userId}`, {
+      headers: getHeader(),
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function getUserProfile(userId, token) {
   try {
     const response = await api.get(`users/profile/${userId}`, {
@@ -399,6 +410,28 @@ export async function searchUserByKeyWord(pageNo = 0, pageSize = 8, keyword) {
     return response.data;
   } catch (error) {
     throw error;
+  }
+}
+
+export async function updateUser(
+  userId,
+  firstName,
+  lastName,
+  email,
+  phoneNumber
+) {
+  const formData = new FormData();
+  formData.append("firstName", firstName);
+  formData.append("lastName", lastName);
+  formData.append("email", email);
+  formData.append("phoneNumber", phoneNumber);
+  const response = await api.post(`/users/updateUser/${userId}`, formData, {
+    headers: getHeader(),
+  });
+  if (response.status === 201) {
+    return true;
+  } else {
+    return false;
   }
 }
 

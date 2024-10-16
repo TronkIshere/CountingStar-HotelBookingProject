@@ -1,0 +1,26 @@
+.userEdit .modal-header {
+    background: var(--primary-color);
+}
+
+.userEdit label {
+    width: 100%;
+    text-align: start;
+}
+
+.userEdit .modal-header h5 {
+    color: var(--white-color);
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.userEdit .modal-header button {
+    color: var(--white-color);
+}
+
+.userEdit .form-label {
+    width: 100%;
+}
+
+.userEdit .alert {
+    margin-top: 20px;
+}

@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./userManagement.css";
-import { getAllUserExceptAminRole, searchUserByKeyWord } from "../../utils/ApiFunction";
+import {
+  getAllUserExceptAminRole,
+  searchUserByKeyWord,
+} from "../../utils/ApiFunction";
+import UserEdit from "./userManagementComponent/userEdit/UserEdit";
+import UserDelete from "./userManagementComponent/userDelete/UserDelete";
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -32,6 +37,16 @@ const UserManagement = () => {
     if (newPage >= 0 && newPage < totalPages) {
       setPage(newPage);
     }
+  };
+
+  const [currentUserId, setUserId] = useState(null);
+
+  const handleEditClick = (id) => {
+    setUserId(id);
+  };
+
+  const handleDeleteClick = (id) => {
+    setUserId(id);
   };
 
   return (
@@ -86,8 +101,24 @@ const UserManagement = () => {
                   <td>{user.email}</td>
                   <td>{user.phoneNumber}</td>
                   <td>
-                    <button className="btn btn-primary btn-sm">Chỉnh sửa</button>
-                    <button className="btn btn-danger btn-sm">Xóa</button>
+                    <button
+                      className="btn btn-primary btn-sm"
+                      data-bs-toggle="modal"
+                      data-bs-target="#editUserModal"
+                      onClick={() => handleEditClick(user.id)}
+                    >
+                      Chỉnh sửa
+                    </button>
+                    <UserEdit userId={currentUserId} />
+                    <button
+                      className="btn btn-danger btn-sm"
+                      data-bs-toggle="modal"
+                      data-bs-target="#deleteUserModel"
+                      onClick={() => handleEditClick(user.id)}
+                    >
+                      Xóa
+                    </button>
+                    <UserDelete userId={currentUserId} />
                   </td>
                 </tr>
               ))}
@@ -105,13 +136,23 @@ const UserManagement = () => {
                   </button>
                 </li>
                 {Array.from({ length: totalPages }, (_, i) => (
-                  <li key={i} className={`page-item ${page === i ? "active" : ""}`}>
-                    <button className="page-link" onClick={() => handlePageChange(i)}>
+                  <li
+                    key={i}
+                    className={`page-item ${page === i ? "active" : ""}`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => handlePageChange(i)}
+                    >
                       {i + 1}
                     </button>
                   </li>
                 ))}
-                <li className={`page-item ${page === totalPages - 1 ? "disabled" : ""}`}>
+                <li
+                  className={`page-item ${
+                    page === totalPages - 1 ? "disabled" : ""
+                  }`}
+                >
                   <button
                     className="page-link"
                     onClick={() => handlePageChange(page + 1)}

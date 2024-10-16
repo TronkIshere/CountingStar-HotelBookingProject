@@ -102,4 +102,19 @@ public class UserServiceImpl implements UserService {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         return userRepository.searchUserByKeyWord(pageable, keyWord);
     }
+
+    @Override
+    public User getUserByUserId(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    @Override
+    public User updateUser(Long userId, String firstName, String lastName, String email, String phoneNumber) {
+        User user = userRepository.findById(userId).get();
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
+        user.setPhoneNumber(phoneNumber);
+        return userRepository.save(user);
+    }
 }

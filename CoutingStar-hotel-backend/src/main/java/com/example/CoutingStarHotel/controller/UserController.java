@@ -69,6 +69,36 @@ public class UserController {
         }
     }
 
+    @GetMapping("/getUserByUserId/{userId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> getUserByUserId(@PathVariable Long userId){
+        try{
+            User users = userService.getUserByUserId(userId);
+            return ResponseEntity.ok(getUserDTO(users));
+        }catch (UsernameNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching user");
+        }
+    }
+
+    @GetMapping("/updateUser/{userId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> updateUser(@PathVariable Long userId,
+                                        @RequestParam String firstName,
+                                        @RequestParam String lastName,
+                                        @RequestParam String email,
+                                        @RequestParam String phoneNumber){
+        try{
+            User users = userService.updateUser(userId, firstName, lastName, email, phoneNumber);
+            return ResponseEntity.ok(users);
+        }catch (UsernameNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching user");
+        }
+    }
+
     @DeleteMapping("/delete/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_USER') or hasRole('ROLE_HOTEL_OWNER') and #email == principal.username)")
     public ResponseEntity<String> deleteUser(@PathVariable("userId") String email){

@@ -1,0 +1,14 @@
+.userDelete .modal-header {
+    background: var(--primary-color);
+  }
+  
+  .userDelete .modal-header h5 {
+    color: var(--white-color);
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+  
+  .userDelete .modal-header button {
+    color: var(--white-color);
+  }
+  
