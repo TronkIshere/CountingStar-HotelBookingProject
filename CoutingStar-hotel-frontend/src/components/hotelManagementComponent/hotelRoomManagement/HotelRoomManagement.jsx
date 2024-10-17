@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./hotelRoomManagement.css";
-import AddRoom from "../../../components/room/addRoom/AddRoom";
-import UpdateRoom from "../../../components/room/updateRoom/UpdateRoom";
-import DeleteRoom from "../../../components/room/deleteRoom/DeleteRoom";
-import { getRoomsByHotelId, getAllRoomByKeywordAndHotelId } from "../../../components/utils/ApiFunction";
+import {
+  getRoomsByHotelId,
+  getAllRoomByKeywordAndHotelId,
+} from "../../utils/ApiFunction";
 import { useParams } from "react-router-dom";
+import AddRoom from "./addRoom/AddRoom";
+import EditRoom from "./editRoom/EditRoom";
+import DeleteRoom from "./deleteRoom/DeleteRoom";
 
 const HotelRoomManagement = () => {
   const [rooms, setRooms] = useState([]);
@@ -15,17 +18,20 @@ const HotelRoomManagement = () => {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  
+
   const { hotelId } = useParams();
-  
+
   const fetchRooms = async (pageNo = 0, pageSize = 8, keyword = "") => {
     try {
-      let roomsData;
-      if (keyword) {
-        roomsData = await getAllRoomByKeywordAndHotelId(pageNo, pageSize, keyword, hotelId);
-      } else {
-        roomsData = await getRoomsByHotelId(hotelId, pageNo, pageSize);
-      }
+      const roomsData = keyword
+        ? await getAllRoomByKeywordAndHotelId(
+            pageNo,
+            pageSize,
+            keyword,
+            hotelId
+          )
+        : await getRoomsByHotelId(hotelId, pageNo, pageSize);
+
       if (roomsData && roomsData.content) {
         setRooms(roomsData.content);
         setTotalPages(roomsData.totalPages);
@@ -62,27 +68,35 @@ const HotelRoomManagement = () => {
     setSelectedRoomId(roomId);
     setIsUpdateModalOpen(true);
   };
-  const handleCloseUpdateModal = () => setIsUpdateModalOpen(false);
+  const handleCloseUpdateModal = () => {
+    setSelectedRoomId(null);
+    setIsUpdateModalOpen(false);
+  };
 
   const handleOpenDeleteModal = (roomId) => {
     setSelectedRoomId(roomId);
     setIsDeleteModalOpen(true);
   };
-  const handleCloseDeleteModal = () => setIsDeleteModalOpen(false);
+  const handleCloseDeleteModal = () => {
+    setSelectedRoomId(null);
+    setIsDeleteModalOpen(false);
+  };
 
   const handleAddRoom = (newRoom) => {
-    setRooms([...rooms, newRoom]);
-    setIsAddModalOpen(false);
+    setRooms((prevRooms) => [...prevRooms, newRoom]);
+    handleCloseAddModal();
   };
 
   const handleUpdateRoom = (updatedRoom) => {
-    setRooms(rooms.map((room) => room.id === updatedRoom.id ? updatedRoom : room));
-    setIsUpdateModalOpen(false);
+    setRooms((prevRooms) =>
+      prevRooms.map((room) => (room.id === updatedRoom.id ? updatedRoom : room))
+    );
+    handleCloseUpdateModal();
   };
 
   const handleDeleteRoom = (roomId) => {
-    setRooms(rooms.filter((room) => room.id !== roomId));
-    setIsDeleteModalOpen(false);
+    setRooms((prevRooms) => prevRooms.filter((room) => room.id !== roomId));
+    handleCloseDeleteModal();
   };
 
   return (
@@ -157,19 +171,35 @@ const HotelRoomManagement = () => {
             <nav aria-label="Page navigation example">
               <ul className="pagination">
                 <li className={`page-item ${page === 0 ? "disabled" : ""}`}>
-                  <button className="page-link" onClick={() => handlePageChange(page - 1)}>
+                  <button
+                    className="page-link"
+                    onClick={() => handlePageChange(page - 1)}
+                  >
                     &laquo;
                   </button>
                 </li>
                 {Array.from({ length: totalPages }, (_, i) => (
-                  <li key={i} className={`page-item ${page === i ? "active" : ""}`}>
-                    <button className="page-link" onClick={() => handlePageChange(i)}>
+                  <li
+                    key={i}
+                    className={`page-item ${page === i ? "active" : ""}`}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => handlePageChange(i)}
+                    >
                       {i + 1}
                     </button>
                   </li>
                 ))}
-                <li className={`page-item ${page === totalPages - 1 ? "disabled" : ""}`}>
-                  <button className="page-link" onClick={() => handlePageChange(page + 1)}>
+                <li
+                  className={`page-item ${
+                    page === totalPages - 1 ? "disabled" : ""
+                  }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => handlePageChange(page + 1)}
+                  >
                     &raquo;
                   </button>
                 </li>
@@ -179,10 +209,13 @@ const HotelRoomManagement = () => {
         </div>
 
         {isAddModalOpen && (
-          <AddRoom handleAddRoom={handleAddRoom} onClose={handleCloseAddModal} />
+          <AddRoom
+            handleAddRoom={handleAddRoom}
+            onClose={handleCloseAddModal}
+          />
         )}
         {isUpdateModalOpen && selectedRoomId && (
-          <UpdateRoom
+          <EditRoom
             roomId={selectedRoomId}
             handleUpdateRoom={handleUpdateRoom}
             onClose={handleCloseUpdateModal}

@@ -1,0 +1,17 @@
+.deleteRoom .modal-header {
+    background: var(--primary-color);
+}
+
+.deleteRoom .modal-header h5 {
+    color: var(--white-color);
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.deleteRoom .modal-header button {
+    color: var(--white-color);
+}
+
+.deleteRoom .alert {
+    margin: 10px 0;
+}
