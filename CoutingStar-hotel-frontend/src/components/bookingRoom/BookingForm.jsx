@@ -79,7 +79,7 @@ const BookingForm = ({ roomId }) => {
         setRoomInfo(response);
       } catch (error) {
         console.error("Error fetching room:", error.message);
-        setError(error.message);
+        setError("Có lỗi xảy ra khi lấy thông tin phòng.");
       }
     };
 
@@ -119,7 +119,6 @@ const BookingForm = ({ roomId }) => {
   const handleDiscountChange = (e) => {
     const selectedDiscountId = e.target.value;
 
-    // Nếu chọn phần tử đầu tiên, đặt mã giảm giá là null
     if (selectedDiscountId === "") {
       setSelectedDiscount(null);
       updateTotalPayment(date[0].startDate, date[0].endDate, null);
@@ -130,11 +129,9 @@ const BookingForm = ({ roomId }) => {
       setSelectedDiscount(discount);
       updateTotalPayment(date[0].startDate, date[0].endDate, discount);
     }
-    console.log(selectedDiscountId);
   };
 
   const handleSubmit = async () => {
-    // Tạo đối tượng booking với discountId là id của discount hoặc null nếu không chọn mã giảm giá
     const booking = {
       guestFullName: `${user.firstName} ${user.lastName}`,
       checkInDate: date[0].startDate.toISOString(),
@@ -148,7 +145,7 @@ const BookingForm = ({ roomId }) => {
         date[0].endDate,
         selectedDiscount
       ),
-      discountId: selectedDiscount ? selectedDiscount.id : null, // Truyền discountId hoặc null
+      discountId: selectedDiscount ? selectedDiscount.id : null, 
     };
 
     try {
