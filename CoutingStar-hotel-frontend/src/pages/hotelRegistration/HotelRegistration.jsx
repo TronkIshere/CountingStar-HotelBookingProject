@@ -100,145 +100,168 @@ const HotelRegistration = () => {
 
   return (
     <div className="hotelRegistration">
-      <div className="container">
+      <div className="container my-4">
         <form
           onSubmit={handleRegistration}
           className="form"
           encType="multipart/form-data"
         >
           <h2>Thông tin chủ khách sạn</h2>
-          <div className="form-group">
-            <label>Họ và tên đệm:</label>
-            <input
-              type="text"
-              name="firstName"
-              value={user.firstName}
-              onChange={handleUserChange}
-              required
-            />
+          <div className="row mb-3">
+            <div className="col-md-6">
+              <label className="form-label">Họ và tên đệm:</label>
+              <input
+                type="text"
+                name="firstName"
+                className="form-control"
+                value={user.firstName}
+                onChange={handleUserChange}
+                required
+              />
+            </div>
+            <div className="col-md-6">
+              <label className="form-label">Tên:</label>
+              <input
+                type="text"
+                name="lastName"
+                className="form-control"
+                value={user.lastName}
+                onChange={handleUserChange}
+                required
+              />
+            </div>
           </div>
-          <div className="form-group">
-            <label>Tên:</label>
-            <input
-              type="text"
-              name="lastName"
-              value={user.lastName}
-              onChange={handleUserChange}
-              required
-            />
+          <div className="row mb-3">
+            <div className="col-md-6">
+              <label className="form-label">Mật khẩu:</label>
+              <input
+                type="password"
+                name="password"
+                className="form-control"
+                value={user.password}
+                onChange={handleUserChange}
+                required
+              />
+            </div>
+            <div className="col-md-6">
+              <label className="form-label">Số điện thoại:</label>
+              <input
+                type="tel"
+                name="phoneNumber"
+                className="form-control"
+                value={user.phoneNumber}
+                onChange={handleUserChange}
+                required
+              />
+            </div>
           </div>
-          <div className="form-group">
-            <label>Mật khẩu:</label>
-            <input
-              type="password"
-              name="password"
-              value={user.password}
-              onChange={handleUserChange}
-              required
-            />
+          <div className="row mb-3">
+            <div className="col-md-6">
+              <label className="form-label">Email:</label>
+              <input
+                type="email"
+                name="email"
+                className="form-control"
+                value={user.email}
+                onChange={handleUserChange}
+                required
+              />
+            </div>
           </div>
-          <div className="form-group">
-            <label>Số điện thoại:</label>
-            <input
-              type="tel"
-              name="phoneNumber"
-              value={user.phoneNumber}
-              onChange={handleUserChange}
-              required
-            />
+          <h2>Thông tin khách sạn</h2>
+          <div className="row mb-3">
+            <div className="col-md-6">
+              <label className="form-label">Tên khách sạn:</label>
+              <input
+                type="text"
+                name="hotelName"
+                className="form-control"
+                value={hotel.hotelName}
+                onChange={handleHotelChange}
+                required
+              />
+            </div>
+            <div className="col-md-6">
+              <label className="form-label">Thành phố:</label>
+              <select
+                name="city"
+                className="form-select"
+                value={hotel.city}
+                onChange={handleHotelChange}
+                required
+              >
+                <option value="" disabled>
+                  Khách sạn bạn ở thành phố nào?
+                </option>
+                <option value="Hồ Chí Minh">Hồ Chí Minh</option>
+                <option value="Hà Nội">Hà Nội</option>
+                <option value="Đà Lạt">Đà Lạt</option>
+                <option value="Nha Trang">Nha Trang</option>
+                <option value="Vũng Tàu">Vũng Tàu</option>
+              </select>
+            </div>
           </div>
-          <div className="form-group">
-            <label>Email:</label>
-            <input
-              type="email"
-              name="email"
-              value={user.email}
-              onChange={handleUserChange}
-              required
-            />
+          <div className="row mb-3">
+            <div className="col-md-6">
+              <label className="form-label">Địa chỉ:</label>
+              <input
+                type="text"
+                name="hotelLocation"
+                className="form-control"
+                value={hotel.hotelLocation}
+                onChange={handleHotelChange}
+                required
+              />
+            </div>
+            <div className="col-md-6">
+              <label className="form-label">Số điện thoại khách sạn:</label>
+              <input
+                type="tel"
+                name="hotelPhone"
+                className="form-control"
+                value={hotel.hotelPhone}
+                onChange={handleHotelChange}
+                required
+              />
+            </div>
           </div>
 
-          <h2>Thông tin khách sạn</h2>
-          <div className="form-group">
-            <label>Tên khách sạn:</label>
-            <input
-              type="text"
-              name="hotelName"
-              value={hotel.hotelName}
-              onChange={handleHotelChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Thành phố:</label>
-            <select
-              name="city"
-              className="selectBar"
-              value={hotel.city}
-              onChange={handleHotelChange}
-              required
-            >
-              <option value="" disabled>
-                Khách sạn bạn ở thành phố nào?
-              </option>
-              <option value="Hồ Chí Minh">Hồ Chí Minh</option>
-              <option value="Hà Nội">Hà Nội</option>
-              <option value="Đà Lạt">Đà Lạt</option>
-              <option value="Nha Trang">Nha Trang</option>
-              <option value="Vũng Tàu">Vũng Tàu</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label>Địa chỉ:</label>
-            <input
-              type="text"
-              name="hotelLocation"
-              value={hotel.hotelLocation}
-              onChange={handleHotelChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Mô tả:</label>
+          <div className="mb-3">
+            <label className="form-label">Mô tả:</label>
             <textarea
               name="description"
+              className="form-control"
               value={hotel.description}
               onChange={handleHotelChange}
               required
             ></textarea>
           </div>
-          <div className="form-group">
-            <label>Số điện thoại khách sạn:</label>
-            <input
-              type="tel"
-              name="hotelPhone"
-              value={hotel.hotelPhone}
-              onChange={handleHotelChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Ảnh của khách sạn:</label>
+
+          <div className="mb-3">
+            <label className="form-label">Ảnh của khách sạn:</label>
             <input
               type="file"
               name="photo"
+              className="form-control"
               onChange={handleImageChange}
               required
             />
             {imagePreview && (
-              <div className="imagePreview">
+              <div className="imagePreview mt-3">
                 <img className="inputImg" src={imagePreview} alt="Preview" />
               </div>
             )}
           </div>
 
-          <button type="submit" className="postHotelButton">
+          <button type="submit" className="main-btn">
             Đăng ký khách sạn
           </button>
 
-          {errorMessage && <div className="error-message">{errorMessage}</div>}
+          {errorMessage && (
+            <div className="alert alert-danger mt-3">{errorMessage}</div>
+          )}
           {successMessage && (
-            <div className="success-message">{successMessage}</div>
+            <div className="alert alert-success mt-3">{successMessage}</div>
           )}
         </form>
       </div>

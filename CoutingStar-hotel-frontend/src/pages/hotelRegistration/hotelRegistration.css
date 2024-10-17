@@ -1,6 +1,5 @@
 .hotelRegistration .form {
   width: 100%;
-  max-width: 600px;
   background-color: #f9f9f9;
   padding: 20px;
   border-radius: 10px;
@@ -12,27 +11,6 @@
   color: #003580;
 }
 
-.hotelRegistration .form-group {
-  margin-bottom: 15px;
-}
-
-.hotelRegistration .form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.hotelRegistration .form-group input,
-.hotelRegistration .form-group textarea,
-.hotelRegistration .form-group select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-  font-size: 1rem;
-}
-
 .hotelRegistration textarea {
   resize: vertical;
 }
@@ -42,20 +20,6 @@
   width: 100%;
 }
 
-.hotelRegistration .select-wrapper select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-color: #ffffff;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-  width: 100%;
-  cursor: pointer;
-  outline: none;
-}
-
 .hotelRegistration .select-wrapper::after {
   content: "\\25BC";
   position: absolute;
@@ -63,18 +27,6 @@
   right: 10px;
   transform: translateY(-50%);
   pointer-events: none;
-}
-
-.hotelRegistration .postHotelButton {
-  border: none;
-  background-color: #003580;
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .hotelRegistration .postHotelButton:hover {
