@@ -7,7 +7,7 @@ import {
   getUserByEmail,
   bookRoom,
   getAllRedeemedDiscountByUserId,
-} from "../../utils/ApiFunction";
+} from "../utils/ApiFunction";
 import moment from "moment";
 
 const BookingForm = ({ roomId }) => {
@@ -241,7 +241,7 @@ const BookingForm = ({ roomId }) => {
                       <strong>Giá tiền:</strong> {room.roomPrice}
                     </p>
                     <p>
-                      <strong>Đánh giá:</strong> {room.rating}
+                      <strong>Đánh giá:</strong> {room.averageNumberOfRoomStars} / 5
                     </p>
                   </div>
                 </div>
@@ -383,9 +383,18 @@ const BookingForm = ({ roomId }) => {
                 <strong>Tổng thanh toán:</strong> {totalPayment} VND
               </p>
 
-              <button onClick={handleSubmit} className="main-btn">
-                Đặt phòng
-              </button>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="white-btn"
+                  data-bs-dismiss="modal"
+                >
+                  Đóng
+                </button>
+                <button onClick={handleSubmit} className="main-btn">
+                  Đặt phòng
+                </button>
+              </div>
 
               {error && <p className="text-danger">{error}</p>}
             </div>

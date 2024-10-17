@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./roomList.css";
 import { getRoomsByHotelId } from "../utils/ApiFunction";
-import BookingForm from "../bookingRoom/bookingForm/BookingForm";
+import BookingForm from "../bookingRoom/BookingForm";
 
 const RoomList = ({ hotelId }) => {
   const [selectedRoom, setSelectedRoom] = useState(null);
@@ -68,7 +68,7 @@ const RoomList = ({ hotelId }) => {
                     className="btn btn-primary"
                     data-bs-toggle="modal"
                     data-bs-target="#bookingModal"
-                    onClick={() => setSelectedRoom(room.roomId)}
+                    onClick={() => setSelectedRoom(room.id)}
                   >
                     Đặt
                   </button>
