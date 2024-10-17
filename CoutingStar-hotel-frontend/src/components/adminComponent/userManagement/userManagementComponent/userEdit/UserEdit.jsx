@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./userEdit.css";
-import { getUserByUserId, updateUser } from "../../../../utils/ApiFunction"; // Make sure to implement this function
+import { getUserByUserId, updateUser } from "../../../../utils/ApiFunction"; 
 
 const UserEdit = ({ userId }) => {
   const [firstName, setFirstName] = useState("");

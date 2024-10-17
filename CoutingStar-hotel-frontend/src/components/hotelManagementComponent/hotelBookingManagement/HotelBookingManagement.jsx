@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./hotelBookingManagement.css";
-import { getBookingByHotelId, getAllBookingByKeywordAndHotelId } from "../../../components/utils/ApiFunction";
+import {
+  getBookingByHotelId,
+  getAllBookingByKeywordAndHotelId,
+} from "../../../components/utils/ApiFunction";
 import { useParams } from "react-router-dom";
 import DeleteBooking from "./deleteBooking/DeleteBooking";
 import UpdateBooking from "./updateBooking/UpdateBooking";
@@ -8,11 +11,11 @@ import UpdateBooking from "./updateBooking/UpdateBooking";
 const HotelBookingManagement = () => {
   const [bookings, setBookings] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [selectedBookingId, setSelectedBookingId] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const { hotelId } = useParams();
+  const [currentBookingId, setBookingId] = useState(null);
+  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const fetchBookings = async (keyword = "") => {
     try {
@@ -37,38 +40,14 @@ const HotelBookingManagement = () => {
     fetchBookings(searchKeyword);
   };
 
-  const handleOpenDeleteModal = (bookingId) => {
-    setSelectedBookingId(bookingId);
-    setIsDeleteModalOpen(true);
+  const handleEditClick = (id) => {
+    setBookingId(id);
+    setUpdateModalOpen(true);
   };
 
-  const handleCloseDeleteModal = () => {
-    setIsDeleteModalOpen(false);
-  };
-
-  const handleDeleteBooking = (bookingId) => {
-    setBookings(bookings.filter((booking) => booking.bookingId !== bookingId));
-    setIsDeleteModalOpen(false);
-  };
-
-  const handleOpenUpdateModal = (bookingId) => {
-    setSelectedBookingId(bookingId);
-    setIsUpdateModalOpen(true);
-  };
-
-  const handleCloseUpdateModal = () => {
-    setIsUpdateModalOpen(false);
-  };
-
-  const handleUpdateBooking = (updatedBooking) => {
-    setBookings(
-      bookings.map((booking) =>
-        booking.bookingId === updatedBooking.bookingId
-          ? updatedBooking
-          : booking
-      )
-    );
-    setIsUpdateModalOpen(false);
+  const handleDeleteClick = (id) => {
+    setBookingId(id);
+    setDeleteModalOpen(true);
   };
 
   return (
@@ -133,13 +112,13 @@ const HotelBookingManagement = () => {
                 <td>
                   <button
                     className="btn btn-primary btn-sm"
-                    onClick={() => handleOpenUpdateModal(booking.bookingId)}
+                    onClick={() => handleEditClick(booking.bookingId)}
                   >
                     Chỉnh sửa
                   </button>
                   <button
                     className="btn btn-danger btn-sm"
-                    onClick={() => handleOpenDeleteModal(booking.bookingId)}
+                    onClick={() => handleDeleteClick(booking.bookingId)}
                   >
                     Xóa
                   </button>
@@ -153,22 +132,20 @@ const HotelBookingManagement = () => {
           )}
         </tbody>
       </table>
-
-      {isDeleteModalOpen && selectedBookingId && (
-        <DeleteBooking
-          bookingId={selectedBookingId}
-          handleDeleteBooking={handleDeleteBooking}
-          onClose={handleCloseDeleteModal}
-        />
-      )}
-      {isUpdateModalOpen && selectedBookingId && (
-        <UpdateBooking
-          bookingId={selectedBookingId}
-          handleUpdateBooking={handleUpdateBooking}
-          onClose={handleCloseUpdateModal}
-        />
-      )}
       {errorMessage && <p className="error">{errorMessage}</p>}
+
+      {isUpdateModalOpen && (
+        <UpdateBooking
+          bookingId={currentBookingId}
+          onClose={() => setUpdateModalOpen(false)}
+        />
+      )}
+      {isDeleteModalOpen && (
+        <DeleteBooking
+          bookingId={currentBookingId}
+          onClose={() => setDeleteModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

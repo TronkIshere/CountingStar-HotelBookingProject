@@ -114,7 +114,7 @@ const UserManagement = () => {
                       className="btn btn-danger btn-sm"
                       data-bs-toggle="modal"
                       data-bs-target="#deleteUserModel"
-                      onClick={() => handleEditClick(user.id)}
+                      onClick={() => handleDeleteClick(user.id)}
                     >
                       Xóa
                     </button>

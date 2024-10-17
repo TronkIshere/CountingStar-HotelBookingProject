@@ -313,9 +313,10 @@ export async function getAllBookingByKeywordAndHotelId(
   }
 }
 
-export async function getBookingByBookingId(bookingId, bookingData) {
+export async function getBookingByBookingId(bookingId) {
   try {
     const result = await api.get(`/bookings/booking/${bookingId}`);
+    console.log(result)
     return result.data;
   } catch (error) {
     if (error.response && error.response.data) {
