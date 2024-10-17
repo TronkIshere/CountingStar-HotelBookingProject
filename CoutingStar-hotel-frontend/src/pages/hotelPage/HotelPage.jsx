@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./hotelPage.css";
 import Header from "../../components/header/Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,24 +7,20 @@ import {
   faCircleArrowRight,
   faCircleXmark,
   faLocationDot,
-  faPencil,
   faPhone,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link as ScrollLink } from "react-scroll";
-import { Link as RouterLink } from "react-router-dom";
 import Register from "../../components/register/Register";
 import Rating from "../../components/rating/Rating";
 import { getHotelById } from "../../components/utils/ApiFunction";
 import { useParams } from "react-router-dom";
-import { AuthContext } from "../../components/utils/AuthProvider";
 import RoomList from "../../components/roomList/RoomList";
 
 const Hotel = () => {
   const userId = localStorage.getItem("userId");
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
-  const [ratingOpen, setRatingOpen] = useState(false);
   const [hotelInfo, setHotelInfo] = useState({
     id: "",
     hotelName: "",
@@ -41,40 +37,14 @@ const Hotel = () => {
   const { hotelId } = useParams();
 
   useEffect(() => {
-    setTimeout(() => {
-      getHotelById(hotelId)
-        .then((response) => {
-          setHotelInfo(response);
-          console.log(response);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          setError(error);
-          setIsLoading(false);
-        });
-    }, 2000);
+    getHotelById(hotelId)
+      .then((response) => {
+        setHotelInfo(response);
+      })
+      .catch((error) => {
+        console.error("Error fetching hotel data:", error);
+      });
   }, [hotelId]);
-
-  const photos = [
-    {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707778.jpg?k=56ba0babbcbbfeb3d3e911728831dcbc390ed2cb16c51d88159f82bf751d04c6&o=&hp=1",
-    },
-    {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707367.jpg?k=cbacfdeb8404af56a1a94812575d96f6b80f6740fd491d02c6fc3912a16d8757&o=&hp=1",
-    },
-    {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261708745.jpg?k=1aae4678d645c63e0d90cdae8127b15f1e3232d4739bdf387a6578dc3b14bdfd&o=&hp=1",
-    },
-    {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707776.jpg?k=054bb3e27c9e58d3bb1110349eb5e6e24dacd53fbb0316b9e2519b2bf3c520ae&o=&hp=1",
-    },
-    {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261708693.jpg?k=ea210b4fa329fe302eab55dd9818c0571afba2abd2225ca3a36457f9afa74e94&o=&hp=1",
-    },
-    {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707389.jpg?k=52156673f9eb6d5d99d3eed9386491a0465ce6f3b995f005ac71abc192dd5827&o=&hp=1",
-    },
-  ];
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -93,7 +63,11 @@ const Hotel = () => {
     setSlideNumber(newSlideNumber);
   };
 
-  const userRole = localStorage.getItem("userRole");
+  const [isRatingModalOpen, setRatingModalOpen] = useState(false);
+
+  const handleOpenRatingClick = () => {
+    setRatingModalOpen(true);
+  };
 
   return (
     <div className="hotelPage">
@@ -113,7 +87,7 @@ const Hotel = () => {
             <div className="sliderWrapper">
               <img
                 src={`data:image/jpeg;base64,${hotelInfo.photo}`}
-                alt=""
+                alt="Hotel"
                 className="sliderImg"
               />
             </div>
@@ -124,16 +98,17 @@ const Hotel = () => {
             />
           </div>
         )}
-        {ratingOpen && (
-          <Rating hotelId={hotelInfo.id} onClose={() => setRatingOpen(false)} />
+
+        {isRatingModalOpen && (
+          <Rating hotelId={hotelId} onClose={() => setRatingModalOpen(false)} />
         )}
 
         <div className="hotelWrapper">
           <div className="row d-flex align-items-center">
-            <div className="col-12 col-sm-12 col-md-6 col-lg-6">
+            <div className="col-md-6">
               <h1 className="hotelTitle">{hotelInfo.hotelName}</h1>
             </div>
-            <div className="col-12 col-sm-12 col-md-6 col-lg-6 d-flex justify-content-end align-items-end">
+            <div className="col-md-6 d-flex justify-content-end align-items-end">
               <ScrollLink to="roomList" smooth={true} duration={500}>
                 <button className="main-btn">Hãy đặt ngay!</button>
               </ScrollLink>
@@ -151,9 +126,14 @@ const Hotel = () => {
           <span className="hotelRating">
             <p>
               Đây là khách sạn với số sao là <FontAwesomeIcon icon={faStar} />{" "}
-              5/5
+              {hotelInfo.averageNumberOfHotelStars}/5
             </p>
-            <p className="viewHotelRating" onClick={() => setRatingOpen(true)}>
+            <p
+              className="viewHotelRating"
+              data-bs-toggle="modal"
+              data-bs-target="#ratingModal"
+              onClick={handleOpenRatingClick}
+            >
               Xem đánh giá
             </p>
           </span>
@@ -164,28 +144,19 @@ const Hotel = () => {
             <img
               className="hotelImg"
               src={`data:image/jpeg;base64,${hotelInfo.photo}`}
+              alt="Hotel"
             />
-            {/* {photos.map((photo, i) => (
-              <div className="hotelImgWrapper" key={i}>
-                <img
-                  onClick={() => handleOpen(i)}
-                  src={photo.src}
-                  alt=""
-                  className="hotelImg"
-                />
-              </div>
-            ))} */}
           </div>
 
           <div className="hotelDetails">
             <div className="row">
-              <div className="col-12 col-sm-12 col-md-9 col-lg-9">
+              <div className="col-md-9">
                 <div className="hotelDetailsTexts">
                   <h1 className="hotelTitle">Tổng quan khách sạn</h1>
                   <p className="hotelDesc">{hotelInfo.hotelDescription}</p>
                 </div>
               </div>
-              <div className="col-12 col-sm-12 col-md-3 col-lg-3">
+              <div className="col-md-3">
                 <div className="hotelDetailsPrice">
                   <h1>Nơi tuyệt vời để thuê!</h1>
                   <span>
@@ -203,12 +174,13 @@ const Hotel = () => {
               </div>
             </div>
           </div>
+
           <div id="roomList">
             <RoomList hotelId={hotelInfo.id} />
           </div>
         </div>
 
-        {userId ? <div></div> : <Register />}
+        {userId ? null : <Register />}
       </div>
     </div>
   );

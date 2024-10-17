@@ -55,8 +55,9 @@ public class RoomController {
     }
 
     @GetMapping("/{hotelId}")
-    public ResponseEntity<Page<RoomDTO>> getRoomsByHotelId(@PathVariable Long hotelId, @RequestParam(defaultValue = "0") Integer pageNo,
-                                                           @RequestParam(defaultValue = "8") Integer pageSize) throws SQLException{
+    public ResponseEntity<Page<RoomDTO>> getRoomsByHotelId(@PathVariable Long hotelId,
+                                                           @RequestParam(defaultValue = "0") Integer pageNo,
+                                                           @RequestParam(defaultValue = "8") Integer pageSize) {
         Page<Room> rooms = roomService.getRoomByHotelId(hotelId, pageNo, pageSize);
         Page<RoomDTO> roomResponses = rooms.map(this::getRoomResponse);
         return ResponseEntity.ok(roomResponses);

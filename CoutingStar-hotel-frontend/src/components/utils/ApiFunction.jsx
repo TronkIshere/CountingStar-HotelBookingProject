@@ -77,7 +77,6 @@ export async function getAllRoomByKeywordAndHotelId(
     );
     return response.data;
   } catch (error) {
-    console.error("Error fetching hotels:", error);
     throw new Error("Error fetching hotels");
   }
 }
@@ -99,7 +98,7 @@ export async function getHotelById(hotelId) {
     const response = await api.get(`/hotels/hotel/${hotelId}`);
     return response.data;
   } catch (error) {
-    throw new Error("Error fetching hotels");
+    throw new Error(`Error fetching hotels: ${error.message}`);
   }
 }
 
@@ -217,14 +216,14 @@ export async function getRoomById(roomId) {
   }
 }
 
-export async function getRoomsByHotelId(hotelId, pageNo = 0, pageSize = 10) {
+export async function getRoomsByHotelId(hotelId, pageNo = 0, pageSize = 8) {
   try {
     const result = await api.get(`/rooms/${hotelId}`, {
       params: { pageNo, pageSize },
     });
     return result.data;
   } catch (error) {
-    throw new Error(`Error fetching room ${err.message}`);
+    throw new Error(`Error fetching room ${error.message}`);
   }
 }
 

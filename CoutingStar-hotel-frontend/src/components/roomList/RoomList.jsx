@@ -18,13 +18,16 @@ const RoomList = ({ hotelId }) => {
 
   const fetchRooms = async () => {
     setIsLoading(true);
+    setError(null);
     try {
       const response = await getRoomsByHotelId(hotelId, page, pageSize);
+      console.log(response);
       setRooms(response.content); 
-      setTotalPages(response.totalPages); 
+      setTotalPages(response.totalPages);
       setIsLoading(false);
     } catch (error) {
-      setError(error.message);
+      console.error("Error fetching rooms:", error); 
+      setError(error.message); 
       setIsLoading(false);
     }
   };
@@ -33,12 +36,12 @@ const RoomList = ({ hotelId }) => {
     setPage(newPage);
   };
 
-  if (isLoading) {
-    return <div>Đang kiểm tra phòng...</div>;
-  }
-
   if (error) {
     return <div>{`Đã xảy ra lỗi: ${error}`}</div>;
+  }
+
+  if (isLoading) {
+    return <div>Đang kiểm tra phòng...</div>;
   }
 
   return (
@@ -104,9 +107,7 @@ const RoomList = ({ hotelId }) => {
               </li>
             ))}
             <li
-              className={`page-item ${
-                page === totalPages - 1 ? "disabled" : ""
-              }`}
+              className={`page-item ${page === totalPages - 1 ? "disabled" : ""}`}
             >
               <button
                 className="page-link"

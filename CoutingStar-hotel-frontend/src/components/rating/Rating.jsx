@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import "./rating.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faStar } from "@fortawesome/free-solid-svg-icons";
 import { AuthContext } from "../utils/AuthProvider";
@@ -8,6 +7,7 @@ import {
   checkIfUserCanComment,
   getAllRatingByHotelId,
 } from "../utils/ApiFunction";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Rating = ({ hotelId, onClose }) => {
   const userId = localStorage.getItem("userId");
@@ -15,16 +15,7 @@ const Rating = ({ hotelId, onClose }) => {
   const [newStars, setNewStars] = useState(0);
   const [canComment, setCanComment] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [ratings, setRatings] = useState([
-    {
-      id: "",
-      star: "",
-      comment: "",
-      rateDay: "",
-      userName: "",
-      roomType: ""
-    },
-  ]);
+  const [ratings, setRatings] = useState([]);
 
   useEffect(() => {
     if (userId) {
@@ -42,7 +33,6 @@ const Rating = ({ hotelId, onClose }) => {
   const getAllRatings = async (hotelId) => {
     try {
       const ratings = await getAllRatingByHotelId(hotelId);
-      console.log(ratings);
       setRatings(ratings);
     } catch (error) {
       console.error("Error fetching ratings:", error.message);
@@ -69,6 +59,7 @@ const Rating = ({ hotelId, onClose }) => {
 
       if (success) {
         console.log("Rating submitted successfully!");
+        getAllRatings(hotelId); 
       } else {
         console.error("Failed to submit rating");
       }
@@ -83,7 +74,10 @@ const Rating = ({ hotelId, onClose }) => {
 
   const formatDate = (dateArray) => {
     const [year, month, day] = dateArray;
-    return `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
+    return `${String(day).padStart(2, "0")}/${String(month).padStart(
+      2,
+      "0"
+    )}/${year}`;
   };
 
   const calculateAverageRating = (ratings) => {
@@ -94,92 +88,110 @@ const Rating = ({ hotelId, onClose }) => {
 
   const averageRating = calculateAverageRating(ratings);
 
-  console.log("Check if can comment: " + userId + " " + canComment);
-
   return (
-    <div className="ratingPopup">
-      <div className="ratingContent">
-        <span className="close" onClick={onClose}>
-          &times;
-        </span>
-        <h2>Đánh giá khách sạn</h2>
-        <div className="ratingOverView">
-          <div className="ratingOverViewText">
-            <div className="ratingOverViewText_header">
-              <strong>{averageRating}</strong> trên 5
-            </div>
-            <div className="ratingOverView_star">
-              {Array(5).fill().map((_, i) => (
-                <FontAwesomeIcon
-                  icon={faStar}
-                  key={i}
-                  className={i < Math.round(averageRating) ? "selectedStar" : ""}
-                />
-              ))}
-            </div>
+    <div
+      className="ratingModal modal fade"
+      id="ratingModal"
+      tabIndex="-1"
+      aria-labelledby="ratingModalLabel"
+      aria-hidden="true"
+    >
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title" id="ratingModalLabel">
+              Đánh giá khách sạn
+            </h5>
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              onClick={onClose}
+            />
           </div>
-          <div className="totalComments">{ratings.length} nhận xét</div>
-        </div>
-        <div className="ratingReviews">
-          <h3>Nhận xét</h3>
-          <div className="reviewList">
-            {ratings.map((rating, index) => (
-              <div className="reviewItem" key={index}>
-                <p className="reviewUser">{rating.userName}</p>
-                <div className="reviewStars">
-                  {Array.from({ length: rating.star }, (_, i) => (
-                    <FontAwesomeIcon icon={faStar} key={i} />
-                  ))}
-                </div>
-                <p className="reviewText">{rating.comment}</p>
-                <div className="reviewDetails">
-                  <p className="reviewRoomType">Loại phòng: {rating.roomType}</p>
-                  <p className="reviewDate">{formatDate(rating.rateDay)}</p>
+          <div className="modal-body">
+            <div className="d-flex justify-content-between align-items-center">
+              <div className="text-center">
+                <strong>{averageRating}</strong> trên 5
+                <div className="text-warning">
+                  {Array(5)
+                    .fill()
+                    .map((_, i) => (
+                      <FontAwesomeIcon
+                        icon={faStar}
+                        key={i}
+                        className={
+                          i < Math.round(averageRating) ? "selectedStar" : ""
+                        }
+                      />
+                    ))}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
+              <div>{ratings.length} nhận xét</div>
+            </div>
 
-        <div className="newReview">
-          {userId && canComment ? (
-            <form onSubmit={handleCommentSubmit}>
-              <div className="starRating">
-                Hãy chọn số sao đánh giá: &#160;
-                {Array(5)
-                  .fill()
-                  .map((_, i) => (
-                    <FontAwesomeIcon
-                      icon={faStar}
-                      key={i}
-                      className={newStars > i ? "selectedStar" : ""}
-                      onClick={() => handleStarClick(i + 1)}
-                    />
-                  ))}
+            <div className="mt-3">
+              <h6>Nhận xét</h6>
+              <div className="overflow-auto" style={{ maxHeight: "300px" }}>
+                {ratings.map((rating, index) => (
+                  <div className="border-top pt-2" key={index}>
+                    <p className="fw-bold">{rating.userName}</p>
+                    <div className="text-warning">
+                      {Array.from({ length: rating.star }, (_, i) => (
+                        <FontAwesomeIcon icon={faStar} key={i} />
+                      ))}
+                    </div>
+                    <p>{rating.comment}</p>
+                    <small className="text-muted">
+                      Loại phòng: {rating.roomType} -{" "}
+                      {formatDate(rating.rateDay)}
+                    </small>
+                  </div>
+                ))}
               </div>
-              <div className="wrapper">
-                <input
-                  className="commentInput"
-                  placeholder="Viết bình luận của bạn..."
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  required
-                />
-                <button
-                  type="submit"
-                  className="submitIcon"
-                  disabled={submitting}
-                >
-                  <FontAwesomeIcon icon={faPaperPlane} />
-                </button>
-              </div>
-            </form>
-          ) : (
-            <div className="remindText">
-              Bạn phải đăng nhặp và đặt phòng (và chưa đánh giá) để có thể đánh
-              giá.
             </div>
-          )}
+
+            {userId && canComment ? (
+              <form className="mt-3" onSubmit={handleCommentSubmit}>
+                <div className="mb-2">
+                  Hãy chọn số sao đánh giá: &#160;
+                  {Array(5)
+                    .fill()
+                    .map((_, i) => (
+                      <FontAwesomeIcon
+                        icon={faStar}
+                        key={i}
+                        className={newStars > i ? "text-warning" : ""}
+                        onClick={() => handleStarClick(i + 1)}
+                        style={{ cursor: "pointer" }}
+                      />
+                    ))}
+                </div>
+                <div className="input-group">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Viết bình luận của bạn..."
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    required
+                  />
+                  <button
+                    className="btn btn-primary"
+                    type="submit"
+                    disabled={submitting}
+                  >
+                    <FontAwesomeIcon icon={faPaperPlane} />
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <p className="mt-3 text-center">
+                Bạn phải đăng nhập và đặt phòng để có thể đánh giá.
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>
