@@ -70,7 +70,7 @@ export async function getAllRoomByKeywordAndHotelId(
 ) {
   try {
     const response = await api.get(
-      `/hotels/getHotelByKeyword/${hotelId}/${encodeURIComponent(keyword)}`,
+      `/rooms/getAllRoomByKeyword/${hotelId}/${encodeURIComponent(keyword)}`,
       {
         params: { pageNo, pageSize },
       }

@@ -13,12 +13,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link as ScrollLink } from "react-scroll";
 import { Link as RouterLink } from "react-router-dom";
-import RoomList from "../../components/room/roomList/RoomList";
 import Register from "../../components/register/Register";
 import Rating from "../../components/rating/Rating";
 import { getHotelById } from "../../components/utils/ApiFunction";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../../components/utils/AuthProvider";
+import RoomList from "../../components/roomList/RoomList";
 
 const Hotel = () => {
   const userId = localStorage.getItem("userId");

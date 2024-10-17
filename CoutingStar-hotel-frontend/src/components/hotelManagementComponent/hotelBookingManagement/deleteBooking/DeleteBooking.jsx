@@ -62,10 +62,10 @@ const DeleteBooking = ({ bookingId, onClose }) => {
             {successMessage && <p className="success">{successMessage}</p>}
           </div>
           <div className="modal-footer">
-            <button className="btn btn-danger" onClick={handleDelete}>
+            <button className="white-btn" onClick={handleDelete}>
               Xóa
             </button>
-            <button className="btn btn-secondary" onClick={onClose}>
+            <button className="main-btn" onClick={onClose}>
               Đóng
             </button>
           </div>
