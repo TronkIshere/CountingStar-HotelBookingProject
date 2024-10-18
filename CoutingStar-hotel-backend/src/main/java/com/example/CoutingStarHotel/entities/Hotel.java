@@ -21,6 +21,7 @@ public class Hotel {
     private String hotelName;
     private String city;
     private String hotelLocation;
+    @Column(columnDefinition = "LONGTEXT")
     private String hotelDescription;
     private String phoneNumber;
     private LocalDate registerDay;

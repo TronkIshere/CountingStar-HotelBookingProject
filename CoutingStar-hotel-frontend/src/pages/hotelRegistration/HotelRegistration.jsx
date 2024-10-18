@@ -4,6 +4,7 @@ import {
   registerHotelOwner,
   addHotel,
 } from "../../components/utils/ApiFunction";
+import ReactQuill from "react-quill";
 
 const HotelRegistration = () => {
   const [user, setUser] = useState({
@@ -96,6 +97,27 @@ const HotelRegistration = () => {
     const selectedImage = e.target.files[0];
     setHotel({ ...hotel, photo: selectedImage });
     setImagePreview(URL.createObjectURL(selectedImage));
+  };
+
+  const handleDescriptionChange = (value) => {
+    setHotel((prevHotel) => ({
+      ...prevHotel,
+      description: value,
+    }));
+  };
+
+  const descriptionModule = {
+    toolbar: [
+      ["bold", "italic", "underline", "strike"],
+      [{ header: 1 }, { header: 2 }],
+      [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+      [{ size: ["small", false, "large", "huge"] }],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ font: [] }],
+      [{ align: [] }],
+      ["image"],
+      ["clean"],
+    ],
   };
 
   return (
@@ -226,15 +248,19 @@ const HotelRegistration = () => {
             </div>
           </div>
 
-          <div className="mb-3">
-            <label className="form-label">Mô tả:</label>
-            <textarea
-              name="description"
-              className="form-control"
+          <div className="reactQuill mb-5">
+            <label htmlFor="specifications" className="form-label">
+              Mô tả:
+            </label>
+            <ReactQuill
+              className="reactQuill"
+              id="description"
+              modules={descriptionModule}
+              theme="snow"
               value={hotel.description}
-              onChange={handleHotelChange}
-              required
-            ></textarea>
+              onChange={handleDescriptionChange}
+              style={{ height: "250px" }}
+            />
           </div>
 
           <div className="mb-3">

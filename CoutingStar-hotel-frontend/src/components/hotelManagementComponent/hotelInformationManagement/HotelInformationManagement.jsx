@@ -5,6 +5,7 @@ import {
   updateHotel,
 } from "../../../components/utils/ApiFunction";
 import { useParams } from "react-router-dom";
+import ReactQuill from "react-quill";
 
 const HotelInformationManagement = () => {
   const [hotel, setHotel] = useState({
@@ -46,6 +47,27 @@ const HotelInformationManagement = () => {
 
     fetchRoom();
   }, [hotelId]);
+
+  const handleDescriptionChange = (value) => {
+    setHotel((prevHotel) => ({
+      ...prevHotel,
+      description: value,
+    }));
+  };
+
+  const descriptionModule = {
+    toolbar: [
+      ["bold", "italic", "underline", "strike"],
+      [{ header: 1 }, { header: 2 }],
+      [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+      [{ size: ["small", false, "large", "huge"] }],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ font: [] }],
+      [{ align: [] }],
+      ["image"],
+      ["clean"],
+    ],
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -130,20 +152,19 @@ const HotelInformationManagement = () => {
               />
             </div>
           </div>
-          <div className="row mb-3">
-            <div className="col-12">
-              <label htmlFor="description" className="form-label">
-                Mô tả:
-              </label>
-              <textarea
-                className="form-control"
-                id="description"
-                name="hotelDescription"
-                value={hotel.hotelDescription}
-                onChange={handleInputChange}
-                required
-              ></textarea>
-            </div>
+          <div className="row mb-5">
+          <label htmlFor="specifications" className="form-label">
+              Mô tả:
+            </label>
+            <ReactQuill
+              className="reactQuill"
+              id="description"
+              modules={descriptionModule}
+              theme="snow"
+              value={hotel.description}
+              onChange={handleDescriptionChange}
+              style={{ height: "250px" }}
+            />
           </div>
           <div className="form-group mb-3">
             <label>Ảnh của khách sạn:</label>

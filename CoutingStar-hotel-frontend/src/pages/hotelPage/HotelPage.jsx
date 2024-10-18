@@ -153,15 +153,17 @@ const Hotel = () => {
               <div className="col-md-9">
                 <div className="hotelDetailsTexts">
                   <h1 className="hotelTitle">Tổng quan khách sạn</h1>
-                  <p className="hotelDesc">{hotelInfo.hotelDescription}</p>
+                  <p className="hotelDesc">
+                  <div dangerouslySetInnerHTML={{ __html: hotelInfo.hotelDescription }} />
+                    </p>
                 </div>
               </div>
               <div className="col-md-3">
                 <div className="hotelDetailsPrice">
                   <h1>Nơi tuyệt vời để thuê!</h1>
                   <span>
-                    Nằm tại thành phố Hồ Chí Minh, khách sạn này có số điểm là
-                    9.8!
+                    Nằm tại thành phố {hotelInfo.city}, khách sạn này có số điểm
+                    là 9.8!
                   </span>
                   <h2>
                     <b>

@@ -1,20 +1,21 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useState } from "react";
+import { AuthProvider } from "./components/utils/AuthProvider";
 import HomePage from "./pages/homePage/HomePage";
 import SearchHotelsPage from "./pages/searchHotelsPage/SearchHotelsPage";
 import Navbar from "./components/navbar/Navbar";
-import { useState } from "react";
 import Login from "./components/login/Login";
 import UserProfile from "./pages/userProfile/UserProfile";
 import Footer from "./components/footer/Footer";
-import { AuthProvider } from "./components/utils/AuthProvider";
 import AdminPage from "./pages/adminPage/AdminPage";
 import Discount from "./pages/Discount/Discount";
 import HotelPage from "./pages/hotelPage/HotelPage";
 import HotelRegistration from "./pages/hotelRegistration/HotelRegistration";
+import HotelOwnerPage from "./pages/hotelOwnerPage/HotelOwnerPage";
+import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import "./App.css";
-import HotelOwnerPage from "./pages/hotelOwnerPage/HotelOwnerPage";
+import "react-quill/dist/quill.snow.css";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
