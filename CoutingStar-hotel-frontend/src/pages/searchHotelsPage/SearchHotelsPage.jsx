@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../../components/navbar/Navbar";
-import Header from "../../components/header/Header";
 import "./searchHotelsPage.css";
 import { useLocation } from "react-router-dom";
 import { format } from "date-fns";
 import { DateRange } from "react-date-range";
 import SearchItem from "../../components/searchItem/SearchItem";
-import { getHotelsByCity } from "../../components/utils/ApiFunction";
+import { getHotelByKeyword } from "../../components/utils/ApiFunction";
 import Register from "../../components/register/Register";
 
 const SearchHotelsPage = () => {
   const userId = localStorage.getItem("userId");
   const location = useLocation();
-  const {
-    destination: initialDestination = "",
-    date: initialDate = [],
-    options: initialOptions = {},
-  } = location.state || {};
+  const { date: initialDate = [], options: initialOptions = {} } =
+    location.state || {};
+
+  const queryParams = new URLSearchParams(location.search);
+  const initialDestination = queryParams.get("destination") || "";
 
   const [hotels, setHotels] = useState([]);
   const [openDate, setOpenDate] = useState(false);
@@ -24,7 +22,7 @@ const SearchHotelsPage = () => {
   const [date, setDate] = useState(initialDate);
   const [options, setOptions] = useState(initialOptions);
   const [pageNo, setPageNo] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(8);
   const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
@@ -33,10 +31,10 @@ const SearchHotelsPage = () => {
 
   const fetchHotels = async () => {
     try {
-      const hotelsData = await getHotelsByCity(
-        decodeURIComponent(destination),
+      const hotelsData = await getHotelByKeyword(
         pageNo,
-        pageSize
+        pageSize,
+        decodeURIComponent(destination)
       );
       setHotels(hotelsData.content);
       setTotalPages(hotelsData.totalPages);
@@ -47,7 +45,7 @@ const SearchHotelsPage = () => {
 
   const handleDestinationChange = (e) => {
     setDestination(e.target.value);
-    setPageNo(0); // Reset về trang đầu khi thay đổi điểm đến
+    setPageNo(0);
   };
 
   const handleDateChange = (item) => {
@@ -78,16 +76,12 @@ const SearchHotelsPage = () => {
               <h1 className="lsTitle">Search</h1>
               <div className="lsItem">
                 <label>Điểm đến</label>
-                <select value={destination} onChange={handleDestinationChange}>
-                  <option value="" disabled>
-                    Bạn muốn đi đâu?
-                  </option>
-                  <option value="Ho Chi Minh">Hồ Chí Minh</option>
-                  <option value="Ha Noi">Hà Nội</option>
-                  <option value="Da Lat">Đà Lạt</option>
-                  <option value="Nha Trang">Nha Trang</option>
-                  <option value="Vung Tau">Vũng Tàu</option>
-                </select>
+                <input
+                  type="text"
+                  placeholder="Bạn muốn đi đâu?"
+                  value={destination}
+                  onChange={handleDestinationChange}
+                />
               </div>
               <div className="lsItem">
                 <label>Ngày thuê</label>

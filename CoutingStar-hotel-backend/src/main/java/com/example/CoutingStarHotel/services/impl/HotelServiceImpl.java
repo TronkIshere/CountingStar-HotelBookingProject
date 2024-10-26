@@ -179,7 +179,6 @@ public class HotelServiceImpl implements HotelService {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         return hotelRepository.getHotelByKeyword(pageable, keyword);
     }
-
     @Override
     public Page<Hotel> getAllHotels(Integer pageNo, Integer pageSize){
         Pageable pageable = PageRequest.of(pageNo, pageSize);

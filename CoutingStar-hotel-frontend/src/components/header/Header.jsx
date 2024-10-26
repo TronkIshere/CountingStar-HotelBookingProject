@@ -49,7 +49,9 @@ const Header = () => {
     localStorage.setItem("adult", options.adult);
     localStorage.setItem("children", options.children);
 
-    navigate("/hotels", { state: { destination, date, options } });
+    navigate(`/hotels?destination=${encodeURIComponent(destination)}`, {
+      state: { date, options },
+    });
   };
 
   return (
@@ -97,20 +99,13 @@ const Header = () => {
             <div className="col-12 col-sm-12 col-md-3 col-lg-3">
               <div className="headerSearchItem">
                 <FontAwesomeIcon icon={faBed} className="headerIcon" />
-                <select
+                <input
+                  type="text"
                   className="headerSearchSelect headerSearchText"
+                  placeholder="Bạn muốn đi đâu?"
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
-                >
-                  <option value="" disabled>
-                    Bạn muốn đi đâu?
-                  </option>
-                  <option value="Ho Chi Minh">Hồ Chí Minh</option>
-                  <option value="Ha Noi">Hà Nội</option>
-                  <option value="Da Lat">Đà Lạt</option>
-                  <option value="Nha Trang">Nha Trang</option>
-                  <option value="Vung Tau">Vũng Tàu</option>
-                </select>
+                />
               </div>
             </div>
             <div className="col-12 col-sm-12 col-md-3 col-lg-3">
