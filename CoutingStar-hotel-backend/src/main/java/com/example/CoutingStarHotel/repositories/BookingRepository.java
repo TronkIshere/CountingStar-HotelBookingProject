@@ -21,11 +21,11 @@ public interface BookingRepository extends JpaRepository<BookedRoom, Long> {
     @Query("SELECT br FROM BookedRoom br JOIN br.room r JOIN r.hotel h WHERE h.id = :hotelId")
     Page<BookedRoom> findByHotelId(Pageable pageable, Long hotelId);
 
-    @Query("SELECT MIN(br.bookingId) FROM BookedRoom br LEFT JOIN br.rating r " +
+    @Query("SELECT br FROM BookedRoom br LEFT JOIN br.rating r " +
             "WHERE br.user.id = :userId " +
             "AND br.room.hotel.id = :hotelId " +
             "AND r.id IS NULL")
-    Long findRoomUserHasBookedAndNotComment(Long hotelId, Long userId);
+    BookedRoom findRoomUserHasBookedAndNotComment(Long hotelId, Long userId);
 
     @Query("SELECT COUNT(b) FROM BookedRoom b")
     int getTotalNumberOfBookedRooms();

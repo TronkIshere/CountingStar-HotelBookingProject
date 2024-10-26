@@ -1,5 +1,6 @@
 package com.example.CoutingStarHotel.controller;
 
+import com.example.CoutingStarHotel.entities.BookedRoom;
 import com.example.CoutingStarHotel.entities.Rating;
 import com.example.CoutingStarHotel.DTO.RatingDTO;
 import com.example.CoutingStarHotel.services.RatingService;
@@ -49,9 +50,9 @@ public class RatingController {
     }
 
     @GetMapping("/hotel/{hotelId}/CheckUserRating/{userId}")
-    public ResponseEntity<Boolean> checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(@PathVariable Long userId,
+    public ResponseEntity<String> checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(@PathVariable Long userId,
                                                                                                          @PathVariable Long hotelId){
-        boolean result = ratingService.checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(userId, hotelId);
+        String result = ratingService.checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(userId, hotelId);
         return ResponseEntity.ok(result);
     }
 

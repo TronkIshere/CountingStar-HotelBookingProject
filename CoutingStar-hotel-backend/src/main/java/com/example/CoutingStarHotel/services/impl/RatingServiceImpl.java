@@ -27,13 +27,14 @@ public class RatingServiceImpl implements RatingService {
         rating.setComment(comment);
         rating.setRateDay(rateDay);
 
-        Long bookedRoomIdForAddComment = bookingRepository.findRoomUserHasBookedAndNotComment(hotelId, userId);
+        BookedRoom bookedRoom = bookingRepository.findRoomUserHasBookedAndNotComment(hotelId, userId);
+        Long bookedRoomIdForAddComment = bookedRoom.getRoom().getId();
 
         User user = userRepository.findById(userId).get();
         user.addComment(rating);
 
-        BookedRoom bookedRoom = bookingRepository.findById(bookedRoomIdForAddComment).get();
-        bookedRoom.addComment(rating);
+        BookedRoom saveBookedRoom = bookingRepository.findById(bookedRoomIdForAddComment).get();
+        saveBookedRoom.addComment(rating);
 
         return ratingRepository.save(rating);
     }
@@ -52,9 +53,9 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public boolean checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(Long userId, Long hotelId) {
-        Long bookingId = bookingRepository.findRoomUserHasBookedAndNotComment(hotelId, userId);
-        return bookingId != null;
+    public String checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(Long userId, Long hotelId) {bookingRepository.findRoomUserHasBookedAndNotComment(hotelId, userId);
+        BookedRoom bookedRoom = bookingRepository.findRoomUserHasBookedAndNotComment(hotelId, userId);
+        return bookedRoom.getRoom().getRoomType();
     }
 
     @Override

@@ -516,6 +516,7 @@ export async function checkIfUserCanComment(userId, hotelId) {
     const response = await api.get(
       `/ratings/hotel/${hotelId}/CheckUserRating/${userId}`
     );
+    console.log(response.data);
     return response.data;
   } catch (error) {
     throw new Error("Faild to check");

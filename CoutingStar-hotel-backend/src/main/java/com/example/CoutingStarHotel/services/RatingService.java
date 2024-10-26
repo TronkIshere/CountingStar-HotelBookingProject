@@ -1,5 +1,6 @@
 package com.example.CoutingStarHotel.services;
 
+import com.example.CoutingStarHotel.entities.BookedRoom;
 import com.example.CoutingStarHotel.entities.Rating;
 
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ public interface RatingService {
 
     void deleteRating(Long ratingId);
 
-    boolean checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(Long userId, Long hotelId);
+    String checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(Long userId, Long hotelId);
 
     List<Rating> getAllRatingByHotelId(Long hotelId);
 

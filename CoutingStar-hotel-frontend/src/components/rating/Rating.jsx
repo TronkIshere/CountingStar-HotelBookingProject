@@ -16,12 +16,14 @@ const Rating = ({ hotelId, onClose }) => {
   const [canComment, setCanComment] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [ratings, setRatings] = useState([]);
+  const [roomType, setRoomType] = useState("");
 
   useEffect(() => {
     if (userId) {
       checkIfUserCanComment(userId, hotelId)
         .then((response) => {
           setCanComment(response);
+          setRoomType(response);
         })
         .catch((error) => {
           console.error(error);
@@ -59,7 +61,7 @@ const Rating = ({ hotelId, onClose }) => {
 
       if (success) {
         console.log("Rating submitted successfully!");
-        getAllRatings(hotelId); 
+        getAllRatings(hotelId);
       } else {
         console.error("Failed to submit rating");
       }
@@ -144,7 +146,7 @@ const Rating = ({ hotelId, onClose }) => {
                     </div>
                     <p>{rating.comment}</p>
                     <small className="text-muted">
-                      Loại phòng: {rating.roomType} -{" "}
+                      Loại phòng: {rating.roomType || roomType} -{" "}
                       {formatDate(rating.rateDay)}
                     </small>
                   </div>
@@ -172,7 +174,7 @@ const Rating = ({ hotelId, onClose }) => {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Viết bình luận của bạn..."
+                    placeholder={`Viết bình luận của bạn cho ${roomType}...`}
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
                     required
