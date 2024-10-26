@@ -82,11 +82,8 @@ public class BookingController {
                                          @RequestParam(required = false) Long userId,
                                          @RequestParam(required = false) Long redeemedDiscountId){
         try{
-            System.out.println("RedeemedDiscountId: " + redeemedDiscountId);
             String confirmationCode = bookingService.saveBooking(roomId, bookingRequest, userId, redeemedDiscountId);
-            return ResponseEntity.ok(
-                    "Room booked successfully, Your booking confirmation code is :" + confirmationCode);
-
+            return ResponseEntity.ok("Room booked successfully, Your booking confirmation code is :" + confirmationCode);
         }catch (InvalidBookingRequestException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }

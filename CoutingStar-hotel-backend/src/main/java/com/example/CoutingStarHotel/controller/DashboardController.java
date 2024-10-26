@@ -44,7 +44,6 @@ public class DashboardController {
     @GetMapping("/HotelOwner/dashBoardMonthIncreased/{hotelId}")
     public ResponseEntity<DashBoardMonthIncreasedDTO> getDataForHotelOwnerMonthIncreased(@PathVariable Long hotelId){
         DashBoardMonthIncreasedDTO dashBoardMonthIncreasedData = dashBoardService.getDataForHotelOwnerMonthIncreased(hotelId);
-        System.out.println("======Is Running=====");
         return ResponseEntity.ok(dashBoardMonthIncreasedData);
     }
 }

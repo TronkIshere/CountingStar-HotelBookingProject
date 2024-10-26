@@ -90,12 +90,12 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookedRoom updateBooked(Long bookingId, LocalDate checkInDate, LocalDate checkOutDate, String guestEmail, String guestPhoneNumber, String guestFullName, int totalNumOfGuest) {
         BookedRoom bookedRoom = bookingRepository.findById(bookingId).get();
-        if (checkInDate != null) bookedRoom.setCheckInDate(checkInDate);
-        if (checkOutDate != null) bookedRoom.setCheckOutDate(checkOutDate);
-        if (guestEmail != null) bookedRoom.setGuestEmail(guestEmail);
-        if (guestPhoneNumber != null) bookedRoom.setGuestPhoneNumber(guestPhoneNumber);
-        if (guestFullName != null) bookedRoom.setGuestFullName(guestFullName);
-        if (totalNumOfGuest > 0) bookedRoom.setTotalNumOfGuest(totalNumOfGuest);
+        bookedRoom.setCheckInDate(checkInDate);
+        bookedRoom.setCheckOutDate(checkOutDate);
+        bookedRoom.setGuestEmail(guestEmail);
+        bookedRoom.setGuestPhoneNumber(guestPhoneNumber);
+        bookedRoom.setGuestFullName(guestFullName);
+        bookedRoom.setTotalNumOfGuest(totalNumOfGuest);
         bookedRoom.setBookingDay(LocalDate.now());
         return bookingRepository.save(bookedRoom);
     }
@@ -148,7 +148,6 @@ public class BookingServiceImpl implements BookingService {
 
     private BigDecimal applyDiscountIfValid(Long redeemedDiscountId, BigDecimal totalAmount, BookedRoom bookingRequest) {
         RedeemedDiscount redeemedDiscount = redeemedDiscountService.findRedeemedDiscountById(redeemedDiscountId);
-
         if (redeemedDiscount.isUsed()) {
             throw new InvalidBookingRequestException("Mã giảm giá đã được sử dụng, hãy chọn cái khác!");
         }

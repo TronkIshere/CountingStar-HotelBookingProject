@@ -207,11 +207,11 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public Hotel updateHotel(Long hotelId, String hotelName, String hotelLocation, String hotelDescription, String phoneNumber, String city, MultipartFile photo) throws IOException, SQLException {
         Hotel hotel = hotelRepository.findById(hotelId).get();
-        if (hotelName != null) hotel.setHotelName(hotelName);
-        if (hotelLocation != null) hotel.setHotelLocation(hotelLocation);
-        if (hotelDescription != null) hotel.setHotelDescription(hotelDescription);
-        if (phoneNumber != null) hotel.setPhoneNumber(phoneNumber);
-        if (city != null) hotel.setCity(city);
+        hotel.setHotelName(hotelName);
+        hotel.setHotelLocation(hotelLocation);
+        hotel.setHotelDescription(hotelDescription);
+        hotel.setPhoneNumber(phoneNumber);
+        hotel.setCity(city);
         if (photo != null && !photo.isEmpty()) {
             byte[] photoBytes = photo.getBytes();
             Blob photoBlob = new SerialBlob(photoBytes);

@@ -30,7 +30,7 @@ public class DiscountController {
     public ResponseEntity<DiscountDTO> addDiscount( @RequestParam("discountName") String discountName,
                                           @RequestParam("percentDiscount") Integer percentDiscount,
                                           @RequestParam("discountDescription") String discountDescription,
-                                          @RequestParam("expirationDate") LocalDate expirationDate) throws SQLException, IOException {
+                                          @RequestParam("expirationDate") LocalDate expirationDate) throws IOException {
             Discount discount = discountService.addDiscount(discountName, percentDiscount, discountDescription, expirationDate);
             return ResponseEntity.ok(getDiscountResponse(discount));
     }
