@@ -110,7 +110,12 @@ const HotelRegistration = () => {
     toolbar: [
       ["bold", "italic", "underline", "strike"],
       [{ header: 1 }, { header: 2 }],
-      [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+      ],
       [{ size: ["small", false, "large", "huge"] }],
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
       [{ font: [] }],
@@ -248,7 +253,7 @@ const HotelRegistration = () => {
             </div>
           </div>
 
-          <div className="reactQuill mb-5">
+          <div className="mb-5">
             <label htmlFor="specifications" className="form-label">
               Mô tả:
             </label>

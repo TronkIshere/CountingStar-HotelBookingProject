@@ -119,10 +119,15 @@ export async function updateHotel(hotelId, hotelData) {
   formData.append("hotelDescription", hotelData.hotelDescription);
   formData.append("phoneNumber", hotelData.phoneNumber);
   formData.append("photo", hotelData.photo);
+
   const response = await api.put(
     `/hotels/hotel/${hotelId}/hotelInformationUpdate`,
-    formData
+    formData,
+    {
+      headers: getHeader(),
+    }
   );
+
   return response;
 }
 
@@ -315,7 +320,7 @@ export async function getAllBookingByKeywordAndHotelId(
 export async function getBookingByBookingId(bookingId) {
   try {
     const result = await api.get(`/bookings/booking/${bookingId}`);
-    console.log(result)
+    console.log(result);
     return result.data;
   } catch (error) {
     if (error.response && error.response.data) {

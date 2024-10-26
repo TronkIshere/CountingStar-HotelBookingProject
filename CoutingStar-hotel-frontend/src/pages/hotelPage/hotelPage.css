@@ -70,11 +70,6 @@
   flex: 3;
 }
 
-.hotelDesc {
-  font-size: 14px;
-  margin-top: 20px;
-}
-
 .hotelDetailsPrice {
   background-color: #ebf3ff;
   padding: 20px;
@@ -94,6 +89,10 @@
 
 .hotelDetailsPrice>h2 {
   font-weight: 300;
+}
+
+.hotelDesc ul li {
+  list-style-type: circle;
 }
 
 

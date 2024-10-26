@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./editHotel.css";
 import { getHotelById, updateHotel } from "../../../../utils/ApiFunction";
+import ReactQuill from "react-quill";
 
 const EditHotel = ({ hotelId }) => {
   const [hotelName, setHotelName] = useState("");
@@ -49,15 +50,16 @@ const EditHotel = ({ hotelId }) => {
   const handleUpdate = async () => {
     try {
       if (hotelId) {
-        await updateHotel(
-          hotelId,
+        const hotelData = {
           hotelName,
           city,
           hotelLocation,
           hotelDescription,
           phoneNumber,
-          photo ? photo : base64Photo
-        );
+          photo: photo ? photo : base64Photo,
+        };
+
+        const response = await updateHotel(hotelId, hotelData);
         setSuccessMessage("Khách sạn đã được chỉnh sửa thành công!");
         setErrorMessage("");
         setTimeout(() => {
@@ -69,6 +71,25 @@ const EditHotel = ({ hotelId }) => {
       setErrorMessage("Lỗi khi cập nhật thông tin khách sạn.");
       setSuccessMessage("");
     }
+  };
+
+  const descriptionModule = {
+    toolbar: [
+      ["bold", "italic", "underline", "strike"],
+      [{ header: 1 }, { header: 2 }],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+      ],
+      [{ size: ["small", false, "large", "huge"] }],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ font: [] }],
+      [{ align: [] }],
+      ["image"],
+      ["clean"],
+    ],
   };
 
   return (
@@ -133,16 +154,19 @@ const EditHotel = ({ hotelId }) => {
               />
             </div>
 
-            <div className="mb-3">
+            <div className="react-quill">
               <label htmlFor="hotelDescription" className="form-label">
                 Mô tả:
               </label>
-              <textarea
-                className="form-control"
+              <ReactQuill
+                className="reactQuill"
                 id="hotelDescription"
+                modules={descriptionModule}
+                theme="snow"
                 value={hotelDescription}
-                onChange={(e) => setHotelDescription(e.target.value)}
-              ></textarea>
+                onChange={setHotelDescription}
+                style={{ height: "250px" }}
+              />
             </div>
 
             <div className="mb-3">

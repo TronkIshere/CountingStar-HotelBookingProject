@@ -6,7 +6,7 @@
     margin: auto;
 }
 
-.editHotelModel label{
+.editHotelModel label {
     width: 100%;
 }
 
@@ -54,4 +54,8 @@
 
 .editHotelModel .alert {
     margin-top: 20px;
+}
+
+.editHotelModel .react-quill {
+    margin-bottom: 5rem;
 }
