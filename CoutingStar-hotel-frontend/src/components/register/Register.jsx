@@ -106,7 +106,7 @@ const Register = () => {
         </div>
 
         <div className="row mt-3">
-          <div className="col-12 col-sm-6">
+          <div className="col-12 col-sm-6 col-md-6">
             <input
               className="form-control"
               type="text"
@@ -117,8 +117,8 @@ const Register = () => {
               required
             />
           </div>
-          <div className="col-12 col-sm-6">
-            <button className="white-btn registerButton" type="submit">
+          <div className="col-12 col-sm-6 col-md-6">
+            <button className="registerButton white-btn" type="submit">
               Đăng ký
             </button>
           </div>

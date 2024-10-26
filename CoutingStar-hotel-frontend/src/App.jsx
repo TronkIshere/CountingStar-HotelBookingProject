@@ -1,3 +1,4 @@
+import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useState } from "react";
 import { AuthProvider } from "./components/utils/AuthProvider";
@@ -12,10 +13,9 @@ import Discount from "./pages/Discount/Discount";
 import HotelPage from "./pages/hotelPage/HotelPage";
 import HotelRegistration from "./pages/hotelRegistration/HotelRegistration";
 import HotelOwnerPage from "./pages/hotelOwnerPage/HotelOwnerPage";
-import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "react-quill/dist/quill.snow.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -41,7 +41,10 @@ function App() {
           <Route path="/user/admin" element={<AdminPage />} />
           <Route path="/hotels/hotel/:hotelId" element={<HotelPage />} />
           <Route path="/hotelRegistration" element={<HotelRegistration />} />
-          <Route path="/hotels/hotelOwnerPage/:hotelId" element={<HotelOwnerPage />} />
+          <Route
+            path="/hotels/hotelOwnerPage/:hotelId"
+            element={<HotelOwnerPage />}
+          />
         </Routes>
 
         <Footer />

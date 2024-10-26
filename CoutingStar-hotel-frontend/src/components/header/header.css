@@ -46,7 +46,7 @@
   position: absolute;
   bottom: -25px;
   width: 100%;
-  max-width: 1000px; 
+  max-width: 1290px;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -76,6 +76,7 @@
 }
 
 .header .headerSearchText {
+  margin-left: 1rem;
   color: black;
   cursor: pointer;
 }
@@ -136,11 +137,16 @@
   cursor: not-allowed;
 }
 
+.fix-link-error {
+  display: inline-block;
+  cursor: pointer;
+}
+
 @media (max-width: 1196px) {
   .header .headerSearch {
     max-width: 935px;
   }
-  
+
   .header .headerSearchItem {
     padding-left: 0;
   }
@@ -150,6 +156,7 @@
   .header .headerSearch {
     max-width: 700px;
   }
+
   .header .headerSearchItem {
     height: auto;
   }
@@ -159,11 +166,13 @@
   .header {
     padding-bottom: 8rem;
   }
+
   .header .headerSearch {
     max-width: 520px;
     height: auto;
   }
-  .header .headerSearchItem{
+
+  .header .headerSearchItem {
     font-size: 1.1rem;
   }
 }

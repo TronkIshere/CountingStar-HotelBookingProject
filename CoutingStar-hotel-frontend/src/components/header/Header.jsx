@@ -88,7 +88,7 @@ const Header = () => {
           to="register"
           smooth={true}
           duration={500}
-          className="btn white-btn"
+          className="white-btn fix-link-error"
         >
           Đăng ký ngay hôm nay!
         </Link>
@@ -98,7 +98,7 @@ const Header = () => {
               <div className="headerSearchItem">
                 <FontAwesomeIcon icon={faBed} className="headerIcon" />
                 <select
-                  className="headerSearchSelect"
+                  className="headerSearchSelect headerSearchText"
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
                 >
