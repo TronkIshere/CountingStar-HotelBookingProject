@@ -619,12 +619,12 @@ export async function getAllDiscount(pageNo = 0, pageSize = 8) {
   }
 }
 
-export async function getDiscountNotExpired(pageNo = 0, pageSize = 8) {
+export async function getDiscountNotExpired(pageNo = 0, pageSize = 15) {
   try {
     const response = await api.get("/discounts/getDiscountNotExpired", {
-      headers: getHeader(),
       params: { pageNo, pageSize },
     });
+    console.log(response);
     return response.data;
   } catch (error) {
     throw new Error("Error fetching data");

@@ -45,7 +45,7 @@ public class DiscountController {
 
     @GetMapping("/getDiscountNotExpired")
     public ResponseEntity<Page<DiscountDTO>> getDiscountNotExpired(@RequestParam(defaultValue = "0") Integer pageNo,
-                                                                   @RequestParam(defaultValue = "8") Integer pageSize){
+                                                                   @RequestParam(defaultValue = "15") Integer pageSize){
         Page<Discount> discounts = discountService.getDiscountNotExpired(pageNo, pageSize);
         Page<DiscountDTO> discountDTOS = discounts.map(this::getDiscountResponse);
         return ResponseEntity.ok(discountDTOS);

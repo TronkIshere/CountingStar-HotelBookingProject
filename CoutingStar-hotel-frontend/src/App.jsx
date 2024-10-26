@@ -1,3 +1,6 @@
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import "react-quill/dist/quill.snow.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useState } from "react";
@@ -13,9 +16,6 @@ import Discount from "./pages/Discount/Discount";
 import HotelPage from "./pages/hotelPage/HotelPage";
 import HotelRegistration from "./pages/hotelRegistration/HotelRegistration";
 import HotelOwnerPage from "./pages/hotelOwnerPage/HotelOwnerPage";
-import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import "react-quill/dist/quill.snow.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);

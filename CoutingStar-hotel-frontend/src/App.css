@@ -182,15 +182,14 @@ h5 {
     .container {
         max-width: 1024px;
     }
-  }
+}
 
 @media screen and (max-width: 450px) {
     .main-btn {
         padding: 8px 12px;
     }
-    
+
     .white-btn {
         padding: 8px 12px;
     }
 }
-

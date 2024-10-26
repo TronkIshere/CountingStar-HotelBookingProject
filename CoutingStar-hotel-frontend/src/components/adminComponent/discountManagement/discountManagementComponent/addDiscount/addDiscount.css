@@ -15,17 +15,3 @@
 .addDiscount .alert {
     margin: 10px 0;
 }
-
-.addDiscount .white-btn {
-    background-color: #f8f9fa;
-    border: none;
-    color: var(--primary-color);
-    cursor: pointer;
-}
-
-.addDiscount .main-btn {
-    background-color: var(--primary-color);
-    border: none;
-    color: var(--white-color);
-    cursor: pointer;
-}
