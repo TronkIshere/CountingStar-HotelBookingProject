@@ -669,11 +669,7 @@ export async function addDiscount(
   const response = await api.post("/discounts/addDiscount", formData, {
     headers: getHeader(),
   });
-  if (response.status === 201) {
-    return true;
-  } else {
-    return false;
-  }
+  return response.data;
 }
 
 export async function updateDiscount(discountId, updatedDiscount) {

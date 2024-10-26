@@ -24,8 +24,13 @@ public class DiscountServiceImpl implements DiscountService {
     private final DiscountRepository discountRepository;
 
     @Override
-    public void addDiscount(Discount discountRequest){
-        discountRepository.save(discountRequest);
+    public Discount addDiscount(String discountName, Integer percentDiscount, String discountDescription, LocalDate expirationDate){
+        Discount discount = new Discount();
+        discount.setDiscountName(discountName);
+        discount.setPercentDiscount(percentDiscount);
+        discount.setDiscountDescription(discountDescription);
+        discount.setExpirationDate(expirationDate);
+        return discountRepository.save(discount);
     }
 
     @Override

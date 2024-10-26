@@ -27,23 +27,12 @@ public class DiscountController {
     private final DiscountService discountService;
     @PostMapping("/addDiscount")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
-    public ResponseEntity<?> addDiscount( @RequestParam("discountName") String discountName,
+    public ResponseEntity<DiscountDTO> addDiscount( @RequestParam("discountName") String discountName,
                                           @RequestParam("percentDiscount") Integer percentDiscount,
                                           @RequestParam("discountDescription") String discountDescription,
                                           @RequestParam("expirationDate") LocalDate expirationDate) throws SQLException, IOException {
-        try{
-            Discount discountRequest = Discount.builder()
-                    .discountName(discountName)
-                    .percentDiscount(percentDiscount)
-                    .discountDescription(discountDescription)
-                    .expirationDate(expirationDate)
-                    .createDate(LocalDate.now())
-                    .build();
-            discountService.addDiscount(discountRequest);
-            return ResponseEntity.ok("Your discount have been set successfully");
-        } catch (InvalidDiscountRequestException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
+            Discount discount = discountService.addDiscount(discountName, percentDiscount, discountDescription, expirationDate);
+            return ResponseEntity.ok(getDiscountResponse(discount));
     }
 
     @GetMapping("/getAllDiscount")

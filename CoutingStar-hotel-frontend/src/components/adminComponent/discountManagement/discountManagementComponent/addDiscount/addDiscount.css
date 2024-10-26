@@ -1,0 +1,31 @@
+.addDiscount .modal-header {
+    background: var(--primary-color);
+}
+
+.addDiscount .modal-header h5 {
+    color: var(--white-color);
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.addDiscount .modal-header button {
+    color: var(--white-color);
+}
+
+.addDiscount .alert {
+    margin: 10px 0;
+}
+
+.addDiscount .white-btn {
+    background-color: #f8f9fa;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+.addDiscount .main-btn {
+    background-color: var(--primary-color);
+    border: none;
+    color: var(--white-color);
+    cursor: pointer;
+}

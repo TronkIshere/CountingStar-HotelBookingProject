@@ -3,12 +3,14 @@ import "./discountManagement.css";
 import { getAllDiscount, getDiscountByKeyword } from "../../utils/ApiFunction";
 import EditDiscount from "./discountManagementComponent/editDiscount/EditDiscount";
 import DeleteDiscount from "./discountManagementComponent/deleteDiscount/DeleteDiscount";
+import AddDiscount from "./discountManagementComponent/addDiscount/AddDiscount";
 
 const DiscountManagement = () => {
   const [discounts, setDiscounts] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+  const [showAddDiscount, setShowAddDiscount] = useState(false);
 
   const fetchDiscounts = async (pageNo = 0, pageSize = 8, keyword = "") => {
     try {
@@ -58,6 +60,10 @@ const DiscountManagement = () => {
     setCurrenDiscountId(id);
   };
 
+  const toggleAddDiscountModal = () => {
+    setShowAddDiscount(!showAddDiscount);
+  };
+
   return (
     <div className="discountManagement">
       <div className="container">
@@ -87,7 +93,10 @@ const DiscountManagement = () => {
               </div>
             </div>
           </div>
-          <button className="main-btn">Thêm mã giảm giá</button>
+          <button className="main-btn" onClick={toggleAddDiscountModal}>
+            Thêm mã giảm giá
+          </button>
+          {showAddDiscount && <AddDiscount onClose={toggleAddDiscountModal} />}
         </div>
 
         <div className="searchDiscountList">

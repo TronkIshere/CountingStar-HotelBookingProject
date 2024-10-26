@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DiscountService {
-    void addDiscount(Discount discountRequest);
+    Discount addDiscount(String discountName, Integer percentDiscount, String discountDescription, LocalDate expirationDate);
 
     void deleteDiscount(Long discount);
 

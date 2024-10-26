@@ -1,15 +1,16 @@
-.editDiscount .modal-content {
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+.editDiscount .modal-header {
+    background: var(--primary-color);
+}
+
+.editDiscount .modal-header h5 {
+    color: var(--white-color);
+    font-weight: 700;
+    font-size: 1.2rem;
 }
 
 .editDiscount label {
     width: 100%;
     text-align: start;
-}
-
-.editDiscount .modal-header {
-    background-color: #f8f9fa;
 }
 
 .editDiscount .modal-title {
@@ -28,14 +29,4 @@
 
 .editDiscount .text-success {
     color: #28a745;
-}
-
-.editDiscount .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-}
-
-.editDiscount .btn-close {
-    background-color: transparent;
-    border: none;
 }

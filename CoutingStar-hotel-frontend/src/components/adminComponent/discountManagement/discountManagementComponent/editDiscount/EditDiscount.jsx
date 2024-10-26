@@ -18,8 +18,9 @@ const EditDiscount = ({ discountId }) => {
         setDiscountName(discountData.discountName);
         setPercentDiscount(discountData.percentDiscount);
         setDiscountDescription(discountData.discountDescription);
-        setCreateDate(discountData.createDate);
-        setExpirationDate(discountData.expirationDate);
+        // Chuyển đổi ngày về định dạng YYYY-MM-DD
+        setCreateDate(formatDate(discountData.createDate));
+        setExpirationDate(formatDate(discountData.expirationDate));
       } catch (error) {
         console.error("Error fetching discount:", error);
       }
@@ -29,6 +30,15 @@ const EditDiscount = ({ discountId }) => {
       fetchDiscountData();
     }
   }, [discountId]);
+
+  // Hàm chuyển đổi định dạng ngày
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Thêm 0 cho tháng
+    const day = String(date.getDate()).padStart(2, "0"); // Thêm 0 cho ngày
+    return `${year}-${month}-${day}`;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,11 +50,10 @@ const EditDiscount = ({ discountId }) => {
         createDate,
         expirationDate,
       });
-      setSuccessMessage("Discount updated successfully!");
+      setSuccessMessage("Chỉnh sửa mã giảm giá thành công!");
       setError("");
     } catch (error) {
-      console.error("Error updating discount:", error);
-      setError("An error occurred while updating the discount.");
+      setError("Đã xảy ra lỗi vui lòng thử lại!.");
     }
 
     setTimeout(() => {
@@ -135,15 +144,12 @@ const EditDiscount = ({ discountId }) => {
               <div className="modal-footer">
                 <button
                   type="button"
-                  className="btn white-btn"
+                  className="white-btn"
                   data-bs-dismiss="modal"
                 >
                   Đóng
                 </button>
-                <button
-                  type="button"
-                  className="btn main-btn"
-                >
+                <button type="submit" className="main-btn">
                   Cập nhật
                 </button>
               </div>
