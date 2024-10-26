@@ -65,6 +65,8 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
             "lower(h.hotelLocation) LIKE lower(concat('%', :keyword, '%')) OR " +
             "lower(h.hotelName) LIKE lower(concat('%', :keyword, '%')) OR " +
             "cast(h.id as string) LIKE lower(concat('%', :keyword, '%')) OR " +
-            "cast(h.phoneNumber as string) LIKE lower(concat('%', :keyword, '%'))")
+            "cast(h.phoneNumber as string) LIKE lower(concat('%', :keyword, '%')) OR " +
+            "lower(h.user.firstName) LIKE lower(concat('%', :keyword, '%')) OR " +
+            "lower(h.user.lastName) LIKE lower(concat('%', :keyword, '%'))")
     Page<Hotel> getHotelByKeyword(Pageable pageable, String keyword);
 }

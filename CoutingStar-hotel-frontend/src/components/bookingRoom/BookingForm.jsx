@@ -61,7 +61,6 @@ const BookingForm = ({ roomId }) => {
       const fetchUserRedeemedDiscount = async () => {
         try {
           const response = await getAllRedeemedDiscountByUserId(userId);
-          console.log(response);
           setRedeemedDiscounts(response);
         } catch (error) {
           console.error("Error fetching user:", error.message);
@@ -74,13 +73,9 @@ const BookingForm = ({ roomId }) => {
 
   useEffect(() => {
     const fetchRoom = async () => {
-      try {
-        const response = await getRoomById(roomId);
-        setRoomInfo(response);
-      } catch (error) {
-        console.error("Error fetching room:", error.message);
-        setError("Có lỗi xảy ra khi lấy thông tin phòng.");
-      }
+      const response = await getRoomById(roomId);
+      setRoomInfo(response);
+      if (!response) setError(error.message);
     };
 
     fetchRoom();
@@ -145,7 +140,7 @@ const BookingForm = ({ roomId }) => {
         date[0].endDate,
         selectedDiscount
       ),
-      discountId: selectedDiscount ? selectedDiscount.id : null, 
+      discountId: selectedDiscount ? selectedDiscount.id : null,
     };
 
     try {
@@ -159,7 +154,6 @@ const BookingForm = ({ roomId }) => {
       localStorage.setItem("children", children);
       onClose();
     } catch (error) {
-      console.error("Error booking room:", error.message);
       setError(error.message);
     }
   };
@@ -238,7 +232,8 @@ const BookingForm = ({ roomId }) => {
                       <strong>Giá tiền:</strong> {room.roomPrice}
                     </p>
                     <p>
-                      <strong>Đánh giá:</strong> {room.averageNumberOfRoomStars} / 5
+                      <strong>Đánh giá:</strong> {room.averageNumberOfRoomStars}{" "}
+                      / 5
                     </p>
                   </div>
                 </div>
