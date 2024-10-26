@@ -48,7 +48,7 @@
   width: 100%;
   max-width: 1290px;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .header .headerIcon {
@@ -90,12 +90,6 @@
 .header .locationIcon {
   font-size: 1rem;
   margin-right: 5px;
-}
-
-.header .date {
-  position: absolute;
-  top: 50px;
-  z-index: 2;
 }
 
 .header .options {

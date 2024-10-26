@@ -27,8 +27,7 @@
 .date {
   position: absolute;
   top: 50px;
-  left: 0;
-  z-index: 1000;
+  z-index: 100;
   background: white;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -46,4 +45,3 @@
   color: red;
   margin-bottom: 20px;
 }
-
