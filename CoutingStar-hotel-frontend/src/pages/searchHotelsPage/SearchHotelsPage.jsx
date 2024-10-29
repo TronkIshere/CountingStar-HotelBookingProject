@@ -12,10 +12,8 @@ const SearchHotelsPage = () => {
   const location = useLocation();
   const { date: initialDate = [], options: initialOptions = {} } =
     location.state || {};
-
   const queryParams = new URLSearchParams(location.search);
   const initialDestination = queryParams.get("destination") || "";
-
   const [hotels, setHotels] = useState([]);
   const [openDate, setOpenDate] = useState(false);
   const [destination, setDestination] = useState(initialDestination);
