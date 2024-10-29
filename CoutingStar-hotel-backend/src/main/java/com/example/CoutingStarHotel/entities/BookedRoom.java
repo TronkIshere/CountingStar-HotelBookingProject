@@ -46,6 +46,7 @@ public class BookedRoom {
     private String bookingConfirmationCode;
     private LocalDate bookingDay;
     private BigDecimal totalAmount;
+    private Boolean isCancelled = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")

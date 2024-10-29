@@ -40,7 +40,9 @@ public class BookingServiceImpl implements BookingService {
     }
     @Override
     public void cancelBooking(Long bookingId) {
-        bookingRepository.deleteById(bookingId);
+        BookedRoom bookedRoom = bookingRepository.findById(bookingId).get();
+        bookedRoom.setIsCancelled(true);
+        bookingRepository.save(bookedRoom);
     }
 
     @Override

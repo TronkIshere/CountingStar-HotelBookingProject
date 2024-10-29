@@ -138,6 +138,7 @@ public class BookingController {
                 booking.getNumOfChildren(),
                 booking.getTotalNumOfGuest(),
                 booking.getGuestFullName(),
-                room);
+                room,
+                booking.getIsCancelled());
     }
 }

@@ -81,6 +81,22 @@ const UserProfile = () => {
     setCurrentPage(page);
   };
 
+  const getStatus = (booking) => {
+    const today = new Date();
+    const checkInDate = new Date(booking.checkInDate);
+    const checkOutDate = new Date(booking.checkOutDate);
+
+    if (booking.isCancelled) {
+      return "Phòng đã hủy";
+    } else if (today < checkInDate) {
+      return "Đã đặt lịch";
+    } else if (today >= checkInDate && today <= checkOutDate) {
+      return "Đang đặt lịch";
+    } else {
+      return "Đã hoàn thành";
+    }
+  };
+
   return (
     <div className="container-fluid my-4">
       {errorMessage && <p className="text-danger">{errorMessage}</p>}
@@ -154,7 +170,7 @@ const UserProfile = () => {
                           {new Date(booking.checkOutDate).toLocaleDateString()}
                         </td>
                         <td>{booking.bookingConfirmationCode}</td>
-                        <td className="text-success">{booking.status}</td>
+                        <td className="text-success">{getStatus(booking)}</td>
                       </tr>
                     ))}
                   </tbody>

@@ -20,6 +20,7 @@ public class BookingDTO {
     private String bookingConfirmationCode;
     private RoomDTO room;
     private User user;
+    private Boolean isCancelled;
 
     public BookingDTO(Long bookingId,
                       LocalDate checkInDate,
@@ -30,7 +31,8 @@ public class BookingDTO {
                       int numOfAdults,
                       int numOfChildren,
                       int totalNumOfGuest,
-                      String guestFullName, RoomDTO room) {
+                      String guestFullName, RoomDTO room,
+                      Boolean isCancelled) {
         this.bookingId = bookingId;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
@@ -42,6 +44,7 @@ public class BookingDTO {
         this.totalNumOfGuest = totalNumOfGuest;
         this.guestFullName = guestFullName;
         this.room = room;
+        this.isCancelled = isCancelled;
     }
 }
 
