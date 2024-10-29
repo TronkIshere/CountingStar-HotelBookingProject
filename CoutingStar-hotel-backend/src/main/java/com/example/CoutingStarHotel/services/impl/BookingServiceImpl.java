@@ -71,8 +71,9 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookedRoom> getBookingsByUserId(Long userId) {
-        return bookingRepository.findByUserId(userId);
+    public Page<BookedRoom> getBookingsByUserId(Integer pageNo, Integer pageSize, Long userId) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return bookingRepository.findByUserId(pageable, userId);
     }
 
     @Override

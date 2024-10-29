@@ -40,6 +40,10 @@
   max-height: 600px;
 }
 
+.roomListTable {
+  width: 100%;
+}
+
 .roomListTable th,
 .roomListTable td {
   border: 1px solid #ccc;

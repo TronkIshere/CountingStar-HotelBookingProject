@@ -17,7 +17,7 @@ public interface BookingService {
 
     List<BookedRoom> getAllBookingsByRoomId(Long roomId);
 
-    List<BookedRoom> getBookingsByUserId(Long userId);
+    Page<BookedRoom> getBookingsByUserId(Integer pageNo, Integer pageSize, Long userId);
 
     Page<BookedRoom> getAllBookingsByHotelId(Integer pageNo, Integer pageSize, Long hotelId);
 

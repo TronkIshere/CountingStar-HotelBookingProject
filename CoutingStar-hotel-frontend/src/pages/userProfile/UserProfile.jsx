@@ -6,6 +6,7 @@ import {
   deleteUser,
 } from "../../components/utils/ApiFunction";
 import { useNavigate } from "react-router-dom";
+import { Pagination } from "react-bootstrap";
 
 const UserProfile = () => {
   const [user, setUser] = useState({
@@ -17,15 +18,9 @@ const UserProfile = () => {
     roles: [{ name: "" }],
   });
 
-  const [bookings, setBookings] = useState([
-    {
-      id: "",
-      room: { id: "", roomType: "" },
-      checkInDate: "",
-      checkOutDate: "",
-      bookingConfirmationCode: "",
-    },
-  ]);
+  const [bookings, setBookings] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
@@ -37,8 +32,7 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const userData = await getUserByEmail(userEmail, token);
-        console.log("userData: ", userData);
+        const userData = await getUserByEmail(userEmail);
         setUser(userData);
       } catch (error) {
         console.error(error);
@@ -51,8 +45,9 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await getBookingsByUserId(userId, token);
-        setBookings(response);
+        const response = await getBookingsByUserId(currentPage, 8, userId);
+        setBookings(response.content);
+        setTotalPages(response.totalPages);
       } catch (error) {
         console.error("Error fetching bookings:", error.message);
         setErrorMessage(error.message);
@@ -60,7 +55,7 @@ const UserProfile = () => {
     };
 
     fetchBookings();
-  }, [userEmail]);
+  }, [userId, currentPage]);
 
   const handleDeleteAccount = async () => {
     const confirmed = window.confirm(
@@ -82,12 +77,16 @@ const UserProfile = () => {
     }
   };
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
-    <div className="container my-4">
+    <div className="container-fluid my-4">
       {errorMessage && <p className="text-danger">{errorMessage}</p>}
       {message && <p className="text-danger">{message}</p>}
       {user ? (
-        <div className="content">
+        <div className="row">
           <div className="col-12 col-sm-12 col-md-4 col-lg-4">
             <div className="profile w-100">
               <img
@@ -110,7 +109,7 @@ const UserProfile = () => {
                   <span>{user.phoneNumber}</span>
                 </div>
                 <div className="profile-row">
-                  <strong>vai trò:</strong>{" "}
+                  <strong>Vai trò:</strong>
                   <span>
                     <ul className="rolesList">
                       {user.roles.map((role) => (
@@ -128,9 +127,9 @@ const UserProfile = () => {
 
           <div className="col-12 col-sm-12 col-md-8 col-lg-8">
             <div className="booking-history w-100">
-              <h4>Lịch sử đặt phòng</h4>
+              <h5>Lịch sử đặt phòng</h5>
               {bookings.length > 0 ? (
-                <table className="roomListTable">
+                <table className="roomListTable mb-3">
                   <thead>
                     <tr>
                       <th>ID phòng đã đặt</th>
@@ -163,6 +162,17 @@ const UserProfile = () => {
               ) : (
                 <p>Bạn đã đặt phòng chưa?.</p>
               )}
+              <Pagination>
+                {[...Array(totalPages)].map((_, index) => (
+                  <Pagination.Item
+                    key={index}
+                    active={index === currentPage}
+                    onClick={() => handlePageChange(index)}
+                  >
+                    {index + 1}
+                  </Pagination.Item>
+                ))}
+              </Pagination>
             </div>
           </div>
         </div>

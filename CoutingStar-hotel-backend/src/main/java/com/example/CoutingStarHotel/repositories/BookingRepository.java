@@ -16,7 +16,7 @@ public interface BookingRepository extends JpaRepository<BookedRoom, Long> {
 
     Optional<BookedRoom> findByBookingConfirmationCode(String confirmationCode);
 
-    List<BookedRoom> findByUserId(Long userId);
+    Page<BookedRoom> findByUserId(Pageable pageable, Long userId);
 
     @Query("SELECT br FROM BookedRoom br JOIN br.room r JOIN r.hotel h WHERE h.id = :hotelId")
     Page<BookedRoom> findByHotelId(Pageable pageable, Long hotelId);

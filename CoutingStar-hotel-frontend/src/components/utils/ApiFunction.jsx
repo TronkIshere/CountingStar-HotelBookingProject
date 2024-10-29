@@ -320,7 +320,6 @@ export async function getAllBookingByKeywordAndHotelId(
 export async function getBookingByBookingId(bookingId) {
   try {
     const result = await api.get(`/bookings/booking/${bookingId}`);
-    console.log(result);
     return result.data;
   } catch (error) {
     if (error.response && error.response.data) {
@@ -363,10 +362,11 @@ export async function getAvailableRooms(checkInDate, checkOutDate, roomType) {
   return result;
 }
 
-export async function getBookingsByUserId(userId, token) {
+export async function getBookingsByUserId(pageNo = 0, pageSize = 8, userId) {
   try {
     const response = await api.get(`/bookings/user/${userId}/bookings`, {
       headers: getHeader(),
+      params: { pageNo, pageSize },
     });
     return response.data;
   } catch (error) {

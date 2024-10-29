@@ -107,11 +107,11 @@ public class BookingController {
     }
 
     @GetMapping("/user/{userId}/bookings")
-    public ResponseEntity<List<BookingDTO>> getBookingsByUserId(@PathVariable Long userId) {
-        List<BookedRoom> bookings = bookingService.getBookingsByUserId(userId);
-        List<BookingDTO> bookingResponses = bookings.stream()
-                .map(this::getBookingResponse)
-                .collect(Collectors.toList());
+    public ResponseEntity<Page<BookingDTO>> getBookingsByUserId(@PathVariable Long userId,
+                                                                @RequestParam(defaultValue = "0") Integer pageNo,
+                                                                @RequestParam(defaultValue = "8") Integer pageSize) {
+        Page<BookedRoom> bookings = bookingService.getBookingsByUserId(pageNo, pageSize, userId);
+        Page<BookingDTO> bookingResponses = bookings.map(this::getBookingResponse);
         return ResponseEntity.ok(bookingResponses);
     }
 
