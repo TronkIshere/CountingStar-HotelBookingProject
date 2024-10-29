@@ -39,7 +39,7 @@ const FeaturedProperties = () => {
             1000: { items: 5 },
           },
         });
-      }, 3000);
+      }, 1000);
     }
   }, [hotels]);
 
@@ -70,8 +70,13 @@ const FeaturedProperties = () => {
                 <span className="hotHotelsName">{hotel.hotelName}</span>
                 <span className="hotHotelsName">{hotel.city}</span>
                 <span className="hotHotelsName hotHotelsPrice">
-                  Giá từ ${hotel.lowestPrice}
+                  Giá từ{" "}
+                  {new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(hotel.lowestPrice)}
                 </span>
+
                 <div className="hotHotelsRating">
                   <button>{hotel.averageNumberOfHotelStars}</button>
                   <span>Trên 5 sao</span>

@@ -168,12 +168,22 @@ const Hotel = () => {
                     Nằm tại thành phố {hotelInfo.city}, khách sạn này có số sao
                     là {hotelInfo.averageNumberOfHotelStars}/5!
                   </span>
-                  <h2>
+                  <h3>
                     <b>
-                      Từ ${hotelInfo.lowestPrice}-{hotelInfo.highestPrice}
+                      Từ{" "}
+                      {new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(hotelInfo.lowestPrice)}{" "}
+                      -
+                      {new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(hotelInfo.highestPrice)}
                     </b>{" "}
                     (1 đêm)
-                  </h2>
+                  </h3>
+
                   <button className="main-btn">Đặt phòng ngay!</button>
                 </div>
               </div>

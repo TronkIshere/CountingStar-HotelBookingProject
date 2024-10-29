@@ -7,6 +7,7 @@ import {
 import { useParams } from "react-router-dom";
 import DeleteBooking from "./deleteBooking/DeleteBooking";
 import UpdateBooking from "./updateBooking/UpdateBooking";
+import { Pagination } from "react-bootstrap"; // Thêm import Pagination của Bootstrap
 
 const HotelBookingManagement = () => {
   const [bookings, setBookings] = useState([]);
@@ -16,16 +17,24 @@ const HotelBookingManagement = () => {
   const [currentBookingId, setBookingId] = useState(null);
   const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const fetchBookings = async (keyword = "") => {
+  const fetchBookings = async (keyword = "", pageNo = 0) => {
     try {
       let response;
       if (keyword) {
-        response = await getAllBookingByKeywordAndHotelId(0, 8, hotelId, keyword);
+        response = await getAllBookingByKeywordAndHotelId(
+          pageNo,
+          8,
+          hotelId,
+          keyword
+        );
       } else {
-        response = await getBookingByHotelId(0, 8, hotelId);
+        response = await getBookingByHotelId(pageNo, 8, hotelId);
       }
       setBookings(response.content || []);
+      setTotalPages(response.totalPages || 1);
     } catch (error) {
       console.error("Error fetching bookings:", error.message);
       setErrorMessage(error.message);
@@ -33,11 +42,16 @@ const HotelBookingManagement = () => {
   };
 
   useEffect(() => {
-    fetchBookings();
-  }, [hotelId]);
+    fetchBookings("", currentPage);
+  }, [hotelId, currentPage]);
 
   const handleSearch = () => {
-    fetchBookings(searchKeyword);
+    setCurrentPage(0); // Reset về trang đầu tiên khi tìm kiếm
+    fetchBookings(searchKeyword, 0);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   const handleEditClick = (id) => {
@@ -48,6 +62,18 @@ const HotelBookingManagement = () => {
   const handleDeleteClick = (id) => {
     setBookingId(id);
     setDeleteModalOpen(true);
+  };
+
+  const getBookingStatus = (booking) => {
+    const currentDate = new Date();
+    const checkInDate = new Date(booking.checkInDate);
+    const checkOutDate = new Date(booking.checkOutDate);
+
+    if (booking.isCancelled) return "Phòng đã hủy";
+    if (currentDate < checkInDate) return "Đã đặt lịch";
+    if (currentDate >= checkInDate && currentDate <= checkOutDate)
+      return "Đang đặt lịch";
+    return "Đã hoàn thành";
   };
 
   return (
@@ -87,11 +113,11 @@ const HotelBookingManagement = () => {
             <th>Loại Phòng</th>
             <th>Ngày Nhận Phòng</th>
             <th>Ngày Trả Phòng</th>
-            <th>Mã Xác Nhận</th>
             <th>Email Đăng Ký</th>
             <th>Số Điện Thoại</th>
             <th>Tên Người Đặt</th>
             <th>Tổng Số Người</th>
+            <th>Trạng Thái</th>
             <th>Hành động</th>
           </tr>
         </thead>
@@ -104,11 +130,11 @@ const HotelBookingManagement = () => {
                 <td>{booking.room.roomType}</td>
                 <td>{booking.checkInDate}</td>
                 <td>{booking.checkOutDate}</td>
-                <td>{booking.bookingConfirmationCode}</td>
                 <td>{booking.guestEmail}</td>
                 <td>{booking.guestPhoneNumber}</td>
                 <td>{booking.guestFullName}</td>
                 <td>{booking.totalNumOfGuest}</td>
+                <td>{getBookingStatus(booking)}</td>
                 <td>
                   <button
                     className="btn btn-primary btn-sm"
@@ -120,19 +146,48 @@ const HotelBookingManagement = () => {
                     className="btn btn-danger btn-sm"
                     onClick={() => handleDeleteClick(booking.bookingId)}
                   >
-                    Xóa
+                    Hủy đặt
                   </button>
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="11">Không có dữ liệu đặt phòng</td>
+              <td colSpan="12">Không có dữ liệu đặt phòng</td>
             </tr>
           )}
         </tbody>
       </table>
       {errorMessage && <p className="error">{errorMessage}</p>}
+
+      {/* Component phân trang */}
+      <Pagination>
+        <Pagination.First
+          onClick={() => handlePageChange(0)}
+          disabled={currentPage === 0}
+        />
+        <Pagination.Prev
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 0}
+        />
+        {[...Array(totalPages).keys()].map((page) => (
+          <Pagination.Item
+            key={page}
+            active={page === currentPage}
+            onClick={() => handlePageChange(page)}
+          >
+            {page + 1}
+          </Pagination.Item>
+        ))}
+        <Pagination.Next
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages - 1}
+        />
+        <Pagination.Last
+          onClick={() => handlePageChange(totalPages - 1)}
+          disabled={currentPage === totalPages - 1}
+        />
+      </Pagination>
 
       {isUpdateModalOpen && (
         <UpdateBooking

@@ -136,3 +136,11 @@
   color: lightgray;
   cursor: pointer;
 }
+
+.hotelPage ul {
+  padding-left: 2rem;
+}
+
+.hotelPage ol {
+  padding-left: 2rem;
+}

@@ -372,7 +372,11 @@ const BookingForm = ({ roomId }) => {
               </div>
 
               <p>
-                <strong>Tổng thanh toán:</strong> {totalPayment} VND
+                <strong>Tổng thanh toán:</strong>{" "}
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(totalPayment)}
               </p>
 
               <div className="modal-footer">

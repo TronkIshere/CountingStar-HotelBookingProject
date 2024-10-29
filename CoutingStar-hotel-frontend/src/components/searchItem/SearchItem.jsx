@@ -28,12 +28,26 @@ const SearchItem = ({ hotel }) => {
       <div className="siDetails">
         <div className="siRating">
           <span>{hotel.ratingText}</span>
-          <button>{hotel.averageNumberOfHotelStars}</button>
+          <button>
+            {typeof hotel.averageNumberOfHotelStars === "number" &&
+            !isNaN(hotel.averageNumberOfHotelStars)
+              ? hotel.averageNumberOfHotelStars
+              : "Chưa có đánh giá"}
+          </button>
         </div>
         <div className="siDetailTexts">
           <span className="siPrice">
-            ${hotel.lowestPrice}-{hotel.highestPrice}
+            {new Intl.NumberFormat("vi-VN", {
+              style: "currency",
+              currency: "VND",
+            }).format(hotel.lowestPrice)}{" "}
+            -{" "}
+            {new Intl.NumberFormat("vi-VN", {
+              style: "currency",
+              currency: "VND",
+            }).format(hotel.highestPrice)}
           </span>
+
           <span className="siTaxOp">Bao gồm tất cả khoảng phí</span>
           <button className="siCheckButton">
             <Link

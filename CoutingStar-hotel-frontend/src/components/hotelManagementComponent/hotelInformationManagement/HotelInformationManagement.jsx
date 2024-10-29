@@ -59,7 +59,12 @@ const HotelInformationManagement = () => {
     toolbar: [
       ["bold", "italic", "underline", "strike"],
       [{ header: 1 }, { header: 2 }],
-      [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+      ],
       [{ size: ["small", false, "large", "huge"] }],
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
       [{ font: [] }],
@@ -153,7 +158,7 @@ const HotelInformationManagement = () => {
             </div>
           </div>
           <div className="row mb-5">
-          <label htmlFor="specifications" className="form-label">
+            <label htmlFor="specifications" className="form-label">
               Mô tả:
             </label>
             <ReactQuill
@@ -161,7 +166,7 @@ const HotelInformationManagement = () => {
               id="description"
               modules={descriptionModule}
               theme="snow"
-              value={hotel.description}
+              value={hotel.hotelDescription}
               onChange={handleDescriptionChange}
               style={{ height: "250px" }}
             />

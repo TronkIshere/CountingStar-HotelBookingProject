@@ -8,9 +8,9 @@ const RoomList = ({ hotelId }) => {
   const [rooms, setRooms] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [page, setPage] = useState(0); 
-  const [pageSize] = useState(10); 
-  const [totalPages, setTotalPages] = useState(0); 
+  const [page, setPage] = useState(0);
+  const [pageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     fetchRooms();
@@ -22,12 +22,12 @@ const RoomList = ({ hotelId }) => {
     try {
       const response = await getRoomsByHotelId(hotelId, page, pageSize);
       console.log(response);
-      setRooms(response.content); 
+      setRooms(response.content);
       setTotalPages(response.totalPages);
       setIsLoading(false);
     } catch (error) {
-      console.error("Error fetching rooms:", error); 
-      setError(error.message); 
+      console.error("Error fetching rooms:", error);
+      setError(error.message);
       setIsLoading(false);
     }
   };
@@ -63,7 +63,13 @@ const RoomList = ({ hotelId }) => {
               <tr key={index}>
                 <td>{room.roomType}</td>
                 <td>{room.roomDescription}</td>
-                <td>${room.roomPrice}</td>
+                <td>
+                  {new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(room.roomPrice)}
+                </td>
+
                 <td>{room.averageNumberOfRoomStars} / 5</td>
                 <td className="lastTd">
                   <button
@@ -101,13 +107,18 @@ const RoomList = ({ hotelId }) => {
             </li>
             {Array.from({ length: totalPages }, (_, i) => (
               <li key={i} className={`page-item ${page === i ? "active" : ""}`}>
-                <button className="page-link" onClick={() => handlePageChange(i)}>
+                <button
+                  className="page-link"
+                  onClick={() => handlePageChange(i)}
+                >
                   {i + 1}
                 </button>
               </li>
             ))}
             <li
-              className={`page-item ${page === totalPages - 1 ? "disabled" : ""}`}
+              className={`page-item ${
+                page === totalPages - 1 ? "disabled" : ""
+              }`}
             >
               <button
                 className="page-link"

@@ -129,7 +129,7 @@ const EditRoom = ({ roomId, handleUpdateRoom, onClose }) => {
               </div>
               {imagePreview && (
                 <img
-                  src={imagePreview}
+                  src={`data:image/png;base64, ${imagePreview}`}
                   alt="Room preview"
                   className="img-fluid mb-3"
                 />
