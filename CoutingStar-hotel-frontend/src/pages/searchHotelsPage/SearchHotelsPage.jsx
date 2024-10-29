@@ -71,7 +71,7 @@ const SearchHotelsPage = () => {
         <div className="row">
           <div className="col-12 col-sm-12 col-md-3 col-lg-3">
             <div className="listSearch">
-              <h1 className="lsTitle">Search</h1>
+              <h1 className="lsTitle">Tìm kiếm</h1>
               <div className="lsItem">
                 <label>Điểm đến</label>
                 <input
@@ -81,7 +81,7 @@ const SearchHotelsPage = () => {
                   onChange={handleDestinationChange}
                 />
               </div>
-              <div className="lsItem">
+              <div className="lsItem calendar-container">
                 <label>Ngày thuê</label>
                 <span onClick={() => setOpenDate(!openDate)}>{`${format(
                   date[0]?.startDate,
@@ -89,6 +89,7 @@ const SearchHotelsPage = () => {
                 )} đến ${format(date[0]?.endDate, "MM/dd/yyyy")}`}</span>
                 {openDate && (
                   <DateRange
+                    className="calendar"
                     onChange={handleDateChange}
                     minDate={new Date()}
                     ranges={date}
