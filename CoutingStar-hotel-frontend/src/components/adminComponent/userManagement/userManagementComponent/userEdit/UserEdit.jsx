@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./userEdit.css";
-import { getUserByUserId, updateUser } from "../../../../utils/ApiFunction"; 
+import { getUserByUserId, updateUser } from "../../../../utils/ApiFunction";
 
 const UserEdit = ({ userId }) => {
   const [firstName, setFirstName] = useState("");
@@ -122,18 +122,10 @@ const UserEdit = ({ userId }) => {
           )}
 
           <div className="modal-footer">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" className="white-btn" data-bs-dismiss="modal">
               Đóng
             </button>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={handleUpdate}
-            >
+            <button type="button" className="main-btn" onClick={handleUpdate}>
               Cập nhật
             </button>
           </div>

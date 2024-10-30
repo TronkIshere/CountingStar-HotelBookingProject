@@ -74,7 +74,7 @@ const EditDiscount = ({ discountId }) => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="editDiscountModalLabel">
-              Edit Discount
+              Chỉnh sửa mã giảm giá
             </h5>
             <button
               type="button"
@@ -86,7 +86,7 @@ const EditDiscount = ({ discountId }) => {
           <div className="modal-body">
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label className="form-label">Discount Name:</label>
+                <label className="form-label">Tên mã giảm giá:</label>
                 <input
                   type="text"
                   className="form-control"
@@ -97,7 +97,7 @@ const EditDiscount = ({ discountId }) => {
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Percent Discount:</label>
+                <label className="form-label">Phần trăm giảm giá:</label>
                 <input
                   type="number"
                   className="form-control"
@@ -108,7 +108,7 @@ const EditDiscount = ({ discountId }) => {
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Discount Description:</label>
+                <label className="form-label">Miêu tả:</label>
                 <textarea
                   className="form-control"
                   value={discountDescription}
@@ -117,7 +117,7 @@ const EditDiscount = ({ discountId }) => {
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Create Date:</label>
+                <label className="form-label">Ngày tạo:</label>
                 <input
                   type="date"
                   className="form-control"
@@ -127,7 +127,7 @@ const EditDiscount = ({ discountId }) => {
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Expiration Date:</label>
+                <label className="form-label">Ngày hết hạn:</label>
                 <input
                   type="date"
                   className="form-control"

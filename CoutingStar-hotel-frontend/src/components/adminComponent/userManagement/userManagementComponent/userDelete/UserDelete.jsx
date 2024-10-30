@@ -54,18 +54,10 @@ const UserDelete = ({ userId }) => {
           )}
 
           <div className="modal-footer">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" className="white-btn" data-bs-dismiss="modal">
               Đóng
             </button>
-            <button
-              type="button"
-              className="btn btn-danger"
-              onClick={handleDelete}
-            >
+            <button type="button" className="main-btn" onClick={handleDelete}>
               Xóa
             </button>
           </div>

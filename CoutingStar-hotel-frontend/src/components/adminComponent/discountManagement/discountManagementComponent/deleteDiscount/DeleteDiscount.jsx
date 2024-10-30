@@ -43,7 +43,9 @@ const DeleteDiscount = ({ discountId }) => {
           </div>
 
           <div className="modal-body">
-            <h3>Bạn có chắc là muốn xóa mã giảm giá với ID là {discountId} không?</h3>
+            <h3>
+              Bạn có chắc là muốn xóa mã giảm giá với ID là {discountId} không?
+            </h3>
           </div>
 
           {successMessage && (
@@ -58,19 +60,11 @@ const DeleteDiscount = ({ discountId }) => {
           )}
 
           <div className="modal-footer">
-            <button
-              type="button"
-              className="white-btn"
-              data-bs-dismiss="modal"
-            >
-              Cancel
+            <button type="button" className="white-btn" data-bs-dismiss="modal">
+              Hủy
             </button>
-            <button
-              type="button"
-              className="main-btn"
-              onClick={handleDelete}
-            >
-              Delete
+            <button type="button" className="main-btn" onClick={handleDelete}>
+              Xóa
             </button>
           </div>
         </div>
