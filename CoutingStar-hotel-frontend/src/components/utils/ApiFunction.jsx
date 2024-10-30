@@ -157,7 +157,6 @@ export async function addRoom(
   formData.append("roomType", roomType);
   formData.append("roomPrice", roomPrice);
   formData.append("roomDescription", roomDescription);
-  console.log(roomType);
   const response = await api.post(`/rooms/add/new-room/${hotelId}`, formData, {
     headers: getHeader(),
   });
@@ -203,9 +202,6 @@ export async function updateRoom(roomId, roomData) {
   formData.append("roomDescription", roomData.roomDescription);
   formData.append("roomPrice", roomData.roomPrice);
   formData.append("photo", roomData.photo);
-  console.log(roomData.roomType);
-  console.log(roomData.roomDescription);
-  console.log(roomData.roomPrice);
   const response = await api.put(`/rooms/update/${roomId}`, formData, {
     headers: getHeader(),
   });
@@ -516,7 +512,6 @@ export async function checkIfUserCanComment(userId, hotelId) {
     const response = await api.get(
       `/ratings/hotel/${hotelId}/CheckUserRating/${userId}`
     );
-    console.log(response.data);
     return response.data;
   } catch (error) {
     throw new Error("Faild to check");
