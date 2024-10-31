@@ -233,29 +233,34 @@ export async function getRoomsByHotelId(hotelId, pageNo = 0, pageSize = 8) {
 // **********************
 export async function bookRoom(roomId, booking, userId, redeemedDiscountId) {
   try {
-    let url = `/bookings/room/${roomId}/booking?userId=${userId}`;
+    const formData = new FormData();
+    if (userId !== null) {
+      formData.append("userId", userId);
+    }
     if (redeemedDiscountId !== null) {
-      url += `&redeemedDiscountId=${redeemedDiscountId}`;
+      formData.append("redeemedDiscountId", redeemedDiscountId);
     }
-    const response = await api.post(url, booking, { headers: getHeader() });
-    console.log("API response:", response);
+    formData.append("checkInDate", booking.checkInDate);
+    formData.append("checkOutDate", booking.checkOutDate);
+    formData.append("guestFullName", booking.guestFullName);
+    formData.append("guestEmail", booking.guestEmail);
+    formData.append("NumOfAdults", booking.numOfAdults);
+    formData.append("NumOfChildren", booking.numOfChildren);
+    formData.append("totalNumOfGuest", booking.totalNumOfGuest);
+    formData.append("guestPhoneNumber", booking.guestPhoneNumber);
+    const result = await api.post(`/bookings/room/${roomId}/booking`, formData);
+    return result.data;
   } catch (error) {
-    if (error.response && error.response.data) {
-      console.error("API error:", error.response.data);
-      throw new Error(error.response.data);
-    } else {
-      console.error("API error:", error.message);
-      throw new Error(`Error booking room: ${error.message}`);
-    }
+    throw new Error(`Error fetching bookings : ${error.message}`);
   }
 }
 
 export async function getAllBookings() {
   try {
     const result = await api.get("/bookings/all-bookings");
-    console.log("API response:", result);
     return result.data;
   } catch (error) {
+    console.log(error.message);
     throw new Error(`Error fetching bookings : ${error.message}`);
   }
 }

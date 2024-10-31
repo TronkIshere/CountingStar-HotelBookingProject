@@ -129,12 +129,13 @@ const BookingForm = ({ roomId }) => {
   const handleSubmit = async () => {
     const booking = {
       guestFullName: `${user.firstName} ${user.lastName}`,
-      checkInDate: date[0].startDate.toISOString(),
-      checkOutDate: date[0].endDate.toISOString(),
+      checkInDate: date[0].startDate.toISOString().split("T")[0],
+      checkOutDate: date[0].endDate.toISOString().split("T")[0],
       guestPhoneNumber: user.phoneNumber,
       guestEmail: user.email,
       numOfAdults: adults,
       numOfChildren: children,
+      totalNumOfGuest: adults + children,
       totalPayment: calculatePayment(
         date[0].startDate,
         date[0].endDate,
@@ -147,12 +148,21 @@ const BookingForm = ({ roomId }) => {
       const redeemedDiscountId = booking.discountId
         ? parseInt(booking.discountId, 10)
         : null;
-      await bookRoom(roomId, booking, userId, redeemedDiscountId);
+      console.log(roomId);
+      console.log(booking);
+      console.log(userId);
+      console.log(redeemedDiscountId);
+      const result = await bookRoom(
+        roomId,
+        booking,
+        userId,
+        redeemedDiscountId
+      );
+      console.log(result);
       localStorage.setItem("checkInDate", booking.checkInDate);
       localStorage.setItem("checkOutDate", booking.checkOutDate);
       localStorage.setItem("adults", adults);
       localStorage.setItem("children", children);
-      onClose();
     } catch (error) {
       setError(error.message);
     }

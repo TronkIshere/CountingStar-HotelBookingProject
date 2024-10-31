@@ -51,19 +51,88 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public String saveBooking(Long roomId, BookedRoom bookingRequest, Long userId, Long redeemedDiscountId) {
-        validateBookingDates(bookingRequest);
-        if (userId != null) { handleUserBooking(userId, bookingRequest);}
-        Room room = getRoom(roomId);
-        validateRoomAvailability(bookingRequest, room);
-        BigDecimal totalAmount = calculateTotalAmount(bookingRequest, room.getRoomPrice());
-        if (redeemedDiscountId != null) {
-            totalAmount = applyDiscountIfValid(redeemedDiscountId, totalAmount, bookingRequest);
+    public BookedRoom saveBooking(Long roomId, LocalDate checkInDate, LocalDate checkOutDate, String guestFullName, String guestEmail, int numOfAdults, int numOfChildren, int totalNumOfGuest, String guestPhoneNumber, Long userId, Long redeemedDiscountId) {
+        try {
+            BookedRoom bookedRoom = new BookedRoom();
+            bookedRoom.setCheckInDate(checkInDate);
+            bookedRoom.setCheckOutDate(checkOutDate);
+            bookedRoom.setGuestFullName(guestFullName);
+            bookedRoom.setGuestEmail(guestEmail);
+            bookedRoom.setNumOfAdults(numOfAdults);
+            bookedRoom.setNumOfChildren(numOfChildren);
+            bookedRoom.setTotalNumOfGuest(totalNumOfGuest);
+            bookedRoom.setGuestPhoneNumber(guestPhoneNumber);
+            validateBookingDates(bookedRoom);
+            Room room = getRoom(roomId);
+            room.addBooking(bookedRoom);
+            bookedRoom.setRoom(room);
+            if (userId != null) {
+                handleUserBooking(userId, bookedRoom);
+            }
+            BigDecimal totalAmount = calculateTotalAmount(bookedRoom, room.getRoomPrice());
+            if (redeemedDiscountId != null) {
+                totalAmount = applyDiscountIfValid(redeemedDiscountId, totalAmount, bookedRoom);
+            }
+            bookedRoom.setTotalAmount(totalAmount);
+            bookedRoom.setBookingDay(LocalDate.now());
+            return bookingRepository.save(bookedRoom);
+        } catch (InvalidBookingRequestException e) {
+            throw new InvalidBookingRequestException("Có lỗi trong việc đặt phòng!" + e.getMessage());
         }
-        bookingRequest.setTotalAmount(totalAmount);
-        bookingRequest.setBookingDay(LocalDate.now());
-        bookingRepository.save(bookingRequest);
-        return bookingRequest.getBookingConfirmationCode();
+    }
+
+    private void validateBookingDates(BookedRoom bookingRequest) {
+        if (bookingRequest.getCheckOutDate().isBefore(bookingRequest.getCheckInDate())) {
+            throw new InvalidBookingRequestException("Check-in date must come before check-out date");
+        }
+    }
+
+    private Room getRoom(Long roomId) {
+        return roomService.getRoomById(roomId).orElseThrow(() ->
+                new InvalidBookingRequestException("Room not found"));
+    }
+
+    private void validateRoomAvailability(BookedRoom bookingRequest, Room room) {
+        boolean roomIsAvailable = roomIsAvailable(bookingRequest, room.getBookings());
+        if (!roomIsAvailable) {
+            throw new InvalidBookingRequestException("Phòng hiện đã đặt trong khoảng thời gian này, xin hãy đặt trong khoảng thời gian khác!");
+        }
+        room.addBooking(bookingRequest);
+    }
+
+    private BigDecimal calculateTotalAmount(BookedRoom bookingRequest, BigDecimal roomPrice) {
+        return getBookedRoomTotalAmount(bookingRequest.getCheckInDate(), bookingRequest.getCheckOutDate(), roomPrice);
+    }
+
+    private BigDecimal applyDiscountIfValid(Long redeemedDiscountId, BigDecimal totalAmount, BookedRoom bookingRequest) {
+        RedeemedDiscount redeemedDiscount = redeemedDiscountService.findRedeemedDiscountById(redeemedDiscountId);
+        if (redeemedDiscount.isUsed()) {
+            throw new InvalidBookingRequestException("Mã giảm giá đã được sử dụng, hãy chọn cái khác!");
+        }
+
+        return handleDiscountAndReturnTotalAmount(redeemedDiscount, totalAmount, bookingRequest);
+    }
+
+    private BigDecimal getBookedRoomTotalAmount(LocalDate checkInDate, LocalDate checkOutDate, BigDecimal roomPrice){
+        long bookingDays = ChronoUnit.DAYS.between(checkInDate, checkOutDate);
+        BigDecimal daysBigDecimal = BigDecimal.valueOf(bookingDays);
+        BigDecimal totalAmount = daysBigDecimal.multiply(roomPrice);
+        return totalAmount;
+    }
+
+    private BigDecimal handleDiscountAndReturnTotalAmount(RedeemedDiscount redeemedDiscount, BigDecimal totalAmount, BookedRoom bookingRequest){
+        BigDecimal discountPercent = BigDecimal.valueOf(redeemedDiscount.getDiscount().getPercentDiscount());
+        BigDecimal discountAmount = totalAmount.multiply(discountPercent).divide(BigDecimal.valueOf(100));
+        totalAmount = totalAmount.subtract(discountAmount);
+        redeemedDiscount.setUsed(true);
+        bookingRequest.addDiscount(redeemedDiscount);
+        redeemedDiscountRepository.save(redeemedDiscount);
+        return totalAmount;
+    }
+
+    private void handleUserBooking(Long userId, BookedRoom bookingRequest){
+        User user = userService.getUserById(userId).get();
+        user.addBooking(bookingRequest);
     }
 
     @Override
@@ -124,60 +193,6 @@ public class BookingServiceImpl implements BookingService {
     public Page<BookedRoom> getAllBookingByKeywordAndHotelId(Integer pageNo, Integer pageSize, Long hotelId, String keyword) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         return bookingRepository.getAllBookingByKeywordAndHotelId(pageable, hotelId, keyword);
-    }
-
-    private void validateBookingDates(BookedRoom bookingRequest) {
-        if (bookingRequest.getCheckOutDate().isBefore(bookingRequest.getCheckInDate())) {
-            throw new InvalidBookingRequestException("Check-in date must come before check-out date");
-        }
-    }
-
-    private Room getRoom(Long roomId) {
-        return roomService.getRoomById(roomId).orElseThrow(() ->
-                new InvalidBookingRequestException("Room not found"));
-    }
-
-    private void validateRoomAvailability(BookedRoom bookingRequest, Room room) {
-        boolean roomIsAvailable = roomIsAvailable(bookingRequest, room.getBookings());
-        if (!roomIsAvailable) {
-            throw new InvalidBookingRequestException("Phòng hiện đã đặt trong khoảng thời gian này, xin hãy đặt trong khoảng thời gian khác!");
-        }
-        room.addBooking(bookingRequest);
-    }
-
-    private BigDecimal calculateTotalAmount(BookedRoom bookingRequest, BigDecimal roomPrice) {
-        return getBookedRoomTotalAmount(bookingRequest.getCheckInDate(), bookingRequest.getCheckOutDate(), roomPrice);
-    }
-
-    private BigDecimal applyDiscountIfValid(Long redeemedDiscountId, BigDecimal totalAmount, BookedRoom bookingRequest) {
-        RedeemedDiscount redeemedDiscount = redeemedDiscountService.findRedeemedDiscountById(redeemedDiscountId);
-        if (redeemedDiscount.isUsed()) {
-            throw new InvalidBookingRequestException("Mã giảm giá đã được sử dụng, hãy chọn cái khác!");
-        }
-
-        return handleDiscountAndReturnTotalAmount(redeemedDiscount, totalAmount, bookingRequest);
-    }
-
-    private BigDecimal getBookedRoomTotalAmount(LocalDate checkInDate, LocalDate checkOutDate, BigDecimal roomPrice){
-        long bookingDays = ChronoUnit.DAYS.between(checkInDate, checkOutDate);
-        BigDecimal daysBigDecimal = BigDecimal.valueOf(bookingDays);
-        BigDecimal totalAmount = daysBigDecimal.multiply(roomPrice);
-        return totalAmount;
-    }
-
-    private BigDecimal handleDiscountAndReturnTotalAmount(RedeemedDiscount redeemedDiscount, BigDecimal totalAmount, BookedRoom bookingRequest){
-        BigDecimal discountPercent = BigDecimal.valueOf(redeemedDiscount.getDiscount().getPercentDiscount());
-        BigDecimal discountAmount = totalAmount.multiply(discountPercent).divide(BigDecimal.valueOf(100));
-        totalAmount = totalAmount.subtract(discountAmount);
-        redeemedDiscount.setUsed(true);
-        bookingRequest.addDiscount(redeemedDiscount);
-        redeemedDiscountRepository.save(redeemedDiscount);
-        return totalAmount;
-    }
-
-    private void handleUserBooking(Long userId, BookedRoom bookingRequest){
-        User user = userService.getUserById(userId).get();
-        user.addBooking(bookingRequest);
     }
 
     private boolean getAllRoomAndCheckRoomIsAvailable(Room room, BookedRoom bookingRequest) {

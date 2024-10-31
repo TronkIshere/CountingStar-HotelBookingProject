@@ -77,15 +77,23 @@ public class BookingController {
     }
 
     @PostMapping("/room/{roomId}/booking")
-    public ResponseEntity<?> saveBooking(@PathVariable Long roomId,
-                                         @RequestBody BookedRoom bookingRequest,
+    public ResponseEntity<BookingDTO> saveBooking(@PathVariable Long roomId,
+                                         @RequestParam LocalDate checkInDate,
+                                         @RequestParam LocalDate checkOutDate,
+                                         @RequestParam String guestFullName,
+                                         @RequestParam String guestEmail,
+                                         @RequestParam int NumOfAdults,
+                                         @RequestParam int NumOfChildren,
+                                         @RequestParam int totalNumOfGuest,
+                                         @RequestParam String guestPhoneNumber,
                                          @RequestParam(required = false) Long userId,
                                          @RequestParam(required = false) Long redeemedDiscountId){
         try{
-            String confirmationCode = bookingService.saveBooking(roomId, bookingRequest, userId, redeemedDiscountId);
-            return ResponseEntity.ok("Room booked successfully, Your booking confirmation code is :" + confirmationCode);
+            BookedRoom bookedRoom = bookingService.saveBooking(roomId, checkInDate, checkOutDate, guestFullName, guestEmail, NumOfAdults, NumOfChildren, totalNumOfGuest, guestPhoneNumber, userId, redeemedDiscountId);
+            BookingDTO bookingDTO = getBookingResponse(bookedRoom);
+            return ResponseEntity.ok(bookingDTO);
         }catch (InvalidBookingRequestException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("Error", e.getMessage()).build();
         }
     }
 

@@ -11,8 +11,6 @@ public interface BookingService {
 
     BookedRoom findByBookingConfirmationCode(String confirmationCode);
 
-    String saveBooking(Long roomId, BookedRoom bookingRequest, Long UserId, Long RedeemedDiscountId);
-
     void cancelBooking(Long bookingId);
 
     List<BookedRoom> getAllBookingsByRoomId(Long roomId);
@@ -30,4 +28,6 @@ public interface BookingService {
     double getPercentageOfBookedRoomsIncreasedDuringTheMonth();
 
     Page<BookedRoom> getAllBookingByKeywordAndHotelId(Integer pageNo, Integer pageSize, Long hotelId, String keyword);
+
+    BookedRoom saveBooking(Long roomId, LocalDate checkInDate, LocalDate checkOutDate, String guestFullName, String guestEmail, int numOfAdults, int numOfChildren, int totalNumOfGuest, String guestPhoneNumber, Long userId, Long redeemedDiscountId);
 }

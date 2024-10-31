@@ -36,10 +36,10 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/hotels" element={<SearchHotelsPage />} />
+          <Route path="/hotels/hotel/:hotelId" element={<HotelPage />} />
           <Route path="/discount" element={<Discount />} />
           <Route path="/user/:userId" element={<UserProfile />} />
           <Route path="/user/admin" element={<AdminPage />} />
-          <Route path="/hotels/hotel/:hotelId" element={<HotelPage />} />
           <Route path="/hotelRegistration" element={<HotelRegistration />} />
           <Route
             path="/hotels/hotelOwnerPage/:hotelId"
