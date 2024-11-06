@@ -82,7 +82,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/updateUser/{userId}")
+    @PostMapping("/updateUser/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> updateUser(@PathVariable Long userId,
                                         @RequestParam String firstName,

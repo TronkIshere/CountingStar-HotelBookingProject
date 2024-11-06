@@ -128,8 +128,13 @@ const HotelBookingManagement = () => {
                 <td>{booking.bookingId}</td>
                 <td>{booking.room.id}</td>
                 <td>{booking.room.roomType}</td>
-                <td>{booking.checkInDate}</td>
-                <td>{booking.checkOutDate}</td>
+                <td>
+                  {new Date(booking.checkInDate).toLocaleDateString("vi-VN")}
+                </td>
+                <td>
+                  {new Date(booking.checkOutDate).toLocaleDateString("vi-VN")}
+                </td>
+
                 <td>{booking.guestEmail}</td>
                 <td>{booking.guestPhoneNumber}</td>
                 <td>{booking.guestFullName}</td>

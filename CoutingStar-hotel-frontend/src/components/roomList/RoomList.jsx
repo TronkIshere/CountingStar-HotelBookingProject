@@ -70,7 +70,7 @@ const RoomList = ({ hotelId }) => {
                   }).format(room.roomPrice)}
                 </td>
 
-                <td>{room.averageNumberOfRoomStars} / 5</td>
+                <td>{room.averageNumberOfRoomStars.toFixed(2)} / 5</td>
                 <td className="lastTd">
                   <button
                     type="button"

@@ -71,7 +71,11 @@ const HotelDashBoard = () => {
                   <div className="hotelOwnerInfoText">Tổng số phòng đã đặt</div>
                 </div>
                 <div className="hotelOwnerOverViewNumber">
-                  +{dashboardData.percentageOfBookedIncreasedDuringTheMonth}%
+                  +
+                  {dashboardData.percentageOfBookedIncreasedDuringTheMonth.toFixed(
+                    2
+                  )}
+                  %
                 </div>
               </div>
 
@@ -84,7 +88,11 @@ const HotelDashBoard = () => {
                   <div className="hotelOwnerInfoText">Tổng bình luận</div>
                 </div>
                 <div className="hotelOwnerOverViewNumber">
-                  +{dashboardData.percentageOfRatingIncreasedDuringTheMonth}%
+                  +
+                  {dashboardData.percentageOfRatingIncreasedDuringTheMonth.toFixed(
+                    2
+                  )}
+                  %
                 </div>
               </div>
 
@@ -109,12 +117,12 @@ const HotelDashBoard = () => {
             </div>
           </div>
           <div className="col-12 col-sm-12 col-md-8 col-lg-8">
-          <div className="hotelOwnerChartsGroup">
-            <div className="hotelOwnerChartContainer">
-              <p>Tổng số khách sạn của từng thành phố</p>
-              <PieChart data={data} />
+            <div className="hotelOwnerChartsGroup">
+              <div className="hotelOwnerChartContainer">
+                <p>Tổng số khách sạn của từng thành phố</p>
+                <PieChart data={data} />
+              </div>
             </div>
-          </div>
           </div>
         </div>
       </div>

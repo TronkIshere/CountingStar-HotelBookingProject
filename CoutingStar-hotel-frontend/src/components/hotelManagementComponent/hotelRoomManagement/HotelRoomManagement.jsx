@@ -147,7 +147,12 @@ const HotelRoomManagement = () => {
                   <td>{room.roomType}</td>
                   <td>{room.roomDescription}</td>
                   <td>{room.roomPrice}</td>
-                  <td>{room.averageNumberOfRoomStars} / 5</td>
+                  <td>
+                    {typeof room.averageNumberOfRoomStars === "number"
+                      ? room.averageNumberOfRoomStars.toFixed(2) + " / 5"
+                      : "Chưa có đánh giá"}
+                  </td>
+
                   <td>
                     <button
                       className="btn btn-primary btn-sm"
