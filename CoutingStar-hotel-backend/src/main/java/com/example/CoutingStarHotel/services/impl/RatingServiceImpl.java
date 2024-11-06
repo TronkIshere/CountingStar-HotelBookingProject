@@ -18,7 +18,6 @@ public class RatingServiceImpl implements RatingService {
     private final RatingRepository ratingRepository;
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
-    private final RoomRepository roomRepository;
 
     @Override
     public Rating saveRating(Long hotelId, Long userId, int star, String comment, LocalDate rateDay) {

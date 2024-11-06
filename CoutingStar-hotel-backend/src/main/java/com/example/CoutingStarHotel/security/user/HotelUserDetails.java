@@ -31,7 +31,6 @@ public class HotelUserDetails implements UserDetails {
                 .collect(Collectors.toList());
 
         Long hotelId = user.getHotel() != null ? user.getHotel().getId() : null;
-        System.out.println("HotelId: " + hotelId);
         return new HotelUserDetails(
                 user.getId(),
                 user.getEmail(),

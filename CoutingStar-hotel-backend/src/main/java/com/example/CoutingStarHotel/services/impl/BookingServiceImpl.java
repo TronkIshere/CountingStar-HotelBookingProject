@@ -53,19 +53,10 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookedRoom saveBooking(Long roomId, LocalDate checkInDate, LocalDate checkOutDate, String guestFullName, String guestEmail, int numOfAdults, int numOfChildren, int totalNumOfGuest, String guestPhoneNumber, Long userId, Long redeemedDiscountId) {
         try {
-            BookedRoom bookedRoom = new BookedRoom();
-            bookedRoom.setCheckInDate(checkInDate);
-            bookedRoom.setCheckOutDate(checkOutDate);
-            bookedRoom.setGuestFullName(guestFullName);
-            bookedRoom.setGuestEmail(guestEmail);
-            bookedRoom.setNumOfAdults(numOfAdults);
-            bookedRoom.setNumOfChildren(numOfChildren);
-            bookedRoom.setTotalNumOfGuest(totalNumOfGuest);
-            bookedRoom.setGuestPhoneNumber(guestPhoneNumber);
+            BookedRoom bookedRoom = createBookedRoom(checkInDate, checkOutDate, guestFullName, guestEmail, numOfAdults, numOfChildren, totalNumOfGuest, guestPhoneNumber);
             validateBookingDates(bookedRoom);
             Room room = getRoom(roomId);
-            room.addBooking(bookedRoom);
-            bookedRoom.setRoom(room);
+            handleRoomBooking(roomId, bookedRoom);
             if (userId != null) {
                 handleUserBooking(userId, bookedRoom);
             }
@@ -79,6 +70,28 @@ public class BookingServiceImpl implements BookingService {
         } catch (InvalidBookingRequestException e) {
             throw new InvalidBookingRequestException("Có lỗi trong việc đặt phòng!" + e.getMessage());
         }
+    }
+
+    private void handleRoomBooking(Long roomId, BookedRoom bookedRoom) {
+        Room room = getRoom(roomId);
+        room.addBooking(bookedRoom);
+        bookedRoom.setRoom(room);
+    }
+
+    private BookedRoom createBookedRoom(LocalDate checkInDate, LocalDate checkOutDate, String guestFullName, String guestEmail,
+                                        int numOfAdults, int numOfChildren, int totalNumOfGuest, String guestPhoneNumber) {
+        BookedRoom bookedRoom = new BookedRoom();
+        bookedRoom.setCheckInDate(checkInDate);
+        bookedRoom.setCheckOutDate(checkOutDate);
+        bookedRoom.setGuestFullName(guestFullName);
+        bookedRoom.setGuestEmail(guestEmail);
+        bookedRoom.setNumOfAdults(numOfAdults);
+        bookedRoom.setNumOfChildren(numOfChildren);
+        bookedRoom.setTotalNumOfGuest(totalNumOfGuest);
+        bookedRoom.setGuestPhoneNumber(guestPhoneNumber);
+        validateBookingDates(bookedRoom);
+        bookedRoom.setBookingDay(LocalDate.now());
+        return bookedRoom;
     }
 
     private void validateBookingDates(BookedRoom bookingRequest) {
