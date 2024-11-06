@@ -22,6 +22,7 @@ const Rating = ({ hotelId, onClose }) => {
     if (userId) {
       checkIfUserCanComment(userId, hotelId)
         .then((response) => {
+          console.log(response);
           setCanComment(response);
           setRoomType(response);
         })

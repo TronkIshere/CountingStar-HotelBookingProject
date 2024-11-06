@@ -25,7 +25,7 @@ public interface BookingRepository extends JpaRepository<BookedRoom, Long> {
             "WHERE br.user.id = :userId " +
             "AND br.room.hotel.id = :hotelId " +
             "AND r.id IS NULL")
-    BookedRoom findRoomUserHasBookedAndNotComment(Long hotelId, Long userId);
+    List<BookedRoom> findRoomUserHasBookedAndNotComment(Long hotelId, Long userId, Pageable pageable);
 
     @Query("SELECT COUNT(b) FROM BookedRoom b")
     int getTotalNumberOfBookedRooms();

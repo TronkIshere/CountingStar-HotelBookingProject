@@ -7,10 +7,13 @@ import com.example.CoutingStarHotel.repositories.RoomRepository;
 import com.example.CoutingStarHotel.repositories.UserRepository;
 import com.example.CoutingStarHotel.services.RatingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,17 +29,25 @@ public class RatingServiceImpl implements RatingService {
         rating.setComment(comment);
         rating.setRateDay(rateDay);
 
-        BookedRoom bookedRoom = bookingRepository.findRoomUserHasBookedAndNotComment(hotelId, userId);
-        Long bookedRoomIdForAddComment = bookedRoom.getRoom().getId();
+        Pageable pageable = PageRequest.of(0, 1);
+        List<BookedRoom> bookedRooms = bookingRepository.findRoomUserHasBookedAndNotComment(hotelId, userId, pageable);
 
-        User user = userRepository.findById(userId).get();
-        user.addComment(rating);
+        if (!bookedRooms.isEmpty()) {
+            Long bookedRoomIdForAddComment = bookedRooms.get(0).getBookingId();
 
-        BookedRoom saveBookedRoom = bookingRepository.findById(bookedRoomIdForAddComment).get();
-        saveBookedRoom.addComment(rating);
+            User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+            user.addComment(rating);
 
-        return ratingRepository.save(rating);
+            BookedRoom saveBookedRoom = bookingRepository.findById(bookedRoomIdForAddComment)
+                    .orElseThrow(() -> new RuntimeException("BookedRoom not found"));
+            saveBookedRoom.addComment(rating);
+
+            return ratingRepository.save(rating);
+        } else {
+            throw new RuntimeException("No booked room found for user without a rating in the specified hotel");
+        }
     }
+
 
     @Override
     public Rating updateRating(Long ratingId, int star, String comment) {
@@ -52,9 +63,15 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public String checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(Long userId, Long hotelId) {bookingRepository.findRoomUserHasBookedAndNotComment(hotelId, userId);
-        BookedRoom bookedRoom = bookingRepository.findRoomUserHasBookedAndNotComment(hotelId, userId);
-        return bookedRoom.getRoom().getRoomType();
+    public String checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(Long userId, Long hotelId) {
+        Pageable pageable = PageRequest.of(0, 1);
+        List<BookedRoom> bookedRooms = bookingRepository.findRoomUserHasBookedAndNotComment(hotelId, userId, pageable);
+
+        if (!bookedRooms.isEmpty()) {
+            return bookedRooms.get(0).getRoom().getRoomType();
+        } else {
+            return "No booked room found without a comment for this user in the specified hotel.";
+        }
     }
 
     @Override
