@@ -24,7 +24,7 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     Long getHotelHighestPriceByHotelId(Long hotelId);
 
     @Query("SELECT h FROM Hotel h LEFT JOIN h.rooms r LEFT JOIN r.bookings b LEFT JOIN b.rating rt GROUP BY h ORDER BY COUNT(rt) DESC")
-    List<Hotel> getFiveHotelForHomePage();
+    List<Hotel> getTenHotelForHomePage();
 
     @Query("SELECT new com.example.CoutingStarHotel.DTO.PieChartDTO(h.city, COUNT(h)) " +
             "FROM Hotel h " +

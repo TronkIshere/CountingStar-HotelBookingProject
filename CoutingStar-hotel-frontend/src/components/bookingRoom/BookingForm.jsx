@@ -148,10 +148,6 @@ const BookingForm = ({ roomId }) => {
       const redeemedDiscountId = booking.discountId
         ? parseInt(booking.discountId, 10)
         : null;
-      console.log(roomId);
-      console.log(booking);
-      console.log(userId);
-      console.log(redeemedDiscountId);
       const result = await bookRoom(
         roomId,
         booking,
