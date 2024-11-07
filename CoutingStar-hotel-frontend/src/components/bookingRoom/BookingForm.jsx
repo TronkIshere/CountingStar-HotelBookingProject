@@ -41,6 +41,7 @@ const BookingForm = ({ roomId }) => {
     email: "",
     phoneNumber: "",
   });
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     if (userEmail) {
@@ -112,6 +113,7 @@ const BookingForm = ({ roomId }) => {
   };
 
   const handleDiscountChange = (e) => {
+    3;
     const selectedDiscountId = e.target.value;
 
     if (selectedDiscountId === "") {
@@ -155,10 +157,26 @@ const BookingForm = ({ roomId }) => {
         redeemedDiscountId
       );
       console.log(result);
-      localStorage.setItem("checkInDate", booking.checkInDate);
-      localStorage.setItem("checkOutDate", booking.checkOutDate);
-      localStorage.setItem("adults", adults);
-      localStorage.setItem("children", children);
+
+      // Reset form fields
+      setUser({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
+      });
+      setAdults(1);
+      setChildren(0);
+      setDate([
+        {
+          startDate: new Date(),
+          endDate: new Date(),
+          key: "selection",
+        },
+      ]);
+      setSelectedDiscount(null);
+      setTotalPayment(0);
+      setSuccessMessage("Đặt phòng thành công!"); // Set success message
     } catch (error) {
       setError(error.message);
     }
@@ -397,7 +415,11 @@ const BookingForm = ({ roomId }) => {
                   Đặt phòng
                 </button>
               </div>
-
+              {successMessage && (
+                <p style={{ color: "green", marginBottom: "15px" }}>
+                  {successMessage}
+                </p>
+              )}
               {error && <p className="text-danger">{error}</p>}
             </div>
           </div>
