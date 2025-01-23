@@ -1,5 +1,6 @@
 package com.example.CoutingStarHotel.entities;
 
+import com.example.CoutingStarHotel.entities.common.BaseEntity;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,10 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Hotel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Hotel extends BaseEntity {
     private String hotelName;
     private String city;
     private String hotelLocation;

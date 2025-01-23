@@ -1,5 +1,6 @@
 package com.example.CoutingStarHotel.entities;
 
+import com.example.CoutingStarHotel.entities.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,10 +13,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Discount {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Discount extends BaseEntity {
     private String discountName;
     private int percentDiscount;
     private String discountDescription;
