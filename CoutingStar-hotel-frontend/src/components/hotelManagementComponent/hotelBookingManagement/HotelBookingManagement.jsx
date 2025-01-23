@@ -7,7 +7,7 @@ import {
 import { useParams } from "react-router-dom";
 import DeleteBooking from "./deleteBooking/DeleteBooking";
 import UpdateBooking from "./updateBooking/UpdateBooking";
-import { Pagination } from "react-bootstrap"; // Thêm import Pagination của Bootstrap
+import { Pagination } from "react-bootstrap";
 
 const HotelBookingManagement = () => {
   const [bookings, setBookings] = useState([]);
@@ -46,7 +46,7 @@ const HotelBookingManagement = () => {
   }, [hotelId, currentPage]);
 
   const handleSearch = () => {
-    setCurrentPage(0); // Reset về trang đầu tiên khi tìm kiếm
+    setCurrentPage(0);
     fetchBookings(searchKeyword, 0);
   };
 

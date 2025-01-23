@@ -1,5 +1,6 @@
 package com.example.CoutingStarHotel.entities;
 
+import com.example.CoutingStarHotel.entities.common.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
@@ -14,35 +15,15 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "bookingId")
-public class BookedRoom {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bookingId;
-    @Column(name = "check_In")
+public class BookedRoom extends BaseEntity {
     private LocalDate checkInDate;
-
-    @Column(name = "check_Out")
     private LocalDate checkOutDate;
-
-    @Column(name = "guest_PhoneNumber")
     private String guestPhoneNumber;
-
-    @Column(name = "guest_FullName")
     private String guestFullName;
-
-    @Column(name = "guest_Email")
     private String guestEmail;
-
-    @Column(name = "adults")
     private int NumOfAdults;
-
-    @Column(name = "children")
     private int NumOfChildren;
-
-    @Column(name = "total_guest")
     private int totalNumOfGuest;
-
-    @Column(name = "confirmation_Code")
     private String bookingConfirmationCode;
     private LocalDate bookingDay;
     private BigDecimal totalAmount;

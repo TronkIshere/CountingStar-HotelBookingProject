@@ -1,5 +1,6 @@
 package com.example.CoutingStarHotel.entities;
 
+import com.example.CoutingStarHotel.entities.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,10 +9,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RedeemedDiscount {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class RedeemedDiscount extends BaseEntity {
     private boolean isUsed;
 
     @ManyToOne(fetch = FetchType.LAZY)
