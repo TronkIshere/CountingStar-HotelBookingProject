@@ -136,7 +136,7 @@ public class BookingController {
                 theRoom.getRoomPrice(),
                 theRoom.getRoomDescription());
         return new BookingDTO(
-                booking.getBookingId(),
+                booking.getId(),
                 booking.getCheckInDate(),
                 booking.getCheckOutDate(),
                 booking.getBookingConfirmationCode(),

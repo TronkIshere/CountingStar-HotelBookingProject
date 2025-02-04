@@ -60,11 +60,11 @@ public class BookingServiceImpl implements BookingService {
             if (userId != null) {
                 handleUserBooking(userId, bookedRoom);
             }
-            BigDecimal totalAmount = calculateTotalAmount(bookedRoom, room.getRoomPrice());
             if (redeemedDiscountId != null) {
+                BigDecimal totalAmount = calculateTotalAmount(bookedRoom, room.getRoomPrice());
                 totalAmount = applyDiscountIfValid(redeemedDiscountId, totalAmount, bookedRoom);
+                bookedRoom.setTotalAmount(totalAmount);
             }
-            bookedRoom.setTotalAmount(totalAmount);
             bookedRoom.setBookingDay(LocalDate.now());
             return bookingRepository.save(bookedRoom);
         } catch (InvalidBookingRequestException e) {

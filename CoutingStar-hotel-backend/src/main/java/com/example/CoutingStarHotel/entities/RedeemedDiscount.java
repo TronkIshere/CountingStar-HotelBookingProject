@@ -1,6 +1,6 @@
 package com.example.CoutingStarHotel.entities;
 
-import com.example.CoutingStarHotel.entities.common.BaseEntity;
+import com.example.CoutingStarHotel.entities.common.AbstractEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,7 +9,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RedeemedDiscount extends BaseEntity {
+public class RedeemedDiscount extends AbstractEntity {
     private boolean isUsed;
 
     @ManyToOne(fetch = FetchType.LAZY)

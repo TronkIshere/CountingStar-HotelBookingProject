@@ -1,6 +1,6 @@
 package com.example.CoutingStarHotel.entities;
 
-import com.example.CoutingStarHotel.entities.common.BaseEntity;
+import com.example.CoutingStarHotel.entities.common.AbstractEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Discount extends BaseEntity {
+public class Discount extends AbstractEntity {
     private String discountName;
     private int percentDiscount;
     private String discountDescription;
