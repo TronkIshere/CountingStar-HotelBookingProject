@@ -1,9 +1,9 @@
 package com.example.CoutingStarHotel.services;
 
-import com.example.CoutingStarHotel.DTO.DashBoardMonthIncreasedDTO;
+import com.example.CoutingStarHotel.DTO.response.DashBoardMonthIncreasedResponse;
 
 public interface DashBoardService {
-    DashBoardMonthIncreasedDTO getDataForAdminDashBoardMonthIncreased();
+    DashBoardMonthIncreasedResponse getDataForAdminDashBoardMonthIncreased();
 
-    DashBoardMonthIncreasedDTO getDataForHotelOwnerMonthIncreased(Long hotelId);
+    DashBoardMonthIncreasedResponse getDataForHotelOwnerMonthIncreased(Long hotelId);
 }

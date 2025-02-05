@@ -1,6 +1,6 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.DTO.RoomDTO;
+import com.example.CoutingStarHotel.DTO.response.RoomResponse;
 import com.example.CoutingStarHotel.entities.BookedRoom;
 import com.example.CoutingStarHotel.entities.Room;
 import com.example.CoutingStarHotel.exception.PhotoRetrievalExcetion;
@@ -38,14 +38,14 @@ public class RoomController {
 
     @PostMapping("/add/new-room/{hotelId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
-    public ResponseEntity<RoomDTO> addNewRoom(
+    public ResponseEntity<RoomResponse> addNewRoom(
             @RequestParam("photo")MultipartFile photo,
             @RequestParam("roomType")String roomType,
             @RequestParam("roomPrice")BigDecimal roomPrice,
             @RequestParam("roomDescription")String roomDescription,
             @PathVariable Long hotelId) throws SQLException, IOException {
         Room savedRoom = roomService.addNewRoom(photo, roomType, roomPrice, roomDescription, hotelId);
-        RoomDTO response = new RoomDTO(savedRoom.getId(), savedRoom.getRoomType(), savedRoom.getRoomPrice(), savedRoom.getRoomDescription());
+        RoomResponse response = new RoomResponse(savedRoom.getId(), savedRoom.getRoomType(), savedRoom.getRoomPrice(), savedRoom.getRoomDescription());
         return ResponseEntity.ok(response);
     }
 
@@ -55,23 +55,23 @@ public class RoomController {
     }
 
     @GetMapping("/{hotelId}")
-    public ResponseEntity<Page<RoomDTO>> getRoomsByHotelId(@PathVariable Long hotelId,
-                                                           @RequestParam(defaultValue = "0") Integer pageNo,
-                                                           @RequestParam(defaultValue = "8") Integer pageSize) {
+    public ResponseEntity<Page<RoomResponse>> getRoomsByHotelId(@PathVariable Long hotelId,
+                                                                @RequestParam(defaultValue = "0") Integer pageNo,
+                                                                @RequestParam(defaultValue = "8") Integer pageSize) {
         Page<Room> rooms = roomService.getRoomByHotelId(hotelId, pageNo, pageSize);
-        Page<RoomDTO> roomResponses = rooms.map(this::getRoomResponse);
+        Page<RoomResponse> roomResponses = rooms.map(this::getRoomResponse);
         return ResponseEntity.ok(roomResponses);
     }
 
     @GetMapping("/all-rooms")
-    public ResponseEntity<List<RoomDTO>> getAllRooms() throws SQLException{
+    public ResponseEntity<List<RoomResponse>> getAllRooms() throws SQLException{
         List<Room> rooms = roomService.getAllRooms();
-        List<RoomDTO> roomResponses = new ArrayList<>();
+        List<RoomResponse> roomResponses = new ArrayList<>();
         for(Room room : rooms) {
             byte[] photoBytes = roomService.getRoomPhotoByRoomId(room.getId());
             if(photoBytes != null && photoBytes.length > 0) {
                 String base64Photo = Base64.encodeBase64String(photoBytes);
-                RoomDTO roomResponse = getRoomResponse(room);
+                RoomResponse roomResponse = getRoomResponse(room);
                 roomResponse.setPhoto(base64Photo);
                 roomResponses.add(roomResponse);
             }
@@ -80,12 +80,12 @@ public class RoomController {
     }
 
     @GetMapping("/getAllRoomByKeyword/{hotelId}/{keyword}")
-    public ResponseEntity<Page<RoomDTO>> getAllRoomByKeywordAndHotelId(@RequestParam(defaultValue = "0") Integer pageNo,
-                                                             @RequestParam(defaultValue = "8") Integer pageSize,
-                                                             @PathVariable String keyword,
-                                                             @PathVariable Long hotelId) {
+    public ResponseEntity<Page<RoomResponse>> getAllRoomByKeywordAndHotelId(@RequestParam(defaultValue = "0") Integer pageNo,
+                                                                            @RequestParam(defaultValue = "8") Integer pageSize,
+                                                                            @PathVariable String keyword,
+                                                                            @PathVariable Long hotelId) {
         Page<Room> rooms = roomService.getAllRoomByKeywordAndHotelId(pageNo, pageSize, keyword, hotelId);
-        Page<RoomDTO> roomResponses = rooms.map(this::getRoomResponse);
+        Page<RoomResponse> roomResponses = rooms.map(this::getRoomResponse);
         return ResponseEntity.ok(roomResponses);
     }
 
@@ -98,21 +98,21 @@ public class RoomController {
 
     @PutMapping("/update/{roomId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
-    public ResponseEntity<RoomDTO> updateRoom(@PathVariable Long roomId,
-                                              @RequestParam("roomType") String roomType,
-                                              @RequestParam("roomDescription") String roomDescription,
-                                              @RequestParam("roomPrice") BigDecimal roomPrice,
-                                              @RequestParam(required = false) MultipartFile photo) throws SQLException, IOException {
+    public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long roomId,
+                                                   @RequestParam("roomType") String roomType,
+                                                   @RequestParam("roomDescription") String roomDescription,
+                                                   @RequestParam("roomPrice") BigDecimal roomPrice,
+                                                   @RequestParam(required = false) MultipartFile photo) throws SQLException, IOException {
         Room theRoom = roomService.updateRoom(roomId, roomType, roomDescription, roomPrice, photo);
-        RoomDTO roomResponse = getRoomResponse(theRoom);
+        RoomResponse roomResponse = getRoomResponse(theRoom);
         return ResponseEntity.ok(roomResponse);
     }
 
     @GetMapping("/room/{roomId}")
-    public ResponseEntity<Optional<RoomDTO>> getRoomById(@PathVariable Long roomId){
+    public ResponseEntity<Optional<RoomResponse>> getRoomById(@PathVariable Long roomId){
         Optional<Room> theRoom = roomService.getRoomById(roomId);
         return theRoom.map(room -> {
-            RoomDTO roomResponse = getRoomResponse(room);
+            RoomResponse roomResponse = getRoomResponse(room);
             return  ResponseEntity.ok(Optional.of(roomResponse));
         }).orElseThrow(() -> new ResourceNotFoundException("Room not found"));
     }
@@ -122,17 +122,17 @@ public class RoomController {
     }
 
     @GetMapping("/available-rooms")
-    public ResponseEntity<List<RoomDTO>> getAvailableRooms(
+    public ResponseEntity<List<RoomResponse>> getAvailableRooms(
             @RequestParam("checkInDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
             @RequestParam("checkOutDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate checkOutDate,
             @RequestParam("roomType") String roomType) throws SQLException {
         List<Room> availableRooms = roomService.getAvailableRooms(checkInDate, checkOutDate, roomType);
-        List<RoomDTO> roomResponses = new ArrayList<>();
+        List<RoomResponse> roomResponses = new ArrayList<>();
         for (Room room : availableRooms){
             byte[] photoBytes = roomService.getRoomPhotoByRoomId(room.getId());
             if (photoBytes != null && photoBytes.length > 0){
                 String photoBase64 = Base64.encodeBase64String(photoBytes);
-                RoomDTO roomResponse = getRoomResponse(room);
+                RoomResponse roomResponse = getRoomResponse(room);
                 roomResponse.setPhoto(photoBase64);
                 roomResponses.add(roomResponse);
             }
@@ -144,7 +144,7 @@ public class RoomController {
         }
     }
 
-    private RoomDTO getRoomResponse(Room room) {
+    private RoomResponse getRoomResponse(Room room) {
         byte[] photoBytes = null;
         Blob photoBlob = room.getPhoto();
         if (photoBlob != null) {
@@ -157,7 +157,7 @@ public class RoomController {
 
         double averageNumberOfRoomStars = roomService.averageNumberOfRoomStars(room.getId());
 
-        return new RoomDTO(
+        return new RoomResponse(
                 room.getId(),
                 room.getRoomType(),
                 room.getRoomPrice(),

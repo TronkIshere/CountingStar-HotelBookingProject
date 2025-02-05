@@ -1,7 +1,7 @@
 package com.example.CoutingStarHotel.repositories;
 
-import com.example.CoutingStarHotel.DTO.BarChartDTO;
-import com.example.CoutingStarHotel.DTO.PieChartDTO;
+import com.example.CoutingStarHotel.DTO.response.BarChartResponse;
+import com.example.CoutingStarHotel.DTO.response.PieChartResponse;
 import com.example.CoutingStarHotel.entities.Hotel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,12 +29,12 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     @Query("SELECT new com.example.CoutingStarHotel.DTO.PieChartDTO(h.city, COUNT(h)) " +
             "FROM Hotel h " +
             "GROUP BY h.city")
-    List<PieChartDTO> findNumberOfHotelsByCity();
+    List<PieChartResponse> findNumberOfHotelsByCity();
 
     @Query("SELECT new com.example.CoutingStarHotel.DTO.BarChartDTO(h.city, SUM(b.totalAmount)) " +
             "FROM Hotel h JOIN h.rooms r JOIN r.bookings b " +
             "GROUP BY h.city")
-    List<BarChartDTO> findRevenueByEachCity();
+    List<BarChartResponse> findRevenueByEachCity();
 
     @Query("SELECT COUNT(h) FROM Hotel h")
     int getTotalNumberOfHotels();
@@ -46,7 +46,7 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
             "FROM Room r JOIN r.bookings b " +
             "WHERE r.hotel.id = :hotelId " +
             "GROUP BY r.roomType")
-    List<PieChartDTO> findRevenueByEachRoom(Long hotelId);
+    List<PieChartResponse> findRevenueByEachRoom(Long hotelId);
 
     @Query("SELECT COUNT(b) FROM BookedRoom b WHERE b.room.hotel.id = :hotelId")
     int getTotalBookedRoomInSpecificHotel(@Param("hotelId")Long hotelId);

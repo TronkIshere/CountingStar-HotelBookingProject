@@ -1,6 +1,6 @@
 package com.example.CoutingStarHotel.services.impl;
 
-import com.example.CoutingStarHotel.DTO.DashBoardMonthIncreasedDTO;
+import com.example.CoutingStarHotel.DTO.response.DashBoardMonthIncreasedResponse;
 import com.example.CoutingStarHotel.services.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,8 +13,8 @@ public class DashBoardServiceImpl implements DashBoardService {
     private final BookingService bookingService;
     private final RatingService ratingService;
     @Override
-    public DashBoardMonthIncreasedDTO getDataForAdminDashBoardMonthIncreased() {
-        DashBoardMonthIncreasedDTO dashBoardMonthIncreasedData = new DashBoardMonthIncreasedDTO(
+    public DashBoardMonthIncreasedResponse getDataForAdminDashBoardMonthIncreased() {
+        DashBoardMonthIncreasedResponse dashBoardMonthIncreasedData = new DashBoardMonthIncreasedResponse(
                 userService.getTotalNumberOfUsers(),
                 userService.getPercentageOfUsersIncreasedDuringTheMonth(),
                 hotelService.getTotalNumberOfHotels(),
@@ -28,8 +28,8 @@ public class DashBoardServiceImpl implements DashBoardService {
     }
 
     @Override
-    public DashBoardMonthIncreasedDTO getDataForHotelOwnerMonthIncreased(Long hotelId) {
-        DashBoardMonthIncreasedDTO dashBoardMonthIncreasedData = new DashBoardMonthIncreasedDTO(
+    public DashBoardMonthIncreasedResponse getDataForHotelOwnerMonthIncreased(Long hotelId) {
+        DashBoardMonthIncreasedResponse dashBoardMonthIncreasedData = new DashBoardMonthIncreasedResponse(
                 hotelService.getTotalBookedRoomInSpecificHotel(hotelId),
                 hotelService.getPercentageOfBookedIncreasedDuringTheMonthForHotel(hotelId),
                 ratingService.getTotalRatingInSpecificHotel(hotelId),

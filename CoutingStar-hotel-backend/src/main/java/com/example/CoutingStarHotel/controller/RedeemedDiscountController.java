@@ -1,6 +1,6 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.DTO.RedeemedDiscountDTO;
+import com.example.CoutingStarHotel.DTO.response.RedeemedDiscountResponse;
 import com.example.CoutingStarHotel.entities.RedeemedDiscount;
 import com.example.CoutingStarHotel.exception.InvalidBookingRequestException;
 import com.example.CoutingStarHotel.services.RedeemedDiscountService;
@@ -35,9 +35,9 @@ public class RedeemedDiscountController {
         try{
             System.out.println(userId);
             List<RedeemedDiscount> redeemedDiscounts = redeemedDiscountService.getAllRedeemedDiscountByUserId(userId);
-            List<RedeemedDiscountDTO> redeemedDiscountDTOS = new ArrayList<>();
+            List<RedeemedDiscountResponse> redeemedDiscountDTOS = new ArrayList<>();
             for(RedeemedDiscount redeemedDiscount : redeemedDiscounts) {
-                RedeemedDiscountDTO ratingResponse = getRedeemedDiscountDTO(redeemedDiscount);
+                RedeemedDiscountResponse ratingResponse = getRedeemedDiscountDTO(redeemedDiscount);
                 redeemedDiscountDTOS.add(ratingResponse);
             }
             return ResponseEntity.ok(redeemedDiscountDTOS);
@@ -46,8 +46,8 @@ public class RedeemedDiscountController {
         }
     }
 
-    private RedeemedDiscountDTO getRedeemedDiscountDTO(RedeemedDiscount redeemedDiscount){
-        return new RedeemedDiscountDTO(
+    private RedeemedDiscountResponse getRedeemedDiscountDTO(RedeemedDiscount redeemedDiscount){
+        return new RedeemedDiscountResponse(
                 redeemedDiscount.getId(),
                 redeemedDiscount.isUsed(),
                 redeemedDiscount.getDiscount().getDiscountName(),

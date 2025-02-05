@@ -1,7 +1,7 @@
 package com.example.CoutingStarHotel.services.impl;
 
-import com.example.CoutingStarHotel.DTO.BarChartDTO;
-import com.example.CoutingStarHotel.DTO.PieChartDTO;
+import com.example.CoutingStarHotel.DTO.response.BarChartResponse;
+import com.example.CoutingStarHotel.DTO.response.PieChartResponse;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.entities.Hotel;
 import com.example.CoutingStarHotel.entities.Rating;
@@ -94,14 +94,14 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public List<PieChartDTO> getNumberOfHotelByEachCity() {
-        List<PieChartDTO> numberOfHotelByEachCity = hotelRepository.findNumberOfHotelsByCity();
+    public List<PieChartResponse> getNumberOfHotelByEachCity() {
+        List<PieChartResponse> numberOfHotelByEachCity = hotelRepository.findNumberOfHotelsByCity();
         return numberOfHotelByEachCity;
     }
 
     @Override
-    public List<BarChartDTO> getHotelRevenueByEachCity() {
-        List<BarChartDTO> revenueByEachCity = hotelRepository.findRevenueByEachCity();
+    public List<BarChartResponse> getHotelRevenueByEachCity() {
+        List<BarChartResponse> revenueByEachCity = hotelRepository.findRevenueByEachCity();
         return revenueByEachCity;
     }
 
@@ -123,8 +123,8 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public List<PieChartDTO> getTheRevenceOfEachRoom(Long hotelId) {
-        List<PieChartDTO> revenueByEachRoom = hotelRepository.findRevenueByEachRoom(hotelId);
+    public List<PieChartResponse> getTheRevenceOfEachRoom(Long hotelId) {
+        List<PieChartResponse> revenueByEachRoom = hotelRepository.findRevenueByEachRoom(hotelId);
         return revenueByEachRoom;
     }
 

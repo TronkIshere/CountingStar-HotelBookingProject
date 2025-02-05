@@ -1,6 +1,6 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.DTO.UserDTO;
+import com.example.CoutingStarHotel.DTO.response.UserResponse;
 import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class UserController {
     public ResponseEntity<?> getUserByEmail(@PathVariable("email") String email){
         try{
             User theUser = userService.getUser(email);
-            UserDTO userResponse = new UserDTO(theUser);
+            UserResponse userResponse = new UserResponse(theUser);
             return ResponseEntity.ok(userResponse);
         }catch (UsernameNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -44,7 +44,7 @@ public class UserController {
                                                       @RequestParam(defaultValue = "8") Integer pageSize){
         try{
             Page<User> users = userService.getAllUserExceptAdminRole(pageNo, pageSize);
-            Page<UserDTO> userResponse = users.map(this::getUserDTO);
+            Page<UserResponse> userResponse = users.map(this::getUserDTO);
             return ResponseEntity.ok(userResponse);
         }catch (UsernameNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -60,7 +60,7 @@ public class UserController {
                                                  @PathVariable String keyWord){
         try{
             Page<User> users = userService.searchUserByKeyWord(pageNo, pageSize, keyWord);
-            Page<UserDTO> userResponse = users.map(this::getUserDTO);
+            Page<UserResponse> userResponse = users.map(this::getUserDTO);
             return ResponseEntity.ok(userResponse);
         }catch (UsernameNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -112,8 +112,8 @@ public class UserController {
         }
     }
 
-    private UserDTO getUserDTO(User user) {
-        return new UserDTO(
+    private UserResponse getUserDTO(User user) {
+        return new UserResponse(
                 user.getId(),
                 user.getFirstName(),
                 user.getLastName(),

@@ -4,7 +4,7 @@ import com.example.CoutingStarHotel.exception.InvalidHotelRequestException;
 import com.example.CoutingStarHotel.exception.PhotoRetrievalExcetion;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.entities.Hotel;
-import com.example.CoutingStarHotel.DTO.HotelDTO;
+import com.example.CoutingStarHotel.DTO.response.HotelResponse;
 import com.example.CoutingStarHotel.services.HotelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,7 +20,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @CrossOrigin("http://localhost:5173")
 @RequiredArgsConstructor
@@ -44,62 +43,62 @@ public class HotelController {
         }
     }
     @GetMapping("/all-hotels")
-    public ResponseEntity<Page<HotelDTO>> getAllHotels(@RequestParam(defaultValue = "0") Integer pageNo,
-                                                       @RequestParam(defaultValue = "8") Integer pageSize){
+    public ResponseEntity<Page<HotelResponse>> getAllHotels(@RequestParam(defaultValue = "0") Integer pageNo,
+                                                            @RequestParam(defaultValue = "8") Integer pageSize){
         Page<Hotel> hotels = hotelService.getAllHotels(pageNo, pageSize);
-        Page<HotelDTO> hotelResponses = hotels.map(this::getHotelResponse);
+        Page<HotelResponse> hotelResponses = hotels.map(this::getHotelResponse);
         return ResponseEntity.ok(hotelResponses);
     }
 
     @GetMapping("/getHotelByKeyword/{keyword}")
-    public ResponseEntity<Page<HotelDTO>> getHotelByKeyword(@RequestParam(defaultValue = "0") Integer pageNo,
-                                                            @RequestParam(defaultValue = "8") Integer pageSize,
-                                                            @PathVariable String keyword){
+    public ResponseEntity<Page<HotelResponse>> getHotelByKeyword(@RequestParam(defaultValue = "0") Integer pageNo,
+                                                                 @RequestParam(defaultValue = "8") Integer pageSize,
+                                                                 @PathVariable String keyword){
         Page<Hotel> hotels = hotelService.getHotelByKeyword(pageNo, pageSize, keyword);
-        Page<HotelDTO> hotelResponses = hotels.map(this::getHotelResponse);
+        Page<HotelResponse> hotelResponses = hotels.map(this::getHotelResponse);
         return ResponseEntity.ok(hotelResponses);
     }
 
     @GetMapping("/homepage")
-    public ResponseEntity<List<HotelDTO>> getTenFunkyHotelForHomePage(){
+    public ResponseEntity<List<HotelResponse>> getTenFunkyHotelForHomePage(){
         List<Hotel> hotels = hotelService.getTenFunkyHotelForHomePage();
-        List<HotelDTO> hotelResponses = new ArrayList<>();
+        List<HotelResponse> hotelResponses = new ArrayList<>();
         for (Hotel hotel : hotels){
-            HotelDTO hotelResponse = getHotelResponse(hotel);
+            HotelResponse hotelResponse = getHotelResponse(hotel);
             hotelResponses.add(hotelResponse);
         }
         return ResponseEntity.ok(hotelResponses);
     }
 
     @GetMapping("/hotel/{hotelId}")
-    public ResponseEntity<Optional<HotelDTO>> getHotelById(@PathVariable Long hotelId){
+    public ResponseEntity<Optional<HotelResponse>> getHotelById(@PathVariable Long hotelId){
         Optional<Hotel> theHotel = hotelService.getHotelById(hotelId);
         return theHotel.map(room -> {
-            HotelDTO hotelResponse = getHotelResponse(room);
+            HotelResponse hotelResponse = getHotelResponse(room);
             return  ResponseEntity.ok(Optional.of(hotelResponse));
         }).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khách sạn"));
     }
 
     @GetMapping("/{city}")
-    public ResponseEntity<Page<HotelDTO>> getHotelsByCity(@PathVariable String city,
-                                                          @RequestParam(defaultValue = "0") Integer pageNo,
-                                                          @RequestParam(defaultValue = "5") Integer pageSize){
+    public ResponseEntity<Page<HotelResponse>> getHotelsByCity(@PathVariable String city,
+                                                               @RequestParam(defaultValue = "0") Integer pageNo,
+                                                               @RequestParam(defaultValue = "5") Integer pageSize){
         Page<Hotel> hotels = hotelService.getAllHotelsByCity(city, pageNo, pageSize);
-        Page<HotelDTO> hotelResponses = hotels.map(this::getHotelResponse);
+        Page<HotelResponse> hotelResponses = hotels.map(this::getHotelResponse);
         return ResponseEntity.ok(hotelResponses);
     }
 
     @PutMapping("/hotel/{hotelId}/hotelInformationUpdate")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
-    public ResponseEntity<HotelDTO> updateHotel(@PathVariable Long hotelId,
-                                                @RequestParam String hotelName,
-                                                @RequestParam String city,
-                                                @RequestParam String hotelLocation,
-                                                @RequestParam String hotelDescription,
-                                                @RequestParam String phoneNumber,
-                                                @RequestParam(required = false) MultipartFile photo) throws IOException, SQLException {
+    public ResponseEntity<HotelResponse> updateHotel(@PathVariable Long hotelId,
+                                                     @RequestParam String hotelName,
+                                                     @RequestParam String city,
+                                                     @RequestParam String hotelLocation,
+                                                     @RequestParam String hotelDescription,
+                                                     @RequestParam String phoneNumber,
+                                                     @RequestParam(required = false) MultipartFile photo) throws IOException, SQLException {
         Hotel theHotel = hotelService.updateHotel(hotelId, hotelName, hotelLocation, hotelDescription, phoneNumber, city, photo);
-        HotelDTO hotelResponse = getHotelResponse(theHotel);
+        HotelResponse hotelResponse = getHotelResponse(theHotel);
         return ResponseEntity.ok(hotelResponse);
     }
 
@@ -110,7 +109,7 @@ public class HotelController {
         hotelService.deleteHotel(hotelId);
     }
 
-    private HotelDTO getHotelResponse(Hotel hotel){
+    private HotelResponse getHotelResponse(Hotel hotel){
         byte[] photoBytes = null;
         Blob photoBlob = hotel.getPhoto();
         if (photoBlob != null) {
@@ -129,7 +128,7 @@ public class HotelController {
                 = hotelService.getHotelHighestPriceByHotelId(hotel.getId())
                 != null ? hotelService.getHotelHighestPriceByHotelId(hotel.getId()) : 0;
 
-        return new HotelDTO(
+        return new HotelResponse(
                 hotel.getId(),
                 hotel.getHotelName(),
                 hotel.getCity(),

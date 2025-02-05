@@ -1,8 +1,7 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.entities.BookedRoom;
 import com.example.CoutingStarHotel.entities.Rating;
-import com.example.CoutingStarHotel.DTO.RatingDTO;
+import com.example.CoutingStarHotel.DTO.response.RatingResponse;
 import com.example.CoutingStarHotel.services.RatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +19,15 @@ import java.util.List;
 public class RatingController {
     private final RatingService ratingService;
     @PostMapping("/add/hotel/{hotelId}/user/{userId}/addRating")
-    public ResponseEntity<RatingDTO> addNewRating(@PathVariable Long hotelId,
-                                                  @PathVariable Long userId,
-                                                  @RequestParam("star") int star,
-                                                  @RequestParam("comment") String comment,
-                                                  @RequestParam("rateDay")String rateDay){
+    public ResponseEntity<RatingResponse> addNewRating(@PathVariable Long hotelId,
+                                                       @PathVariable Long userId,
+                                                       @RequestParam("star") int star,
+                                                       @RequestParam("comment") String comment,
+                                                       @RequestParam("rateDay")String rateDay){
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         LocalDate formatRateDay = LocalDate.parse(rateDay, dateTimeFormatter);
         Rating rating = ratingService.saveRating(hotelId, userId , star, comment, formatRateDay);
-        RatingDTO ratingResponse = new RatingDTO
+        RatingResponse ratingResponse = new RatingResponse
                 (rating.getStar(),
                         rating.getComment(),
                         rating.getRateDay(),
@@ -39,11 +38,11 @@ public class RatingController {
     }
 
     @GetMapping("/hotel/{hotelId}")
-        public ResponseEntity<List<RatingDTO>> getAllRatingByRoomId(@PathVariable Long hotelId){
+        public ResponseEntity<List<RatingResponse>> getAllRatingByRoomId(@PathVariable Long hotelId){
             List<Rating> ratings = ratingService.getAllRatingByHotelId(hotelId);
-            List<RatingDTO> ratingRepositories = new ArrayList<>();
+            List<RatingResponse> ratingRepositories = new ArrayList<>();
             for(Rating rating : ratings) {
-                RatingDTO ratingResponse = getRatingResponse(rating);
+                RatingResponse ratingResponse = getRatingResponse(rating);
                 ratingRepositories.add(ratingResponse);
             }
         return ResponseEntity.ok(ratingRepositories);
@@ -57,11 +56,11 @@ public class RatingController {
     }
 
     @PutMapping("/update/{ratingId}")
-    public ResponseEntity<RatingDTO> updateRating(@PathVariable Long ratingId,
-                                                  @RequestParam("start") int star,
-                                                  @RequestParam("comment") String comment){
+    public ResponseEntity<RatingResponse> updateRating(@PathVariable Long ratingId,
+                                                       @RequestParam("start") int star,
+                                                       @RequestParam("comment") String comment){
         Rating rating = ratingService.updateRating(ratingId, star, comment);
-        RatingDTO ratingResponse = getRatingResponse(rating);
+        RatingResponse ratingResponse = getRatingResponse(rating);
         return ResponseEntity.ok(ratingResponse);
     }
 
@@ -70,8 +69,8 @@ public class RatingController {
         ratingService.deleteRating(ratingId);
     }
 
-    private RatingDTO getRatingResponse(Rating rating){
-        return new RatingDTO(
+    private RatingResponse getRatingResponse(Rating rating){
+        return new RatingResponse(
                 rating.getStar(),
                 rating.getComment(),
                 rating.getRateDay(),

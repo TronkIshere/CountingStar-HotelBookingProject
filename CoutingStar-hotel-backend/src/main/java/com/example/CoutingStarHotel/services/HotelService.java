@@ -1,7 +1,7 @@
 package com.example.CoutingStarHotel.services;
 
-import com.example.CoutingStarHotel.DTO.BarChartDTO;
-import com.example.CoutingStarHotel.DTO.PieChartDTO;
+import com.example.CoutingStarHotel.DTO.response.BarChartResponse;
+import com.example.CoutingStarHotel.DTO.response.PieChartResponse;
 import com.example.CoutingStarHotel.entities.Hotel;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,15 +35,15 @@ public interface HotelService {
 
     List<Hotel> getTenFunkyHotelForHomePage();
 
-    List<PieChartDTO> getNumberOfHotelByEachCity();
+    List<PieChartResponse> getNumberOfHotelByEachCity();
 
-    List<BarChartDTO> getHotelRevenueByEachCity();
+    List<BarChartResponse> getHotelRevenueByEachCity();
 
     int getTotalNumberOfHotels();
 
     double getPercentageOfHotelsIncreasedDuringTheMonth();
 
-    List<PieChartDTO> getTheRevenceOfEachRoom(Long hotelId);
+    List<PieChartResponse> getTheRevenceOfEachRoom(Long hotelId);
 
     BigDecimal getTotalRevenueInSpecificHotel(Long hotelId);
 
