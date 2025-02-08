@@ -1,7 +1,14 @@
 package com.example.CoutingStarHotel.services.impl;
 
+import com.example.CoutingStarHotel.DTO.request.AddDiscountRequest;
+import com.example.CoutingStarHotel.DTO.request.UpdateDiscountRequest;
+import com.example.CoutingStarHotel.DTO.response.BookingResponse;
+import com.example.CoutingStarHotel.DTO.response.DiscountResponse;
+import com.example.CoutingStarHotel.DTO.response.PageResponse;
 import com.example.CoutingStarHotel.entities.Discount;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
+import com.example.CoutingStarHotel.mapper.BookedRoomMapper;
+import com.example.CoutingStarHotel.mapper.DiscountMapper;
 import com.example.CoutingStarHotel.repositories.DiscountRepository;
 import com.example.CoutingStarHotel.repositories.RoomRepository;
 import com.example.CoutingStarHotel.services.DiscountService;
@@ -22,47 +29,79 @@ public class DiscountServiceImpl implements DiscountService {
     private final DiscountRepository discountRepository;
 
     @Override
-    public Discount addDiscount(String discountName, Integer percentDiscount, String discountDescription, LocalDate expirationDate){
+    public DiscountResponse addDiscount(AddDiscountRequest request){
         Discount discount = new Discount();
-        discount.setDiscountName(discountName);
-        discount.setPercentDiscount(percentDiscount);
-        discount.setDiscountDescription(discountDescription);
-        discount.setExpirationDate(expirationDate);
-        return discountRepository.save(discount);
+        discount.setDiscountName(request.getDiscountName());
+        discount.setPercentDiscount(request.getPercentDiscount());
+        discount.setDiscountDescription(request.getDiscountDescription());
+        discount.setExpirationDate(request.getExpirationDate());
+        discountRepository.save(discount);
+        return DiscountMapper.toDiscountResponse(discount);
     }
 
     @Override
-    public Discount updateDiscount(Long discountId, String discountName, int percentDiscount, String discountDescription, LocalDate expirationDate){
+    public DiscountResponse updateDiscount(Long discountId, UpdateDiscountRequest request){
         Discount discount = discountRepository.findById(discountId).get();
-        discount.setPercentDiscount(percentDiscount);
-        discount.setDiscountName(discountName);
-        discount.setDiscountDescription(discountDescription);
-        discount.setExpirationDate(expirationDate);
-        return discountRepository.save(discount);
+        discount.setPercentDiscount(request.getPercentDiscount());
+        discount.setDiscountName(request.getDiscountName());
+        discount.setDiscountDescription(request.getDiscountDescription());
+        discount.setExpirationDate(request.getExpirationDate());
+        discountRepository.save(discount);
+        return DiscountMapper.toDiscountResponse(discount);
     }
 
     @Override
-    public Page<Discount> getDiscountNotExpired(Integer pageNo, Integer pageSize) {
+    public PageResponse<DiscountResponse> getDiscountNotExpired(Integer pageNo, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return discountRepository.getDiscountNotExpired(pageable, LocalDate.now());
+        Page<Discount> discountPage = discountRepository.getDiscountNotExpired(pageable, LocalDate.now());
+
+        List<Discount> discountList = discountPage.getContent();
+
+        return PageResponse.<DiscountResponse>builder()
+                .currentPage(pageNo)
+                .pageSize((pageable.getPageSize()))
+                .totalPages(discountPage.getTotalPages())
+                .totalElements(discountPage.getTotalElements())
+                .data(DiscountMapper.discountResponses(discountList))
+                .build();
+    }
+
+    public DiscountResponse getDiscountById(Long discountId) {
+        return discountRepository.findById(discountId)
+                .map(DiscountMapper::toDiscountResponse)
+                .orElseThrow(() -> new ResourceNotFoundException("Discount not found"));
     }
 
     @Override
-    public Optional<Discount> getDiscountById(Long discountId) {
-        return Optional.ofNullable(discountRepository.findById(discountId)
-                .orElseThrow(() -> new ResourceNotFoundException("discount not found")));
+    public PageResponse<DiscountResponse> getAllDiscount(Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Page<Discount> discountPage = discountRepository.findAll(pageable);
+
+        List<Discount> discountList = discountPage.getContent();
+
+        return PageResponse.<DiscountResponse>builder()
+                .currentPage(pageNo)
+                .pageSize((pageable.getPageSize()))
+                .totalPages(discountPage.getTotalPages())
+                .totalElements(discountPage.getTotalElements())
+                .data(DiscountMapper.discountResponses(discountList))
+                .build();
     }
 
     @Override
-    public Page<Discount> getAllDiscount(Integer pageNo, Integer pageSize) {
+    public PageResponse<DiscountResponse> getDiscountByKeyword(Integer pageNo, Integer pageSize, String keyword) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return discountRepository.findAll(pageable);
-    }
+        Page<Discount> discountPage = discountRepository.getDiscountByKeyword(pageable, keyword);
 
-    @Override
-    public Page<Discount> getDiscountByKeyword(Integer pageNo, Integer pageSize, String keyword) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return discountRepository.getDiscountByKeyword(pageable, keyword);
+        List<Discount> discountList = discountPage.getContent();
+
+        return PageResponse.<DiscountResponse>builder()
+                .currentPage(pageNo)
+                .pageSize((pageable.getPageSize()))
+                .totalPages(discountPage.getTotalPages())
+                .totalElements(discountPage.getTotalElements())
+                .data(DiscountMapper.discountResponses(discountList))
+                .build();
     }
 
     @Override
