@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Hotel extends AbstractEntity {
+public class Hotel extends AbstractEntity<Long> {
     private String hotelName;
     private String city;
     private String hotelLocation;

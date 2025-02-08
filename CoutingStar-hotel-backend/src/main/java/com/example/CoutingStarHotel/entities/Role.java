@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Role extends AbstractEntity {
+public class Role extends AbstractEntity<Long> {
     private String name;
 
     @ManyToMany(mappedBy = "roles")

@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Discount extends AbstractEntity {
+public class Discount extends AbstractEntity<Long> {
     private String discountName;
     private int percentDiscount;
     private String discountDescription;

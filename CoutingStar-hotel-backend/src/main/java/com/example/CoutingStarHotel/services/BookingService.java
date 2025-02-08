@@ -1,5 +1,9 @@
 package com.example.CoutingStarHotel.services;
 
+import com.example.CoutingStarHotel.DTO.request.SaveBookingRequest;
+import com.example.CoutingStarHotel.DTO.request.UpdateBookedRoom;
+import com.example.CoutingStarHotel.DTO.response.BookingResponse;
+import com.example.CoutingStarHotel.DTO.response.PageResponse;
 import com.example.CoutingStarHotel.entities.BookedRoom;
 import org.springframework.data.domain.Page;
 
@@ -7,27 +11,27 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface BookingService {
-    Page<BookedRoom> getAllBookings(Integer pageNo, Integer pageSize);
+    PageResponse<BookingResponse> getAllBookings(Integer pageNo, Integer pageSize);
 
-    BookedRoom findByBookingConfirmationCode(String confirmationCode);
+    BookingResponse findByBookingConfirmationCode(String confirmationCode);
 
     void cancelBooking(Long bookingId);
 
     List<BookedRoom> getAllBookingsByRoomId(Long roomId);
 
-    Page<BookedRoom> getBookingsByUserId(Integer pageNo, Integer pageSize, Long userId);
+    PageResponse<BookingResponse> getBookingsByUserId(Integer pageNo, Integer pageSize, Long userId);
 
-    Page<BookedRoom> getAllBookingsByHotelId(Integer pageNo, Integer pageSize, Long hotelId);
+    PageResponse<BookingResponse> getAllBookingsByHotelId(Integer pageNo, Integer pageSize, Long hotelId);
 
-    BookedRoom findByBookingId(Long bookingId);
+    BookingResponse findByBookingId(Long bookingId);
 
-    BookedRoom updateBooked(Long bookingId, LocalDate checkInDate, LocalDate checkOutDate, String guestEmail, String guestPhoneNumber, String guestFullName, int totalNumOfGuest);
+    BookingResponse updateBooked(Long bookingId, UpdateBookedRoom request);
 
     int getTotalNumberOfBookedRooms();
 
     double getPercentageOfBookedRoomsIncreasedDuringTheMonth();
 
-    Page<BookedRoom> getAllBookingByKeywordAndHotelId(Integer pageNo, Integer pageSize, Long hotelId, String keyword);
+    PageResponse<BookingResponse> getAllBookingByKeywordAndHotelId(Integer pageNo, Integer pageSize, Long hotelId, String keyword);
 
-    BookedRoom saveBooking(Long roomId, LocalDate checkInDate, LocalDate checkOutDate, String guestFullName, String guestEmail, int numOfAdults, int numOfChildren, int totalNumOfGuest, String guestPhoneNumber, Long userId, Long redeemedDiscountId);
+    BookingResponse saveBooking(Long roomId, SaveBookingRequest request, Long userId, Long redeemedDiscountId);
 }

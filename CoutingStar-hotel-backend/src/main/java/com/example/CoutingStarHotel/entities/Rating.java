@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Rating extends AbstractEntity {
+public class Rating extends AbstractEntity<Long> {
     private int star;
     private String comment;
     private LocalDate rateDay;

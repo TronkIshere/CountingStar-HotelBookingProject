@@ -1,11 +1,16 @@
 package com.example.CoutingStarHotel.services.impl;
 
+import com.example.CoutingStarHotel.DTO.request.SaveBookingRequest;
+import com.example.CoutingStarHotel.DTO.request.UpdateBookedRoom;
+import com.example.CoutingStarHotel.DTO.response.BookingResponse;
+import com.example.CoutingStarHotel.DTO.response.PageResponse;
 import com.example.CoutingStarHotel.entities.BookedRoom;
 import com.example.CoutingStarHotel.entities.RedeemedDiscount;
 import com.example.CoutingStarHotel.entities.Room;
 import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.exception.InvalidBookingRequestException;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
+import com.example.CoutingStarHotel.mapper.BookedRoomMapper;
 import com.example.CoutingStarHotel.repositories.BookingRepository;
 import com.example.CoutingStarHotel.repositories.RedeemedDiscountRepository;
 import com.example.CoutingStarHotel.services.BookingService;
@@ -34,10 +39,21 @@ public class BookingServiceImpl implements BookingService {
     private final RedeemedDiscountRepository redeemedDiscountRepository;
 
     @Override
-    public Page<BookedRoom> getAllBookings(Integer pageNo, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return bookingRepository.findAll(pageable);
+    public PageResponse<BookingResponse> getAllBookings(Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Page<BookedRoom> bookedRoomPage = bookingRepository.findAll(pageable);
+
+        List<BookedRoom> bookedRoomList = bookedRoomPage.getContent();
+
+        return PageResponse.<BookingResponse>builder()
+                .currentPage(pageNo)
+                .pageSize(pageable.getPageSize())
+                .totalPages(bookedRoomPage.getTotalPages())
+                .totalElements(bookedRoomPage.getTotalElements())
+                .data(BookedRoomMapper.bookingResponses(bookedRoomList))
+                .build();
     }
+
     @Override
     public void cancelBooking(Long bookingId) {
         BookedRoom bookedRoom = bookingRepository.findById(bookingId).get();
@@ -51,9 +67,9 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookedRoom saveBooking(Long roomId, LocalDate checkInDate, LocalDate checkOutDate, String guestFullName, String guestEmail, int numOfAdults, int numOfChildren, int totalNumOfGuest, String guestPhoneNumber, Long userId, Long redeemedDiscountId) {
+    public BookingResponse saveBooking(Long roomId, SaveBookingRequest request, Long userId, Long redeemedDiscountId) {
         try {
-            BookedRoom bookedRoom = createBookedRoom(checkInDate, checkOutDate, guestFullName, guestEmail, numOfAdults, numOfChildren, totalNumOfGuest, guestPhoneNumber);
+            BookedRoom bookedRoom = createBookedRoom(request);
             validateBookingDates(bookedRoom);
             Room room = getRoom(roomId);
             handleRoomBooking(roomId, bookedRoom);
@@ -66,7 +82,8 @@ public class BookingServiceImpl implements BookingService {
                 bookedRoom.setTotalAmount(totalAmount);
             }
             bookedRoom.setBookingDay(LocalDate.now());
-            return bookingRepository.save(bookedRoom);
+            bookingRepository.save(bookedRoom);
+            return BookedRoomMapper.toBookingResponse(bookedRoom);
         } catch (InvalidBookingRequestException e) {
             throw new InvalidBookingRequestException("Có lỗi trong việc đặt phòng!" + e.getMessage());
         }
@@ -78,17 +95,16 @@ public class BookingServiceImpl implements BookingService {
         bookedRoom.setRoom(room);
     }
 
-    private BookedRoom createBookedRoom(LocalDate checkInDate, LocalDate checkOutDate, String guestFullName, String guestEmail,
-                                        int numOfAdults, int numOfChildren, int totalNumOfGuest, String guestPhoneNumber) {
+    private BookedRoom createBookedRoom(SaveBookingRequest request) {
         BookedRoom bookedRoom = new BookedRoom();
-        bookedRoom.setCheckInDate(checkInDate);
-        bookedRoom.setCheckOutDate(checkOutDate);
-        bookedRoom.setGuestFullName(guestFullName);
-        bookedRoom.setGuestEmail(guestEmail);
-        bookedRoom.setNumOfAdults(numOfAdults);
-        bookedRoom.setNumOfChildren(numOfChildren);
-        bookedRoom.setTotalNumOfGuest(totalNumOfGuest);
-        bookedRoom.setGuestPhoneNumber(guestPhoneNumber);
+        bookedRoom.setCheckInDate(request.getCheckInDate());
+        bookedRoom.setCheckOutDate(request.getCheckOutDate());
+        bookedRoom.setGuestFullName(request.getGuestFullName());
+        bookedRoom.setGuestEmail(request.getGuestEmail());
+        bookedRoom.setNumOfAdults(request.getNumOfAdults());
+        bookedRoom.setNumOfChildren(request.getNumOfChildren());
+        bookedRoom.setTotalNumOfGuest(request.getTotalNumOfGuest());
+        bookedRoom.setGuestPhoneNumber(request.getGuestPhoneNumber());
         validateBookingDates(bookedRoom);
         bookedRoom.setBookingDay(LocalDate.now());
         return bookedRoom;
@@ -149,40 +165,64 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookedRoom findByBookingConfirmationCode(String confirmationCode) {
-        return bookingRepository.findByBookingConfirmationCode(confirmationCode)
+    public BookingResponse findByBookingConfirmationCode(String confirmationCode) {
+        BookedRoom bookedRoom = bookingRepository.findByBookingConfirmationCode(confirmationCode)
                 .orElseThrow(() -> new ResourceNotFoundException("No booking found with booking code :"+confirmationCode));
+
+        return BookedRoomMapper.toBookingResponse(bookedRoom);
     }
 
     @Override
-    public Page<BookedRoom> getBookingsByUserId(Integer pageNo, Integer pageSize, Long userId) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return bookingRepository.findByUserId(pageable, userId);
+    public PageResponse<BookingResponse> getBookingsByUserId(Integer pageNo, Integer pageSize, Long userId) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Page<BookedRoom> bookedRoomPage = bookingRepository.findByUserId(pageable, userId);
+
+        List<BookedRoom> bookedRoomList = bookedRoomPage.getContent();
+
+        return PageResponse.<BookingResponse>builder()
+                .currentPage(pageNo)
+                .pageSize((pageable.getPageSize()))
+                .totalPages(bookedRoomPage.getTotalPages())
+                .totalElements(bookedRoomPage.getTotalElements())
+                .data(BookedRoomMapper.bookingResponses(bookedRoomList))
+                .build();
     }
 
     @Override
-    public Page<BookedRoom> getAllBookingsByHotelId(Integer pageNo, Integer pageSize, Long hotelId) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return bookingRepository.findByHotelId(pageable, hotelId);
+    public PageResponse<BookingResponse> getAllBookingsByHotelId(Integer pageNo, Integer pageSize, Long hotelId) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Page<BookedRoom> bookedRoomPage = bookingRepository.findByHotelId(pageable, hotelId);
+
+        List<BookedRoom> bookedRoomList = bookedRoomPage.getContent();
+
+        return PageResponse.<BookingResponse>builder()
+                .currentPage(pageNo)
+                .pageSize(pageable.getPageSize())
+                .totalPages(bookedRoomPage.getTotalPages())
+                .totalElements(bookedRoomPage.getTotalElements())
+                .data(BookedRoomMapper.bookingResponses(bookedRoomList))
+                .build();
     }
 
     @Override
-    public BookedRoom findByBookingId(Long bookingId) {
-        return bookingRepository.findById(bookingId)
+    public BookingResponse findByBookingId(Long bookingId) {
+        BookedRoom bookedRoom = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("No booking found with bookingId :"+ bookingId));
+        return BookedRoomMapper.toBookingResponse(bookedRoom);
     }
 
     @Override
-    public BookedRoom updateBooked(Long bookingId, LocalDate checkInDate, LocalDate checkOutDate, String guestEmail, String guestPhoneNumber, String guestFullName, int totalNumOfGuest) {
+    public BookingResponse updateBooked(Long bookingId, UpdateBookedRoom request) {
         BookedRoom bookedRoom = bookingRepository.findById(bookingId).get();
-        bookedRoom.setCheckInDate(checkInDate);
-        bookedRoom.setCheckOutDate(checkOutDate);
-        bookedRoom.setGuestEmail(guestEmail);
-        bookedRoom.setGuestPhoneNumber(guestPhoneNumber);
-        bookedRoom.setGuestFullName(guestFullName);
-        bookedRoom.setTotalNumOfGuest(totalNumOfGuest);
+        bookedRoom.setCheckInDate(request.getCheckInDate());
+        bookedRoom.setCheckOutDate(request.getCheckOutDate());
+        bookedRoom.setGuestEmail(request.getGuestEmail());
+        bookedRoom.setGuestPhoneNumber(request.getGuestPhoneNumber());
+        bookedRoom.setGuestFullName(request.getGuestFullName());
+        bookedRoom.setTotalNumOfGuest(request.getTotalNumOfGuest());
         bookedRoom.setBookingDay(LocalDate.now());
-        return bookingRepository.save(bookedRoom);
+        bookingRepository.save(bookedRoom);
+        return BookedRoomMapper.toBookingResponse(bookedRoom);
     }
 
     @Override
@@ -203,9 +243,19 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Page<BookedRoom> getAllBookingByKeywordAndHotelId(Integer pageNo, Integer pageSize, Long hotelId, String keyword) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return bookingRepository.getAllBookingByKeywordAndHotelId(pageable, hotelId, keyword);
+    public PageResponse<BookingResponse> getAllBookingByKeywordAndHotelId(Integer pageNo, Integer pageSize, Long hotelId, String keyword) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Page<BookedRoom> bookedRoomPage = bookingRepository.getAllBookingByKeywordAndHotelId(pageable, hotelId, keyword);
+
+        List<BookedRoom> bookedRoomList = bookedRoomPage.getContent();
+
+        return PageResponse.<BookingResponse>builder()
+                .currentPage(pageNo)
+                .pageSize(pageable.getPageSize())
+                .totalPages(bookedRoomPage.getTotalPages())
+                .totalElements(bookedRoomPage.getTotalElements())
+                .data(BookedRoomMapper.bookingResponses(bookedRoomList))
+                .build();
     }
 
     private boolean getAllRoomAndCheckRoomIsAvailable(Room room, BookedRoom bookingRequest) {

@@ -18,7 +18,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Room extends AbstractEntity {
+public class Room extends AbstractEntity<Long> {
     private String roomType;
     private BigDecimal roomPrice;
     private String roomDescription;

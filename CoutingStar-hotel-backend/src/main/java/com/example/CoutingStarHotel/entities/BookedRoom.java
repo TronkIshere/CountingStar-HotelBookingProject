@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "bookingId")
-public class BookedRoom extends AbstractEntity {
+public class BookedRoom extends AbstractEntity<Long> {
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
     private String guestPhoneNumber;

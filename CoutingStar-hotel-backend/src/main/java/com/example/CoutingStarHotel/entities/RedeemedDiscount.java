@@ -9,7 +9,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RedeemedDiscount extends AbstractEntity {
+public class RedeemedDiscount extends AbstractEntity<Long> {
     private boolean isUsed;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -2,7 +2,7 @@ package com.example.CoutingStarHotel.controller;
 
 import com.example.CoutingStarHotel.exception.UserAlreadyExistsException;
 import com.example.CoutingStarHotel.entities.User;
-import com.example.CoutingStarHotel.request.LoginRequest;
+import com.example.CoutingStarHotel.DTO.request.LoginRequest;
 import com.example.CoutingStarHotel.DTO.response.JwtResponse;
 import com.example.CoutingStarHotel.DTO.response.UserResponse;
 import com.example.CoutingStarHotel.security.jwt.JwtUtils;

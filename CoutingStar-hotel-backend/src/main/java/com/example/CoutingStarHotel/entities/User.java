@@ -19,7 +19,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class User extends AbstractEntity {
+public class User extends AbstractEntity<Long> {
     private String firstName;
     private String lastName;
     private String email;

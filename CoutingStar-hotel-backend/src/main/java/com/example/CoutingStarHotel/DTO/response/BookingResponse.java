@@ -4,6 +4,7 @@ import com.example.CoutingStarHotel.entities.User;
 import lombok.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
@@ -20,9 +21,11 @@ public class BookingResponse implements Serializable {
     private int numOfChildren;
     private int totalNumOfGuest;
     private String bookingConfirmationCode;
+    private BigDecimal totalAmount;
+    private Boolean isCancelled;
+    private LocalDate bookingDay;
     private RoomResponse room;
     private User user;
-    private Boolean isCancelled;
 }
 
 
