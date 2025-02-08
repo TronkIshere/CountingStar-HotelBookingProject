@@ -1,10 +1,9 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.DTO.response.BarChartResponse;
-import com.example.CoutingStarHotel.DTO.response.DashBoardMonthIncreasedResponse;
-import com.example.CoutingStarHotel.DTO.response.PieChartResponse;
+import com.example.CoutingStarHotel.DTO.response.*;
 import com.example.CoutingStarHotel.services.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,32 +17,52 @@ public class DashboardController {
     private final HotelService hotelService;
     private final DashBoardService dashBoardService;
     @GetMapping("/Admin/PieChart")
-    public ResponseEntity<List<PieChartResponse>> getDataForAdminPieChart(){
-        List<PieChartResponse> PieChartData = hotelService.getNumberOfHotelByEachCity();
-        return ResponseEntity.ok(PieChartData);
+    public ResponseData<List<PieChartResponse>> getDataForAdminPieChart(){
+        var result = hotelService.getNumberOfHotelByEachCity();
+        return ResponseData.<List<PieChartResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 
     @GetMapping("/Admin/BarChart")
-    public ResponseEntity<List<BarChartResponse>> getDataForAdminBarChart(){
-        List<BarChartResponse> barChartData = hotelService.getHotelRevenueByEachCity();
-        return ResponseEntity.ok(barChartData);
+    public ResponseData<List<BarChartResponse>> getDataForAdminBarChart(){
+        var result = hotelService.getHotelRevenueByEachCity();
+        return ResponseData.<List<BarChartResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 
     @GetMapping("/HotelOwner/PieChart/{hotelId}")
-    public ResponseEntity<List<PieChartResponse>> getDataForAdminPieChartChart(@PathVariable Long hotelId){
-        List<PieChartResponse> barChartData = hotelService.getTheRevenceOfEachRoom(hotelId);
-        return ResponseEntity.ok(barChartData);
+    public ResponseData<List<PieChartResponse>> getDataForAdminPieChartChart(@PathVariable Long hotelId){
+        var result = hotelService.getTheRevenceOfEachRoom(hotelId);
+        return ResponseData.<List<PieChartResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 
     @GetMapping("/Admin/dashBoardMonthIncreased")
-    public ResponseEntity<DashBoardMonthIncreasedResponse> getDataForAdminDashBoardMonthIncreased(){
-        DashBoardMonthIncreasedResponse dashBoardMonthIncreasedData = dashBoardService.getDataForAdminDashBoardMonthIncreased();
-        return ResponseEntity.ok(dashBoardMonthIncreasedData);
+    public ResponseData<DashBoardMonthIncreasedResponse> getDataForAdminDashBoardMonthIncreased(){
+        var result = dashBoardService.getDataForAdminDashBoardMonthIncreased();
+        return ResponseData.<DashBoardMonthIncreasedResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 
     @GetMapping("/HotelOwner/dashBoardMonthIncreased/{hotelId}")
-    public ResponseEntity<DashBoardMonthIncreasedResponse> getDataForHotelOwnerMonthIncreased(@PathVariable Long hotelId){
-        DashBoardMonthIncreasedResponse dashBoardMonthIncreasedData = dashBoardService.getDataForHotelOwnerMonthIncreased(hotelId);
-        return ResponseEntity.ok(dashBoardMonthIncreasedData);
+    public ResponseData<DashBoardMonthIncreasedResponse> getDataForHotelOwnerMonthIncreased(@PathVariable Long hotelId){
+        var result = dashBoardService.getDataForHotelOwnerMonthIncreased(hotelId);
+        return ResponseData.<DashBoardMonthIncreasedResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 }

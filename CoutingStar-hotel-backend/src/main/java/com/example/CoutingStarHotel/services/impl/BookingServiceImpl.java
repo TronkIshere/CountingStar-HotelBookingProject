@@ -167,7 +167,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingResponse findByBookingConfirmationCode(String confirmationCode) {
         BookedRoom bookedRoom = bookingRepository.findByBookingConfirmationCode(confirmationCode)
-                .orElseThrow(() -> new ResourceNotFoundException("No booking found with booking code :"+confirmationCode));
+                .orElseThrow(() -> new ResourceNotFoundException("No booking found with booking code :" + confirmationCode));
 
         return BookedRoomMapper.toBookingResponse(bookedRoom);
     }
