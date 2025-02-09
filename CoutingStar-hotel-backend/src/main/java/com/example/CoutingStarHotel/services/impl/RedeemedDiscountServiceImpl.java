@@ -1,10 +1,12 @@
 package com.example.CoutingStarHotel.services.impl;
 
+import com.example.CoutingStarHotel.DTO.response.RedeemedDiscountResponse;
 import com.example.CoutingStarHotel.entities.Discount;
 import com.example.CoutingStarHotel.entities.RedeemedDiscount;
 import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.exception.InvalidBookingRequestException;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
+import com.example.CoutingStarHotel.mapper.RedeemedDiscountMapper;
 import com.example.CoutingStarHotel.repositories.DiscountRepository;
 import com.example.CoutingStarHotel.repositories.RedeemedDiscountRepository;
 import com.example.CoutingStarHotel.repositories.UserRepository;
@@ -38,9 +40,9 @@ public class RedeemedDiscountServiceImpl implements RedeemedDiscountService {
     }
 
     @Override
-    public List<RedeemedDiscount> getAllRedeemedDiscountByUserId(Long userId) {
-
-        return discountRepository.getAllRedeemedDiscountNotExpiredByUserId(userId, LocalDate.now());
+    public List<RedeemedDiscountResponse> getAllRedeemedDiscountByUserId(Long userId) {
+        List<RedeemedDiscount> redeemedDiscountList = discountRepository.getAllRedeemedDiscountNotExpiredByUserId(userId, LocalDate.now());
+        return RedeemedDiscountMapper.redeemedDiscountResponses(redeemedDiscountList);
     }
 
     @Override
