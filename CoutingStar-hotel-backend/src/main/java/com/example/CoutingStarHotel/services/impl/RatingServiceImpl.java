@@ -1,6 +1,10 @@
 package com.example.CoutingStarHotel.services.impl;
 
+import com.example.CoutingStarHotel.DTO.request.AddRatingRequest;
+import com.example.CoutingStarHotel.DTO.request.UpdateRatingRequest;
+import com.example.CoutingStarHotel.DTO.response.RatingResponse;
 import com.example.CoutingStarHotel.entities.*;
+import com.example.CoutingStarHotel.mapper.RatingMapper;
 import com.example.CoutingStarHotel.repositories.BookingRepository;
 import com.example.CoutingStarHotel.repositories.RatingRepository;
 import com.example.CoutingStarHotel.repositories.RoomRepository;
@@ -23,17 +27,17 @@ public class RatingServiceImpl implements RatingService {
     private final BookingRepository bookingRepository;
 
     @Override
-    public Rating saveRating(Long hotelId, Long userId, int star, String comment, LocalDate rateDay) {
+    public RatingResponse saveRating(Long hotelId, Long userId, AddRatingRequest request) {
         Rating rating = new Rating();
-        rating.setStar(star);
-        rating.setComment(comment);
-        rating.setRateDay(rateDay);
+        rating.setStar(request.getStar());
+        rating.setComment(request.getComment());
+        rating.setRateDay(request.getRateDay());
 
         Pageable pageable = PageRequest.of(0, 1);
         List<BookedRoom> bookedRooms = bookingRepository.findRoomUserHasBookedAndNotComment(hotelId, userId, pageable);
 
         if (!bookedRooms.isEmpty()) {
-            Long bookedRoomIdForAddComment = bookedRooms.get(0).getBookingId();
+            Long bookedRoomIdForAddComment = bookedRooms.get(0).getId();
 
             User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
             user.addComment(rating);
@@ -41,8 +45,9 @@ public class RatingServiceImpl implements RatingService {
             BookedRoom saveBookedRoom = bookingRepository.findById(bookedRoomIdForAddComment)
                     .orElseThrow(() -> new RuntimeException("BookedRoom not found"));
             saveBookedRoom.addComment(rating);
+            ratingRepository.save(rating);
 
-            return ratingRepository.save(rating);
+            return RatingMapper.toRatingResponse(rating);
         } else {
             throw new RuntimeException("No booked room found for user without a rating in the specified hotel");
         }
@@ -50,11 +55,12 @@ public class RatingServiceImpl implements RatingService {
 
 
     @Override
-    public Rating updateRating(Long ratingId, int star, String comment) {
+    public RatingResponse updateRating(Long ratingId, UpdateRatingRequest request) {
         Rating rating = ratingRepository.findById(ratingId).get();
-        if(star != 0) rating.setStar(star);
-        if(comment != null) rating.setComment(comment);
-        return ratingRepository.save(rating);
+        rating.setStar(request.getStar());
+        rating.setComment(request.getComment());
+        ratingRepository.save(rating);
+        return RatingMapper.toRatingResponse(rating);
     }
 
     @Override
@@ -75,9 +81,9 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public List<Rating> getAllRatingByHotelId(Long hotelId) {
+    public List<RatingResponse> getAllRatingByHotelId(Long hotelId) {
         List<Rating> ratingList = ratingRepository.getAllRatingByHotelId(hotelId);
-        return ratingList;
+        return RatingMapper.ratingResponses(ratingList);
     }
 
     @Override

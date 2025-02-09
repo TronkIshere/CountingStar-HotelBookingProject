@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Setter
 @Builder
 public class RatingResponse {
+    private Long id;
     private int star;
     private String comment;
     private LocalDate rateDay;

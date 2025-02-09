@@ -1,9 +1,14 @@
 package com.example.CoutingStarHotel.controller;
 
+import com.example.CoutingStarHotel.DTO.request.AddRatingRequest;
+import com.example.CoutingStarHotel.DTO.request.UpdateRatingRequest;
+import com.example.CoutingStarHotel.DTO.response.DiscountResponse;
+import com.example.CoutingStarHotel.DTO.response.ResponseData;
 import com.example.CoutingStarHotel.entities.Rating;
 import com.example.CoutingStarHotel.DTO.response.RatingResponse;
 import com.example.CoutingStarHotel.services.RatingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,33 +24,25 @@ import java.util.List;
 public class RatingController {
     private final RatingService ratingService;
     @PostMapping("/add/hotel/{hotelId}/user/{userId}/addRating")
-    public ResponseEntity<RatingResponse> addNewRating(@PathVariable Long hotelId,
+    public ResponseData<RatingResponse> addNewRating(@PathVariable Long hotelId,
                                                        @PathVariable Long userId,
-                                                       @RequestParam("star") int star,
-                                                       @RequestParam("comment") String comment,
-                                                       @RequestParam("rateDay")String rateDay){
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        LocalDate formatRateDay = LocalDate.parse(rateDay, dateTimeFormatter);
-        Rating rating = ratingService.saveRating(hotelId, userId , star, comment, formatRateDay);
-        RatingResponse ratingResponse = new RatingResponse
-                (rating.getStar(),
-                        rating.getComment(),
-                        rating.getRateDay(),
-                        rating.getBookedRoom().getGuestFullName(),
-                        rating.getBookedRoom().getRoom().getRoomType());
-
-        return ResponseEntity.ok(ratingResponse);
+                                                       @RequestParam AddRatingRequest request){
+        var result = ratingService.saveRating(hotelId, userId , request);
+        return ResponseData.<RatingResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 
     @GetMapping("/hotel/{hotelId}")
-        public ResponseEntity<List<RatingResponse>> getAllRatingByRoomId(@PathVariable Long hotelId){
-            List<Rating> ratings = ratingService.getAllRatingByHotelId(hotelId);
-            List<RatingResponse> ratingRepositories = new ArrayList<>();
-            for(Rating rating : ratings) {
-                RatingResponse ratingResponse = getRatingResponse(rating);
-                ratingRepositories.add(ratingResponse);
-            }
-        return ResponseEntity.ok(ratingRepositories);
+        public ResponseData<List<RatingResponse>> getAllRatingByRoomId(@PathVariable Long hotelId){
+            var result = ratingService.getAllRatingByHotelId(hotelId);
+        return ResponseData.<List<RatingResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 
     @GetMapping("/hotel/{hotelId}/CheckUserRating/{userId}")
@@ -56,27 +53,19 @@ public class RatingController {
     }
 
     @PutMapping("/update/{ratingId}")
-    public ResponseEntity<RatingResponse> updateRating(@PathVariable Long ratingId,
-                                                       @RequestParam("start") int star,
-                                                       @RequestParam("comment") String comment){
-        Rating rating = ratingService.updateRating(ratingId, star, comment);
-        RatingResponse ratingResponse = getRatingResponse(rating);
-        return ResponseEntity.ok(ratingResponse);
+    public ResponseData<RatingResponse> updateRating(@PathVariable Long ratingId,
+                                                     @RequestParam UpdateRatingRequest request){
+        var result = ratingService.updateRating(ratingId, request);
+        return ResponseData.<RatingResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 
     @DeleteMapping("/delete/{ratingId}")
     public void deleteRating(@PathVariable Long ratingId) {
         ratingService.deleteRating(ratingId);
-    }
-
-    private RatingResponse getRatingResponse(Rating rating){
-        return new RatingResponse(
-                rating.getStar(),
-                rating.getComment(),
-                rating.getRateDay(),
-                rating.getBookedRoom().getGuestFullName(),
-                rating.getBookedRoom().getRoom().getRoomType()
-        );
     }
 }
 

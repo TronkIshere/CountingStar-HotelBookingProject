@@ -2,6 +2,7 @@ package com.example.CoutingStarHotel.services.impl;
 
 import com.example.CoutingStarHotel.DTO.response.BarChartResponse;
 import com.example.CoutingStarHotel.DTO.response.PieChartResponse;
+import com.example.CoutingStarHotel.DTO.response.RatingResponse;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.entities.Hotel;
 import com.example.CoutingStarHotel.entities.Rating;
@@ -70,8 +71,8 @@ public class HotelServiceImpl implements HotelService {
     public double averageNumberOfHotelStars(Long hotelId){
         double result = 0;
         int count = 0;
-        List<Rating> ratings = ratingService.getAllRatingByHotelId(hotelId);
-        for(Rating rating: ratings){
+        List<RatingResponse> ratings = ratingService.getAllRatingByHotelId(hotelId);
+        for(RatingResponse rating: ratings){
             result += rating.getStar();
             count++;
         }
