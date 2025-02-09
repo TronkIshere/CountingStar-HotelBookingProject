@@ -2,15 +2,13 @@ package com.example.CoutingStarHotel.controller;
 
 import com.example.CoutingStarHotel.DTO.request.SaveBookingRequest;
 import com.example.CoutingStarHotel.DTO.request.UpdateBookedRoom;
+import com.example.CoutingStarHotel.DTO.response.BookingResponse;
 import com.example.CoutingStarHotel.DTO.response.PageResponse;
 import com.example.CoutingStarHotel.DTO.response.ResponseData;
-import com.example.CoutingStarHotel.DTO.response.BookingResponse;
 import com.example.CoutingStarHotel.services.BookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 
 @CrossOrigin("http://localhost:5173")
 @RequiredArgsConstructor
