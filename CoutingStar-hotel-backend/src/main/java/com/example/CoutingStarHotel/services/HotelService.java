@@ -1,7 +1,8 @@
 package com.example.CoutingStarHotel.services;
 
-import com.example.CoutingStarHotel.DTO.response.BarChartResponse;
-import com.example.CoutingStarHotel.DTO.response.PieChartResponse;
+import com.example.CoutingStarHotel.DTO.request.AddHotelRequest;
+import com.example.CoutingStarHotel.DTO.request.UpdateHotelRequest;
+import com.example.CoutingStarHotel.DTO.response.*;
 import com.example.CoutingStarHotel.entities.Hotel;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,19 +14,19 @@ import java.util.List;
 import java.util.Optional;
 
 public interface HotelService {
-    Page<Hotel> getAllHotels(Integer pageNo, Integer pageSize);
+    PageResponse<HotelResponse> getAllHotels(Integer pageNo, Integer pageSize);
 
-    Page<Hotel> getAllHotelsByCity(String city, Integer pageNo, Integer pageSize);
+    PageResponse<HotelResponse> getAllHotelsByCity(String city, Integer pageNo, Integer pageSize);
 
     void deleteHotel(Long hotelId);
 
     byte[] getHotelPhotobyHotelId(Long hotelId) throws SQLException;
 
-    Hotel updateHotel(Long hotelId, String hotelName, String hotelLocation, String hotelDescription, String city, String phoneNumber, MultipartFile photo) throws IOException, SQLException;
+    HotelResponse updateHotel(Long hotelId, UpdateHotelRequest request) throws IOException, SQLException;
 
-    String addHotel(Long userId, String hotelName, String city, String hotelLocation, String hotelDescription, String phoneNumber, MultipartFile photo) throws IOException, SQLException;
+    HotelResponse addHotel(Long userId, AddHotelRequest request) throws IOException, SQLException;
 
-    Optional<Hotel> getHotelById(Long hotelId);
+    HotelResponse getHotelById(Long hotelId);
 
     double averageNumberOfHotelStars(Long hotelId);
 
@@ -33,7 +34,7 @@ public interface HotelService {
 
     Long getHotelHighestPriceByHotelId(Long hotelId);
 
-    List<Hotel> getTenFunkyHotelForHomePage();
+    List<HotelResponse> getTenFunkyHotelForHomePage();
 
     List<PieChartResponse> getNumberOfHotelByEachCity();
 
@@ -53,5 +54,5 @@ public interface HotelService {
 
     double getPercentageOfBookedIncreasedDuringTheMonthForHotel(Long hotelId);
 
-    Page<Hotel> getHotelByKeyword(Integer pageNo, Integer pageSize, String keyword);
+    PageResponse<HotelResponse> getHotelByKeyword(Integer pageNo, Integer pageSize, String keyword);
 }
