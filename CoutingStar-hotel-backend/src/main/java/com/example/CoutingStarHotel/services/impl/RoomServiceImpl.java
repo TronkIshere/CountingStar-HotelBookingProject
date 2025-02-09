@@ -1,9 +1,17 @@
 package com.example.CoutingStarHotel.services.impl;
 
+import com.example.CoutingStarHotel.DTO.request.AddRoomRequest;
+import com.example.CoutingStarHotel.DTO.request.UpdateRoomRequest;
+import com.example.CoutingStarHotel.DTO.response.BookingResponse;
+import com.example.CoutingStarHotel.DTO.response.PageResponse;
+import com.example.CoutingStarHotel.DTO.response.ResponseData;
+import com.example.CoutingStarHotel.DTO.response.RoomResponse;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.entities.Hotel;
 import com.example.CoutingStarHotel.entities.Rating;
 import com.example.CoutingStarHotel.entities.Room;
+import com.example.CoutingStarHotel.mapper.BookedRoomMapper;
+import com.example.CoutingStarHotel.mapper.RoomMapper;
 import com.example.CoutingStarHotel.repositories.HotelRepository;
 import com.example.CoutingStarHotel.repositories.RoomRepository;
 import com.example.CoutingStarHotel.services.RoomService;
@@ -30,19 +38,20 @@ public class RoomServiceImpl implements RoomService {
     private final HotelRepository hotelRepository;
     private final RatingServiceImpl ratingService;
     @Override
-    public Room addNewRoom(MultipartFile file, String roomType, BigDecimal roomPrice, String roomDescription, Long hotelId) throws SQLException, IOException {
+    public RoomResponse addNewRoom(AddRoomRequest request, Long hotelId) throws SQLException, IOException {
         Room room = new Room();
-        room.setRoomType(roomType);
-        room.setRoomPrice(roomPrice);
-        room.setRoomDescription(roomDescription);
+        room.setRoomType(request.getRoomType());
+        room.setRoomPrice(request.getRoomPrice());
+        room.setRoomDescription(request.getRoomDescription());
         Hotel hotel = hotelRepository.getById(hotelId);
-        if(!file.isEmpty()) {
-            byte[] photoBytes = file.getBytes();
+        if(!request.getPhoto().isEmpty()) {
+            byte[] photoBytes = request.getPhoto().getBytes();
             Blob photoBlob = new SerialBlob(photoBytes);
             room.setPhoto(photoBlob);
         }
         hotel.addRoom(room);
-        return roomRepository.save(room);
+        roomRepository.save(room);
+        return RoomMapper.toRoomResponse(room);
     }
 
     @Override
@@ -51,8 +60,9 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> getAllRooms() {
-        return roomRepository.findAll();
+    public List<RoomResponse> getAllRooms() {
+        List<Room> roomList = roomRepository.findAll();
+        return RoomMapper.roomResponses(roomList);
     }
 
 
@@ -78,24 +88,26 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Room updateRoom(Long roomId, String roomType, String roomDescription, BigDecimal roomPrice, MultipartFile photo) throws IOException, SQLException {
+    public RoomResponse updateRoom(Long roomId, UpdateRoomRequest request) throws IOException, SQLException {
         Room room = roomRepository.findById(roomId).get();
-        if (roomType != null) room.setRoomType(roomType);
-        if (roomDescription != null) room.setRoomDescription(roomDescription);
-        if (roomPrice != null) room.setRoomPrice(roomPrice);
+        room.setRoomType(request.getRoomType());
+        room.setRoomDescription(request.getRoomDescription());
+        room.setRoomPrice(request.getRoomPrice());
 
-        if (photo != null && !photo.isEmpty()) {
-            byte[] photoBytes = photo.getBytes();
+        if (request.getPhoto() != null && !request.getPhoto().isEmpty()) {
+            byte[] photoBytes = request.getPhoto().getBytes();
             Blob photoBlob = new SerialBlob(photoBytes);
             room.setPhoto(photoBlob);
         }
 
-        return roomRepository.save(room);
+        roomRepository.save(room);
+        return RoomMapper.toRoomResponse(room);
     }
 
     @Override
-    public Optional<Room> getRoomById(Long roomId) {
-        return Optional.of(roomRepository.findById(roomId).get());
+    public RoomResponse getRoomById(Long roomId) {
+        Room room = roomRepository.findById(roomId).get();
+        return RoomMapper.toRoomResponse(room);
     }
 
     @Override
@@ -104,9 +116,19 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Page<Room> getRoomByHotelId(Long hotelId, Integer pageNo, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return roomRepository.findRoomsByHotelId(hotelId, pageable);
+    public PageResponse<RoomResponse> getRoomByHotelId(Long hotelId, Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Page<Room> roomPage = roomRepository.findRoomsByHotelId(hotelId, pageable);
+
+        List<Room> roomList = roomPage.getContent();
+
+        return PageResponse.<RoomResponse>builder()
+                .currentPage(pageNo)
+                .pageSize(pageable.getPageSize())
+                .totalPages(roomPage.getTotalPages())
+                .totalElements(roomPage.getTotalElements())
+                .data(RoomMapper.roomResponses(roomList))
+                .build();
     }
 
     @Override
@@ -122,8 +144,18 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Page<Room> getAllRoomByKeywordAndHotelId(Integer pageNo, Integer pageSize, String keyword, Long hotelId) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return roomRepository.getAllRoomByKeywordAndHotelId(pageable, keyword, hotelId);
+    public PageResponse<RoomResponse> getAllRoomByKeywordAndHotelId(Integer pageNo, Integer pageSize, String keyword, Long hotelId) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Page<Room> roomPage = roomRepository.getAllRoomByKeywordAndHotelId(pageable, keyword, hotelId);
+
+        List<Room> roomList = roomPage.getContent();
+
+        return PageResponse.<RoomResponse>builder()
+                .currentPage(pageNo)
+                .pageSize(pageable.getPageSize())
+                .totalPages(roomPage.getTotalPages())
+                .totalElements(roomPage.getTotalElements())
+                .data(RoomMapper.roomResponses(roomList))
+                .build();
     }
 }
