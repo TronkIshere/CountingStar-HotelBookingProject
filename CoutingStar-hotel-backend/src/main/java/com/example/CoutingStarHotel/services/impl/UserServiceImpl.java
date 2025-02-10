@@ -1,7 +1,13 @@
 package com.example.CoutingStarHotel.services.impl;
 
+import com.example.CoutingStarHotel.DTO.request.UpdateUserRequest;
+import com.example.CoutingStarHotel.DTO.response.PageResponse;
+import com.example.CoutingStarHotel.DTO.response.RoomResponse;
+import com.example.CoutingStarHotel.DTO.response.UserResponse;
 import com.example.CoutingStarHotel.entities.Role;
 import com.example.CoutingStarHotel.entities.User;
+import com.example.CoutingStarHotel.mapper.RoomMapper;
+import com.example.CoutingStarHotel.mapper.UserMapper;
 import com.example.CoutingStarHotel.repositories.RoleReponsitory;
 import com.example.CoutingStarHotel.repositories.UserRepository;
 import com.example.CoutingStarHotel.services.UserService;
@@ -56,16 +62,16 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void deleteUser(String email) {
-        User theUser = getUser(email);
+        UserResponse theUser = getUser(email);
         if (theUser != null){
             userRepository.deleteByEmail(email);
         }
     }
 
     @Override
-    public User getUser(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    public UserResponse getUser(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return UserMapper.toUserResponse(user);
     }
 
     @Override
@@ -92,29 +98,51 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> getAllUserExceptAdminRole(Integer pageNo, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return userRepository.getAllUserExceptAdminRole(pageable);
+    public PageResponse<UserResponse> getAllUserExceptAdminRole(Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Page<User> userPage = userRepository.getAllUserExceptAdminRole(pageable);
+
+        List<User> userList = userPage.getContent();
+
+        return PageResponse.<UserResponse>builder()
+                .currentPage(pageNo)
+                .pageSize(pageable.getPageSize())
+                .totalPages(userPage.getTotalPages())
+                .totalElements(userPage.getTotalElements())
+                .data(UserMapper.userResponses(userList))
+                .build();
     }
 
     @Override
-    public Page<User> searchUserByKeyWord(Integer pageNo, Integer pageSize, String keyWord) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return userRepository.searchUserByKeyWord(pageable, keyWord);
+    public PageResponse<UserResponse> searchUserByKeyWord(Integer pageNo, Integer pageSize, String keyWord) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Page<User> userPage = userRepository.searchUserByKeyWord(pageable, keyWord);
+
+        List<User> userList = userPage.getContent();
+
+        return PageResponse.<UserResponse>builder()
+                .currentPage(pageNo)
+                .pageSize(pageable.getPageSize())
+                .totalPages(userPage.getTotalPages())
+                .totalElements(userPage.getTotalElements())
+                .data(UserMapper.userResponses(userList))
+                .build();
     }
 
     @Override
-    public User getUserByUserId(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    public UserResponse getUserByUserId(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return UserMapper.toUserResponse(user);
     }
 
     @Override
-    public User updateUser(Long userId, String firstName, String lastName, String email, String phoneNumber) {
+    public UserResponse updateUser(Long userId, UpdateUserRequest request) {
         User user = userRepository.findById(userId).get();
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setEmail(email);
-        user.setPhoneNumber(phoneNumber);
-        return userRepository.save(user);
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        user.setPhoneNumber(request.getPhoneNumber());
+        userRepository.save(user);
+        return UserMapper.toUserResponse(user);
     }
 }

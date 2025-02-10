@@ -1,5 +1,8 @@
 package com.example.CoutingStarHotel.services;
 
+import com.example.CoutingStarHotel.DTO.request.UpdateUserRequest;
+import com.example.CoutingStarHotel.DTO.response.PageResponse;
+import com.example.CoutingStarHotel.DTO.response.UserResponse;
 import com.example.CoutingStarHotel.entities.User;
 import org.springframework.data.domain.Page;
 
@@ -13,7 +16,7 @@ public interface UserService {
 
     List<User> getUsers();
     void deleteUser(String email);
-    User getUser(String email);
+    UserResponse getUser(String email);
 
     Optional<User> getUserById(Long userId);
 
@@ -21,11 +24,11 @@ public interface UserService {
 
     double getPercentageOfUsersIncreasedDuringTheMonth();
 
-    Page<User> getAllUserExceptAdminRole(Integer pageNo, Integer pageSize);
+    PageResponse<UserResponse> getAllUserExceptAdminRole(Integer pageNo, Integer pageSize);
 
-    Page<User> searchUserByKeyWord(Integer pageNo, Integer pageSize, String keyWord);
+    PageResponse<UserResponse> searchUserByKeyWord(Integer pageNo, Integer pageSize, String keyWord);
 
-    User getUserByUserId(Long userId);
+    UserResponse getUserByUserId(Long userId);
 
-    User updateUser(Long userId, String firstName, String lastName, String email, String phoneNumber);
+    UserResponse updateUser(Long userId, UpdateUserRequest request);
 }
