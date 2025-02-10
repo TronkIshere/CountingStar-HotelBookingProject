@@ -47,9 +47,9 @@ public class DashboardController {
     }
 
     @GetMapping("/Admin/dashBoardMonthIncreased")
-    public ResponseData<DashBoardMonthIncreasedResponse> getDataForAdminDashBoardMonthIncreased(){
+    public ResponseData<AdminDashBoardMonthIncreased> getDataForAdminDashBoardMonthIncreased(){
         var result = dashBoardService.getDataForAdminDashBoardMonthIncreased();
-        return ResponseData.<DashBoardMonthIncreasedResponse>builder()
+        return ResponseData.<AdminDashBoardMonthIncreased>builder()
                 .code(HttpStatus.OK.value())
                 .message("success")
                 .data(result)
@@ -57,9 +57,9 @@ public class DashboardController {
     }
 
     @GetMapping("/HotelOwner/dashBoardMonthIncreased/{hotelId}")
-    public ResponseData<DashBoardMonthIncreasedResponse> getDataForHotelOwnerMonthIncreased(@PathVariable Long hotelId){
+    public ResponseData<HotelOwnerMonthIncreased> getDataForHotelOwnerMonthIncreased(@PathVariable Long hotelId){
         var result = dashBoardService.getDataForHotelOwnerMonthIncreased(hotelId);
-        return ResponseData.<DashBoardMonthIncreasedResponse>builder()
+        return ResponseData.<HotelOwnerMonthIncreased>builder()
                 .code(HttpStatus.OK.value())
                 .message("success")
                 .data(result)
