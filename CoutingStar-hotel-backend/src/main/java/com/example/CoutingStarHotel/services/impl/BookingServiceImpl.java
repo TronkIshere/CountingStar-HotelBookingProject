@@ -13,12 +13,12 @@ import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.mapper.BookedRoomMapper;
 import com.example.CoutingStarHotel.repositories.BookingRepository;
 import com.example.CoutingStarHotel.repositories.RedeemedDiscountRepository;
+import com.example.CoutingStarHotel.repositories.RoomRepository;
 import com.example.CoutingStarHotel.services.BookingService;
 import com.example.CoutingStarHotel.services.RedeemedDiscountService;
 import com.example.CoutingStarHotel.services.RoomService;
 import com.example.CoutingStarHotel.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
+    private final RoomRepository roomRepository;
     private final RoomService roomService;
     private final UserService userService;
     private final RedeemedDiscountService redeemedDiscountService;
@@ -71,7 +72,7 @@ public class BookingServiceImpl implements BookingService {
         try {
             BookedRoom bookedRoom = createBookedRoom(request);
             validateBookingDates(bookedRoom);
-            Room room = getRoom(roomId);
+            Room room = roomService.getRoomById(roomId);
             handleRoomBooking(roomId, bookedRoom);
             if (userId != null) {
                 handleUserBooking(userId, bookedRoom);
@@ -90,7 +91,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private void handleRoomBooking(Long roomId, BookedRoom bookedRoom) {
-        Room room = getRoom(roomId);
+        Room room = roomService.getRoomById(roomId);
         room.addBooking(bookedRoom);
         bookedRoom.setRoom(room);
     }
@@ -116,11 +117,6 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
-    private Room getRoom(Long roomId) {
-        return roomService.getRoomById(roomId).orElseThrow(() ->
-                new InvalidBookingRequestException("Room not found"));
-    }
-
     private void validateRoomAvailability(BookedRoom bookingRequest, Room room) {
         boolean roomIsAvailable = roomIsAvailable(bookingRequest, room.getBookings());
         if (!roomIsAvailable) {
@@ -142,14 +138,14 @@ public class BookingServiceImpl implements BookingService {
         return handleDiscountAndReturnTotalAmount(redeemedDiscount, totalAmount, bookingRequest);
     }
 
-    private BigDecimal getBookedRoomTotalAmount(LocalDate checkInDate, LocalDate checkOutDate, BigDecimal roomPrice){
+    private BigDecimal getBookedRoomTotalAmount(LocalDate checkInDate, LocalDate checkOutDate, BigDecimal roomPrice) {
         long bookingDays = ChronoUnit.DAYS.between(checkInDate, checkOutDate);
         BigDecimal daysBigDecimal = BigDecimal.valueOf(bookingDays);
         BigDecimal totalAmount = daysBigDecimal.multiply(roomPrice);
         return totalAmount;
     }
 
-    private BigDecimal handleDiscountAndReturnTotalAmount(RedeemedDiscount redeemedDiscount, BigDecimal totalAmount, BookedRoom bookingRequest){
+    private BigDecimal handleDiscountAndReturnTotalAmount(RedeemedDiscount redeemedDiscount, BigDecimal totalAmount, BookedRoom bookingRequest) {
         BigDecimal discountPercent = BigDecimal.valueOf(redeemedDiscount.getDiscount().getPercentDiscount());
         BigDecimal discountAmount = totalAmount.multiply(discountPercent).divide(BigDecimal.valueOf(100));
         totalAmount = totalAmount.subtract(discountAmount);
@@ -159,7 +155,7 @@ public class BookingServiceImpl implements BookingService {
         return totalAmount;
     }
 
-    private void handleUserBooking(Long userId, BookedRoom bookingRequest){
+    private void handleUserBooking(Long userId, BookedRoom bookingRequest) {
         User user = userService.getUserById(userId).get();
         user.addBooking(bookingRequest);
     }
@@ -207,7 +203,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingResponse findByBookingId(Long bookingId) {
         BookedRoom bookedRoom = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new ResourceNotFoundException("No booking found with bookingId :"+ bookingId));
+                .orElseThrow(() -> new ResourceNotFoundException("No booking found with bookingId :" + bookingId));
         return BookedRoomMapper.toBookingResponse(bookedRoom);
     }
 

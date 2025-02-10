@@ -29,7 +29,7 @@ public interface RoomService {
 
     RoomResponse updateRoom(Long roomId, UpdateRoomRequest request) throws IOException, SQLException;
 
-    RoomResponse getRoomById(Long roomId);
+    Room getRoomById(Long roomId);
 
     List<Room> getAvailableRooms(LocalDate checkInDate, LocalDate checkOutDate, String roomType);
 
