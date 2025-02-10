@@ -1,21 +1,28 @@
 package com.example.CoutingStarHotel.services.impl;
 
+import com.example.CoutingStarHotel.DTO.request.LoginRequest;
 import com.example.CoutingStarHotel.DTO.request.UpdateUserRequest;
+import com.example.CoutingStarHotel.DTO.response.JwtResponse;
 import com.example.CoutingStarHotel.DTO.response.PageResponse;
-import com.example.CoutingStarHotel.DTO.response.RoomResponse;
 import com.example.CoutingStarHotel.DTO.response.UserResponse;
 import com.example.CoutingStarHotel.entities.Role;
 import com.example.CoutingStarHotel.entities.User;
-import com.example.CoutingStarHotel.mapper.RoomMapper;
 import com.example.CoutingStarHotel.mapper.UserMapper;
 import com.example.CoutingStarHotel.repositories.RoleReponsitory;
 import com.example.CoutingStarHotel.repositories.UserRepository;
+import com.example.CoutingStarHotel.security.jwt.JwtUtils;
+import com.example.CoutingStarHotel.security.user.HotelUserDetails;
 import com.example.CoutingStarHotel.services.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,9 +38,12 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleReponsitory roleReponsitory;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
+
     @Override
     public User registerUser(User user) {
-        if (userRepository.existsByEmail(user.getEmail())){
+        if (userRepository.existsByEmail(user.getEmail())) {
             throw new UsernameNotFoundException(user.getEmail() + " already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -45,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registerHotelOwner(User user) {
-        if (userRepository.existsByEmail(user.getEmail())){
+        if (userRepository.existsByEmail(user.getEmail())) {
             throw new UsernameNotFoundException(user.getEmail() + " already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -63,7 +73,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(String email) {
         UserResponse theUser = getUser(email);
-        if (theUser != null){
+        if (theUser != null) {
             userRepository.deleteByEmail(email);
         }
     }
@@ -144,5 +154,24 @@ public class UserServiceImpl implements UserService {
         user.setPhoneNumber(request.getPhoneNumber());
         userRepository.save(user);
         return UserMapper.toUserResponse(user);
+    }
+
+    @Override
+    public JwtResponse getJwtResponse(LoginRequest request) {
+        Authentication authentication =
+                authenticationManager
+                        .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtTokenForUser(authentication);
+        HotelUserDetails userDetails = (HotelUserDetails) authentication.getPrincipal();
+        List<String> roles = userDetails.getAuthorities()
+                .stream().map(GrantedAuthority::getAuthority).toList();
+
+        return JwtResponse.builder()
+                .id(userDetails.getId())
+                .email(userDetails.getEmail())
+                .token(jwt)
+                .roles(roles)
+                .build();
     }
 }
