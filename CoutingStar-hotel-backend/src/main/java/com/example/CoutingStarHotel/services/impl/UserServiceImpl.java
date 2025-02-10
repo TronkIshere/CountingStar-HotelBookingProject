@@ -16,6 +16,7 @@ import com.example.CoutingStarHotel.services.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,11 +36,25 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final RoleService roleService;
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtils jwtUtils;
+//    private final UserRepository userRepository;
+//    private final PasswordEncoder passwordEncoder;
+//    private final RoleService roleService;
+//    private final AuthenticationManager authenticationManager;
+//    private final JwtUtils jwtUtils;
+
+    private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
+    private RoleService roleService;
+    private AuthenticationManager authenticationManager;
+    private JwtUtils jwtUtils;
+
+    public UserServiceImpl(@Lazy RoleService roleService, UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
+        this.roleService = roleService;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtils = jwtUtils;
+    }
 
     @Override
     public User registerUser(User user) {
