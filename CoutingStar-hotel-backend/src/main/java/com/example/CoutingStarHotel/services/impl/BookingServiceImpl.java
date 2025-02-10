@@ -70,7 +70,7 @@ public class BookingServiceImpl implements BookingService {
         try {
             BookedRoom bookedRoom = createBookedRoom(request);
             validateBookingDates(bookedRoom);
-            Room room = roomService.getRoomById(roomId);
+            Room room = roomService.getRoomById(roomId).get();
             handleRoomBooking(roomId, bookedRoom);
             if (userId != null) {
                 handleUserBooking(userId, bookedRoom);
@@ -89,7 +89,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private void handleRoomBooking(Long roomId, BookedRoom bookedRoom) {
-        Room room = roomService.getRoomById(roomId);
+        Room room = roomService.getRoomById(roomId).get();
         room.addBooking(bookedRoom);
         bookedRoom.setRoom(room);
     }
