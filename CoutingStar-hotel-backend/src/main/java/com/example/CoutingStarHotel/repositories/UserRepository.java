@@ -1,6 +1,5 @@
 package com.example.CoutingStarHotel.repositories;
 
-import com.example.CoutingStarHotel.DTO.response.UserResponse;
 import com.example.CoutingStarHotel.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -17,6 +17,7 @@ import com.example.CoutingStarHotel.services.BookingService;
 import com.example.CoutingStarHotel.services.RedeemedDiscountService;
 import com.example.CoutingStarHotel.services.RoomService;
 import com.example.CoutingStarHotel.services.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -55,14 +57,11 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void cancelBooking(Long bookingId) {
-        BookedRoom bookedRoom = bookingRepository.findById(bookingId).get();
+        BookedRoom bookedRoom = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new EntityNotFoundException("Booking not found with ID: " + bookingId));
+
         bookedRoom.setIsCancelled(true);
         bookingRepository.save(bookedRoom);
-    }
-
-    @Override
-    public List<BookedRoom> getAllBookingsByRoomId(Long roomId) {
-        return bookingRepository.findByRoomId(roomId);
     }
 
     @Override
@@ -70,7 +69,7 @@ public class BookingServiceImpl implements BookingService {
         try {
             BookedRoom bookedRoom = createBookedRoom(request);
             validateBookingDates(bookedRoom);
-            Room room = roomService.getRoomById(roomId).get();
+            Room room = roomService.getRoomById(roomId);
             handleRoomBooking(roomId, bookedRoom);
             if (userId != null) {
                 handleUserBooking(userId, bookedRoom);
@@ -84,12 +83,12 @@ public class BookingServiceImpl implements BookingService {
             bookingRepository.save(bookedRoom);
             return BookedRoomMapper.toBookingResponse(bookedRoom);
         } catch (InvalidBookingRequestException e) {
-            throw new InvalidBookingRequestException("Có lỗi trong việc đặt phòng!" + e.getMessage());
+            throw new InvalidBookingRequestException("Error!" + e.getMessage());
         }
     }
 
     private void handleRoomBooking(Long roomId, BookedRoom bookedRoom) {
-        Room room = roomService.getRoomById(roomId).get();
+        Room room = roomService.getRoomById(roomId);
         room.addBooking(bookedRoom);
         bookedRoom.setRoom(room);
     }
@@ -115,14 +114,6 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
-    private void validateRoomAvailability(BookedRoom bookingRequest, Room room) {
-        boolean roomIsAvailable = roomIsAvailable(bookingRequest, room.getBookings());
-        if (!roomIsAvailable) {
-            throw new InvalidBookingRequestException("Phòng hiện đã đặt trong khoảng thời gian này, xin hãy đặt trong khoảng thời gian khác!");
-        }
-        room.addBooking(bookingRequest);
-    }
-
     private BigDecimal calculateTotalAmount(BookedRoom bookingRequest, BigDecimal roomPrice) {
         return getBookedRoomTotalAmount(bookingRequest.getCheckInDate(), bookingRequest.getCheckOutDate(), roomPrice);
     }
@@ -130,7 +121,7 @@ public class BookingServiceImpl implements BookingService {
     private BigDecimal applyDiscountIfValid(Long redeemedDiscountId, BigDecimal totalAmount, BookedRoom bookingRequest) {
         RedeemedDiscount redeemedDiscount = redeemedDiscountService.findRedeemedDiscountById(redeemedDiscountId);
         if (redeemedDiscount.isUsed()) {
-            throw new InvalidBookingRequestException("Mã giảm giá đã được sử dụng, hãy chọn cái khác!");
+            throw new InvalidBookingRequestException("This discount have been redeemed!");
         }
 
         return handleDiscountAndReturnTotalAmount(redeemedDiscount, totalAmount, bookingRequest);
@@ -139,13 +130,13 @@ public class BookingServiceImpl implements BookingService {
     private BigDecimal getBookedRoomTotalAmount(LocalDate checkInDate, LocalDate checkOutDate, BigDecimal roomPrice) {
         long bookingDays = ChronoUnit.DAYS.between(checkInDate, checkOutDate);
         BigDecimal daysBigDecimal = BigDecimal.valueOf(bookingDays);
-        BigDecimal totalAmount = daysBigDecimal.multiply(roomPrice);
-        return totalAmount;
+        return daysBigDecimal.multiply(roomPrice);
     }
 
     private BigDecimal handleDiscountAndReturnTotalAmount(RedeemedDiscount redeemedDiscount, BigDecimal totalAmount, BookedRoom bookingRequest) {
         BigDecimal discountPercent = BigDecimal.valueOf(redeemedDiscount.getDiscount().getPercentDiscount());
-        BigDecimal discountAmount = totalAmount.multiply(discountPercent).divide(BigDecimal.valueOf(100));
+        BigDecimal discountAmount = totalAmount.multiply(discountPercent)
+                .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
         totalAmount = totalAmount.subtract(discountAmount);
         redeemedDiscount.setUsed(true);
         bookingRequest.addDiscount(redeemedDiscount);
@@ -154,7 +145,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private void handleUserBooking(Long userId, BookedRoom bookingRequest) {
-        User user = userService.getUserById(userId).get();
+        User user = userService.getUserById(userId);
         user.addBooking(bookingRequest);
     }
 
@@ -199,15 +190,16 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingResponse findByBookingId(Long bookingId) {
-        BookedRoom bookedRoom = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new ResourceNotFoundException("No booking found with bookingId :" + bookingId));
+    public BookingResponse findByBookingId(Long id) {
+        BookedRoom bookedRoom = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No booking found with bookingId :" + id));
         return BookedRoomMapper.toBookingResponse(bookedRoom);
     }
 
     @Override
-    public BookingResponse updateBooked(Long bookingId, UpdateBookedRoom request) {
-        BookedRoom bookedRoom = bookingRepository.findById(bookingId).get();
+    public BookingResponse updateBooked(Long id, UpdateBookedRoom request) {
+        BookedRoom bookedRoom = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No booking found with bookingId :" + id));
         bookedRoom.setCheckInDate(request.getCheckInDate());
         bookedRoom.setCheckOutDate(request.getCheckOutDate());
         bookedRoom.setGuestEmail(request.getGuestEmail());
@@ -250,33 +242,5 @@ public class BookingServiceImpl implements BookingService {
                 .totalElements(bookedRoomPage.getTotalElements())
                 .data(BookedRoomMapper.bookingResponses(bookedRoomList))
                 .build();
-    }
-
-    private boolean getAllRoomAndCheckRoomIsAvailable(Room room, BookedRoom bookingRequest) {
-        List<BookedRoom> existingBookings = room.getBookings();
-        boolean roomIsAvailable = roomIsAvailable(bookingRequest, existingBookings);
-        return roomIsAvailable;
-    }
-
-    private boolean roomIsAvailable(BookedRoom bookingRequest, List<BookedRoom> existingBookings) {
-        return existingBookings.stream()
-                .noneMatch(existingBooking ->
-                        bookingRequest.getCheckInDate().equals(existingBooking.getCheckInDate())
-                                || bookingRequest.getCheckOutDate().isBefore(existingBooking.getCheckOutDate())
-                                || (bookingRequest.getCheckInDate().isAfter(existingBooking.getCheckInDate())
-                                && bookingRequest.getCheckInDate().isBefore(existingBooking.getCheckOutDate()))
-                                || (bookingRequest.getCheckInDate().isBefore(existingBooking.getCheckInDate())
-
-                                && bookingRequest.getCheckOutDate().equals(existingBooking.getCheckOutDate()))
-                                || (bookingRequest.getCheckInDate().isBefore(existingBooking.getCheckInDate())
-
-                                && bookingRequest.getCheckOutDate().isAfter(existingBooking.getCheckOutDate()))
-
-                                || (bookingRequest.getCheckInDate().equals(existingBooking.getCheckOutDate())
-                                && bookingRequest.getCheckOutDate().equals(existingBooking.getCheckInDate()))
-
-                                || (bookingRequest.getCheckInDate().equals(existingBooking.getCheckOutDate())
-                                && bookingRequest.getCheckOutDate().equals(bookingRequest.getCheckInDate()))
-                );
     }
 }

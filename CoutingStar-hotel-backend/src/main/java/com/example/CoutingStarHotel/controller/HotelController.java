@@ -68,7 +68,7 @@ public class HotelController {
 
     @GetMapping("/hotel/{hotelId}")
     public ResponseData<HotelResponse> getHotelById(@PathVariable Long hotelId) {
-        var result = hotelService.getHotelById(hotelId);
+        var result = hotelService.getHotelResponseById(hotelId);
         return ResponseData.<HotelResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("success")

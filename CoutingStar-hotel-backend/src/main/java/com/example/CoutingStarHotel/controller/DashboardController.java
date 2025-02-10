@@ -1,10 +1,10 @@
 package com.example.CoutingStarHotel.controller;
 
 import com.example.CoutingStarHotel.DTO.response.*;
-import com.example.CoutingStarHotel.services.*;
+import com.example.CoutingStarHotel.services.DashBoardService;
+import com.example.CoutingStarHotel.services.HotelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public class DashboardController {
 
     @GetMapping("/HotelOwner/PieChart/{hotelId}")
     public ResponseData<List<PieChartResponse>> getDataForAdminPieChartChart(@PathVariable Long hotelId){
-        var result = hotelService.getTheRevenceOfEachRoom(hotelId);
+        var result = hotelService.getTheRevenueOfEachRoom(hotelId);
         return ResponseData.<List<PieChartResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("success")

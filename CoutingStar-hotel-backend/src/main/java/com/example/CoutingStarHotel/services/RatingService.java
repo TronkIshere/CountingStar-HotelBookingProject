@@ -3,10 +3,8 @@ package com.example.CoutingStarHotel.services;
 import com.example.CoutingStarHotel.DTO.request.AddRatingRequest;
 import com.example.CoutingStarHotel.DTO.request.UpdateRatingRequest;
 import com.example.CoutingStarHotel.DTO.response.RatingResponse;
-import com.example.CoutingStarHotel.entities.BookedRoom;
 import com.example.CoutingStarHotel.entities.Rating;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface RatingService {

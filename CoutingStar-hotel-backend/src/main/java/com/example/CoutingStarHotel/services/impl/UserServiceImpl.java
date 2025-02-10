@@ -8,11 +8,12 @@ import com.example.CoutingStarHotel.DTO.response.UserResponse;
 import com.example.CoutingStarHotel.entities.Role;
 import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.mapper.UserMapper;
-import com.example.CoutingStarHotel.repositories.RoleReponsitory;
 import com.example.CoutingStarHotel.repositories.UserRepository;
 import com.example.CoutingStarHotel.security.jwt.JwtUtils;
 import com.example.CoutingStarHotel.security.user.HotelUserDetails;
+import com.example.CoutingStarHotel.services.RoleService;
 import com.example.CoutingStarHotel.services.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,14 +31,13 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RoleReponsitory roleReponsitory;
+    private final RoleService roleService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException(user.getEmail() + " already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role userRole = roleReponsitory.findByName("ROLE_USER").get();
+        Role userRole = roleService.findByName("ROLE_USER");
         user.setRoles(Collections.singletonList(userRole));
         user.setRegisterDay(LocalDate.now());
         return userRepository.save(user);
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException(user.getEmail() + " already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role userRole = roleReponsitory.findByName("ROLE_HOTEL_OWNER").get();
+        Role userRole = roleService.findByName("ROLE_HOTEL_OWNER");
         user.setRoles(Collections.singletonList(userRole));
         return userRepository.save(user);
     }
@@ -82,12 +82,6 @@ public class UserServiceImpl implements UserService {
     public UserResponse getUser(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return UserMapper.toUserResponse(user);
-    }
-
-    @Override
-    public Optional<User> getUserById(Long userId) {
-        return Optional.ofNullable(userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found")));
     }
 
     @Override
@@ -147,13 +141,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse updateUser(Long userId, UpdateUserRequest request) {
-        User user = userRepository.findById(userId).get();
+        User user = getUserById(userId);
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setPhoneNumber(request.getPhoneNumber());
         userRepository.save(user);
         return UserMapper.toUserResponse(user);
+    }
+
+    @Override
+    public User getUserById(Long userId){
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Room not found with ID: " + userId));
     }
 
     @Override

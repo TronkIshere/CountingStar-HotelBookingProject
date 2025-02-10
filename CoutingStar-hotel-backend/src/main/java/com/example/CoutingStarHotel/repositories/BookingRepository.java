@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<BookedRoom, Long> {
+    @Query("SELECT br FROM BookedRoom br WHERE br.room.id = :roomId")
     List<BookedRoom> findByRoomId(Long roomId);
 
     Optional<BookedRoom> findByBookingConfirmationCode(String confirmationCode);
@@ -37,7 +38,7 @@ public interface BookingRepository extends JpaRepository<BookedRoom, Long> {
             "lower(b.guestEmail) LIKE lower(concat('%', :keyword, '%')) OR " +
             "lower(b.guestFullName) LIKE lower(concat('%', :keyword, '%')) OR " +
             "lower(b.guestPhoneNumber) LIKE lower(concat('%', :keyword, '%')) OR " +
-            "cast(b.bookingId as string) LIKE lower(concat('%', :keyword, '%')) AND " +
+            "cast(b.id as string) LIKE lower(concat('%', :keyword, '%')) AND " +
             "b.room.hotel.id = :hotelId")
     Page<BookedRoom> getAllBookingByKeywordAndHotelId(Pageable pageable, Long hotelId, String keyword);
 }

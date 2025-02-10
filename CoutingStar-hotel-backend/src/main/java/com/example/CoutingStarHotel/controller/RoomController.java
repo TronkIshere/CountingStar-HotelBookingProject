@@ -36,11 +36,6 @@ public class RoomController {
                 .build();
     }
 
-    @GetMapping("/room/types")
-    public List<String> getRoomTypes() {
-        return roomService.getAllRoomTypes();
-    }
-
     @GetMapping("/{hotelId}")
     public ResponseData<PageResponse<RoomResponse>> getRoomsByHotelId(@PathVariable Long hotelId,
                                                                       @RequestParam(defaultValue = "0") Integer pageNo,

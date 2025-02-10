@@ -17,7 +17,7 @@ import java.util.List;
 
 @Component
 public class JwtUtils {
-    private static final Logger logger = (Logger) LoggerFactory.getLogger(JwtUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
     @Value("${security.jwt.secret}")
     private String jwtSecret;
 

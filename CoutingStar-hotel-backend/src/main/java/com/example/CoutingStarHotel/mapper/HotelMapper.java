@@ -1,7 +1,6 @@
 package com.example.CoutingStarHotel.mapper;
 
 import com.example.CoutingStarHotel.DTO.response.HotelResponse;
-import com.example.CoutingStarHotel.DTO.response.RatingResponse;
 import com.example.CoutingStarHotel.entities.Hotel;
 import com.example.CoutingStarHotel.services.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;

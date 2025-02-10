@@ -8,28 +8,20 @@ import com.example.CoutingStarHotel.entities.Room;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface RoomService {
     RoomResponse addNewRoom(AddRoomRequest request, Long hotelId) throws SQLException, IOException;
 
-    List<String> getAllRoomTypes();
-
     List<RoomResponse> getAllRooms();
-
-    byte[] getRoomPhotoByRoomId(Long roomId) throws SQLException;
 
     void deleteRoom(Long roomId);
 
     RoomResponse updateRoom(Long roomId, UpdateRoomRequest request) throws IOException, SQLException;
 
-    Optional<Room> getRoomById(Long roomId);
+    Room getRoomById(Long roomId);
 
     RoomResponse getRoomResponseById(Long roomId);
-
-    List<Room> getAvailableRooms(LocalDate checkInDate, LocalDate checkOutDate, String roomType);
 
     PageResponse<RoomResponse> getRoomByHotelId(Long hotelId, Integer pageNo, Integer pageSize);
 

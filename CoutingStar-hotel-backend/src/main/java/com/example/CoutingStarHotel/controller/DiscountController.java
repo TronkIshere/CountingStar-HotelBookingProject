@@ -67,7 +67,7 @@ public class DiscountController {
 
     @GetMapping("/getDiscountById/{discountId}")
     public ResponseData<DiscountResponse> getDiscountById(@PathVariable Long discountId) {
-        var result = discountService.getDiscountById(discountId);
+        var result = discountService.getDiscountResponseById(discountId);
         return ResponseData.<DiscountResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("success")

@@ -4,14 +4,15 @@ import com.example.CoutingStarHotel.DTO.request.AddRoomRequest;
 import com.example.CoutingStarHotel.DTO.request.UpdateRoomRequest;
 import com.example.CoutingStarHotel.DTO.response.PageResponse;
 import com.example.CoutingStarHotel.DTO.response.RoomResponse;
-import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.entities.Hotel;
 import com.example.CoutingStarHotel.entities.Rating;
 import com.example.CoutingStarHotel.entities.Room;
 import com.example.CoutingStarHotel.mapper.RoomMapper;
-import com.example.CoutingStarHotel.repositories.HotelRepository;
 import com.example.CoutingStarHotel.repositories.RoomRepository;
+import com.example.CoutingStarHotel.services.HotelService;
+import com.example.CoutingStarHotel.services.RatingService;
 import com.example.CoutingStarHotel.services.RoomService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +23,6 @@ import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,8 +30,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
-    private final HotelRepository hotelRepository;
-    private final RatingServiceImpl ratingService;
+    private final HotelService hotelService;
+    private final RatingService ratingService;
 
     @Override
     public RoomResponse addNewRoom(AddRoomRequest request, Long hotelId) throws SQLException, IOException {
@@ -39,7 +39,7 @@ public class RoomServiceImpl implements RoomService {
         room.setRoomType(request.getRoomType());
         room.setRoomPrice(request.getRoomPrice());
         room.setRoomDescription(request.getRoomDescription());
-        Hotel hotel = hotelRepository.getById(hotelId);
+        Hotel hotel = hotelService.getHotelById(hotelId);
         if (!request.getPhoto().isEmpty()) {
             byte[] photoBytes = request.getPhoto().getBytes();
             Blob photoBlob = new SerialBlob(photoBytes);
@@ -51,29 +51,11 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<String> getAllRoomTypes() {
-        return roomRepository.findDistinctRoomTypes();
-    }
-
-    @Override
     public List<RoomResponse> getAllRooms() {
         List<Room> roomList = roomRepository.findAll();
         return RoomMapper.roomResponses(roomList);
     }
 
-
-    @Override
-    public byte[] getRoomPhotoByRoomId(Long roomId) throws SQLException {
-        Optional<Room> theRoom = roomRepository.findById(roomId);
-        if (theRoom.isEmpty()) {
-            throw new ResourceNotFoundException("Sorry, Room not found");
-        }
-        Blob photoBlob = theRoom.get().getPhoto();
-        if (photoBlob != null) {
-            return photoBlob.getBytes(1, (int) photoBlob.length());
-        }
-        return null;
-    }
 
     @Override
     public void deleteRoom(Long roomId) {
@@ -85,7 +67,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public RoomResponse updateRoom(Long roomId, UpdateRoomRequest request) throws IOException, SQLException {
-        Room room = roomRepository.findById(roomId).get();
+        Room room = getRoomById(roomId);
         room.setRoomType(request.getRoomType());
         room.setRoomDescription(request.getRoomDescription());
         room.setRoomPrice(request.getRoomPrice());
@@ -101,19 +83,15 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Optional<Room> getRoomById(Long roomId) {
-        return roomRepository.findById(roomId);
+    public Room getRoomById(Long roomId) {
+        return roomRepository.findById(roomId)
+                .orElseThrow(() -> new EntityNotFoundException("Room not found with ID: " + roomId));
     }
+
 
     @Override
     public RoomResponse getRoomResponseById(Long roomId) {
-        Room room = roomRepository.findById(roomId).get();
-        return RoomMapper.toRoomResponse(room);
-    }
-
-    @Override
-    public List<Room> getAvailableRooms(LocalDate checkInDate, LocalDate checkOutDate, String roomType) {
-        return roomRepository.findAvailableRoomsByDatesAndType(checkInDate, checkOutDate, roomType);
+        return RoomMapper.toRoomResponse(getRoomById(roomId));
     }
 
     @Override

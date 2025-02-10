@@ -2,17 +2,13 @@ package com.example.CoutingStarHotel.services.impl;
 
 import com.example.CoutingStarHotel.DTO.request.AddDiscountRequest;
 import com.example.CoutingStarHotel.DTO.request.UpdateDiscountRequest;
-import com.example.CoutingStarHotel.DTO.response.BookingResponse;
 import com.example.CoutingStarHotel.DTO.response.DiscountResponse;
 import com.example.CoutingStarHotel.DTO.response.PageResponse;
 import com.example.CoutingStarHotel.entities.Discount;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
-import com.example.CoutingStarHotel.mapper.BookedRoomMapper;
 import com.example.CoutingStarHotel.mapper.DiscountMapper;
 import com.example.CoutingStarHotel.repositories.DiscountRepository;
-import com.example.CoutingStarHotel.repositories.RoomRepository;
 import com.example.CoutingStarHotel.services.DiscountService;
-import com.example.CoutingStarHotel.services.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +37,8 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public DiscountResponse updateDiscount(Long discountId, UpdateDiscountRequest request){
-        Discount discount = discountRepository.findById(discountId).get();
+        Discount discount = discountRepository.findById(discountId)
+                .orElseThrow(() -> new NoSuchElementException("Discount not found with ID: " + discountId));
         discount.setPercentDiscount(request.getPercentDiscount());
         discount.setDiscountName(request.getDiscountName());
         discount.setDiscountDescription(request.getDiscountDescription());
@@ -66,9 +63,8 @@ public class DiscountServiceImpl implements DiscountService {
                 .build();
     }
 
-    public DiscountResponse getDiscountById(Long discountId) {
+    public Discount getDiscountById(Long discountId) {
         return discountRepository.findById(discountId)
-                .map(DiscountMapper::toDiscountResponse)
                 .orElseThrow(() -> new ResourceNotFoundException("Discount not found"));
     }
 
@@ -102,6 +98,11 @@ public class DiscountServiceImpl implements DiscountService {
                 .totalElements(discountPage.getTotalElements())
                 .data(DiscountMapper.discountResponses(discountList))
                 .build();
+    }
+
+    @Override
+    public DiscountResponse getDiscountResponseById(Long discountId) {
+        return DiscountMapper.toDiscountResponse(getDiscountById(discountId));
     }
 
     @Override

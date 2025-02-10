@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Collection;
 import java.util.Optional;
 
-public interface RoleReponsitory extends JpaRepository<Role, Long> {
+public interface RoleRepository extends JpaRepository<Role, Long> {
     Optional<Role> findByName(String role);
 
     boolean existsByName(String roleName);

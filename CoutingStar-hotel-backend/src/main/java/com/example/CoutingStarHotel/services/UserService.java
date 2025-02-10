@@ -6,10 +6,8 @@ import com.example.CoutingStarHotel.DTO.response.JwtResponse;
 import com.example.CoutingStarHotel.DTO.response.PageResponse;
 import com.example.CoutingStarHotel.DTO.response.UserResponse;
 import com.example.CoutingStarHotel.entities.User;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
     User registerUser(User user);
@@ -20,7 +18,7 @@ public interface UserService {
     void deleteUser(String email);
     UserResponse getUser(String email);
 
-    Optional<User> getUserById(Long userId);
+    User getUserById(Long userId);
 
     int getTotalNumberOfUsers();
 

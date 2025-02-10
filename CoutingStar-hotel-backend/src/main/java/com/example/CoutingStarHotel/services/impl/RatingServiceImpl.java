@@ -3,11 +3,12 @@ package com.example.CoutingStarHotel.services.impl;
 import com.example.CoutingStarHotel.DTO.request.AddRatingRequest;
 import com.example.CoutingStarHotel.DTO.request.UpdateRatingRequest;
 import com.example.CoutingStarHotel.DTO.response.RatingResponse;
-import com.example.CoutingStarHotel.entities.*;
+import com.example.CoutingStarHotel.entities.BookedRoom;
+import com.example.CoutingStarHotel.entities.Rating;
+import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.mapper.RatingMapper;
 import com.example.CoutingStarHotel.repositories.BookingRepository;
 import com.example.CoutingStarHotel.repositories.RatingRepository;
-import com.example.CoutingStarHotel.repositories.RoomRepository;
 import com.example.CoutingStarHotel.repositories.UserRepository;
 import com.example.CoutingStarHotel.services.RatingService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +57,8 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public RatingResponse updateRating(Long ratingId, UpdateRatingRequest request) {
-        Rating rating = ratingRepository.findById(ratingId).get();
+        Rating rating = ratingRepository.findById(ratingId)
+                .orElseThrow(() -> new NoSuchElementException("Rating not found with ID: " + ratingId));
         rating.setStar(request.getStar());
         rating.setComment(request.getComment());
         ratingRepository.save(rating);
@@ -88,8 +90,7 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public List<Rating> getAllRatingByRoomId(Long roomId) {
-        List<Rating> ratingList = ratingRepository.getAllRatingByRoomId(roomId);
-        return ratingList;
+        return ratingRepository.getAllRatingByRoomId(roomId);
     }
 
     @Override

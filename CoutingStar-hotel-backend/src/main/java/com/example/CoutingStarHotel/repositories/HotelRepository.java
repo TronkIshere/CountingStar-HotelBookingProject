@@ -26,12 +26,12 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     @Query("SELECT h FROM Hotel h LEFT JOIN h.rooms r LEFT JOIN r.bookings b LEFT JOIN b.rating rt GROUP BY h ORDER BY COUNT(rt) DESC")
     List<Hotel> getTenHotelForHomePage();
 
-    @Query("SELECT new com.example.CoutingStarHotel.DTO.PieChartDTO(h.city, COUNT(h)) " +
+    @Query("SELECT PieChartResponse(h.city, COUNT(h)) " +
             "FROM Hotel h " +
             "GROUP BY h.city")
     List<PieChartResponse> findNumberOfHotelsByCity();
 
-    @Query("SELECT new com.example.CoutingStarHotel.DTO.BarChartDTO(h.city, SUM(b.totalAmount)) " +
+    @Query("SELECT new com.example.CoutingStarHotel.DTO.response.BarChartResponse(h.city, SUM(b.totalAmount)) " +
             "FROM Hotel h JOIN h.rooms r JOIN r.bookings b " +
             "GROUP BY h.city")
     List<BarChartResponse> findRevenueByEachCity();
@@ -42,7 +42,7 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     @Query("SELECT COUNT(h) FROM Hotel h WHERE h.registerDay >= :startDate AND h.registerDay < :endDate")
     int getHotelsAddedDuringPeriod(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
-    @Query("SELECT new com.example.CoutingStarHotel.DTO.PieChartDTO(r.roomType, SUM(b.totalAmount)) " +
+    @Query("SELECT PieChartResponse(r.roomType, SUM(b.totalAmount)) " +
             "FROM Room r JOIN r.bookings b " +
             "WHERE r.hotel.id = :hotelId " +
             "GROUP BY r.roomType")

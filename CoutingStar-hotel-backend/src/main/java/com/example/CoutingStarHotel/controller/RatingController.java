@@ -2,19 +2,14 @@ package com.example.CoutingStarHotel.controller;
 
 import com.example.CoutingStarHotel.DTO.request.AddRatingRequest;
 import com.example.CoutingStarHotel.DTO.request.UpdateRatingRequest;
-import com.example.CoutingStarHotel.DTO.response.DiscountResponse;
-import com.example.CoutingStarHotel.DTO.response.ResponseData;
-import com.example.CoutingStarHotel.entities.Rating;
 import com.example.CoutingStarHotel.DTO.response.RatingResponse;
+import com.example.CoutingStarHotel.DTO.response.ResponseData;
 import com.example.CoutingStarHotel.services.RatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin("http://localhost:5173")
