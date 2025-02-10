@@ -13,7 +13,6 @@ import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.mapper.BookedRoomMapper;
 import com.example.CoutingStarHotel.repositories.BookingRepository;
 import com.example.CoutingStarHotel.repositories.RedeemedDiscountRepository;
-import com.example.CoutingStarHotel.repositories.RoomRepository;
 import com.example.CoutingStarHotel.services.BookingService;
 import com.example.CoutingStarHotel.services.RedeemedDiscountService;
 import com.example.CoutingStarHotel.services.RoomService;
@@ -33,7 +32,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
-    private final RoomRepository roomRepository;
     private final RoomService roomService;
     private final UserService userService;
     private final RedeemedDiscountService redeemedDiscountService;

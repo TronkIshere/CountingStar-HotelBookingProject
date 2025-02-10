@@ -97,7 +97,7 @@ public class RoomController {
 
     @GetMapping("/room/{roomId}")
     public ResponseData<RoomResponse> getRoomById(@PathVariable Long roomId) {
-        var result = roomService.getRoomById(roomId);
+        var result = roomService.getRoomResponseById(roomId);
         return ResponseData.<RoomResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("success")

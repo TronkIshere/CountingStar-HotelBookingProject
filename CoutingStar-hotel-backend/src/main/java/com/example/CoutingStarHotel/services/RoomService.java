@@ -3,14 +3,10 @@ package com.example.CoutingStarHotel.services;
 import com.example.CoutingStarHotel.DTO.request.AddRoomRequest;
 import com.example.CoutingStarHotel.DTO.request.UpdateRoomRequest;
 import com.example.CoutingStarHotel.DTO.response.PageResponse;
-import com.example.CoutingStarHotel.DTO.response.ResponseData;
 import com.example.CoutingStarHotel.DTO.response.RoomResponse;
 import com.example.CoutingStarHotel.entities.Room;
-import org.springframework.data.domain.Page;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -29,7 +25,9 @@ public interface RoomService {
 
     RoomResponse updateRoom(Long roomId, UpdateRoomRequest request) throws IOException, SQLException;
 
-    Room getRoomById(Long roomId);
+    Optional<Room> getRoomById(Long roomId);
+
+    RoomResponse getRoomResponseById(Long roomId);
 
     List<Room> getAvailableRooms(LocalDate checkInDate, LocalDate checkOutDate, String roomType);
 
