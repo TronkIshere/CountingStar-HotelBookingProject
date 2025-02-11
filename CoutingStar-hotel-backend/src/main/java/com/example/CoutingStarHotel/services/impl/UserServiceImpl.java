@@ -11,7 +11,7 @@ import com.example.CoutingStarHotel.mapper.UserMapper;
 import com.example.CoutingStarHotel.repositories.UserRepository;
 import com.example.CoutingStarHotel.security.jwt.JwtUtils;
 import com.example.CoutingStarHotel.security.user.HotelUserDetails;
-import com.example.CoutingStarHotel.services.UserAndRoleService;
+import com.example.CoutingStarHotel.services.UserRoleHelperService;
 import com.example.CoutingStarHotel.services.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -37,7 +37,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UserAndRoleService userAndRoleService;
+    private final UserRoleHelperService userAndRoleService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
