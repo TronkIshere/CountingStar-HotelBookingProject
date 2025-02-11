@@ -11,12 +11,11 @@ import com.example.CoutingStarHotel.mapper.UserMapper;
 import com.example.CoutingStarHotel.repositories.UserRepository;
 import com.example.CoutingStarHotel.security.jwt.JwtUtils;
 import com.example.CoutingStarHotel.security.user.HotelUserDetails;
-import com.example.CoutingStarHotel.services.RoleService;
+import com.example.CoutingStarHotel.services.UserAndRoleService;
 import com.example.CoutingStarHotel.services.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,25 +35,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-//    private final UserRepository userRepository;
-//    private final PasswordEncoder passwordEncoder;
-//    private final RoleService roleService;
-//    private final AuthenticationManager authenticationManager;
-//    private final JwtUtils jwtUtils;
-
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-    private RoleService roleService;
-    private AuthenticationManager authenticationManager;
-    private JwtUtils jwtUtils;
-
-    public UserServiceImpl(@Lazy RoleService roleService, UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
-        this.roleService = roleService;
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-        this.jwtUtils = jwtUtils;
-    }
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserAndRoleService userAndRoleService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
 
     @Override
     public User registerUser(User user) {
@@ -62,7 +47,7 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException(user.getEmail() + " already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role userRole = roleService.findByName("ROLE_USER");
+        Role userRole = userAndRoleService.getRoleByName("ROLE_USER");
         user.setRoles(Collections.singletonList(userRole));
         user.setRegisterDay(LocalDate.now());
         return userRepository.save(user);
@@ -74,7 +59,7 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException(user.getEmail() + " already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role userRole = roleService.findByName("ROLE_HOTEL_OWNER");
+        Role userRole = userAndRoleService.getRoleByName("ROLE_HOTEL_OWNER");
         user.setRoles(Collections.singletonList(userRole));
         return userRepository.save(user);
     }

@@ -5,21 +5,19 @@ import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.exception.RoleAlreadyExistException;
 import com.example.CoutingStarHotel.exception.UserAlreadyExistsException;
 import com.example.CoutingStarHotel.repositories.RoleRepository;
-import com.example.CoutingStarHotel.repositories.UserRepository;
 import com.example.CoutingStarHotel.services.RoleService;
 import com.example.CoutingStarHotel.services.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
-    private final UserRepository userRepository;
     private final UserService userService;
 
     @Override
@@ -68,29 +66,38 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public User assignRoleToUser(Long userId, Long roleId) {
-        Optional<User> user = userRepository.findById(userId);
-        Optional<Role> role = roleRepository.findById(roleId);
-        if (user.isPresent() && user.get().getRoles().contains(role.get())) {
+        User user = userService.getUserById(userId);
+        Role role = getById(roleId);
+
+        if (role == null) {
+            throw new EntityNotFoundException("Role not found with ID: " + roleId);
+        }
+
+        if (user.getRoles().contains(role)) {
             throw new UserAlreadyExistsException(
-                    user.get().getFirstName() + " is already assigned to the" + role.get().getName() + " role");
+                    user.getFirstName() + " is already assigned to the " + role.getName() + " role");
         }
-        if (role.isPresent()) {
-            role.get().assignRoleToUser(user.get());
-            roleRepository.save(role.get());
-        }
-        return user.get();
+
+        role.assignRoleToUser(user);
+        roleRepository.save(role);
+        return user;
     }
 
     @Override
     public Role removeAllUsersFromRole(Long roleId) {
-        Optional<Role> role = roleRepository.findById(roleId);
-        role.ifPresent(Role::removeAllUsersFromRole);
-        return roleRepository.save(role.get());
+        Role role = getById(roleId);
+        return roleRepository.save(role);
     }
 
     @Override
-    public Role findByName(String name){
+    public Role findByName(String name) {
         return roleRepository.findByName(name)
                 .orElseThrow(() -> new NoSuchElementException("Role not found with name: " + name));
+    }
+
+    @Override
+    public Role getById(Long id) {
+        return roleRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Role not found with ID: " + id));
     }
 }

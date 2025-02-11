@@ -21,4 +21,6 @@ public interface RoleService {
     Role removeAllUsersFromRole(Long roleId);
 
     Role findByName(String name);
+
+    Role getById(Long id);
 }
