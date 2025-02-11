@@ -5,6 +5,10 @@ import com.example.CoutingStarHotel.DTO.request.UpdateDiscountRequest;
 import com.example.CoutingStarHotel.DTO.response.DiscountResponse;
 import com.example.CoutingStarHotel.DTO.response.PageResponse;
 import com.example.CoutingStarHotel.entities.Discount;
+import com.example.CoutingStarHotel.entities.RedeemedDiscount;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public interface DiscountService {
     DiscountResponse addDiscount(AddDiscountRequest request);
@@ -22,4 +26,6 @@ public interface DiscountService {
     PageResponse<DiscountResponse> getDiscountByKeyword(Integer pageNo, Integer pageSize, String keyword);
 
     DiscountResponse getDiscountResponseById(Long discountId);
+
+    List<RedeemedDiscount> getAllRedeemedDiscountNotExpiredByUserId(Long userId, LocalDate now);
 }

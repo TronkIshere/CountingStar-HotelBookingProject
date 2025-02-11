@@ -9,8 +9,8 @@ import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.mapper.RatingMapper;
 import com.example.CoutingStarHotel.repositories.BookingRepository;
 import com.example.CoutingStarHotel.repositories.RatingRepository;
-import com.example.CoutingStarHotel.repositories.UserRepository;
 import com.example.CoutingStarHotel.services.RatingService;
+import com.example.CoutingStarHotel.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class RatingServiceImpl implements RatingService {
     private final RatingRepository ratingRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final BookingRepository bookingRepository;
 
     @Override
@@ -40,7 +40,7 @@ public class RatingServiceImpl implements RatingService {
         if (!bookedRooms.isEmpty()) {
             Long bookedRoomIdForAddComment = bookedRooms.get(0).getId();
 
-            User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+            User user = userService.getUserById(userId);
             user.addComment(rating);
 
             BookedRoom saveBookedRoom = bookingRepository.findById(bookedRoomIdForAddComment)

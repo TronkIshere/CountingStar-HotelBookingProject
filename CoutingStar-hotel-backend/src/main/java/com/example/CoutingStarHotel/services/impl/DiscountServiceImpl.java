@@ -5,6 +5,7 @@ import com.example.CoutingStarHotel.DTO.request.UpdateDiscountRequest;
 import com.example.CoutingStarHotel.DTO.response.DiscountResponse;
 import com.example.CoutingStarHotel.DTO.response.PageResponse;
 import com.example.CoutingStarHotel.entities.Discount;
+import com.example.CoutingStarHotel.entities.RedeemedDiscount;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.mapper.DiscountMapper;
 import com.example.CoutingStarHotel.repositories.DiscountRepository;
@@ -103,6 +104,11 @@ public class DiscountServiceImpl implements DiscountService {
     @Override
     public DiscountResponse getDiscountResponseById(Long discountId) {
         return DiscountMapper.toDiscountResponse(getDiscountById(discountId));
+    }
+
+    @Override
+    public List<RedeemedDiscount> getAllRedeemedDiscountNotExpiredByUserId(Long userId, LocalDate now) {
+        return discountRepository.getAllRedeemedDiscountNotExpiredByUserId(userId, now);
     }
 
     @Override

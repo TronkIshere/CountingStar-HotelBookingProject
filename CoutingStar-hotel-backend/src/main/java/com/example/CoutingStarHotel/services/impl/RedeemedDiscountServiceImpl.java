@@ -7,7 +7,6 @@ import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.exception.InvalidBookingRequestException;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.mapper.RedeemedDiscountMapper;
-import com.example.CoutingStarHotel.repositories.DiscountRepository;
 import com.example.CoutingStarHotel.repositories.RedeemedDiscountRepository;
 import com.example.CoutingStarHotel.services.DiscountService;
 import com.example.CoutingStarHotel.services.RedeemedDiscountService;
@@ -22,7 +21,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RedeemedDiscountServiceImpl implements RedeemedDiscountService {
     private final RedeemedDiscountRepository redeemedDiscountRepository;
-    private final DiscountRepository discountRepository;
     private final UserService userService;
     private final DiscountService discountService;
 
@@ -42,7 +40,7 @@ public class RedeemedDiscountServiceImpl implements RedeemedDiscountService {
 
     @Override
     public List<RedeemedDiscountResponse> getAllRedeemedDiscountByUserId(Long userId) {
-        List<RedeemedDiscount> redeemedDiscountList = discountRepository.getAllRedeemedDiscountNotExpiredByUserId(userId, LocalDate.now());
+        List<RedeemedDiscount> redeemedDiscountList = discountService.getAllRedeemedDiscountNotExpiredByUserId(userId, LocalDate.now());
         return RedeemedDiscountMapper.redeemedDiscountResponses(redeemedDiscountList);
     }
 
