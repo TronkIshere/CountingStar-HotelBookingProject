@@ -22,7 +22,7 @@ public class DiscountController {
 
     @PostMapping("/addDiscount")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
-    public ResponseData<DiscountResponse> addDiscount(@RequestParam AddDiscountRequest request) throws IOException {
+    public ResponseData<DiscountResponse> addDiscount(@RequestBody AddDiscountRequest request) throws IOException {
         var result = discountService.addDiscount(request);
         return ResponseData.<DiscountResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -78,7 +78,7 @@ public class DiscountController {
     @PutMapping("/update/{discountId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public ResponseData<DiscountResponse> updateDiscount(@PathVariable Long discountId,
-                                                         @RequestParam UpdateDiscountRequest request) {
+                                                         @RequestBody UpdateDiscountRequest request) {
         var result = discountService.updateDiscount(discountId, request);
         return ResponseData.<DiscountResponse>builder()
                 .code(HttpStatus.OK.value())

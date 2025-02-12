@@ -75,7 +75,7 @@ public class BookingController {
 
     @PostMapping("/room/{roomId}/booking")
     public ResponseData<BookingResponse> saveBooking(@PathVariable Long roomId,
-                                                       @RequestParam SaveBookingRequest request,
+                                                       @RequestBody SaveBookingRequest request,
                                                        @RequestParam(required = false) Long userId,
                                                        @RequestParam(required = false) Long redeemedDiscountId) {
         var result = bookingService.saveBooking(roomId, request, userId, redeemedDiscountId);
@@ -88,7 +88,7 @@ public class BookingController {
 
     @PutMapping("/booking/{bookingId}/update")
     public ResponseData<BookingResponse> updateBookedRoom(@PathVariable Long bookingId,
-                                                            @RequestParam UpdateBookedRoom request) {
+                                                            @RequestBody UpdateBookedRoom request) {
         var result = bookingService.updateBooked(bookingId, request);
         return ResponseData.<BookingResponse>builder()
                 .code(HttpStatus.OK.value())

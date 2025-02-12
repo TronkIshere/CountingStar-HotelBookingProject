@@ -21,7 +21,7 @@ public class RatingController {
     @PostMapping("/add/hotel/{hotelId}/user/{userId}/addRating")
     public ResponseData<RatingResponse> addNewRating(@PathVariable Long hotelId,
                                                        @PathVariable Long userId,
-                                                       @RequestParam AddRatingRequest request){
+                                                       @RequestBody AddRatingRequest request){
         var result = ratingService.saveRating(hotelId, userId , request);
         return ResponseData.<RatingResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -49,7 +49,7 @@ public class RatingController {
 
     @PutMapping("/update/{ratingId}")
     public ResponseData<RatingResponse> updateRating(@PathVariable Long ratingId,
-                                                     @RequestParam UpdateRatingRequest request){
+                                                     @RequestBody UpdateRatingRequest request){
         var result = ratingService.updateRating(ratingId, request);
         return ResponseData.<RatingResponse>builder()
                 .code(HttpStatus.OK.value())

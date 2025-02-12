@@ -26,7 +26,7 @@ public class RoomController {
     @PostMapping("/add/new-room/{hotelId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public ResponseData<RoomResponse> addNewRoom(
-            @RequestParam AddRoomRequest request,
+            @RequestBody AddRoomRequest request,
             @PathVariable Long hotelId) throws SQLException, IOException {
         var result = roomService.addNewRoom(request, hotelId);
         return ResponseData.<RoomResponse>builder()
@@ -81,7 +81,7 @@ public class RoomController {
     @PutMapping("/update/{roomId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public ResponseData<RoomResponse> updateRoom(@PathVariable Long roomId,
-                                                 @RequestParam UpdateRoomRequest request) throws SQLException, IOException {
+                                                 @RequestBody UpdateRoomRequest request) throws SQLException, IOException {
         var result = roomService.updateRoom(roomId, request);
         return ResponseData.<RoomResponse>builder()
                 .code(HttpStatus.OK.value())

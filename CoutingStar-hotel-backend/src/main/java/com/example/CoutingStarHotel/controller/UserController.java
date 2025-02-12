@@ -76,7 +76,7 @@ public class UserController {
     @PostMapping("/updateUser/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseData<UserResponse> updateUser(@PathVariable Long userId,
-                                                 @RequestParam UpdateUserRequest request) {
+                                                 @RequestBody UpdateUserRequest request) {
         var result = userService.updateUser(userId, request);
         return ResponseData.<UserResponse>builder()
                 .code(HttpStatus.OK.value())
