@@ -9,6 +9,7 @@ import com.example.CoutingStarHotel.exception.InvalidHotelRequestException;
 import com.example.CoutingStarHotel.mapper.HotelMapper;
 import com.example.CoutingStarHotel.repositories.HotelRepository;
 import com.example.CoutingStarHotel.services.HotelService;
+import com.example.CoutingStarHotel.services.RatingService;
 import com.example.CoutingStarHotel.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
 public class HotelServiceImpl implements HotelService {
     private final HotelRepository hotelRepository;
     private final UserService userService;
-    private final RatingServiceImpl ratingService;
+    private final RatingService ratingService;
 
     @Override
     public HotelResponse addHotel(Long userId,

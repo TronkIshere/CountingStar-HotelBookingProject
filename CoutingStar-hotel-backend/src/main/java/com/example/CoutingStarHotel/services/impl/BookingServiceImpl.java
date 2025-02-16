@@ -254,8 +254,13 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookedRoom findRoomUserHasBookedAndNotComment(Long hotelId, Long userId) {
         Pageable pageable = PageRequest.of(0, 1);
-        return bookingRepository.findRoomUserHasBookedAndNotComment(hotelId, userId, pageable)
-                .orElseThrow(() -> new RuntimeException("No booked room found for user without a rating in the specified hotel"));
+        List<BookedRoom> bookedRooms = bookingRepository.findRoomsUserHasBookedAndNotComment(hotelId, userId, pageable);
+
+        if (bookedRooms.isEmpty()) {
+            throw new RuntimeException("No booked room found for user without a rating in the specified hotel");
+        }
+
+        return bookedRooms.get(0);
     }
 
 }

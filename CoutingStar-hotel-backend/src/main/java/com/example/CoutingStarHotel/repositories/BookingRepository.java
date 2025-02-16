@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<BookedRoom, Long> {
@@ -22,7 +23,7 @@ public interface BookingRepository extends JpaRepository<BookedRoom, Long> {
             "WHERE br.user.id = :userId " +
             "AND br.room.hotel.id = :hotelId " +
             "AND r.id IS NULL")
-    Optional<BookedRoom> findRoomUserHasBookedAndNotComment(Long hotelId, Long userId, Pageable pageable);
+    List<BookedRoom> findRoomsUserHasBookedAndNotComment(Long hotelId, Long userId, Pageable pageable);
 
     @Query("SELECT COUNT(b) FROM BookedRoom b")
     int getTotalNumberOfBookedRooms();

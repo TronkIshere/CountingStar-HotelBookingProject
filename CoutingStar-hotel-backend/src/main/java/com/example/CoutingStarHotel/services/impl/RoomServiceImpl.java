@@ -9,9 +9,9 @@ import com.example.CoutingStarHotel.entities.Rating;
 import com.example.CoutingStarHotel.entities.Room;
 import com.example.CoutingStarHotel.mapper.RoomMapper;
 import com.example.CoutingStarHotel.repositories.RoomRepository;
-import com.example.CoutingStarHotel.services.HotelService;
-import com.example.CoutingStarHotel.services.RatingService;
 import com.example.CoutingStarHotel.services.RoomService;
+import com.example.CoutingStarHotel.services.impl.helpers.HotelCoordinator;
+import com.example.CoutingStarHotel.services.impl.helpers.RatingCoordinator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,8 +30,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
-    private final HotelService hotelService;
-    private final RatingService ratingService;
+    private final HotelCoordinator hotelCoordinator;
+    private final RatingCoordinator ratingCoordinator;
 
     @Override
     public RoomResponse addNewRoom(AddRoomRequest request, Long hotelId) throws SQLException, IOException {
@@ -39,7 +39,7 @@ public class RoomServiceImpl implements RoomService {
         room.setRoomType(request.getRoomType());
         room.setRoomPrice(request.getRoomPrice());
         room.setRoomDescription(request.getRoomDescription());
-        Hotel hotel = hotelService.getHotelById(hotelId);
+        Hotel hotel = hotelCoordinator.getHotelById(hotelId);
         if (!request.getPhoto().isEmpty()) {
             byte[] photoBytes = request.getPhoto().getBytes();
             Blob photoBlob = new SerialBlob(photoBytes);
@@ -114,7 +114,7 @@ public class RoomServiceImpl implements RoomService {
     public double averageNumberOfRoomStars(Long roomId) {
         double result = 0;
         int count = 0;
-        List<Rating> ratings = ratingService.getAllRatingByRoomId(roomId);
+        List<Rating> ratings = ratingCoordinator.getAllRatingByRoomId(roomId);
         for (Rating rating : ratings) {
             result += rating.getStar();
             count++;

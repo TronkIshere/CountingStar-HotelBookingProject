@@ -11,8 +11,8 @@ import com.example.CoutingStarHotel.mapper.UserMapper;
 import com.example.CoutingStarHotel.repositories.UserRepository;
 import com.example.CoutingStarHotel.security.jwt.JwtUtils;
 import com.example.CoutingStarHotel.security.user.HotelUserDetails;
-import com.example.CoutingStarHotel.services.UserRoleHelperService;
 import com.example.CoutingStarHotel.services.UserService;
+import com.example.CoutingStarHotel.services.impl.helpers.RoleCoordinator;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UserRoleHelperService userAndRoleService;
+    private final RoleCoordinator roleCoordinator;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException(user.getEmail() + " already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role userRole = userAndRoleService.getRoleByName("ROLE_USER");
+        Role userRole = roleCoordinator.getRoleByName("ROLE_USER");
         user.setRoles(Collections.singletonList(userRole));
         user.setRegisterDay(LocalDate.now());
         return userRepository.save(user);
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException(user.getEmail() + " already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role userRole = userAndRoleService.getRoleByName("ROLE_HOTEL_OWNER");
+        Role userRole = roleCoordinator.getRoleByName("ROLE_HOTEL_OWNER");
         user.setRoles(Collections.singletonList(userRole));
         return userRepository.save(user);
     }
