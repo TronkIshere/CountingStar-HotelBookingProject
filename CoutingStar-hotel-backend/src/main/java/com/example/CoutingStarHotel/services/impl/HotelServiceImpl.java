@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
@@ -42,11 +43,7 @@ public class HotelServiceImpl implements HotelService {
         hotel.setHotelLocation(request.getHotelLocation());
         hotel.setHotelDescription(request.getHotelDescription());
         hotel.setPhoneNumber(request.getPhoneNumber());
-        if(!request.getPhoto().isEmpty()) {
-            byte[] photoBytes = request.getPhoto().getBytes();
-            Blob photoBlob = new SerialBlob(photoBytes);
-            hotel.setPhoto(photoBlob);
-        }
+        setHotelPhoto(hotel, request.getPhoto());
         User user = userService.getUserById(userId);
         user.addHotel(hotel);
         hotelRepository.save(hotel);
@@ -220,19 +217,13 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public HotelResponse updateHotel(Long hotelId, UpdateHotelRequest request) throws IOException, SQLException {
-        Hotel hotel = hotelRepository.findById(hotelId)
-                .orElseThrow(() -> new InvalidHotelRequestException("Hotel not found with ID: " + hotelId));
-
+        Hotel hotel = getHotelById(hotelId);
         hotel.setHotelName(request.getHotelName());
         hotel.setHotelLocation(request.getHotelLocation());
         hotel.setHotelDescription(request.getHotelDescription());
         hotel.setPhoneNumber(request.getPhoneNumber());
         hotel.setCity(request.getCity());
-        if (request.getPhoto() != null && !request.getPhoto().isEmpty()) {
-            byte[] photoBytes = request.getPhoto().getBytes();
-            Blob photoBlob = new SerialBlob(photoBytes);
-            hotel.setPhoto(photoBlob);
-        }
+        setHotelPhoto(hotel, request.getPhoto());
         hotel.setRegisterDay(LocalDate.now());
         hotelRepository.save(hotel);
         return HotelMapper.toHotelResponse(hotel);
@@ -241,5 +232,13 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public void deleteHotel(Long hotelId){
         hotelRepository.deleteById(hotelId);
+    }
+
+    private void setHotelPhoto(Hotel hotel, MultipartFile photo) throws IOException, SQLException {
+        if (photo != null && !photo.isEmpty()) {
+            byte[] photoBytes = photo.getBytes();
+            Blob photoBlob = new SerialBlob(photoBytes);
+            hotel.setPhoto(photoBlob);
+        }
     }
 }
