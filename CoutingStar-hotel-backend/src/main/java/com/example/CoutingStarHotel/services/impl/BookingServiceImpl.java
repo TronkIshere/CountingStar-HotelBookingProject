@@ -191,10 +191,16 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingResponse findByBookingId(Long id) {
+    public BookingResponse findBookingResponseById(Long id) {
         BookedRoom bookedRoom = bookingRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No booking found with bookingId :" + id));
         return BookedRoomMapper.toBookingResponse(bookedRoom);
+    }
+
+    @Override
+    public BookedRoom findBookingById(Long id) {
+        return bookingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No booking found with bookingId :" + id));
     }
 
     @Override
@@ -244,4 +250,12 @@ public class BookingServiceImpl implements BookingService {
                 .data(BookedRoomMapper.bookingResponses(bookedRoomList))
                 .build();
     }
+
+    @Override
+    public BookedRoom findRoomUserHasBookedAndNotComment(Long hotelId, Long userId) {
+        Pageable pageable = PageRequest.of(0, 1);
+        return bookingRepository.findRoomUserHasBookedAndNotComment(hotelId, userId, pageable)
+                .orElseThrow(() -> new RuntimeException("No booked room found for user without a rating in the specified hotel"));
+    }
+
 }

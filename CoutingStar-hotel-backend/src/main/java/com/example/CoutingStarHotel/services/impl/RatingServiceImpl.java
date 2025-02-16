@@ -7,13 +7,11 @@ import com.example.CoutingStarHotel.entities.BookedRoom;
 import com.example.CoutingStarHotel.entities.Rating;
 import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.mapper.RatingMapper;
-import com.example.CoutingStarHotel.repositories.BookingRepository;
 import com.example.CoutingStarHotel.repositories.RatingRepository;
+import com.example.CoutingStarHotel.services.BookingService;
 import com.example.CoutingStarHotel.services.RatingService;
 import com.example.CoutingStarHotel.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,35 +23,35 @@ import java.util.NoSuchElementException;
 public class RatingServiceImpl implements RatingService {
     private final RatingRepository ratingRepository;
     private final UserService userService;
-    private final BookingRepository bookingRepository;
+    private final BookingService bookingService;
 
     @Override
     public RatingResponse saveRating(Long hotelId, Long userId, AddRatingRequest request) {
+        Rating rating = createRating(request);
+        BookedRoom bookedRoom = bookingService.findRoomUserHasBookedAndNotComment(hotelId, userId);
+        handleUserRating(userId, rating);
+        handleBookingRating(rating, bookedRoom);
+        ratingRepository.save(rating);
+        return RatingMapper.toRatingResponse(rating);
+    }
+
+    private Rating createRating(AddRatingRequest request) {
         Rating rating = new Rating();
         rating.setStar(request.getStar());
         rating.setComment(request.getComment());
         rating.setRateDay(request.getRateDay());
-
-        Pageable pageable = PageRequest.of(0, 1);
-        List<BookedRoom> bookedRooms = bookingRepository.findRoomUserHasBookedAndNotComment(hotelId, userId, pageable);
-
-        if (!bookedRooms.isEmpty()) {
-            Long bookedRoomIdForAddComment = bookedRooms.get(0).getId();
-
-            User user = userService.getUserById(userId);
-            user.addComment(rating);
-
-            BookedRoom saveBookedRoom = bookingRepository.findById(bookedRoomIdForAddComment)
-                    .orElseThrow(() -> new RuntimeException("BookedRoom not found"));
-            saveBookedRoom.addComment(rating);
-            ratingRepository.save(rating);
-
-            return RatingMapper.toRatingResponse(rating);
-        } else {
-            throw new RuntimeException("No booked room found for user without a rating in the specified hotel");
-        }
+        return rating;
     }
 
+    private void handleUserRating(Long userId, Rating rating) {
+        User user = userService.getUserById(userId);
+        user.addComment(rating);
+    }
+
+    private void handleBookingRating(Rating rating, BookedRoom bookedRoom) {
+        BookedRoom saveBookedRoom = bookingService.findBookingById(bookedRoom.getId());
+        saveBookedRoom.addComment(rating);
+    }
 
     @Override
     public RatingResponse updateRating(Long ratingId, UpdateRatingRequest request) {
@@ -72,11 +70,10 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public String checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(Long userId, Long hotelId) {
-        Pageable pageable = PageRequest.of(0, 1);
-        List<BookedRoom> bookedRooms = bookingRepository.findRoomUserHasBookedAndNotComment(hotelId, userId, pageable);
+        BookedRoom bookedRoom = bookingService.findRoomUserHasBookedAndNotComment(hotelId, userId);
 
-        if (!bookedRooms.isEmpty()) {
-            return bookedRooms.get(0).getRoom().getRoomType();
+        if (bookedRoom != null) {
+            return bookedRoom.getRoom().getRoomType();
         } else {
             return "No booked room found without a comment for this user in the specified hotel.";
         }

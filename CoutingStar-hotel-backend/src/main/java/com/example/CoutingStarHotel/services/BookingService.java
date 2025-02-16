@@ -4,6 +4,7 @@ import com.example.CoutingStarHotel.DTO.request.SaveBookingRequest;
 import com.example.CoutingStarHotel.DTO.request.UpdateBookedRoom;
 import com.example.CoutingStarHotel.DTO.response.BookingResponse;
 import com.example.CoutingStarHotel.DTO.response.PageResponse;
+import com.example.CoutingStarHotel.entities.BookedRoom;
 
 public interface BookingService {
     PageResponse<BookingResponse> getAllBookings(Integer pageNo, Integer pageSize);
@@ -16,7 +17,9 @@ public interface BookingService {
 
     PageResponse<BookingResponse> getAllBookingsByHotelId(Integer pageNo, Integer pageSize, Long hotelId);
 
-    BookingResponse findByBookingId(Long bookingId);
+    BookingResponse findBookingResponseById(Long bookingId);
+
+    BookedRoom findBookingById(Long id);
 
     BookingResponse updateBooked(Long bookingId, UpdateBookedRoom request);
 
@@ -27,4 +30,6 @@ public interface BookingService {
     PageResponse<BookingResponse> getAllBookingByKeywordAndHotelId(Integer pageNo, Integer pageSize, Long hotelId, String keyword);
 
     BookingResponse saveBooking(Long roomId, SaveBookingRequest request, Long userId, Long redeemedDiscountId);
+
+    BookedRoom findRoomUserHasBookedAndNotComment(Long hotelId, Long UserId);
 }

@@ -53,7 +53,7 @@ public class BookingController {
 
     @GetMapping("/booking/{bookingId}")
     public ResponseData<BookingResponse> getBookingByBookingId(@PathVariable Long bookingId) {
-        var result = bookingService.findByBookingId(bookingId);
+        var result = bookingService.findBookingResponseById(bookingId);
         return ResponseData.<BookingResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("success")
