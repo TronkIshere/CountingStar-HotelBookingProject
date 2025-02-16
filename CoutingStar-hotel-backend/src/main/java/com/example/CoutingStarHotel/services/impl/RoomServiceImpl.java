@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
@@ -40,9 +41,8 @@ public class RoomServiceImpl implements RoomService {
         room.setRoomPrice(request.getRoomPrice());
         room.setRoomDescription(request.getRoomDescription());
         Hotel hotel = hotelCoordinator.getHotelById(hotelId);
-        if (!request.getPhoto().isEmpty()) {
-            byte[] photoBytes = request.getPhoto().getBytes();
-            Blob photoBlob = new SerialBlob(photoBytes);
+        Blob photoBlob = processPhoto(request.getPhoto());
+        if (photoBlob != null) {
             room.setPhoto(photoBlob);
         }
         hotel.addRoom(room);
@@ -72,9 +72,8 @@ public class RoomServiceImpl implements RoomService {
         room.setRoomDescription(request.getRoomDescription());
         room.setRoomPrice(request.getRoomPrice());
 
-        if (request.getPhoto() != null && !request.getPhoto().isEmpty()) {
-            byte[] photoBytes = request.getPhoto().getBytes();
-            Blob photoBlob = new SerialBlob(photoBytes);
+        Blob photoBlob = processPhoto(request.getPhoto());
+        if (photoBlob != null) {
             room.setPhoto(photoBlob);
         }
 
@@ -136,5 +135,13 @@ public class RoomServiceImpl implements RoomService {
                 .totalElements(roomPage.getTotalElements())
                 .data(RoomMapper.roomResponses(roomList))
                 .build();
+    }
+
+    private Blob processPhoto(MultipartFile photo) throws IOException, SQLException {
+        if (photo != null && !photo.isEmpty()) {
+            byte[] photoBytes = photo.getBytes();
+            return new SerialBlob(photoBytes);
+        }
+        return null;
     }
 }
