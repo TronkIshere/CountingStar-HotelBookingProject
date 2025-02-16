@@ -21,7 +21,7 @@ public class RedeemedDiscountController {
     public ResponseEntity<?> addRedeemedDiscountByUserId(@PathVariable Long userId,
                                                          @PathVariable Long discountId) {
         redeemedDiscountService.addRedeemedDiscountByUserId(discountId, userId);
-        return ResponseEntity.ok("Đã nhận được mã giảm giá");
+        return ResponseEntity.ok("success");
 
     }
 

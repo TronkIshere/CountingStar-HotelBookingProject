@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface RedeemedDiscountService {
     void addRedeemedDiscountByUserId(Long discountId, Long userId);
+
     List<RedeemedDiscountResponse> getAllRedeemedDiscountByUserId(Long userId);
+
     RedeemedDiscount findRedeemedDiscountById(Long redeemedDiscountId);
 }

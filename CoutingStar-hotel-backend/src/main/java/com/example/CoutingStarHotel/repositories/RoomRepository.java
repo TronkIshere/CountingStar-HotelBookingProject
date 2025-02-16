@@ -11,14 +11,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
-    @Query("SELECT r FROM Room r WHERE r.roomType LIKE %:roomType% " +
-            "AND r.id NOT IN ( " +
-            "SELECT br.room.id FROM BookedRoom br " +
-            "WHERE (br.checkInDate <= :checkOutDate AND br.checkOutDate >= :checkInDate))")
-    List<Room> findAvailableRoomsByDatesAndType(@Param("checkInDate") LocalDate checkInDate,
-                                                @Param("checkOutDate") LocalDate checkOutDate,
-                                                @Param("roomType") String roomType);
-
     @Query("SELECT r FROM Room r WHERE r.hotel.id = :hotelId")
     Page<Room> findRoomsByHotelId(@Param("hotelId") Long hotelId, Pageable pageable);
 

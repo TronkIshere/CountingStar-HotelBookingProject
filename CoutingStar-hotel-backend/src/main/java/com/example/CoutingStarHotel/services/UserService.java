@@ -15,7 +15,9 @@ public interface UserService {
     User registerHotelOwner(User user);
 
     List<User> getUsers();
+
     void deleteUser(String email);
+
     UserResponse getUser(String email);
 
     User getUserById(Long userId);

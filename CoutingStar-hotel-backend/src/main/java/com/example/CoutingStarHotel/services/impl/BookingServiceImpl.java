@@ -262,5 +262,4 @@ public class BookingServiceImpl implements BookingService {
 
         return bookedRooms.get(0);
     }
-
 }

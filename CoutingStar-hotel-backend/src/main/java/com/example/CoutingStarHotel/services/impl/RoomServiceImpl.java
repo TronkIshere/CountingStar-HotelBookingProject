@@ -56,7 +56,6 @@ public class RoomServiceImpl implements RoomService {
         return RoomMapper.roomResponses(roomList);
     }
 
-
     @Override
     public void deleteRoom(Long roomId) {
         Optional<Room> theRoom = roomRepository.findById(roomId);
