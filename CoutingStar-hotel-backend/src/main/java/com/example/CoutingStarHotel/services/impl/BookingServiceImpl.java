@@ -69,17 +69,9 @@ public class BookingServiceImpl implements BookingService {
         try {
             BookedRoom bookedRoom = createBookedRoom(request);
             validateBookingDates(bookedRoom);
-            Room room = roomService.getRoomById(roomId);
             handleRoomBooking(roomId, bookedRoom);
-            if (userId != null) {
-                handleUserBooking(userId, bookedRoom);
-            }
-            if (redeemedDiscountId != null) {
-                BigDecimal totalAmount = calculateTotalAmount(bookedRoom, room.getRoomPrice());
-                totalAmount = applyDiscountIfValid(redeemedDiscountId, totalAmount, bookedRoom);
-                bookedRoom.setTotalAmount(totalAmount);
-            }
-            bookedRoom.setBookingDay(LocalDate.now());
+            handleUserBooking(userId, bookedRoom);
+            applyDiscountIfValid(redeemedDiscountId, bookedRoom, roomId);
             bookingRepository.save(bookedRoom);
             return BookedRoomMapper.toBookingResponse(bookedRoom);
         } catch (InvalidBookingRequestException e) {
@@ -87,10 +79,12 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
-    private void handleRoomBooking(Long roomId, BookedRoom bookedRoom) {
+    private void applyDiscountIfValid(Long redeemedDiscountId, BookedRoom bookedRoom, Long roomId) {
+        if (redeemedDiscountId == null) return;
         Room room = roomService.getRoomById(roomId);
-        room.addBooking(bookedRoom);
-        bookedRoom.setRoom(room);
+        BigDecimal totalAmount = calculateTotalAmount(bookedRoom, room.getRoomPrice());
+        totalAmount = applyDiscountIfValid(redeemedDiscountId, totalAmount, bookedRoom);
+        bookedRoom.setTotalAmount(totalAmount);
     }
 
     private BookedRoom createBookedRoom(SaveBookingRequest request) {
@@ -112,6 +106,18 @@ public class BookingServiceImpl implements BookingService {
         if (bookingRequest.getCheckOutDate().isBefore(bookingRequest.getCheckInDate())) {
             throw new InvalidBookingRequestException("Check-in date must come before check-out date");
         }
+    }
+
+    private void handleRoomBooking(Long roomId, BookedRoom bookedRoom) {
+        Room room = roomService.getRoomById(roomId);
+        room.addBooking(bookedRoom);
+        bookedRoom.setRoom(room);
+    }
+
+    private void handleUserBooking(Long userId, BookedRoom bookingRequest) {
+        if (userId == null) return;
+        User user = userService.getUserById(userId);
+        user.addBooking(bookingRequest);
     }
 
     private BigDecimal calculateTotalAmount(BookedRoom bookingRequest, BigDecimal roomPrice) {
@@ -142,11 +148,6 @@ public class BookingServiceImpl implements BookingService {
         bookingRequest.addDiscount(redeemedDiscount);
         redeemedDiscountRepository.save(redeemedDiscount);
         return totalAmount;
-    }
-
-    private void handleUserBooking(Long userId, BookedRoom bookingRequest) {
-        User user = userService.getUserById(userId);
-        user.addBooking(bookingRequest);
     }
 
     @Override
