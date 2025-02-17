@@ -1,10 +1,9 @@
 package com.example.CoutingStarHotel.entities;
 
-import com.example.CoutingStarHotel.entities.common.BaseEntity;
+import com.example.CoutingStarHotel.entities.common.AbstractEntity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,7 +17,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Role extends BaseEntity {
+public class Role extends AbstractEntity<Long> {
     private String name;
 
     @ManyToMany(mappedBy = "roles")

@@ -1,4 +1,4 @@
-package com.example.CoutingStarHotel.request;
+package com.example.CoutingStarHotel.DTO.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

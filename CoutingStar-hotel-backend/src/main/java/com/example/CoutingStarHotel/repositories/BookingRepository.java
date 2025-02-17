@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<BookedRoom, Long> {
-    List<BookedRoom> findByRoomId(Long roomId);
-
     Optional<BookedRoom> findByBookingConfirmationCode(String confirmationCode);
 
     Page<BookedRoom> findByUserId(Pageable pageable, Long userId);
@@ -25,7 +23,7 @@ public interface BookingRepository extends JpaRepository<BookedRoom, Long> {
             "WHERE br.user.id = :userId " +
             "AND br.room.hotel.id = :hotelId " +
             "AND r.id IS NULL")
-    List<BookedRoom> findRoomUserHasBookedAndNotComment(Long hotelId, Long userId, Pageable pageable);
+    List<BookedRoom> findRoomsUserHasBookedAndNotComment(Long hotelId, Long userId, Pageable pageable);
 
     @Query("SELECT COUNT(b) FROM BookedRoom b")
     int getTotalNumberOfBookedRooms();
@@ -37,7 +35,7 @@ public interface BookingRepository extends JpaRepository<BookedRoom, Long> {
             "lower(b.guestEmail) LIKE lower(concat('%', :keyword, '%')) OR " +
             "lower(b.guestFullName) LIKE lower(concat('%', :keyword, '%')) OR " +
             "lower(b.guestPhoneNumber) LIKE lower(concat('%', :keyword, '%')) OR " +
-            "cast(b.bookingId as string) LIKE lower(concat('%', :keyword, '%')) AND " +
+            "cast(b.id as string) LIKE lower(concat('%', :keyword, '%')) AND " +
             "b.room.hotel.id = :hotelId")
     Page<BookedRoom> getAllBookingByKeywordAndHotelId(Pageable pageable, Long hotelId, String keyword);
 }

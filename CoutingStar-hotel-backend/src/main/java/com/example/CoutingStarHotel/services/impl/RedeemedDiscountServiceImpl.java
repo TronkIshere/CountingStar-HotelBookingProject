@@ -1,14 +1,16 @@
 package com.example.CoutingStarHotel.services.impl;
 
+import com.example.CoutingStarHotel.DTO.response.RedeemedDiscountResponse;
 import com.example.CoutingStarHotel.entities.Discount;
 import com.example.CoutingStarHotel.entities.RedeemedDiscount;
 import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.exception.InvalidBookingRequestException;
 import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
-import com.example.CoutingStarHotel.repositories.DiscountRepository;
+import com.example.CoutingStarHotel.mapper.RedeemedDiscountMapper;
 import com.example.CoutingStarHotel.repositories.RedeemedDiscountRepository;
-import com.example.CoutingStarHotel.repositories.UserRepository;
+import com.example.CoutingStarHotel.services.DiscountService;
 import com.example.CoutingStarHotel.services.RedeemedDiscountService;
+import com.example.CoutingStarHotel.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,16 +21,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RedeemedDiscountServiceImpl implements RedeemedDiscountService {
     private final RedeemedDiscountRepository redeemedDiscountRepository;
-    private final DiscountRepository discountRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
+    private final DiscountService discountService;
 
     @Override
     public void addRedeemedDiscountByUserId(Long discountId, Long userId) {
-        Discount discount = discountRepository.findById(discountId).get();
-        User user = userRepository.findById(userId).get();
-
+        Discount discount = discountService.getDiscountById(discountId);
+        User user = userService.getUserById(userId);
         if (redeemedDiscountRepository.existsByUserIdAndDiscountId(userId, discountId)) {
-            throw new InvalidBookingRequestException("Người dùng đã nhận mã giảm giá này rồi, hãy kiếm mã giảm giá khác");
+            throw new InvalidBookingRequestException("Discount have been redeemed");
         }
 
         RedeemedDiscount redeemedDiscount = new RedeemedDiscount();
@@ -38,9 +39,9 @@ public class RedeemedDiscountServiceImpl implements RedeemedDiscountService {
     }
 
     @Override
-    public List<RedeemedDiscount> getAllRedeemedDiscountByUserId(Long userId) {
-
-        return discountRepository.getAllRedeemedDiscountNotExpiredByUserId(userId, LocalDate.now());
+    public List<RedeemedDiscountResponse> getAllRedeemedDiscountByUserId(Long userId) {
+        List<RedeemedDiscount> redeemedDiscountList = discountService.getAllRedeemedDiscountNotExpiredByUserId(userId, LocalDate.now());
+        return RedeemedDiscountMapper.redeemedDiscountResponses(redeemedDiscountList);
     }
 
     @Override

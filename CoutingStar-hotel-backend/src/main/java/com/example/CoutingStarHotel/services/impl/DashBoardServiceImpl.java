@@ -1,6 +1,7 @@
 package com.example.CoutingStarHotel.services.impl;
 
-import com.example.CoutingStarHotel.DTO.DashBoardMonthIncreasedDTO;
+import com.example.CoutingStarHotel.DTO.response.AdminDashBoardMonthIncreased;
+import com.example.CoutingStarHotel.DTO.response.HotelOwnerMonthIncreased;
 import com.example.CoutingStarHotel.services.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,30 +14,28 @@ public class DashBoardServiceImpl implements DashBoardService {
     private final BookingService bookingService;
     private final RatingService ratingService;
     @Override
-    public DashBoardMonthIncreasedDTO getDataForAdminDashBoardMonthIncreased() {
-        DashBoardMonthIncreasedDTO dashBoardMonthIncreasedData = new DashBoardMonthIncreasedDTO(
-                userService.getTotalNumberOfUsers(),
-                userService.getPercentageOfUsersIncreasedDuringTheMonth(),
-                hotelService.getTotalNumberOfHotels(),
-                hotelService.getPercentageOfHotelsIncreasedDuringTheMonth(),
-                bookingService.getTotalNumberOfBookedRooms(),
-                bookingService.getPercentageOfBookedRoomsIncreasedDuringTheMonth(),
-                ratingService.getTotalNumberOfComments(),
-                ratingService.getPercentageOfCommentsIncreaseDuringTheMonth()
-        );
-        return dashBoardMonthIncreasedData;
+    public AdminDashBoardMonthIncreased getDataForAdminDashBoardMonthIncreased() {
+        return AdminDashBoardMonthIncreased.builder()
+                .totalNumberOfUsers(userService.getTotalNumberOfUsers())
+                .percentageOfUsersIncreasedDuringTheMonth(userService.getPercentageOfUsersIncreasedDuringTheMonth())
+                .totalNumberOfHotels(hotelService.getTotalNumberOfHotels())
+                .percentageOfHotelsIncreasedDuringTheMonth(hotelService.getPercentageOfHotelsIncreasedDuringTheMonth())
+                .totalNumberOfBookedRooms(bookingService.getTotalNumberOfBookedRooms())
+                .percentageOfBookedRoomsIncreasedDuringTheMonth(bookingService.getPercentageOfBookedRoomsIncreasedDuringTheMonth())
+                .totalNumberOfComments(ratingService.getTotalNumberOfComments())
+                .percentageOfCommentsIncreaseDuringTheMonth(ratingService.getPercentageOfCommentsIncreaseDuringTheMonth())
+                .build();
     }
 
     @Override
-    public DashBoardMonthIncreasedDTO getDataForHotelOwnerMonthIncreased(Long hotelId) {
-        DashBoardMonthIncreasedDTO dashBoardMonthIncreasedData = new DashBoardMonthIncreasedDTO(
-                hotelService.getTotalBookedRoomInSpecificHotel(hotelId),
-                hotelService.getPercentageOfBookedIncreasedDuringTheMonthForHotel(hotelId),
-                ratingService.getTotalRatingInSpecificHotel(hotelId),
-                ratingService.getPercentageOfRatingIncreasedDuringTheMonthForHotel(hotelId),
-                hotelService.getTotalRevenueInSpecificHotel(hotelId),
-                hotelService.getPercentageOfRevenueIncreasedDuringTheMonthForHotel(hotelId)
-        );
-        return dashBoardMonthIncreasedData;
+    public HotelOwnerMonthIncreased getDataForHotelOwnerMonthIncreased(Long hotelId) {
+        return HotelOwnerMonthIncreased.builder()
+                .totalBookedRoomInSpecificHotel(hotelService.getTotalBookedRoomInSpecificHotel(hotelId))
+                .percentageOfBookedIncreasedDuringTheMonth(hotelService.getPercentageOfBookedIncreasedDuringTheMonthForHotel(hotelId))
+                .totalRatingInSpecificHotel(ratingService.getTotalRatingInSpecificHotel(hotelId))
+                .percentageOfRatingIncreasedDuringTheMonth(ratingService.getPercentageOfRatingIncreasedDuringTheMonthForHotel(hotelId))
+                .totalRevenueInSpecificHotel(hotelService.getTotalRevenueInSpecificHotel(hotelId))
+                .percentageOfRevenueIncreasedDuringTheMonth(hotelService.getPercentageOfRevenueIncreasedDuringTheMonthForHotel(hotelId))
+                .build();
     }
 }

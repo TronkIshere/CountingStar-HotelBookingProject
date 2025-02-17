@@ -1,6 +1,6 @@
 package com.example.CoutingStarHotel.entities;
 
-import com.example.CoutingStarHotel.entities.common.BaseEntity;
+import com.example.CoutingStarHotel.entities.common.AbstractEntity;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Hotel extends BaseEntity {
+public class Hotel extends AbstractEntity<Long> {
     private String hotelName;
     private String city;
     private String hotelLocation;
