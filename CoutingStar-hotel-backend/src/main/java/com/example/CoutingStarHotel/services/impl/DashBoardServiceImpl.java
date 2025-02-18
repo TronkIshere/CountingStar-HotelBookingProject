@@ -3,16 +3,19 @@ package com.example.CoutingStarHotel.services.impl;
 import com.example.CoutingStarHotel.DTO.response.AdminDashBoardMonthIncreased;
 import com.example.CoutingStarHotel.DTO.response.HotelOwnerMonthIncreased;
 import com.example.CoutingStarHotel.services.*;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class DashBoardServiceImpl implements DashBoardService {
-    private final UserService userService;
-    private final HotelService hotelService;
-    private final BookingService bookingService;
-    private final RatingService ratingService;
+    UserService userService;
+    HotelService hotelService;
+    BookingService bookingService;
+    RatingService ratingService;
     @Override
     public AdminDashBoardMonthIncreased getDataForAdminDashBoardMonthIncreased() {
         return AdminDashBoardMonthIncreased.builder()

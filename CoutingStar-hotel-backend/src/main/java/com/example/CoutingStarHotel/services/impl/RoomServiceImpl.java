@@ -13,7 +13,9 @@ import com.example.CoutingStarHotel.services.RoomService;
 import com.example.CoutingStarHotel.services.impl.helpers.HotelCoordinator;
 import com.example.CoutingStarHotel.services.impl.helpers.RatingCoordinator;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,10 +31,11 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RoomServiceImpl implements RoomService {
-    private final RoomRepository roomRepository;
-    private final HotelCoordinator hotelCoordinator;
-    private final RatingCoordinator ratingCoordinator;
+    RoomRepository roomRepository;
+    HotelCoordinator hotelCoordinator;
+    RatingCoordinator ratingCoordinator;
 
     @Override
     public RoomResponse addNewRoom(AddRoomRequest request, Long hotelId) throws SQLException, IOException {

@@ -11,7 +11,9 @@ import com.example.CoutingStarHotel.repositories.RatingRepository;
 import com.example.CoutingStarHotel.services.BookingService;
 import com.example.CoutingStarHotel.services.RatingService;
 import com.example.CoutingStarHotel.services.UserService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,10 +22,11 @@ import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RatingServiceImpl implements RatingService {
-    private final RatingRepository ratingRepository;
-    private final UserService userService;
-    private final BookingService bookingService;
+    RatingRepository ratingRepository;
+    UserService userService;
+    BookingService bookingService;
 
     @Override
     public RatingResponse saveRating(Long hotelId, Long userId, AddRatingRequest request) {

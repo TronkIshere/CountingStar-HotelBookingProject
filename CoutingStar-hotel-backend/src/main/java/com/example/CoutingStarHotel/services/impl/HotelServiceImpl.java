@@ -11,7 +11,9 @@ import com.example.CoutingStarHotel.repositories.HotelRepository;
 import com.example.CoutingStarHotel.services.HotelService;
 import com.example.CoutingStarHotel.services.RatingService;
 import com.example.CoutingStarHotel.services.UserService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,10 +32,11 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class HotelServiceImpl implements HotelService {
-    private final HotelRepository hotelRepository;
-    private final UserService userService;
-    private final RatingService ratingService;
+    HotelRepository hotelRepository;
+    UserService userService;
+    RatingService ratingService;
 
     @Override
     public HotelResponse addHotel(Long userId,

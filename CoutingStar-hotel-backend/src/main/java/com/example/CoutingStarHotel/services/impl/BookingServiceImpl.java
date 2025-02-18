@@ -18,7 +18,9 @@ import com.example.CoutingStarHotel.services.RedeemedDiscountService;
 import com.example.CoutingStarHotel.services.RoomService;
 import com.example.CoutingStarHotel.services.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,12 +34,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class BookingServiceImpl implements BookingService {
-    private final BookingRepository bookingRepository;
-    private final RoomService roomService;
-    private final UserService userService;
-    private final RedeemedDiscountService redeemedDiscountService;
-    private final RedeemedDiscountRepository redeemedDiscountRepository;
+    BookingRepository bookingRepository;
+    RoomService roomService;
+    UserService userService;
+    RedeemedDiscountService redeemedDiscountService;
+    RedeemedDiscountRepository redeemedDiscountRepository;
 
     @Override
     public PageResponse<BookingResponse> getAllBookings(Integer pageNo, Integer pageSize) {

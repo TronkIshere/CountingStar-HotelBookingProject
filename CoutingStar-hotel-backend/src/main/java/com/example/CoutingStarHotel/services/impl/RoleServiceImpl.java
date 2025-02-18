@@ -8,7 +8,9 @@ import com.example.CoutingStarHotel.repositories.RoleRepository;
 import com.example.CoutingStarHotel.services.RoleService;
 import com.example.CoutingStarHotel.services.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,9 +18,10 @@ import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RoleServiceImpl implements RoleService {
-    private final RoleRepository roleRepository;
-    private final UserService userService;
+    RoleRepository roleRepository;
+    UserService userService;
 
     @Override
     public List<Role> getRoles() {

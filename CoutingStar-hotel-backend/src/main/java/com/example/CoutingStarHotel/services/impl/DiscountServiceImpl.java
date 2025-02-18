@@ -10,7 +10,9 @@ import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
 import com.example.CoutingStarHotel.mapper.DiscountMapper;
 import com.example.CoutingStarHotel.repositories.DiscountRepository;
 import com.example.CoutingStarHotel.services.DiscountService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +24,9 @@ import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class DiscountServiceImpl implements DiscountService {
-    private final DiscountRepository discountRepository;
+    DiscountRepository discountRepository;
 
     @Override
     public DiscountResponse addDiscount(AddDiscountRequest request){

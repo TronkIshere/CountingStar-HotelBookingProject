@@ -3,21 +3,18 @@ package com.example.CoutingStarHotel.mapper;
 import com.example.CoutingStarHotel.DTO.response.HotelResponse;
 import com.example.CoutingStarHotel.entities.Hotel;
 import com.example.CoutingStarHotel.services.HotelService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Base64;
 import java.util.List;
 
-@Service
+@Component
 public class HotelMapper {
     private static HotelService hotelService;
 
-    @Autowired
-    public HotelMapper(@Lazy HotelService hotelService) {
+    public HotelMapper(HotelService hotelService) {
         HotelMapper.hotelService = hotelService;
     }
 

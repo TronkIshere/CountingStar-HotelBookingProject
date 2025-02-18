@@ -15,7 +15,9 @@ import com.example.CoutingStarHotel.services.UserService;
 import com.example.CoutingStarHotel.services.impl.helpers.RoleCoordinator;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,12 +36,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final RoleCoordinator roleCoordinator;
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtils jwtUtils;
+    UserRepository userRepository;
+    PasswordEncoder passwordEncoder;
+    RoleCoordinator roleCoordinator;
+    AuthenticationManager authenticationManager;
+    JwtUtils jwtUtils;
 
     @Override
     public User registerUser(User user) {

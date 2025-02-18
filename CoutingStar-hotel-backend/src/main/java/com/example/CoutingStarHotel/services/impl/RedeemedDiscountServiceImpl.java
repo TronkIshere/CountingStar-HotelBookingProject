@@ -11,7 +11,9 @@ import com.example.CoutingStarHotel.repositories.RedeemedDiscountRepository;
 import com.example.CoutingStarHotel.services.DiscountService;
 import com.example.CoutingStarHotel.services.RedeemedDiscountService;
 import com.example.CoutingStarHotel.services.UserService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,10 +21,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RedeemedDiscountServiceImpl implements RedeemedDiscountService {
-    private final RedeemedDiscountRepository redeemedDiscountRepository;
-    private final UserService userService;
-    private final DiscountService discountService;
+    RedeemedDiscountRepository redeemedDiscountRepository;
+    UserService userService;
+    DiscountService discountService;
 
     @Override
     public void addRedeemedDiscountByUserId(Long discountId, Long userId) {
