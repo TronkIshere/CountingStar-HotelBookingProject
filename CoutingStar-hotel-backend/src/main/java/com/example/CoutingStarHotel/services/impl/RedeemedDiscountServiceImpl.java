@@ -11,12 +11,14 @@ import com.example.CoutingStarHotel.repositories.RedeemedDiscountRepository;
 import com.example.CoutingStarHotel.services.DiscountService;
 import com.example.CoutingStarHotel.services.RedeemedDiscountService;
 import com.example.CoutingStarHotel.services.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -50,5 +52,18 @@ public class RedeemedDiscountServiceImpl implements RedeemedDiscountService {
     @Override
     public RedeemedDiscount findRedeemedDiscountById(Long redeemedDiscountId) {
         return redeemedDiscountRepository.findById(redeemedDiscountId).orElseThrow((() -> new ResourceNotFoundException("discount not found")));
+    }
+
+    @Override
+    public String softDelete(Long redeemedDiscountId) {
+        LocalDateTime deleteAt = LocalDateTime.now();
+        RedeemedDiscount redeemedDiscount = findById(redeemedDiscountId);
+        redeemedDiscount.setDeletedAt(deleteAt);
+        return "RedeemedDiscount with id " + redeemedDiscountId + " has been deleted at " + deleteAt;
+    }
+
+    public RedeemedDiscount findById(Long id){
+        return redeemedDiscountRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Rating with ID " + id + " not found"));
     }
 }

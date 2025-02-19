@@ -99,6 +99,16 @@ public class RoomController {
                 .data(result)
                 .build();
     }
+
+    @PutMapping("/softDelete/{roomId}")
+    public ResponseData<String> softDelete(@PathVariable Long roomId) {
+        var result = roomService.softDelete(roomId);
+        return ResponseData.<String>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
+    }
 }
 
 

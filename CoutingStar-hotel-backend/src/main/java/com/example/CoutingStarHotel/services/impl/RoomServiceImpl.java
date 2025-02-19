@@ -26,6 +26,7 @@ import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -137,6 +138,15 @@ public class RoomServiceImpl implements RoomService {
                 .totalElements(roomPage.getTotalElements())
                 .data(RoomMapper.roomResponses(roomList))
                 .build();
+    }
+
+    @Override
+    public String softDelete(Long roomId) {
+        LocalDateTime deleteAt = LocalDateTime.now();
+        Room room = getRoomById(roomId);
+        room.setDeletedAt(deleteAt);
+        roomRepository.save(room);
+        return "Room with ID " + roomId + " has been softDelete " + deleteAt;
     }
 
     private Blob processPhoto(MultipartFile photo) throws IOException, SQLException {

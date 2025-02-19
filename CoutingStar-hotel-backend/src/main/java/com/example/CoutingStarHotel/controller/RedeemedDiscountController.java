@@ -34,4 +34,14 @@ public class RedeemedDiscountController {
                 .data(result)
                 .build();
     }
+
+    @PutMapping("/softDelete/{redeemedDiscount}")
+    public ResponseData<String> softDeleteRedeemedDiscount(@PathVariable Long redeemedDiscount){
+        var result = redeemedDiscountService.softDelete(redeemedDiscount);
+        return ResponseData.<String>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
+    }
 }

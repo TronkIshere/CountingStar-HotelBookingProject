@@ -95,4 +95,14 @@ public class UserController {
                 .data("success")
                 .build();
     }
+    @PutMapping("/softDelete/{userId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public  ResponseData<String> softDelete(@PathVariable Long userId){
+        var result = userService.softDelete(userId);
+        return ResponseData.<String>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
+    }
 }

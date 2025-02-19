@@ -11,4 +11,6 @@ public interface RedeemedDiscountService {
     List<RedeemedDiscountResponse> getAllRedeemedDiscountByUserId(Long userId);
 
     RedeemedDiscount findRedeemedDiscountById(Long redeemedDiscountId);
+
+    String softDelete(Long redeemedDiscount);
 }

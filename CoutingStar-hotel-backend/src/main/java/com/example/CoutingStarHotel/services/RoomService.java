@@ -28,4 +28,6 @@ public interface RoomService {
     double averageNumberOfRoomStars(Long roomId);
 
     PageResponse<RoomResponse> getAllRoomByKeywordAndHotelId(Integer pageNo, Integer pageSize, String keyword, Long hotelId);
+
+    String softDelete(Long roomId);
 }

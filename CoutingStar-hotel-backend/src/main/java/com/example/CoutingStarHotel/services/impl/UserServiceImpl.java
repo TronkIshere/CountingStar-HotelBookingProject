@@ -31,6 +31,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -176,5 +177,14 @@ public class UserServiceImpl implements UserService {
                 .token(jwt)
                 .roles(roles)
                 .build();
+    }
+
+    @Override
+    public String softDelete(Long userId) {
+        LocalDateTime deleteAt = LocalDateTime.now();
+        User user = getUserById(userId);
+        user.setDeletedAt(deleteAt);
+        userRepository.save(user);
+        return "User with ID " + userId + " has been delete at " + deleteAt;
     }
 }
