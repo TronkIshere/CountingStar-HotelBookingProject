@@ -6,7 +6,8 @@ import com.example.CoutingStarHotel.DTO.response.discount.DiscountResponse;
 import com.example.CoutingStarHotel.DTO.response.common.PageResponse;
 import com.example.CoutingStarHotel.entities.Discount;
 import com.example.CoutingStarHotel.entities.RedeemedDiscount;
-import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
+import com.example.CoutingStarHotel.exception.ApplicationException;
+import com.example.CoutingStarHotel.exception.ErrorCode;
 import com.example.CoutingStarHotel.mapper.DiscountMapper;
 import com.example.CoutingStarHotel.repositories.DiscountRepository;
 import com.example.CoutingStarHotel.services.DiscountService;
@@ -70,7 +71,7 @@ public class DiscountServiceImpl implements DiscountService {
 
     public Discount getDiscountById(Long discountId) {
         return discountRepository.findById(discountId)
-                .orElseThrow(() -> new ResourceNotFoundException("Discount not found"));
+                .orElseThrow(() -> new ApplicationException(ErrorCode.INVALID_DISCOUNT_REQUEST));
     }
 
     @Override

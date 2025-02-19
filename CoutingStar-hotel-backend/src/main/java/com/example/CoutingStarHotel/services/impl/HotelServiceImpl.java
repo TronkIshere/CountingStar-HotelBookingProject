@@ -9,7 +9,8 @@ import com.example.CoutingStarHotel.DTO.response.hotel.HotelResponse;
 import com.example.CoutingStarHotel.DTO.response.rating.RatingResponse;
 import com.example.CoutingStarHotel.entities.Hotel;
 import com.example.CoutingStarHotel.entities.User;
-import com.example.CoutingStarHotel.exception.InvalidHotelRequestException;
+import com.example.CoutingStarHotel.exception.ApplicationException;
+import com.example.CoutingStarHotel.exception.ErrorCode;
 import com.example.CoutingStarHotel.mapper.HotelMapper;
 import com.example.CoutingStarHotel.repositories.HotelRepository;
 import com.example.CoutingStarHotel.services.HotelService;
@@ -62,7 +63,7 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public Hotel getHotelById(Long hotelId) {
         return hotelRepository.findById(hotelId)
-                .orElseThrow(() -> new InvalidHotelRequestException("Hotel not found with ID: " + hotelId));
+                .orElseThrow(() -> new ApplicationException(ErrorCode.INVALID_HOTEL_REQUEST));
     }
 
     @Override
