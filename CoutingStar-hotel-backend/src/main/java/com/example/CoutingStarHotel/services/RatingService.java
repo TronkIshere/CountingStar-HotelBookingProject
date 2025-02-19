@@ -27,4 +27,6 @@ public interface RatingService {
     int getTotalRatingInSpecificHotel(Long hotelId);
 
     double getPercentageOfRatingIncreasedDuringTheMonthForHotel(Long hotelId);
+
+    String softDelete(Long ratingId);
 }

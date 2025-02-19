@@ -62,5 +62,15 @@ public class RatingController {
     public void deleteRating(@PathVariable Long ratingId) {
         ratingService.deleteRating(ratingId);
     }
+
+    @PutMapping("/softDelete/{ratingId}")
+    public ResponseData<String> softDeleteRating(@PathVariable Long ratingId) {
+        var result = ratingService.softDelete(ratingId);
+        return ResponseData.<String>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
+    }
 }
 

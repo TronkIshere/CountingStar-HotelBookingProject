@@ -11,12 +11,14 @@ import com.example.CoutingStarHotel.repositories.RatingRepository;
 import com.example.CoutingStarHotel.services.BookingService;
 import com.example.CoutingStarHotel.services.RatingService;
 import com.example.CoutingStarHotel.services.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -125,5 +127,19 @@ public class RatingServiceImpl implements RatingService {
         int RatingsAddedThisMonth = ratingRepository.getRatingsAddedDuringThisPeriod(hotelId, firstDayOfThisMonth, firstDayOfNextMonth);
 
         return (RatingsAddedThisMonth * 100.0) / totalRatings;
+    }
+
+    @Override
+    public String softDelete(Long ratingId) {
+        LocalDateTime deleteAt = LocalDateTime.now();
+        Rating rating = findById(ratingId);
+        rating.setDeletedAt(deleteAt);
+        ratingRepository.save(rating);
+        return "Rating with ID " + ratingId + " has been deleted at " + deleteAt;
+    }
+
+    private Rating findById(Long id) {
+        return ratingRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Rating with ID " + id + " not found"));
     }
 }
