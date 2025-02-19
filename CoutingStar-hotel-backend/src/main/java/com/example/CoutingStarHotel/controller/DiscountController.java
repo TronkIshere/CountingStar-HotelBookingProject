@@ -93,4 +93,14 @@ public class DiscountController {
         discountService.deleteDiscount(discountId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PutMapping("/softDelete/{discountId}")
+    public ResponseData<String> softDeleteDiscount(@PathVariable Long discountId){
+        var result = discountService.softDelete(discountId);
+        return ResponseData.<String>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
+    }
 }

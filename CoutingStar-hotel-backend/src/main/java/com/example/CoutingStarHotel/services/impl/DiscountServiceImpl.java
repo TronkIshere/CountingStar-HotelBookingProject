@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -112,6 +113,15 @@ public class DiscountServiceImpl implements DiscountService {
     @Override
     public List<RedeemedDiscount> getAllRedeemedDiscountNotExpiredByUserId(Long userId, LocalDate now) {
         return discountRepository.getAllRedeemedDiscountNotExpiredByUserId(userId, now);
+    }
+
+    @Override
+    public String softDelete(Long discountId) {
+        LocalDateTime deletedAt = LocalDateTime.now();
+        Discount discount = getDiscountById(discountId);
+        discount.setDeletedAt(deletedAt);
+        discountRepository.save(discount);
+        return "Discount with ID " + discountId + " has been soft deleted at " + deletedAt;
     }
 
     @Override

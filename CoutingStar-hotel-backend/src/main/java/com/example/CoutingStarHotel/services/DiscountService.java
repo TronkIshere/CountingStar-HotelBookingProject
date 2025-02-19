@@ -28,4 +28,6 @@ public interface DiscountService {
     DiscountResponse getDiscountResponseById(Long discountId);
 
     List<RedeemedDiscount> getAllRedeemedDiscountNotExpiredByUserId(Long userId, LocalDate now);
+
+    String softDelete(Long discountId);
 }
