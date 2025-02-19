@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class DiscountController {
     private final DiscountService discountService;
 
-    @PostMapping("/addDiscount")
+    @PostMapping("/")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public ResponseData<DiscountResponse> addDiscount(@RequestBody AddDiscountRequest request) throws IOException {
         var result = discountService.addDiscount(request);
@@ -31,9 +31,9 @@ public class DiscountController {
                 .build();
     }
 
-    @GetMapping("/getAllDiscount")
+    @GetMapping("/")
     public ResponseData<PageResponse<DiscountResponse>> getAllDiscount(@RequestParam(defaultValue = "0") Integer pageNo,
-                                                                         @RequestParam(defaultValue = "8") Integer pageSize) {
+                                                                       @RequestParam(defaultValue = "8") Integer pageSize) {
         var result = discountService.getAllDiscount(pageNo, pageSize);
         return ResponseData.<PageResponse<DiscountResponse>>builder()
                 .code(HttpStatus.OK.value())
@@ -42,9 +42,9 @@ public class DiscountController {
                 .build();
     }
 
-    @GetMapping("/getDiscountNotExpired")
+    @GetMapping("/not-expired")
     public ResponseData<PageResponse<DiscountResponse>> getDiscountNotExpired(@RequestParam(defaultValue = "0") Integer pageNo,
-                                                                        @RequestParam(defaultValue = "15") Integer pageSize) {
+                                                                              @RequestParam(defaultValue = "15") Integer pageSize) {
         var result = discountService.getDiscountNotExpired(pageNo, pageSize);
         return ResponseData.<PageResponse<DiscountResponse>>builder()
                 .code(HttpStatus.OK.value())
@@ -53,10 +53,10 @@ public class DiscountController {
                 .build();
     }
 
-    @GetMapping("/getDiscountByKeyword/{keyword}")
+    @GetMapping("/search/{keyword}")
     public ResponseData<PageResponse<DiscountResponse>> getDiscountByKeyword(@RequestParam(defaultValue = "0") Integer pageNo,
-                                                                       @RequestParam(defaultValue = "8") Integer pageSize,
-                                                                       @PathVariable String keyword) {
+                                                                             @RequestParam(defaultValue = "8") Integer pageSize,
+                                                                             @PathVariable String keyword) {
         var result = discountService.getDiscountByKeyword(pageNo, pageSize, keyword);
         return ResponseData.<PageResponse<DiscountResponse>>builder()
                 .code(HttpStatus.OK.value())
@@ -65,7 +65,7 @@ public class DiscountController {
                 .build();
     }
 
-    @GetMapping("/getDiscountById/{discountId}")
+    @GetMapping("/{discountId}")
     public ResponseData<DiscountResponse> getDiscountById(@PathVariable Long discountId) {
         var result = discountService.getDiscountResponseById(discountId);
         return ResponseData.<DiscountResponse>builder()
@@ -75,7 +75,7 @@ public class DiscountController {
                 .build();
     }
 
-    @PutMapping("/update/{discountId}")
+    @PutMapping("/{discountId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public ResponseData<DiscountResponse> updateDiscount(@PathVariable Long discountId,
                                                          @RequestBody UpdateDiscountRequest request) {
@@ -87,15 +87,15 @@ public class DiscountController {
                 .build();
     }
 
-    @DeleteMapping("/delete/{discountId}")
+    @DeleteMapping("/{discountId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public ResponseEntity<Void> deleteDiscount(@PathVariable Long discountId) {
         discountService.deleteDiscount(discountId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/softDelete/{discountId}")
-    public ResponseData<String> softDeleteDiscount(@PathVariable Long discountId){
+    @PutMapping("/{discountId}/soft-delete")
+    public ResponseData<String> softDeleteDiscount(@PathVariable Long discountId) {
         var result = discountService.softDelete(discountId);
         return ResponseData.<String>builder()
                 .code(HttpStatus.OK.value())
@@ -104,3 +104,4 @@ public class DiscountController {
                 .build();
     }
 }
+

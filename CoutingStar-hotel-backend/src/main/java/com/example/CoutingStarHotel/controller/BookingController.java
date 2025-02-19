@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class BookingController {
     private final BookingService bookingService;
 
-    @GetMapping("/all-bookings")
+    @GetMapping
     public ResponseData<PageResponse<BookingResponse>> getAllBookings(@RequestParam(defaultValue = "0") Integer pageNo,
                                                                       @RequestParam(defaultValue = "8") Integer pageSize) {
         var result = bookingService.getAllBookings(pageNo, pageSize);
@@ -28,11 +28,11 @@ public class BookingController {
                 .build();
     }
 
-    @GetMapping("/getAllBookingByKeywordAndHotelId/{hotelId}/{keyword}")
-    public ResponseData<PageResponse<BookingResponse>> getAllBookingByKeywordAndHotelId(@RequestParam(defaultValue = "0") Integer pageNo,
-                                                                                        @RequestParam(defaultValue = "8") Integer pageSize,
-                                                                                        @PathVariable Long hotelId,
-                                                                                        @PathVariable String keyword) {
+    @GetMapping("/search")
+    public ResponseData<PageResponse<BookingResponse>> searchBookings(@RequestParam Long hotelId,
+                                                                      @RequestParam String keyword,
+                                                                      @RequestParam(defaultValue = "0") Integer pageNo,
+                                                                      @RequestParam(defaultValue = "8") Integer pageSize) {
         var result = bookingService.getAllBookingByKeywordAndHotelId(pageNo, pageSize, hotelId, keyword);
         return ResponseData.<PageResponse<BookingResponse>>builder()
                 .code(HttpStatus.OK.value())
@@ -41,7 +41,7 @@ public class BookingController {
                 .build();
     }
 
-    @GetMapping("/confirmation/{confirmationCode}")
+    @GetMapping("/{confirmationCode}/confirmation")
     public ResponseData<BookingResponse> getBookingByConfirmationCode(@PathVariable String confirmationCode) {
         var result = bookingService.findByBookingConfirmationCode(confirmationCode);
         return ResponseData.<BookingResponse>builder()
@@ -51,7 +51,7 @@ public class BookingController {
                 .build();
     }
 
-    @GetMapping("/booking/{bookingId}")
+    @GetMapping("/{bookingId}")
     public ResponseData<BookingResponse> getBookingByBookingId(@PathVariable Long bookingId) {
         var result = bookingService.findBookingResponseById(bookingId);
         return ResponseData.<BookingResponse>builder()
@@ -61,7 +61,7 @@ public class BookingController {
                 .build();
     }
 
-    @GetMapping("/hotel/{hotelId}/booking")
+    @GetMapping("/hotels/{hotelId}")
     public ResponseData<PageResponse<BookingResponse>> getBookingByHotelId(@PathVariable Long hotelId,
                                                                            @RequestParam(defaultValue = "0") Integer pageNo,
                                                                            @RequestParam(defaultValue = "8") Integer pageSize) {
@@ -73,11 +73,11 @@ public class BookingController {
                 .build();
     }
 
-    @PostMapping("/room/{roomId}/booking")
+    @PostMapping("/rooms/{roomId}")
     public ResponseData<BookingResponse> saveBooking(@PathVariable Long roomId,
-                                                       @RequestBody SaveBookingRequest request,
-                                                       @RequestParam(required = false) Long userId,
-                                                       @RequestParam(required = false) Long redeemedDiscountId) {
+                                                     @RequestBody SaveBookingRequest request,
+                                                     @RequestParam(required = false) Long userId,
+                                                     @RequestParam(required = false) Long redeemedDiscountId) {
         var result = bookingService.saveBooking(roomId, request, userId, redeemedDiscountId);
         return ResponseData.<BookingResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -86,9 +86,9 @@ public class BookingController {
                 .build();
     }
 
-    @PutMapping("/booking/{bookingId}/update")
+    @PutMapping("/{bookingId}")
     public ResponseData<BookingResponse> updateBookedRoom(@PathVariable Long bookingId,
-                                                            @RequestBody UpdateBookedRoom request) {
+                                                          @RequestBody UpdateBookedRoom request) {
         var result = bookingService.updateBooked(bookingId, request);
         return ResponseData.<BookingResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -97,10 +97,10 @@ public class BookingController {
                 .build();
     }
 
-    @GetMapping("/user/{userId}/bookings")
+    @GetMapping("/users/{userId}")
     public ResponseData<PageResponse<BookingResponse>> getBookingsByUserId(@PathVariable Long userId,
-                                                                     @RequestParam(defaultValue = "0") Integer pageNo,
-                                                                     @RequestParam(defaultValue = "8") Integer pageSize) {
+                                                                           @RequestParam(defaultValue = "0") Integer pageNo,
+                                                                           @RequestParam(defaultValue = "8") Integer pageSize) {
         var result = bookingService.getBookingsByUserId(pageNo, pageSize, userId);
         return ResponseData.<PageResponse<BookingResponse>>builder()
                 .code(HttpStatus.OK.value())
@@ -109,13 +109,13 @@ public class BookingController {
                 .build();
     }
 
-    @DeleteMapping("/booking/{bookingId}/delete")
+    @DeleteMapping("/{bookingId}")
     public void cancelBooking(@PathVariable Long bookingId) {
         bookingService.cancelBooking(bookingId);
     }
 
-    @PutMapping("/booking/softDelete/{bookingId}")
-    public ResponseData<String> softDeleteBooking(@PathVariable Long bookingId){
+    @PutMapping("/{bookingId}/soft-delete")
+    public ResponseData<String> softDeleteBooking(@PathVariable Long bookingId) {
         var result = bookingService.softDelete(bookingId);
         return ResponseData.<String>builder()
                 .code(HttpStatus.OK.value())

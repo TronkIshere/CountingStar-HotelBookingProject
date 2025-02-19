@@ -20,15 +20,15 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/all")
+    @GetMapping("/list")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<List<User>> getUsers() {
-        return new ResponseEntity<>(userService.getUsers(), HttpStatus.FOUND);
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUsers());
     }
 
     @GetMapping("/{email}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
-    public ResponseData<UserResponse> getUserByEmail(@PathVariable("email") String email) {
+    public ResponseData<UserResponse> getUserByEmail(@PathVariable String email) {
         var result = userService.getUser(email);
         return ResponseData.<UserResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -37,10 +37,11 @@ public class UserController {
                 .build();
     }
 
-    @GetMapping("/getAllUserExceptAminRole")
+    @GetMapping("/list/non-admins")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseData<PageResponse<UserResponse>> getAllUserExceptAminRole(@RequestParam(defaultValue = "0") Integer pageNo,
-                                                                             @RequestParam(defaultValue = "8") Integer pageSize) {
+    public ResponseData<PageResponse<UserResponse>> getAllUsersExceptAdmin(
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "8") Integer pageSize) {
         var result = userService.getAllUserExceptAdminRole(pageNo, pageSize);
         return ResponseData.<PageResponse<UserResponse>>builder()
                 .code(HttpStatus.OK.value())
@@ -49,12 +50,13 @@ public class UserController {
                 .build();
     }
 
-    @GetMapping("/searchUserByKeyWord/{keyWord}")
+    @GetMapping("/search")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseData<PageResponse<UserResponse>> searchUserByKeyWord(@RequestParam(defaultValue = "0") Integer pageNo,
-                                                                        @RequestParam(defaultValue = "8") Integer pageSize,
-                                                                        @PathVariable String keyWord) {
-        var result = userService.searchUserByKeyWord(pageNo, pageSize, keyWord);
+    public ResponseData<PageResponse<UserResponse>> searchUsers(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "8") Integer pageSize) {
+        var result = userService.searchUserByKeyWord(pageNo, pageSize, keyword);
         return ResponseData.<PageResponse<UserResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("success")
@@ -62,9 +64,9 @@ public class UserController {
                 .build();
     }
 
-    @GetMapping("/getUserByUserId/{userId}")
+    @GetMapping("/user/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseData<UserResponse> getUserByUserId(@PathVariable Long userId) {
+    public ResponseData<UserResponse> getUserById(@PathVariable Long userId) {
         var result = userService.getUserByUserId(userId);
         return ResponseData.<UserResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -73,10 +75,11 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping("/updateUser/{userId}")
+    @PutMapping("/update/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseData<UserResponse> updateUser(@PathVariable Long userId,
-                                                 @RequestBody UpdateUserRequest request) {
+    public ResponseData<UserResponse> updateUser(
+            @PathVariable Long userId,
+            @RequestBody UpdateUserRequest request) {
         var result = userService.updateUser(userId, request);
         return ResponseData.<UserResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -88,16 +91,17 @@ public class UserController {
     @DeleteMapping("/delete/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_USER') or hasRole('ROLE_HOTEL_OWNER') and #email == principal.username)")
     public ResponseData<String> deleteUser(@PathVariable("userId") String email) {
-            userService.deleteUser(email);
+        userService.deleteUser(email);
         return ResponseData.<String>builder()
                 .code(HttpStatus.OK.value())
                 .message("success")
                 .data("success")
                 .build();
     }
-    @PutMapping("/softDelete/{userId}")
+
+    @PutMapping("/soft-delete/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public  ResponseData<String> softDelete(@PathVariable Long userId){
+    public ResponseData<String> softDelete(@PathVariable Long userId) {
         var result = userService.softDelete(userId);
         return ResponseData.<String>builder()
                 .code(HttpStatus.OK.value())

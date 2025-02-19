@@ -8,6 +8,7 @@ import com.example.CoutingStarHotel.DTO.response.common.ResponseData;
 import com.example.CoutingStarHotel.services.HotelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ import java.util.List;
 public class HotelController {
     private final HotelService hotelService;
 
-    @PostMapping("/{userId}/addHotel")
+    @PostMapping("/{userId}/add")
     public ResponseData<HotelResponse> addHotel(@PathVariable Long userId,
                                                 @RequestBody AddHotelRequest request) throws SQLException, IOException {
         var result = hotelService.addHotel(userId, request);
@@ -33,7 +34,7 @@ public class HotelController {
                 .build();
     }
 
-    @GetMapping("/all-hotels")
+    @GetMapping
     public ResponseData<PageResponse<HotelResponse>> getAllHotels(@RequestParam(defaultValue = "0") Integer pageNo,
                                                                   @RequestParam(defaultValue = "8") Integer pageSize) {
         var result = hotelService.getAllHotels(pageNo, pageSize);
@@ -44,7 +45,7 @@ public class HotelController {
                 .build();
     }
 
-    @GetMapping("/getHotelByKeyword/{keyword}")
+    @GetMapping("/search/{keyword}")
     public ResponseData<PageResponse<HotelResponse>> getHotelByKeyword(@RequestParam(defaultValue = "0") Integer pageNo,
                                                                        @RequestParam(defaultValue = "8") Integer pageSize,
                                                                        @PathVariable String keyword) {
@@ -66,7 +67,7 @@ public class HotelController {
                 .build();
     }
 
-    @GetMapping("/hotel/{hotelId}")
+    @GetMapping("/{hotelId}")
     public ResponseData<HotelResponse> getHotelById(@PathVariable Long hotelId) {
         var result = hotelService.getHotelResponseById(hotelId);
         return ResponseData.<HotelResponse>builder()
@@ -76,7 +77,7 @@ public class HotelController {
                 .build();
     }
 
-    @GetMapping("/{city}")
+    @GetMapping("/city/{city}")
     public ResponseData<PageResponse<HotelResponse>> getHotelsByCity(@PathVariable String city,
                                                                      @RequestParam(defaultValue = "0") Integer pageNo,
                                                                      @RequestParam(defaultValue = "5") Integer pageSize) {
@@ -88,7 +89,7 @@ public class HotelController {
                 .build();
     }
 
-    @PutMapping("/hotel/{hotelId}/hotelInformationUpdate")
+    @PutMapping("/{hotelId}/update")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public ResponseData<HotelResponse> updateHotel(@PathVariable Long hotelId,
                                                    @RequestBody UpdateHotelRequest request) throws IOException, SQLException {
@@ -100,15 +101,15 @@ public class HotelController {
                 .build();
     }
 
-
-    @DeleteMapping("/hotel/{hotelId}/delete")
+    @DeleteMapping("/{hotelId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
-    public void deleteHotel(@PathVariable Long hotelId) {
+    public ResponseEntity<Void> deleteHotel(@PathVariable Long hotelId) {
         hotelService.deleteHotel(hotelId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/hotel/softDelete/{hotelId}")
-    public ResponseData<String> softDelteHotel(@PathVariable Long hotelId) {
+    @PutMapping("/{hotelId}/softDelete")
+    public ResponseData<String> softDeleteHotel(@PathVariable Long hotelId) {
         var result = hotelService.softDelete(hotelId);
         return ResponseData.<String>builder()
                 .code(HttpStatus.OK.value())
@@ -117,3 +118,4 @@ public class HotelController {
                 .build();
     }
 }
+

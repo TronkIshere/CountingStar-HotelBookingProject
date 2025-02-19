@@ -23,7 +23,7 @@ import java.util.List;
 public class RoomController {
     private final RoomService roomService;
 
-    @PostMapping("/add/new-room/{hotelId}")
+    @PostMapping("/hotels/{hotelId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public ResponseData<RoomResponse> addNewRoom(
             @RequestBody AddRoomRequest request,
@@ -36,7 +36,7 @@ public class RoomController {
                 .build();
     }
 
-    @GetMapping("/{hotelId}")
+    @GetMapping("/hotels/{hotelId}")
     public ResponseData<PageResponse<RoomResponse>> getRoomsByHotelId(@PathVariable Long hotelId,
                                                                       @RequestParam(defaultValue = "0") Integer pageNo,
                                                                       @RequestParam(defaultValue = "8") Integer pageSize) {
@@ -48,7 +48,7 @@ public class RoomController {
                 .build();
     }
 
-    @GetMapping("/all-rooms")
+    @GetMapping
     public ResponseData<List<RoomResponse>> getAllRooms() {
         var result = roomService.getAllRooms();
         return ResponseData.<List<RoomResponse>>builder()
@@ -58,10 +58,10 @@ public class RoomController {
                 .build();
     }
 
-    @GetMapping("/getAllRoomByKeyword/{hotelId}/{keyword}")
+    @GetMapping("/hotels/{hotelId}/search")
     public ResponseData<PageResponse<RoomResponse>> getAllRoomByKeywordAndHotelId(@RequestParam(defaultValue = "0") Integer pageNo,
                                                                                   @RequestParam(defaultValue = "8") Integer pageSize,
-                                                                                  @PathVariable String keyword,
+                                                                                  @RequestParam String keyword,
                                                                                   @PathVariable Long hotelId) {
         var result = roomService.getAllRoomByKeywordAndHotelId(pageNo, pageSize, keyword, hotelId);
         return ResponseData.<PageResponse<RoomResponse>>builder()
@@ -71,14 +71,14 @@ public class RoomController {
                 .build();
     }
 
-    @DeleteMapping("/delete/room/{roomId}")
+    @DeleteMapping("/{roomId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long roomId) {
         roomService.deleteRoom(roomId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/update/{roomId}")
+    @PutMapping("/{roomId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public ResponseData<RoomResponse> updateRoom(@PathVariable Long roomId,
                                                  @RequestBody UpdateRoomRequest request) throws SQLException, IOException {
@@ -90,7 +90,7 @@ public class RoomController {
                 .build();
     }
 
-    @GetMapping("/room/{roomId}")
+    @GetMapping("/{roomId}")
     public ResponseData<RoomResponse> getRoomById(@PathVariable Long roomId) {
         var result = roomService.getRoomResponseById(roomId);
         return ResponseData.<RoomResponse>builder()
@@ -100,7 +100,7 @@ public class RoomController {
                 .build();
     }
 
-    @PutMapping("/softDelete/{roomId}")
+    @PutMapping("/{roomId}/soft-delete")
     public ResponseData<String> softDelete(@PathVariable Long roomId) {
         var result = roomService.softDelete(roomId);
         return ResponseData.<String>builder()
@@ -110,5 +110,6 @@ public class RoomController {
                 .build();
     }
 }
+
 
 

@@ -18,11 +18,12 @@ import java.util.List;
 @RequestMapping("/ratings")
 public class RatingController {
     private final RatingService ratingService;
-    @PostMapping("/add/hotel/{hotelId}/user/{userId}/addRating")
+
+    @PostMapping("/hotel/{hotelId}/user/{userId}")
     public ResponseData<RatingResponse> addNewRating(@PathVariable Long hotelId,
-                                                       @PathVariable Long userId,
-                                                       @RequestBody AddRatingRequest request){
-        var result = ratingService.saveRating(hotelId, userId , request);
+                                                     @PathVariable Long userId,
+                                                     @RequestBody AddRatingRequest request) {
+        var result = ratingService.saveRating(hotelId, userId, request);
         return ResponseData.<RatingResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("success")
@@ -31,8 +32,8 @@ public class RatingController {
     }
 
     @GetMapping("/hotel/{hotelId}")
-        public ResponseData<List<RatingResponse>> getAllRatingByRoomId(@PathVariable Long hotelId){
-            var result = ratingService.getAllRatingByHotelId(hotelId);
+    public ResponseData<List<RatingResponse>> getAllRatingsByHotelId(@PathVariable Long hotelId) {
+        var result = ratingService.getAllRatingByHotelId(hotelId);
         return ResponseData.<List<RatingResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("success")
@@ -40,16 +41,16 @@ public class RatingController {
                 .build();
     }
 
-    @GetMapping("/hotel/{hotelId}/CheckUserRating/{userId}")
-    public ResponseEntity<String> checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(@PathVariable Long userId,
-                                                                                                         @PathVariable Long hotelId){
+    @GetMapping("/hotel/{hotelId}/user/{userId}/check")
+    public ResponseEntity<String> checkUserRating(@PathVariable Long userId,
+                                                  @PathVariable Long hotelId) {
         String result = ratingService.checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(userId, hotelId);
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("/update/{ratingId}")
+    @PutMapping("/{ratingId}")
     public ResponseData<RatingResponse> updateRating(@PathVariable Long ratingId,
-                                                     @RequestBody UpdateRatingRequest request){
+                                                     @RequestBody UpdateRatingRequest request) {
         var result = ratingService.updateRating(ratingId, request);
         return ResponseData.<RatingResponse>builder()
                 .code(HttpStatus.OK.value())
@@ -58,12 +59,12 @@ public class RatingController {
                 .build();
     }
 
-    @DeleteMapping("/delete/{ratingId}")
+    @DeleteMapping("/{ratingId}")
     public void deleteRating(@PathVariable Long ratingId) {
         ratingService.deleteRating(ratingId);
     }
 
-    @PutMapping("/softDelete/{ratingId}")
+    @PutMapping("/{ratingId}/soft-delete")
     public ResponseData<String> softDeleteRating(@PathVariable Long ratingId) {
         var result = ratingService.softDelete(ratingId);
         return ResponseData.<String>builder()
@@ -73,4 +74,5 @@ public class RatingController {
                 .build();
     }
 }
+
 

@@ -13,20 +13,19 @@ import java.util.List;
 @CrossOrigin("http://localhost:5173")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/redeemedDiscount")
+@RequestMapping("/redeemed-discounts")
 public class RedeemedDiscountController {
     private final RedeemedDiscountService redeemedDiscountService;
 
-    @PostMapping("/add/{discountId}/{userId}")
-    public ResponseEntity<?> addRedeemedDiscountByUserId(@PathVariable Long userId,
-                                                         @PathVariable Long discountId) {
+    @PostMapping("/user/{userId}/discount/{discountId}")
+    public ResponseEntity<String> addRedeemedDiscount(@PathVariable Long userId,
+                                                      @PathVariable Long discountId) {
         redeemedDiscountService.addRedeemedDiscountByUserId(discountId, userId);
         return ResponseEntity.ok("success");
-
     }
 
-    @GetMapping("/list/{userId}")
-    public ResponseData<List<RedeemedDiscountResponse>> getAllRedeemedDiscountByUserId(@PathVariable Long userId) {
+    @GetMapping("/user/{userId}")
+    public ResponseData<List<RedeemedDiscountResponse>> getAllRedeemedDiscounts(@PathVariable Long userId) {
         var result = redeemedDiscountService.getAllRedeemedDiscountByUserId(userId);
         return ResponseData.<List<RedeemedDiscountResponse>>builder()
                 .code(HttpStatus.OK.value())
@@ -35,9 +34,9 @@ public class RedeemedDiscountController {
                 .build();
     }
 
-    @PutMapping("/softDelete/{redeemedDiscount}")
-    public ResponseData<String> softDeleteRedeemedDiscount(@PathVariable Long redeemedDiscount){
-        var result = redeemedDiscountService.softDelete(redeemedDiscount);
+    @PutMapping("/{redeemedDiscountId}/soft-delete")
+    public ResponseData<String> softDeleteRedeemedDiscount(@PathVariable Long redeemedDiscountId) {
+        var result = redeemedDiscountService.softDelete(redeemedDiscountId);
         return ResponseData.<String>builder()
                 .code(HttpStatus.OK.value())
                 .message("success")
