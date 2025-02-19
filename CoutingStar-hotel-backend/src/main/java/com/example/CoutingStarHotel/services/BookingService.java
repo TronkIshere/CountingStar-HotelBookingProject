@@ -32,4 +32,6 @@ public interface BookingService {
     BookingResponse saveBooking(Long roomId, SaveBookingRequest request, Long userId, Long redeemedDiscountId);
 
     BookedRoom findRoomUserHasBookedAndNotComment(Long hotelId, Long UserId);
+
+    String softDelete(Long bookingId);
 }

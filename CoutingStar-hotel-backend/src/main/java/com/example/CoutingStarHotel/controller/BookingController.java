@@ -114,4 +114,13 @@ public class BookingController {
         bookingService.cancelBooking(bookingId);
     }
 
+    @PutMapping("/booking/softDelete/{bookingId}")
+    public ResponseData<String> softDeleteBooking(@PathVariable Long bookingId){
+        var result = bookingService.softDelete(bookingId);
+        return ResponseData.<String>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
+    }
 }

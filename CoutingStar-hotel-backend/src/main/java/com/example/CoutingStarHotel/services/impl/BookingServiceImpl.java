@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -264,5 +265,14 @@ public class BookingServiceImpl implements BookingService {
         }
 
         return bookedRooms.get(0);
+    }
+
+    @Override
+    public String softDelete(Long bookingId) {
+        BookedRoom bookedRoom = findBookingById(bookingId);
+        LocalDateTime deletedAt = LocalDateTime.now();
+        bookedRoom.setDeletedAt(deletedAt);
+        bookingRepository.save(bookedRoom);
+        return "BookedRoom with ID " + bookingId + " has been soft deleted at " + deletedAt;
     }
 }
