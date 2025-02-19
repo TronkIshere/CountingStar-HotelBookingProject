@@ -2,8 +2,8 @@ package com.example.CoutingStarHotel.services.impl;
 
 import com.example.CoutingStarHotel.entities.Role;
 import com.example.CoutingStarHotel.entities.User;
-import com.example.CoutingStarHotel.exception.RoleAlreadyExistException;
-import com.example.CoutingStarHotel.exception.UserAlreadyExistsException;
+import com.example.CoutingStarHotel.exception.ApplicationException;
+import com.example.CoutingStarHotel.exception.ErrorCode;
 import com.example.CoutingStarHotel.repositories.RoleRepository;
 import com.example.CoutingStarHotel.services.RoleService;
 import com.example.CoutingStarHotel.services.UserService;
@@ -33,7 +33,7 @@ public class RoleServiceImpl implements RoleService {
         String roleName = "ROLE_" + theRole.getName().toUpperCase();
         Role role = new Role(roleName);
         if (roleRepository.existsByName(roleName)) {
-            throw new RoleAlreadyExistException(theRole.getName() + " role already exists");
+            throw new ApplicationException(ErrorCode.ROLE_ALREADY_EXCEPTION);
         }
         return roleRepository.save(role);
     }
@@ -56,8 +56,7 @@ public class RoleServiceImpl implements RoleService {
         Role role = getRoleById(roleId);
 
         if (user.getRoles().contains(role)) {
-            throw new UserAlreadyExistsException(
-                    user.getFirstName() + " is already assigned to the " + role.getName() + " role");
+            throw new ApplicationException(ErrorCode.ROLE_ALREADY_EXCEPTION);
         }
 
         role.assignRoleToUser(user);
@@ -77,8 +76,7 @@ public class RoleServiceImpl implements RoleService {
         }
 
         if (user.getRoles().contains(role)) {
-            throw new UserAlreadyExistsException(
-                    user.getFirstName() + " is already assigned to the " + role.getName() + " role");
+            throw new ApplicationException(ErrorCode.USER_ALREADY_HAS_THIS_ROLE);
         }
 
         role.assignRoleToUser(user);

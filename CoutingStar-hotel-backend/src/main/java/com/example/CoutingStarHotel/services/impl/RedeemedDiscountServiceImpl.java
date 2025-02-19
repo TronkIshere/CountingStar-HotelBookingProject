@@ -4,8 +4,8 @@ import com.example.CoutingStarHotel.DTO.response.redeemedDiscount.RedeemedDiscou
 import com.example.CoutingStarHotel.entities.Discount;
 import com.example.CoutingStarHotel.entities.RedeemedDiscount;
 import com.example.CoutingStarHotel.entities.User;
-import com.example.CoutingStarHotel.exception.InvalidBookingRequestException;
-import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
+import com.example.CoutingStarHotel.exception.ApplicationException;
+import com.example.CoutingStarHotel.exception.ErrorCode;
 import com.example.CoutingStarHotel.mapper.RedeemedDiscountMapper;
 import com.example.CoutingStarHotel.repositories.RedeemedDiscountRepository;
 import com.example.CoutingStarHotel.services.DiscountService;
@@ -34,7 +34,7 @@ public class RedeemedDiscountServiceImpl implements RedeemedDiscountService {
         Discount discount = discountService.getDiscountById(discountId);
         User user = userService.getUserById(userId);
         if (redeemedDiscountRepository.existsByUserIdAndDiscountId(userId, discountId)) {
-            throw new InvalidBookingRequestException("Discount have been redeemed");
+            throw new ApplicationException(ErrorCode.INVALID_DISCOUNT_REQUEST);
         }
 
         RedeemedDiscount redeemedDiscount = new RedeemedDiscount();
@@ -51,7 +51,7 @@ public class RedeemedDiscountServiceImpl implements RedeemedDiscountService {
 
     @Override
     public RedeemedDiscount findRedeemedDiscountById(Long redeemedDiscountId) {
-        return redeemedDiscountRepository.findById(redeemedDiscountId).orElseThrow((() -> new ResourceNotFoundException("discount not found")));
+        return redeemedDiscountRepository.findById(redeemedDiscountId).orElseThrow(() -> new ApplicationException(ErrorCode.INVALID_DISCOUNT_REQUEST));
     }
 
     @Override
