@@ -1,16 +1,15 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.entities.BookedRoom;
-import com.example.CoutingStarHotel.entities.Rating;
-import com.example.CoutingStarHotel.DTO.RatingDTO;
+import com.example.CoutingStarHotel.DTO.request.rating.AddRatingRequest;
+import com.example.CoutingStarHotel.DTO.request.rating.UpdateRatingRequest;
+import com.example.CoutingStarHotel.DTO.response.rating.RatingResponse;
+import com.example.CoutingStarHotel.DTO.response.common.ResponseData;
 import com.example.CoutingStarHotel.services.RatingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin("http://localhost:5173")
@@ -19,65 +18,61 @@ import java.util.List;
 @RequestMapping("/ratings")
 public class RatingController {
     private final RatingService ratingService;
-    @PostMapping("/add/hotel/{hotelId}/user/{userId}/addRating")
-    public ResponseEntity<RatingDTO> addNewRating(@PathVariable Long hotelId,
-                                                  @PathVariable Long userId,
-                                                  @RequestParam("star") int star,
-                                                  @RequestParam("comment") String comment,
-                                                  @RequestParam("rateDay")String rateDay){
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        LocalDate formatRateDay = LocalDate.parse(rateDay, dateTimeFormatter);
-        Rating rating = ratingService.saveRating(hotelId, userId , star, comment, formatRateDay);
-        RatingDTO ratingResponse = new RatingDTO
-                (rating.getStar(),
-                        rating.getComment(),
-                        rating.getRateDay(),
-                        rating.getBookedRoom().getGuestFullName(),
-                        rating.getBookedRoom().getRoom().getRoomType());
 
-        return ResponseEntity.ok(ratingResponse);
+    @PostMapping("/hotel/{hotelId}/user/{userId}")
+    public ResponseData<RatingResponse> addNewRating(@PathVariable Long hotelId,
+                                                     @PathVariable Long userId,
+                                                     @RequestBody AddRatingRequest request) {
+        var result = ratingService.saveRating(hotelId, userId, request);
+        return ResponseData.<RatingResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 
     @GetMapping("/hotel/{hotelId}")
-        public ResponseEntity<List<RatingDTO>> getAllRatingByRoomId(@PathVariable Long hotelId){
-            List<Rating> ratings = ratingService.getAllRatingByHotelId(hotelId);
-            List<RatingDTO> ratingRepositories = new ArrayList<>();
-            for(Rating rating : ratings) {
-                RatingDTO ratingResponse = getRatingResponse(rating);
-                ratingRepositories.add(ratingResponse);
-            }
-        return ResponseEntity.ok(ratingRepositories);
+    public ResponseData<List<RatingResponse>> getAllRatingsByHotelId(@PathVariable Long hotelId) {
+        var result = ratingService.getAllRatingByHotelId(hotelId);
+        return ResponseData.<List<RatingResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 
-    @GetMapping("/hotel/{hotelId}/CheckUserRating/{userId}")
-    public ResponseEntity<String> checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(@PathVariable Long userId,
-                                                                                                         @PathVariable Long hotelId){
+    @GetMapping("/hotel/{hotelId}/user/{userId}/check")
+    public ResponseEntity<String> checkUserRating(@PathVariable Long userId,
+                                                  @PathVariable Long hotelId) {
         String result = ratingService.checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(userId, hotelId);
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("/update/{ratingId}")
-    public ResponseEntity<RatingDTO> updateRating(@PathVariable Long ratingId,
-                                                  @RequestParam("start") int star,
-                                                  @RequestParam("comment") String comment){
-        Rating rating = ratingService.updateRating(ratingId, star, comment);
-        RatingDTO ratingResponse = getRatingResponse(rating);
-        return ResponseEntity.ok(ratingResponse);
+    @PutMapping("/{ratingId}")
+    public ResponseData<RatingResponse> updateRating(@PathVariable Long ratingId,
+                                                     @RequestBody UpdateRatingRequest request) {
+        var result = ratingService.updateRating(ratingId, request);
+        return ResponseData.<RatingResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 
-    @DeleteMapping("/delete/{ratingId}")
+    @DeleteMapping("/{ratingId}")
     public void deleteRating(@PathVariable Long ratingId) {
         ratingService.deleteRating(ratingId);
     }
 
-    private RatingDTO getRatingResponse(Rating rating){
-        return new RatingDTO(
-                rating.getStar(),
-                rating.getComment(),
-                rating.getRateDay(),
-                rating.getBookedRoom().getGuestFullName(),
-                rating.getBookedRoom().getRoom().getRoomType()
-        );
+    @PutMapping("/{ratingId}/soft-delete")
+    public ResponseData<String> softDeleteRating(@PathVariable Long ratingId) {
+        var result = ratingService.softDelete(ratingId);
+        return ResponseData.<String>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 }
+
 

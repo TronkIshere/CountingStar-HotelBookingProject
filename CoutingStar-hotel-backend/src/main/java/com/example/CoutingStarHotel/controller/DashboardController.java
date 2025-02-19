@@ -1,11 +1,14 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.DTO.BarChartDTO;
-import com.example.CoutingStarHotel.DTO.DashBoardMonthIncreasedDTO;
-import com.example.CoutingStarHotel.DTO.PieChartDTO;
-import com.example.CoutingStarHotel.services.*;
+import com.example.CoutingStarHotel.DTO.response.common.ResponseData;
+import com.example.CoutingStarHotel.DTO.response.dashBoard.AdminDashBoardMonthIncreased;
+import com.example.CoutingStarHotel.DTO.response.dashBoard.BarChartResponse;
+import com.example.CoutingStarHotel.DTO.response.dashBoard.HotelOwnerMonthIncreased;
+import com.example.CoutingStarHotel.DTO.response.dashBoard.PieChartResponse;
+import com.example.CoutingStarHotel.services.DashBoardService;
+import com.example.CoutingStarHotel.services.HotelService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,32 +21,52 @@ public class DashboardController {
     private final HotelService hotelService;
     private final DashBoardService dashBoardService;
     @GetMapping("/Admin/PieChart")
-    public ResponseEntity<List<PieChartDTO>> getDataForAdminPieChart(){
-        List<PieChartDTO> PieChartData = hotelService.getNumberOfHotelByEachCity();
-        return ResponseEntity.ok(PieChartData);
+    public ResponseData<List<PieChartResponse>> getDataForAdminPieChart(){
+        var result = hotelService.getNumberOfHotelByEachCity();
+        return ResponseData.<List<PieChartResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 
     @GetMapping("/Admin/BarChart")
-    public ResponseEntity<List<BarChartDTO>> getDataForAdminBarChart(){
-        List<BarChartDTO> barChartData = hotelService.getHotelRevenueByEachCity();
-        return ResponseEntity.ok(barChartData);
+    public ResponseData<List<BarChartResponse>> getDataForAdminBarChart(){
+        var result = hotelService.getHotelRevenueByEachCity();
+        return ResponseData.<List<BarChartResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 
     @GetMapping("/HotelOwner/PieChart/{hotelId}")
-    public ResponseEntity<List<PieChartDTO>> getDataForAdminPieChartChart(@PathVariable Long hotelId){
-        List<PieChartDTO> barChartData = hotelService.getTheRevenceOfEachRoom(hotelId);
-        return ResponseEntity.ok(barChartData);
+    public ResponseData<List<PieChartResponse>> getDataForAdminPieChartChart(@PathVariable Long hotelId){
+        var result = hotelService.getTheRevenueOfEachRoom(hotelId);
+        return ResponseData.<List<PieChartResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 
     @GetMapping("/Admin/dashBoardMonthIncreased")
-    public ResponseEntity<DashBoardMonthIncreasedDTO> getDataForAdminDashBoardMonthIncreased(){
-        DashBoardMonthIncreasedDTO dashBoardMonthIncreasedData = dashBoardService.getDataForAdminDashBoardMonthIncreased();
-        return ResponseEntity.ok(dashBoardMonthIncreasedData);
+    public ResponseData<AdminDashBoardMonthIncreased> getDataForAdminDashBoardMonthIncreased(){
+        var result = dashBoardService.getDataForAdminDashBoardMonthIncreased();
+        return ResponseData.<AdminDashBoardMonthIncreased>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 
     @GetMapping("/HotelOwner/dashBoardMonthIncreased/{hotelId}")
-    public ResponseEntity<DashBoardMonthIncreasedDTO> getDataForHotelOwnerMonthIncreased(@PathVariable Long hotelId){
-        DashBoardMonthIncreasedDTO dashBoardMonthIncreasedData = dashBoardService.getDataForHotelOwnerMonthIncreased(hotelId);
-        return ResponseEntity.ok(dashBoardMonthIncreasedData);
+    public ResponseData<HotelOwnerMonthIncreased> getDataForHotelOwnerMonthIncreased(@PathVariable Long hotelId){
+        var result = dashBoardService.getDataForHotelOwnerMonthIncreased(hotelId);
+        return ResponseData.<HotelOwnerMonthIncreased>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 }

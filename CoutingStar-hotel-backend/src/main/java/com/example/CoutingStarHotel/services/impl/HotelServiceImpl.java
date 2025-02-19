@@ -1,15 +1,23 @@
 package com.example.CoutingStarHotel.services.impl;
 
-import com.example.CoutingStarHotel.DTO.BarChartDTO;
-import com.example.CoutingStarHotel.DTO.PieChartDTO;
-import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
+import com.example.CoutingStarHotel.DTO.request.hotel.AddHotelRequest;
+import com.example.CoutingStarHotel.DTO.request.hotel.UpdateHotelRequest;
+import com.example.CoutingStarHotel.DTO.response.common.PageResponse;
+import com.example.CoutingStarHotel.DTO.response.dashBoard.BarChartResponse;
+import com.example.CoutingStarHotel.DTO.response.dashBoard.PieChartResponse;
+import com.example.CoutingStarHotel.DTO.response.hotel.HotelResponse;
+import com.example.CoutingStarHotel.DTO.response.rating.RatingResponse;
 import com.example.CoutingStarHotel.entities.Hotel;
-import com.example.CoutingStarHotel.entities.Rating;
 import com.example.CoutingStarHotel.entities.User;
+import com.example.CoutingStarHotel.exception.InvalidHotelRequestException;
+import com.example.CoutingStarHotel.mapper.HotelMapper;
 import com.example.CoutingStarHotel.repositories.HotelRepository;
-import com.example.CoutingStarHotel.repositories.UserRepository;
 import com.example.CoutingStarHotel.services.HotelService;
+import com.example.CoutingStarHotel.services.RatingService;
+import com.example.CoutingStarHotel.services.UserService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,55 +31,46 @@ import java.math.RoundingMode;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class HotelServiceImpl implements HotelService {
-    private final HotelRepository hotelRepository;
-    private final UserRepository userRepository;
-    private final RatingServiceImpl ratingService;
+    HotelRepository hotelRepository;
+    UserService userService;
+    RatingService ratingService;
 
     @Override
-    public String addHotel(Long userId,
-                           String hotelName,
-                           String city,
-                           String hotelLocation,
-                           String hotelDescription,
-                           String phoneNumber,
-                           MultipartFile photo) throws IOException, SQLException {
+    public HotelResponse addHotel(Long userId,
+                                  AddHotelRequest request) throws IOException, SQLException {
         Hotel hotel = new Hotel();
-        hotel.setHotelName(hotelName);
-        hotel.setCity(city);
-        hotel.setHotelLocation(hotelLocation);
-        hotel.setHotelDescription(hotelDescription);
-        hotel.setPhoneNumber(phoneNumber);
-        if(!photo.isEmpty()) {
-            byte[] photoBytes = photo.getBytes();
-            Blob photoBlob = new SerialBlob(photoBytes);
-            hotel.setPhoto(photoBlob);
-        }
-
-        User user = userRepository.findById(userId).get();
+        hotel.setHotelName(request.getHotelName());
+        hotel.setCity(request.getCity());
+        hotel.setHotelLocation(request.getHotelLocation());
+        hotel.setHotelDescription(request.getHotelDescription());
+        hotel.setPhoneNumber(request.getPhoneNumber());
+        setHotelPhoto(hotel, request.getPhoto());
+        User user = userService.getUserById(userId);
         user.addHotel(hotel);
         hotelRepository.save(hotel);
-        return user.getLastName();
+        return HotelMapper.toHotelResponse(hotel);
     }
 
     @Override
-    public Optional<Hotel> getHotelById(Long hotelId) {
-        return Optional.ofNullable(hotelRepository.findById(hotelId)
-                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId)));
+    public Hotel getHotelById(Long hotelId) {
+        return hotelRepository.findById(hotelId)
+                .orElseThrow(() -> new InvalidHotelRequestException("Hotel not found with ID: " + hotelId));
     }
 
     @Override
     public double averageNumberOfHotelStars(Long hotelId){
         double result = 0;
         int count = 0;
-        List<Rating> ratings = ratingService.getAllRatingByHotelId(hotelId);
-        for(Rating rating: ratings){
+        List<RatingResponse> ratings = ratingService.getAllRatingByHotelId(hotelId);
+        for(RatingResponse rating: ratings){
             result += rating.getStar();
             count++;
         }
@@ -89,20 +88,19 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public List<Hotel> getTenFunkyHotelForHomePage() {
-        return hotelRepository.getTenHotelForHomePage().stream().limit(10).collect(Collectors.toList());
+    public List<HotelResponse> getTenFunkyHotelForHomePage() {
+        List<Hotel> hotelList = hotelRepository.getTenHotelForHomePage().stream().limit(10).collect(Collectors.toList());
+        return HotelMapper.hotelResponses(hotelList);
     }
 
     @Override
-    public List<PieChartDTO> getNumberOfHotelByEachCity() {
-        List<PieChartDTO> numberOfHotelByEachCity = hotelRepository.findNumberOfHotelsByCity();
-        return numberOfHotelByEachCity;
+    public List<PieChartResponse> getNumberOfHotelByEachCity() {
+        return hotelRepository.findNumberOfHotelsByCity();
     }
 
     @Override
-    public List<BarChartDTO> getHotelRevenueByEachCity() {
-        List<BarChartDTO> revenueByEachCity = hotelRepository.findRevenueByEachCity();
-        return revenueByEachCity;
+    public List<BarChartResponse> getHotelRevenueByEachCity() {
+        return hotelRepository.findRevenueByEachCity();
     }
 
     @Override
@@ -123,9 +121,8 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public List<PieChartDTO> getTheRevenceOfEachRoom(Long hotelId) {
-        List<PieChartDTO> revenueByEachRoom = hotelRepository.findRevenueByEachRoom(hotelId);
-        return revenueByEachRoom;
+    public List<PieChartResponse> getTheRevenueOfEachRoom(Long hotelId) {
+        return hotelRepository.findRevenueByEachRoom(hotelId);
     }
 
     @Override
@@ -175,50 +172,79 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public Page<Hotel> getHotelByKeyword(Integer pageNo, Integer pageSize, String keyword) {
+    public PageResponse<HotelResponse> getHotelByKeyword(Integer pageNo, Integer pageSize, String keyword) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return hotelRepository.getHotelByKeyword(pageable, keyword);
-    }
-    @Override
-    public Page<Hotel> getAllHotels(Integer pageNo, Integer pageSize){
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return hotelRepository.findAll(pageable);
+        Page<Hotel> hotelPage = hotelRepository.getHotelByKeyword(pageable, keyword);
+
+        List<Hotel> hotelList = hotelPage.getContent();
+
+        return PageResponse.<HotelResponse>builder()
+                .currentPage(pageNo)
+                .pageSize(pageable.getPageSize())
+                .totalPages(hotelPage.getTotalPages())
+                .totalElements(hotelPage.getTotalElements())
+                .data(HotelMapper.hotelResponses(hotelList))
+                .build();
     }
 
     @Override
-    public Page<Hotel> getAllHotelsByCity(String city, Integer pageNo, Integer pageSize){
-        Pageable paging = PageRequest.of(pageNo, pageSize);
-        return hotelRepository.findAllHotelsByCity(city, paging);
+    public HotelResponse getHotelResponseById(Long hotelId) {
+        return HotelMapper.toHotelResponse(getHotelById(hotelId));
     }
 
     @Override
-    public byte[] getHotelPhotobyHotelId(Long hotelId) throws SQLException {
-        Optional<Hotel> theHotel = hotelRepository.findById(hotelId);
-        if(theHotel.isEmpty()){
-            throw new ResourceNotFoundException("Sorry, Hotel not found");
-        }
-        Blob photoBlob = theHotel.get().getPhoto();
-        if(photoBlob != null){
-            return photoBlob.getBytes(1, (int) photoBlob.length());
-        }
-        return null;
+    public String softDelete(Long hotelId) {
+        LocalDateTime deletedAt = LocalDateTime.now();
+        Hotel hotel = getHotelById(hotelId);
+        hotel.setDeletedAt(deletedAt);
+        hotelRepository.save(hotel);
+        return "Hotel with ID " + hotel + " has been deleted at +" + deletedAt;
     }
 
     @Override
-    public Hotel updateHotel(Long hotelId, String hotelName, String hotelLocation, String hotelDescription, String phoneNumber, String city, MultipartFile photo) throws IOException, SQLException {
-        Hotel hotel = hotelRepository.findById(hotelId).get();
-        hotel.setHotelName(hotelName);
-        hotel.setHotelLocation(hotelLocation);
-        hotel.setHotelDescription(hotelDescription);
-        hotel.setPhoneNumber(phoneNumber);
-        hotel.setCity(city);
-        if (photo != null && !photo.isEmpty()) {
-            byte[] photoBytes = photo.getBytes();
-            Blob photoBlob = new SerialBlob(photoBytes);
-            hotel.setPhoto(photoBlob);
-        }
+    public PageResponse<HotelResponse> getAllHotels(Integer pageNo, Integer pageSize){
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Page<Hotel> hotelPage = hotelRepository.findAll(pageable);
+
+        List<Hotel> hotelList = hotelPage.getContent();
+
+        return PageResponse.<HotelResponse>builder()
+                .currentPage(pageNo)
+                .pageSize(pageable.getPageSize())
+                .totalPages(hotelPage.getTotalPages())
+                .totalElements(hotelPage.getTotalElements())
+                .data(HotelMapper.hotelResponses(hotelList))
+                .build();
+    }
+
+    @Override
+    public PageResponse<HotelResponse> getAllHotelsByCity(String city, Integer pageNo, Integer pageSize){
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Page<Hotel> hotelPage = hotelRepository.findAllHotelsByCity(city, pageable);
+
+        List<Hotel> hotelList = hotelPage.getContent();
+
+        return PageResponse.<HotelResponse>builder()
+                .currentPage(pageNo)
+                .pageSize(pageable.getPageSize())
+                .totalPages(hotelPage.getTotalPages())
+                .totalElements(hotelPage.getTotalElements())
+                .data(HotelMapper.hotelResponses(hotelList))
+                .build();
+    }
+
+    @Override
+    public HotelResponse updateHotel(Long hotelId, UpdateHotelRequest request) throws IOException, SQLException {
+        Hotel hotel = getHotelById(hotelId);
+        hotel.setHotelName(request.getHotelName());
+        hotel.setHotelLocation(request.getHotelLocation());
+        hotel.setHotelDescription(request.getHotelDescription());
+        hotel.setPhoneNumber(request.getPhoneNumber());
+        hotel.setCity(request.getCity());
+        setHotelPhoto(hotel, request.getPhoto());
         hotel.setRegisterDay(LocalDate.now());
-        return hotelRepository.save(hotel);
+        hotelRepository.save(hotel);
+        return HotelMapper.toHotelResponse(hotel);
     }
 
     @Override
@@ -226,5 +252,11 @@ public class HotelServiceImpl implements HotelService {
         hotelRepository.deleteById(hotelId);
     }
 
-
+    private void setHotelPhoto(Hotel hotel, MultipartFile photo) throws IOException, SQLException {
+        if (photo != null && !photo.isEmpty()) {
+            byte[] photoBytes = photo.getBytes();
+            Blob photoBlob = new SerialBlob(photoBytes);
+            hotel.setPhoto(photoBlob);
+        }
+    }
 }

@@ -1,13 +1,21 @@
 package com.example.CoutingStarHotel.services.impl;
 
-import com.example.CoutingStarHotel.exception.ResourceNotFoundException;
+import com.example.CoutingStarHotel.DTO.request.room.AddRoomRequest;
+import com.example.CoutingStarHotel.DTO.request.room.UpdateRoomRequest;
+import com.example.CoutingStarHotel.DTO.response.common.PageResponse;
+import com.example.CoutingStarHotel.DTO.response.room.RoomResponse;
 import com.example.CoutingStarHotel.entities.Hotel;
 import com.example.CoutingStarHotel.entities.Rating;
 import com.example.CoutingStarHotel.entities.Room;
-import com.example.CoutingStarHotel.repositories.HotelRepository;
+import com.example.CoutingStarHotel.mapper.RoomMapper;
 import com.example.CoutingStarHotel.repositories.RoomRepository;
 import com.example.CoutingStarHotel.services.RoomService;
+import com.example.CoutingStarHotel.services.impl.helpers.HotelCoordinator;
+import com.example.CoutingStarHotel.services.impl.helpers.RatingCoordinator;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,114 +24,136 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RoomServiceImpl implements RoomService {
-    private final RoomRepository roomRepository;
-    private final HotelRepository hotelRepository;
-    private final RatingServiceImpl ratingService;
+    RoomRepository roomRepository;
+    HotelCoordinator hotelCoordinator;
+    RatingCoordinator ratingCoordinator;
+
     @Override
-    public Room addNewRoom(MultipartFile file, String roomType, BigDecimal roomPrice, String roomDescription, Long hotelId) throws SQLException, IOException {
+    public RoomResponse addNewRoom(AddRoomRequest request, Long hotelId) throws SQLException, IOException {
         Room room = new Room();
-        room.setRoomType(roomType);
-        room.setRoomPrice(roomPrice);
-        room.setRoomDescription(roomDescription);
-        Hotel hotel = hotelRepository.getById(hotelId);
-        if(!file.isEmpty()) {
-            byte[] photoBytes = file.getBytes();
-            Blob photoBlob = new SerialBlob(photoBytes);
+        room.setRoomType(request.getRoomType());
+        room.setRoomPrice(request.getRoomPrice());
+        room.setRoomDescription(request.getRoomDescription());
+        Hotel hotel = hotelCoordinator.getHotelById(hotelId);
+        Blob photoBlob = processPhoto(request.getPhoto());
+        if (photoBlob != null) {
             room.setPhoto(photoBlob);
         }
         hotel.addRoom(room);
-        return roomRepository.save(room);
+        roomRepository.save(room);
+        return RoomMapper.toRoomResponse(room);
     }
 
     @Override
-    public List<String> getAllRoomTypes() {
-        return roomRepository.findDistinctRoomTypes();
-    }
-
-    @Override
-    public List<Room> getAllRooms() {
-        return roomRepository.findAll();
-    }
-
-
-    @Override
-    public byte[] getRoomPhotoByRoomId(Long roomId) throws SQLException {
-        Optional<Room> theRoom = roomRepository.findById(roomId);
-        if(theRoom.isEmpty()){
-            throw new ResourceNotFoundException("Sorry, Room not found");
-        }
-        Blob photoBlob = theRoom.get().getPhoto();
-        if(photoBlob != null) {
-            return photoBlob.getBytes(1, (int) photoBlob.length());
-        }
-        return null;
+    public List<RoomResponse> getAllRooms() {
+        List<Room> roomList = roomRepository.findAll();
+        return RoomMapper.roomResponses(roomList);
     }
 
     @Override
     public void deleteRoom(Long roomId) {
         Optional<Room> theRoom = roomRepository.findById(roomId);
-        if(theRoom.isPresent()){
+        if (theRoom.isPresent()) {
             roomRepository.deleteById(roomId);
         }
     }
 
     @Override
-    public Room updateRoom(Long roomId, String roomType, String roomDescription, BigDecimal roomPrice, MultipartFile photo) throws IOException, SQLException {
-        Room room = roomRepository.findById(roomId).get();
-        if (roomType != null) room.setRoomType(roomType);
-        if (roomDescription != null) room.setRoomDescription(roomDescription);
-        if (roomPrice != null) room.setRoomPrice(roomPrice);
+    public RoomResponse updateRoom(Long roomId, UpdateRoomRequest request) throws IOException, SQLException {
+        Room room = getRoomById(roomId);
+        room.setRoomType(request.getRoomType());
+        room.setRoomDescription(request.getRoomDescription());
+        room.setRoomPrice(request.getRoomPrice());
 
-        if (photo != null && !photo.isEmpty()) {
-            byte[] photoBytes = photo.getBytes();
-            Blob photoBlob = new SerialBlob(photoBytes);
+        Blob photoBlob = processPhoto(request.getPhoto());
+        if (photoBlob != null) {
             room.setPhoto(photoBlob);
         }
 
-        return roomRepository.save(room);
+        roomRepository.save(room);
+        return RoomMapper.toRoomResponse(room);
     }
 
     @Override
-    public Optional<Room> getRoomById(Long roomId) {
-        return Optional.of(roomRepository.findById(roomId).get());
+    public Room getRoomById(Long roomId) {
+        return roomRepository.findById(roomId)
+                .orElseThrow(() -> new EntityNotFoundException("Room not found with ID: " + roomId));
+    }
+
+
+    @Override
+    public RoomResponse getRoomResponseById(Long roomId) {
+        return RoomMapper.toRoomResponse(getRoomById(roomId));
     }
 
     @Override
-    public List<Room> getAvailableRooms(LocalDate checkInDate, LocalDate checkOutDate, String roomType) {
-        return roomRepository.findAvailableRoomsByDatesAndType(checkInDate, checkOutDate, roomType);
+    public PageResponse<RoomResponse> getRoomByHotelId(Long hotelId, Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Page<Room> roomPage = roomRepository.findRoomsByHotelId(hotelId, pageable);
+
+        List<Room> roomList = roomPage.getContent();
+
+        return PageResponse.<RoomResponse>builder()
+                .currentPage(pageNo)
+                .pageSize(pageable.getPageSize())
+                .totalPages(roomPage.getTotalPages())
+                .totalElements(roomPage.getTotalElements())
+                .data(RoomMapper.roomResponses(roomList))
+                .build();
     }
 
     @Override
-    public Page<Room> getRoomByHotelId(Long hotelId, Integer pageNo, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return roomRepository.findRoomsByHotelId(hotelId, pageable);
-    }
-
-    @Override
-    public double averageNumberOfRoomStars(Long roomId){
+    public double averageNumberOfRoomStars(Long roomId) {
         double result = 0;
         int count = 0;
-        List<Rating> ratings = ratingService.getAllRatingByRoomId(roomId);
-        for(Rating rating: ratings){
+        List<Rating> ratings = ratingCoordinator.getAllRatingByRoomId(roomId);
+        for (Rating rating : ratings) {
             result += rating.getStar();
             count++;
         }
-        return result/count;
+        return result / count;
     }
 
     @Override
-    public Page<Room> getAllRoomByKeywordAndHotelId(Integer pageNo, Integer pageSize, String keyword, Long hotelId) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return roomRepository.getAllRoomByKeywordAndHotelId(pageable, keyword, hotelId);
+    public PageResponse<RoomResponse> getAllRoomByKeywordAndHotelId(Integer pageNo, Integer pageSize, String keyword, Long hotelId) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Page<Room> roomPage = roomRepository.getAllRoomByKeywordAndHotelId(pageable, keyword, hotelId);
+
+        List<Room> roomList = roomPage.getContent();
+
+        return PageResponse.<RoomResponse>builder()
+                .currentPage(pageNo)
+                .pageSize(pageable.getPageSize())
+                .totalPages(roomPage.getTotalPages())
+                .totalElements(roomPage.getTotalElements())
+                .data(RoomMapper.roomResponses(roomList))
+                .build();
+    }
+
+    @Override
+    public String softDelete(Long roomId) {
+        LocalDateTime deleteAt = LocalDateTime.now();
+        Room room = getRoomById(roomId);
+        room.setDeletedAt(deleteAt);
+        roomRepository.save(room);
+        return "Room with ID " + roomId + " has been softDelete " + deleteAt;
+    }
+
+    private Blob processPhoto(MultipartFile photo) throws IOException, SQLException {
+        if (photo != null && !photo.isEmpty()) {
+            byte[] photoBytes = photo.getBytes();
+            return new SerialBlob(photoBytes);
+        }
+        return null;
     }
 }

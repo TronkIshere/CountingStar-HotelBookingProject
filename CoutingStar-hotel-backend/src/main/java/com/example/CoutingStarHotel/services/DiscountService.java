@@ -1,24 +1,33 @@
 package com.example.CoutingStarHotel.services;
 
+import com.example.CoutingStarHotel.DTO.request.discount.AddDiscountRequest;
+import com.example.CoutingStarHotel.DTO.request.discount.UpdateDiscountRequest;
+import com.example.CoutingStarHotel.DTO.response.discount.DiscountResponse;
+import com.example.CoutingStarHotel.DTO.response.common.PageResponse;
 import com.example.CoutingStarHotel.entities.Discount;
-import org.springframework.data.domain.Page;
+import com.example.CoutingStarHotel.entities.RedeemedDiscount;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface DiscountService {
-    Discount addDiscount(String discountName, Integer percentDiscount, String discountDescription, LocalDate expirationDate);
+    DiscountResponse addDiscount(AddDiscountRequest request);
 
     void deleteDiscount(Long discount);
 
-    Discount updateDiscount(Long discountId, String discountName, int percentDiscount, String discountDescription, LocalDate expirationDate);
+    DiscountResponse updateDiscount(Long discountId, UpdateDiscountRequest request);
 
-    Page<Discount> getDiscountNotExpired(Integer pageNo, Integer pageSize);
+    PageResponse<DiscountResponse> getDiscountNotExpired(Integer pageNo, Integer pageSize);
 
-    Optional<Discount> getDiscountById(Long discountId);
+    Discount getDiscountById(Long discountId);
 
-    Page<Discount> getAllDiscount(Integer pageNo, Integer pageSize);
+    PageResponse<DiscountResponse> getAllDiscount(Integer pageNo, Integer pageSize);
 
-    Page<Discount> getDiscountByKeyword(Integer pageNo, Integer pageSize, String keyword);
+    PageResponse<DiscountResponse> getDiscountByKeyword(Integer pageNo, Integer pageSize, String keyword);
+
+    DiscountResponse getDiscountResponseById(Long discountId);
+
+    List<RedeemedDiscount> getAllRedeemedDiscountNotExpiredByUserId(Long userId, LocalDate now);
+
+    String softDelete(Long discountId);
 }

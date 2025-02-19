@@ -1,7 +1,7 @@
 package com.example.CoutingStarHotel.repositories;
 
-import com.example.CoutingStarHotel.DTO.BarChartDTO;
-import com.example.CoutingStarHotel.DTO.PieChartDTO;
+import com.example.CoutingStarHotel.DTO.response.dashBoard.BarChartResponse;
+import com.example.CoutingStarHotel.DTO.response.dashBoard.PieChartResponse;
 import com.example.CoutingStarHotel.entities.Hotel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,15 +26,15 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     @Query("SELECT h FROM Hotel h LEFT JOIN h.rooms r LEFT JOIN r.bookings b LEFT JOIN b.rating rt GROUP BY h ORDER BY COUNT(rt) DESC")
     List<Hotel> getTenHotelForHomePage();
 
-    @Query("SELECT new com.example.CoutingStarHotel.DTO.PieChartDTO(h.city, COUNT(h)) " +
+    @Query("SELECT PieChartResponse(h.city, COUNT(h)) " +
             "FROM Hotel h " +
             "GROUP BY h.city")
-    List<PieChartDTO> findNumberOfHotelsByCity();
+    List<PieChartResponse> findNumberOfHotelsByCity();
 
-    @Query("SELECT new com.example.CoutingStarHotel.DTO.BarChartDTO(h.city, SUM(b.totalAmount)) " +
+    @Query("SELECT new com.example.CoutingStarHotel.DTO.response.dashBoard.BarChartResponse(h.city, SUM(b.totalAmount)) " +
             "FROM Hotel h JOIN h.rooms r JOIN r.bookings b " +
             "GROUP BY h.city")
-    List<BarChartDTO> findRevenueByEachCity();
+    List<BarChartResponse> findRevenueByEachCity();
 
     @Query("SELECT COUNT(h) FROM Hotel h")
     int getTotalNumberOfHotels();
@@ -42,11 +42,11 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     @Query("SELECT COUNT(h) FROM Hotel h WHERE h.registerDay >= :startDate AND h.registerDay < :endDate")
     int getHotelsAddedDuringPeriod(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
-    @Query("SELECT new com.example.CoutingStarHotel.DTO.PieChartDTO(r.roomType, SUM(b.totalAmount)) " +
+    @Query("SELECT PieChartResponse(r.roomType, SUM(b.totalAmount)) " +
             "FROM Room r JOIN r.bookings b " +
             "WHERE r.hotel.id = :hotelId " +
             "GROUP BY r.roomType")
-    List<PieChartDTO> findRevenueByEachRoom(Long hotelId);
+    List<PieChartResponse> findRevenueByEachRoom(Long hotelId);
 
     @Query("SELECT COUNT(b) FROM BookedRoom b WHERE b.room.hotel.id = :hotelId")
     int getTotalBookedRoomInSpecificHotel(@Param("hotelId")Long hotelId);

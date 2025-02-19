@@ -1,60 +1,71 @@
 package com.example.CoutingStarHotel.services.impl;
 
-import com.example.CoutingStarHotel.entities.*;
-import com.example.CoutingStarHotel.repositories.BookingRepository;
+import com.example.CoutingStarHotel.DTO.request.rating.AddRatingRequest;
+import com.example.CoutingStarHotel.DTO.request.rating.UpdateRatingRequest;
+import com.example.CoutingStarHotel.DTO.response.rating.RatingResponse;
+import com.example.CoutingStarHotel.entities.BookedRoom;
+import com.example.CoutingStarHotel.entities.Rating;
+import com.example.CoutingStarHotel.entities.User;
+import com.example.CoutingStarHotel.mapper.RatingMapper;
 import com.example.CoutingStarHotel.repositories.RatingRepository;
-import com.example.CoutingStarHotel.repositories.RoomRepository;
-import com.example.CoutingStarHotel.repositories.UserRepository;
+import com.example.CoutingStarHotel.services.BookingService;
 import com.example.CoutingStarHotel.services.RatingService;
+import com.example.CoutingStarHotel.services.UserService;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RatingServiceImpl implements RatingService {
-    private final RatingRepository ratingRepository;
-    private final UserRepository userRepository;
-    private final BookingRepository bookingRepository;
+    RatingRepository ratingRepository;
+    UserService userService;
+    BookingService bookingService;
 
     @Override
-    public Rating saveRating(Long hotelId, Long userId, int star, String comment, LocalDate rateDay) {
-        Rating rating = new Rating();
-        rating.setStar(star);
-        rating.setComment(comment);
-        rating.setRateDay(rateDay);
-
-        Pageable pageable = PageRequest.of(0, 1);
-        List<BookedRoom> bookedRooms = bookingRepository.findRoomUserHasBookedAndNotComment(hotelId, userId, pageable);
-
-        if (!bookedRooms.isEmpty()) {
-            Long bookedRoomIdForAddComment = bookedRooms.get(0).getBookingId();
-
-            User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-            user.addComment(rating);
-
-            BookedRoom saveBookedRoom = bookingRepository.findById(bookedRoomIdForAddComment)
-                    .orElseThrow(() -> new RuntimeException("BookedRoom not found"));
-            saveBookedRoom.addComment(rating);
-
-            return ratingRepository.save(rating);
-        } else {
-            throw new RuntimeException("No booked room found for user without a rating in the specified hotel");
-        }
+    public RatingResponse saveRating(Long hotelId, Long userId, AddRatingRequest request) {
+        Rating rating = createRating(request);
+        BookedRoom bookedRoom = bookingService.findRoomUserHasBookedAndNotComment(hotelId, userId);
+        handleUserRating(userId, rating);
+        handleBookingRating(rating, bookedRoom);
+        ratingRepository.save(rating);
+        return RatingMapper.toRatingResponse(rating);
     }
 
+    private Rating createRating(AddRatingRequest request) {
+        Rating rating = new Rating();
+        rating.setStar(request.getStar());
+        rating.setComment(request.getComment());
+        rating.setRateDay(request.getRateDay());
+        return rating;
+    }
+
+    private void handleUserRating(Long userId, Rating rating) {
+        User user = userService.getUserById(userId);
+        user.addComment(rating);
+    }
+
+    private void handleBookingRating(Rating rating, BookedRoom bookedRoom) {
+        BookedRoom saveBookedRoom = bookingService.findBookingById(bookedRoom.getId());
+        saveBookedRoom.addComment(rating);
+    }
 
     @Override
-    public Rating updateRating(Long ratingId, int star, String comment) {
-        Rating rating = ratingRepository.findById(ratingId).get();
-        if(star != 0) rating.setStar(star);
-        if(comment != null) rating.setComment(comment);
-        return ratingRepository.save(rating);
+    public RatingResponse updateRating(Long ratingId, UpdateRatingRequest request) {
+        Rating rating = ratingRepository.findById(ratingId)
+                .orElseThrow(() -> new NoSuchElementException("Rating not found with ID: " + ratingId));
+        rating.setStar(request.getStar());
+        rating.setComment(request.getComment());
+        ratingRepository.save(rating);
+        return RatingMapper.toRatingResponse(rating);
     }
 
     @Override
@@ -64,26 +75,24 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public String checkIfUserHaveBookedRoomInSpecificHotelAndNotCommentInThatBookedRoom(Long userId, Long hotelId) {
-        Pageable pageable = PageRequest.of(0, 1);
-        List<BookedRoom> bookedRooms = bookingRepository.findRoomUserHasBookedAndNotComment(hotelId, userId, pageable);
+        BookedRoom bookedRoom = bookingService.findRoomUserHasBookedAndNotComment(hotelId, userId);
 
-        if (!bookedRooms.isEmpty()) {
-            return bookedRooms.get(0).getRoom().getRoomType();
+        if (bookedRoom != null) {
+            return bookedRoom.getRoom().getRoomType();
         } else {
             return "No booked room found without a comment for this user in the specified hotel.";
         }
     }
 
     @Override
-    public List<Rating> getAllRatingByHotelId(Long hotelId) {
+    public List<RatingResponse> getAllRatingByHotelId(Long hotelId) {
         List<Rating> ratingList = ratingRepository.getAllRatingByHotelId(hotelId);
-        return ratingList;
+        return RatingMapper.ratingResponses(ratingList);
     }
 
     @Override
     public List<Rating> getAllRatingByRoomId(Long roomId) {
-        List<Rating> ratingList = ratingRepository.getAllRatingByRoomId(roomId);
-        return ratingList;
+        return ratingRepository.getAllRatingByRoomId(roomId);
     }
 
     @Override
@@ -118,5 +127,19 @@ public class RatingServiceImpl implements RatingService {
         int RatingsAddedThisMonth = ratingRepository.getRatingsAddedDuringThisPeriod(hotelId, firstDayOfThisMonth, firstDayOfNextMonth);
 
         return (RatingsAddedThisMonth * 100.0) / totalRatings;
+    }
+
+    @Override
+    public String softDelete(Long ratingId) {
+        LocalDateTime deleteAt = LocalDateTime.now();
+        Rating rating = findById(ratingId);
+        rating.setDeletedAt(deleteAt);
+        ratingRepository.save(rating);
+        return "Rating with ID " + ratingId + " has been deleted at " + deleteAt;
+    }
+
+    private Rating findById(Long id) {
+        return ratingRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Rating with ID " + id + " not found"));
     }
 }

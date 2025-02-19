@@ -1,10 +1,13 @@
 package com.example.CoutingStarHotel.services;
 
+import com.example.CoutingStarHotel.DTO.request.user.LoginRequest;
+import com.example.CoutingStarHotel.DTO.request.user.UpdateUserRequest;
+import com.example.CoutingStarHotel.DTO.response.jwt.JwtResponse;
+import com.example.CoutingStarHotel.DTO.response.common.PageResponse;
+import com.example.CoutingStarHotel.DTO.response.user.UserResponse;
 import com.example.CoutingStarHotel.entities.User;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
     User registerUser(User user);
@@ -12,20 +15,26 @@ public interface UserService {
     User registerHotelOwner(User user);
 
     List<User> getUsers();
-    void deleteUser(String email);
-    User getUser(String email);
 
-    Optional<User> getUserById(Long userId);
+    void deleteUser(String email);
+
+    UserResponse getUser(String email);
+
+    User getUserById(Long userId);
 
     int getTotalNumberOfUsers();
 
     double getPercentageOfUsersIncreasedDuringTheMonth();
 
-    Page<User> getAllUserExceptAdminRole(Integer pageNo, Integer pageSize);
+    PageResponse<UserResponse> getAllUserExceptAdminRole(Integer pageNo, Integer pageSize);
 
-    Page<User> searchUserByKeyWord(Integer pageNo, Integer pageSize, String keyWord);
+    PageResponse<UserResponse> searchUserByKeyWord(Integer pageNo, Integer pageSize, String keyWord);
 
-    User getUserByUserId(Long userId);
+    UserResponse getUserByUserId(Long userId);
 
-    User updateUser(Long userId, String firstName, String lastName, String email, String phoneNumber);
+    UserResponse updateUser(Long userId, UpdateUserRequest request);
+
+    JwtResponse getJwtResponse(LoginRequest request);
+
+    String softDelete(Long userId);
 }

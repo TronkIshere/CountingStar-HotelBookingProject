@@ -1,14 +1,15 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.DTO.UserDTO;
+import com.example.CoutingStarHotel.DTO.request.user.UpdateUserRequest;
+import com.example.CoutingStarHotel.DTO.response.common.PageResponse;
+import com.example.CoutingStarHotel.DTO.response.common.ResponseData;
+import com.example.CoutingStarHotel.DTO.response.user.UserResponse;
 import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,107 +19,94 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    @GetMapping("/all")
+
+    @GetMapping("/list")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<List<User>> getUsers(){
-        return new ResponseEntity<>(userService.getUsers(), HttpStatus.FOUND);
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUsers());
     }
 
     @GetMapping("/{email}")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
-    public ResponseEntity<?> getUserByEmail(@PathVariable("email") String email){
-        try{
-            User theUser = userService.getUser(email);
-            UserDTO userResponse = new UserDTO(theUser);
-            return ResponseEntity.ok(userResponse);
-        }catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching user");
-        }
+    public ResponseData<UserResponse> getUserByEmail(@PathVariable String email) {
+        var result = userService.getUser(email);
+        return ResponseData.<UserResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 
-    @GetMapping("/getAllUserExceptAminRole")
+    @GetMapping("/list/non-admins")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> getAllUserExceptAminRole(@RequestParam(defaultValue = "0") Integer pageNo,
-                                                      @RequestParam(defaultValue = "8") Integer pageSize){
-        try{
-            Page<User> users = userService.getAllUserExceptAdminRole(pageNo, pageSize);
-            Page<UserDTO> userResponse = users.map(this::getUserDTO);
-            return ResponseEntity.ok(userResponse);
-        }catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching user");
-        }
+    public ResponseData<PageResponse<UserResponse>> getAllUsersExceptAdmin(
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "8") Integer pageSize) {
+        var result = userService.getAllUserExceptAdminRole(pageNo, pageSize);
+        return ResponseData.<PageResponse<UserResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 
-    @GetMapping("/searchUserByKeyWord/{keyWord}")
+    @GetMapping("/search")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> searchUserByKeyWord(@RequestParam(defaultValue = "0") Integer pageNo,
-                                                 @RequestParam(defaultValue = "8") Integer pageSize,
-                                                 @PathVariable String keyWord){
-        try{
-            Page<User> users = userService.searchUserByKeyWord(pageNo, pageSize, keyWord);
-            Page<UserDTO> userResponse = users.map(this::getUserDTO);
-            return ResponseEntity.ok(userResponse);
-        }catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching user");
-        }
+    public ResponseData<PageResponse<UserResponse>> searchUsers(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "8") Integer pageSize) {
+        var result = userService.searchUserByKeyWord(pageNo, pageSize, keyword);
+        return ResponseData.<PageResponse<UserResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 
-    @GetMapping("/getUserByUserId/{userId}")
+    @GetMapping("/user/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> getUserByUserId(@PathVariable Long userId){
-        try{
-            User users = userService.getUserByUserId(userId);
-            return ResponseEntity.ok(getUserDTO(users));
-        }catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching user");
-        }
+    public ResponseData<UserResponse> getUserById(@PathVariable Long userId) {
+        var result = userService.getUserByUserId(userId);
+        return ResponseData.<UserResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 
-    @PostMapping("/updateUser/{userId}")
+    @PutMapping("/update/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> updateUser(@PathVariable Long userId,
-                                        @RequestParam String firstName,
-                                        @RequestParam String lastName,
-                                        @RequestParam String email,
-                                        @RequestParam String phoneNumber){
-        try{
-            User users = userService.updateUser(userId, firstName, lastName, email, phoneNumber);
-            return ResponseEntity.ok(users);
-        }catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching user");
-        }
+    public ResponseData<UserResponse> updateUser(
+            @PathVariable Long userId,
+            @RequestBody UpdateUserRequest request) {
+        var result = userService.updateUser(userId, request);
+        return ResponseData.<UserResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 
     @DeleteMapping("/delete/{userId}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_USER') or hasRole('ROLE_HOTEL_OWNER') and #email == principal.username)")
-    public ResponseEntity<String> deleteUser(@PathVariable("userId") String email){
-        try{
-            userService.deleteUser(email);
-            return ResponseEntity.ok("User deleted successfully");
-        }catch (UsernameNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting user: " + e.getMessage());
-        }
+    public ResponseData<String> deleteUser(@PathVariable("userId") String email) {
+        userService.deleteUser(email);
+        return ResponseData.<String>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data("success")
+                .build();
     }
 
-    private UserDTO getUserDTO(User user) {
-        return new UserDTO(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getPhoneNumber()
-        );
+    @PutMapping("/soft-delete/{userId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseData<String> softDelete(@PathVariable Long userId) {
+        var result = userService.softDelete(userId);
+        return ResponseData.<String>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 }
