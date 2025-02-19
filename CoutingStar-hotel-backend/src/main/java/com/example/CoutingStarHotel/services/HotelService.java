@@ -55,4 +55,6 @@ public interface HotelService {
     PageResponse<HotelResponse> getHotelByKeyword(Integer pageNo, Integer pageSize, String keyword);
 
     HotelResponse getHotelResponseById(Long hotelId);
+
+    String softDelete(Long hotelId);
 }

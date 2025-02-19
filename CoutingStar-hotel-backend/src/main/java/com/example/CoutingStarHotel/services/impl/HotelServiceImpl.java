@@ -31,6 +31,7 @@ import java.math.RoundingMode;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -189,6 +190,15 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public HotelResponse getHotelResponseById(Long hotelId) {
         return HotelMapper.toHotelResponse(getHotelById(hotelId));
+    }
+
+    @Override
+    public String softDelete(Long hotelId) {
+        LocalDateTime deletedAt = LocalDateTime.now();
+        Hotel hotel = getHotelById(hotelId);
+        hotel.setDeletedAt(deletedAt);
+        hotelRepository.save(hotel);
+        return "Hotel with ID " + hotel + " has been deleted at +" + deletedAt;
     }
 
     @Override

@@ -46,8 +46,8 @@ public class HotelController {
 
     @GetMapping("/getHotelByKeyword/{keyword}")
     public ResponseData<PageResponse<HotelResponse>> getHotelByKeyword(@RequestParam(defaultValue = "0") Integer pageNo,
-                                                                 @RequestParam(defaultValue = "8") Integer pageSize,
-                                                                 @PathVariable String keyword) {
+                                                                       @RequestParam(defaultValue = "8") Integer pageSize,
+                                                                       @PathVariable String keyword) {
         var result = hotelService.getHotelByKeyword(pageNo, pageSize, keyword);
         return ResponseData.<PageResponse<HotelResponse>>builder()
                 .code(HttpStatus.OK.value())
@@ -78,8 +78,8 @@ public class HotelController {
 
     @GetMapping("/{city}")
     public ResponseData<PageResponse<HotelResponse>> getHotelsByCity(@PathVariable String city,
-                                                               @RequestParam(defaultValue = "0") Integer pageNo,
-                                                               @RequestParam(defaultValue = "5") Integer pageSize) {
+                                                                     @RequestParam(defaultValue = "0") Integer pageNo,
+                                                                     @RequestParam(defaultValue = "5") Integer pageSize) {
         var result = hotelService.getAllHotelsByCity(city, pageNo, pageSize);
         return ResponseData.<PageResponse<HotelResponse>>builder()
                 .code(HttpStatus.OK.value())
@@ -105,5 +105,15 @@ public class HotelController {
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_HOTEL_OWNER')")
     public void deleteHotel(@PathVariable Long hotelId) {
         hotelService.deleteHotel(hotelId);
+    }
+
+    @PutMapping("/hotel/softDelete/{hotelId}")
+    public ResponseData<String> softDelteHotel(@PathVariable Long hotelId) {
+        var result = hotelService.softDelete(hotelId);
+        return ResponseData.<String>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(result)
+                .build();
     }
 }
