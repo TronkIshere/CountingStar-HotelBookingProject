@@ -1,9 +1,9 @@
 package com.example.CoutingStarHotel.services;
 
-import com.example.CoutingStarHotel.DTO.request.AddRoomRequest;
-import com.example.CoutingStarHotel.DTO.request.UpdateRoomRequest;
-import com.example.CoutingStarHotel.DTO.response.PageResponse;
-import com.example.CoutingStarHotel.DTO.response.RoomResponse;
+import com.example.CoutingStarHotel.DTO.request.room.AddRoomRequest;
+import com.example.CoutingStarHotel.DTO.request.room.UpdateRoomRequest;
+import com.example.CoutingStarHotel.DTO.response.common.PageResponse;
+import com.example.CoutingStarHotel.DTO.response.room.RoomResponse;
 import com.example.CoutingStarHotel.entities.Room;
 
 import java.io.IOException;

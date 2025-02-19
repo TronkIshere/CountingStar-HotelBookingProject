@@ -1,6 +1,6 @@
 package com.example.CoutingStarHotel.services.impl;
 
-import com.example.CoutingStarHotel.DTO.response.RedeemedDiscountResponse;
+import com.example.CoutingStarHotel.DTO.response.redeemedDiscount.RedeemedDiscountResponse;
 import com.example.CoutingStarHotel.entities.Discount;
 import com.example.CoutingStarHotel.entities.RedeemedDiscount;
 import com.example.CoutingStarHotel.entities.User;

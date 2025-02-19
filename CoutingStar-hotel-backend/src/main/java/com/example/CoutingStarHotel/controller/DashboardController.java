@@ -1,6 +1,10 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.DTO.response.*;
+import com.example.CoutingStarHotel.DTO.response.common.ResponseData;
+import com.example.CoutingStarHotel.DTO.response.dashBoard.AdminDashBoardMonthIncreased;
+import com.example.CoutingStarHotel.DTO.response.dashBoard.BarChartResponse;
+import com.example.CoutingStarHotel.DTO.response.dashBoard.HotelOwnerMonthIncreased;
+import com.example.CoutingStarHotel.DTO.response.dashBoard.PieChartResponse;
 import com.example.CoutingStarHotel.services.DashBoardService;
 import com.example.CoutingStarHotel.services.HotelService;
 import lombok.RequiredArgsConstructor;

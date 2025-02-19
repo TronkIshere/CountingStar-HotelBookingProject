@@ -1,6 +1,6 @@
 package com.example.CoutingStarHotel.mapper;
 
-import com.example.CoutingStarHotel.DTO.response.HotelResponse;
+import com.example.CoutingStarHotel.DTO.response.hotel.HotelResponse;
 import com.example.CoutingStarHotel.entities.Hotel;
 import com.example.CoutingStarHotel.services.HotelService;
 import org.springframework.stereotype.Component;

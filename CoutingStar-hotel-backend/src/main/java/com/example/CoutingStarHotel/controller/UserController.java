@@ -1,9 +1,9 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.DTO.request.UpdateUserRequest;
-import com.example.CoutingStarHotel.DTO.response.PageResponse;
-import com.example.CoutingStarHotel.DTO.response.ResponseData;
-import com.example.CoutingStarHotel.DTO.response.UserResponse;
+import com.example.CoutingStarHotel.DTO.request.user.UpdateUserRequest;
+import com.example.CoutingStarHotel.DTO.response.common.PageResponse;
+import com.example.CoutingStarHotel.DTO.response.common.ResponseData;
+import com.example.CoutingStarHotel.DTO.response.user.UserResponse;
 import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.services.UserService;
 import lombok.RequiredArgsConstructor;

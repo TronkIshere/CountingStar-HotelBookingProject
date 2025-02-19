@@ -1,6 +1,6 @@
 package com.example.CoutingStarHotel.mapper;
 
-import com.example.CoutingStarHotel.DTO.response.UserResponse;
+import com.example.CoutingStarHotel.DTO.response.user.UserResponse;
 import com.example.CoutingStarHotel.entities.User;
 
 import java.util.List;

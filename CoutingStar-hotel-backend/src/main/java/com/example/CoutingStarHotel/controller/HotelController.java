@@ -1,10 +1,10 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.DTO.request.AddHotelRequest;
-import com.example.CoutingStarHotel.DTO.request.UpdateHotelRequest;
-import com.example.CoutingStarHotel.DTO.response.HotelResponse;
-import com.example.CoutingStarHotel.DTO.response.PageResponse;
-import com.example.CoutingStarHotel.DTO.response.ResponseData;
+import com.example.CoutingStarHotel.DTO.request.hotel.AddHotelRequest;
+import com.example.CoutingStarHotel.DTO.request.hotel.UpdateHotelRequest;
+import com.example.CoutingStarHotel.DTO.response.hotel.HotelResponse;
+import com.example.CoutingStarHotel.DTO.response.common.PageResponse;
+import com.example.CoutingStarHotel.DTO.response.common.ResponseData;
 import com.example.CoutingStarHotel.services.HotelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

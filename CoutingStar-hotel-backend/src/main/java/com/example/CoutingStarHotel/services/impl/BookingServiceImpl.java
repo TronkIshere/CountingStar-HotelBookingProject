@@ -1,9 +1,9 @@
 package com.example.CoutingStarHotel.services.impl;
 
-import com.example.CoutingStarHotel.DTO.request.SaveBookingRequest;
-import com.example.CoutingStarHotel.DTO.request.UpdateBookedRoom;
-import com.example.CoutingStarHotel.DTO.response.BookingResponse;
-import com.example.CoutingStarHotel.DTO.response.PageResponse;
+import com.example.CoutingStarHotel.DTO.request.bookedroom.SaveBookingRequest;
+import com.example.CoutingStarHotel.DTO.request.bookedroom.UpdateBookedRoom;
+import com.example.CoutingStarHotel.DTO.response.bookedroom.BookingResponse;
+import com.example.CoutingStarHotel.DTO.response.common.PageResponse;
 import com.example.CoutingStarHotel.entities.BookedRoom;
 import com.example.CoutingStarHotel.entities.RedeemedDiscount;
 import com.example.CoutingStarHotel.entities.Room;

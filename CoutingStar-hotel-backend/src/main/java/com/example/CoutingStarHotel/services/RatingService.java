@@ -1,8 +1,8 @@
 package com.example.CoutingStarHotel.services;
 
-import com.example.CoutingStarHotel.DTO.request.AddRatingRequest;
-import com.example.CoutingStarHotel.DTO.request.UpdateRatingRequest;
-import com.example.CoutingStarHotel.DTO.response.RatingResponse;
+import com.example.CoutingStarHotel.DTO.request.rating.AddRatingRequest;
+import com.example.CoutingStarHotel.DTO.request.rating.UpdateRatingRequest;
+import com.example.CoutingStarHotel.DTO.response.rating.RatingResponse;
 import com.example.CoutingStarHotel.entities.Rating;
 
 import java.util.List;

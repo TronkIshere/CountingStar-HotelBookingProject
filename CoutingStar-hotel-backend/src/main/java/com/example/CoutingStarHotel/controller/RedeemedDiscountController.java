@@ -1,7 +1,7 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.DTO.response.RedeemedDiscountResponse;
-import com.example.CoutingStarHotel.DTO.response.ResponseData;
+import com.example.CoutingStarHotel.DTO.response.redeemedDiscount.RedeemedDiscountResponse;
+import com.example.CoutingStarHotel.DTO.response.common.ResponseData;
 import com.example.CoutingStarHotel.services.RedeemedDiscountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -1,9 +1,9 @@
 package com.example.CoutingStarHotel.services;
 
-import com.example.CoutingStarHotel.DTO.request.SaveBookingRequest;
-import com.example.CoutingStarHotel.DTO.request.UpdateBookedRoom;
-import com.example.CoutingStarHotel.DTO.response.BookingResponse;
-import com.example.CoutingStarHotel.DTO.response.PageResponse;
+import com.example.CoutingStarHotel.DTO.request.bookedroom.SaveBookingRequest;
+import com.example.CoutingStarHotel.DTO.request.bookedroom.UpdateBookedRoom;
+import com.example.CoutingStarHotel.DTO.response.bookedroom.BookingResponse;
+import com.example.CoutingStarHotel.DTO.response.common.PageResponse;
 import com.example.CoutingStarHotel.entities.BookedRoom;
 
 public interface BookingService {

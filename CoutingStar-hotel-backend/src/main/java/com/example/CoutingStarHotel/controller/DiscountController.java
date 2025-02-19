@@ -1,10 +1,10 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.DTO.request.AddDiscountRequest;
-import com.example.CoutingStarHotel.DTO.request.UpdateDiscountRequest;
-import com.example.CoutingStarHotel.DTO.response.DiscountResponse;
-import com.example.CoutingStarHotel.DTO.response.PageResponse;
-import com.example.CoutingStarHotel.DTO.response.ResponseData;
+import com.example.CoutingStarHotel.DTO.request.discount.AddDiscountRequest;
+import com.example.CoutingStarHotel.DTO.request.discount.UpdateDiscountRequest;
+import com.example.CoutingStarHotel.DTO.response.discount.DiscountResponse;
+import com.example.CoutingStarHotel.DTO.response.common.PageResponse;
+import com.example.CoutingStarHotel.DTO.response.common.ResponseData;
 import com.example.CoutingStarHotel.services.DiscountService;
 import io.jsonwebtoken.io.IOException;
 import lombok.RequiredArgsConstructor;

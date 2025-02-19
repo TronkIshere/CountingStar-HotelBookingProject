@@ -1,9 +1,9 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.DTO.request.AddRatingRequest;
-import com.example.CoutingStarHotel.DTO.request.UpdateRatingRequest;
-import com.example.CoutingStarHotel.DTO.response.RatingResponse;
-import com.example.CoutingStarHotel.DTO.response.ResponseData;
+import com.example.CoutingStarHotel.DTO.request.rating.AddRatingRequest;
+import com.example.CoutingStarHotel.DTO.request.rating.UpdateRatingRequest;
+import com.example.CoutingStarHotel.DTO.response.rating.RatingResponse;
+import com.example.CoutingStarHotel.DTO.response.common.ResponseData;
 import com.example.CoutingStarHotel.services.RatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

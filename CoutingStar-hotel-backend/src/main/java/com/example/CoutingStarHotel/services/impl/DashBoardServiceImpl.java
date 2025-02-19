@@ -1,7 +1,7 @@
 package com.example.CoutingStarHotel.services.impl;
 
-import com.example.CoutingStarHotel.DTO.response.AdminDashBoardMonthIncreased;
-import com.example.CoutingStarHotel.DTO.response.HotelOwnerMonthIncreased;
+import com.example.CoutingStarHotel.DTO.response.dashBoard.AdminDashBoardMonthIncreased;
+import com.example.CoutingStarHotel.DTO.response.dashBoard.HotelOwnerMonthIncreased;
 import com.example.CoutingStarHotel.services.*;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

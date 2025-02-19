@@ -1,10 +1,10 @@
 package com.example.CoutingStarHotel.services.impl;
 
-import com.example.CoutingStarHotel.DTO.request.LoginRequest;
-import com.example.CoutingStarHotel.DTO.request.UpdateUserRequest;
-import com.example.CoutingStarHotel.DTO.response.JwtResponse;
-import com.example.CoutingStarHotel.DTO.response.PageResponse;
-import com.example.CoutingStarHotel.DTO.response.UserResponse;
+import com.example.CoutingStarHotel.DTO.request.user.LoginRequest;
+import com.example.CoutingStarHotel.DTO.request.user.UpdateUserRequest;
+import com.example.CoutingStarHotel.DTO.response.jwt.JwtResponse;
+import com.example.CoutingStarHotel.DTO.response.common.PageResponse;
+import com.example.CoutingStarHotel.DTO.response.user.UserResponse;
 import com.example.CoutingStarHotel.entities.Role;
 import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.mapper.UserMapper;

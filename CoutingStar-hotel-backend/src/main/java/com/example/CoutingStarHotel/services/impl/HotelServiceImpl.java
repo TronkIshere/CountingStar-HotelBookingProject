@@ -1,8 +1,12 @@
 package com.example.CoutingStarHotel.services.impl;
 
-import com.example.CoutingStarHotel.DTO.request.AddHotelRequest;
-import com.example.CoutingStarHotel.DTO.request.UpdateHotelRequest;
-import com.example.CoutingStarHotel.DTO.response.*;
+import com.example.CoutingStarHotel.DTO.request.hotel.AddHotelRequest;
+import com.example.CoutingStarHotel.DTO.request.hotel.UpdateHotelRequest;
+import com.example.CoutingStarHotel.DTO.response.common.PageResponse;
+import com.example.CoutingStarHotel.DTO.response.dashBoard.BarChartResponse;
+import com.example.CoutingStarHotel.DTO.response.dashBoard.PieChartResponse;
+import com.example.CoutingStarHotel.DTO.response.hotel.HotelResponse;
+import com.example.CoutingStarHotel.DTO.response.rating.RatingResponse;
 import com.example.CoutingStarHotel.entities.Hotel;
 import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.exception.InvalidHotelRequestException;

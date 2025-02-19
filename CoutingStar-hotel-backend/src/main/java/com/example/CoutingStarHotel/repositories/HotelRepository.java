@@ -1,7 +1,7 @@
 package com.example.CoutingStarHotel.repositories;
 
-import com.example.CoutingStarHotel.DTO.response.BarChartResponse;
-import com.example.CoutingStarHotel.DTO.response.PieChartResponse;
+import com.example.CoutingStarHotel.DTO.response.dashBoard.BarChartResponse;
+import com.example.CoutingStarHotel.DTO.response.dashBoard.PieChartResponse;
 import com.example.CoutingStarHotel.entities.Hotel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +31,7 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
             "GROUP BY h.city")
     List<PieChartResponse> findNumberOfHotelsByCity();
 
-    @Query("SELECT new com.example.CoutingStarHotel.DTO.response.BarChartResponse(h.city, SUM(b.totalAmount)) " +
+    @Query("SELECT new com.example.CoutingStarHotel.DTO.response.dashBoard.BarChartResponse(h.city, SUM(b.totalAmount)) " +
             "FROM Hotel h JOIN h.rooms r JOIN r.bookings b " +
             "GROUP BY h.city")
     List<BarChartResponse> findRevenueByEachCity();

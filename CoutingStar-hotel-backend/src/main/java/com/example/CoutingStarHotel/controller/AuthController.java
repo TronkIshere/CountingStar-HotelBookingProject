@@ -1,8 +1,8 @@
 package com.example.CoutingStarHotel.controller;
 
-import com.example.CoutingStarHotel.DTO.request.LoginRequest;
-import com.example.CoutingStarHotel.DTO.response.JwtResponse;
-import com.example.CoutingStarHotel.DTO.response.ResponseData;
+import com.example.CoutingStarHotel.DTO.request.user.LoginRequest;
+import com.example.CoutingStarHotel.DTO.response.jwt.JwtResponse;
+import com.example.CoutingStarHotel.DTO.response.common.ResponseData;
 import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.services.UserService;
 import jakarta.validation.Valid;
