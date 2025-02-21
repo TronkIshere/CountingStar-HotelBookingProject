@@ -49,10 +49,6 @@ public class User extends AbstractEntity<Long> {
 
     @Enumerated(value = EnumType.STRING)
 
-    // SELF, GOOGLE, FACEBOOK, TWITTER, LINKEDIN, GITHUB
-//    private Providers provider = Providers.SELF;
-//    private String providerUserId;
-
     public void addBooking(BookedRoom booking) {
         if (bookedRooms == null) {
             bookedRooms = new HashSet<>();

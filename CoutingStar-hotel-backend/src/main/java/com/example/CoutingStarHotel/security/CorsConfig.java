@@ -15,7 +15,6 @@ import java.util.Arrays;
 @Configuration
 @EnableWebMvc
 public class CorsConfig {
-
     private static final Long MAX_AGE = 3600L;
     private static final int CORS_FILTER_ORDER = -102;
 
