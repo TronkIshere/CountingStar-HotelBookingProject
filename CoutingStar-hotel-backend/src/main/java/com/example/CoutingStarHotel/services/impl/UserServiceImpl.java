@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
         }
         User user = new User();
         user.setFirstName(request.getFirstName());
-        user.setPassword(request.getPassword());
+        user.setLastName(request.getLastName());
         user.setPhoneNumber(request.getPhoneNumber());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         Role userRole = roleCoordinator.getRoleByName("ROLE_USER");
