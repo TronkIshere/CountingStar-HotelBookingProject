@@ -3,8 +3,11 @@ package com.example.CoutingStarHotel.entities.common;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -16,12 +19,21 @@ public abstract class AbstractEntity<T extends Serializable> implements Serializ
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private T id;
 
-    @CreatedDate
+    @CreationTimestamp
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
-    @Column(nullable = false)
+    @CreatedBy
+    @Column(name = "created_by")
+    private String createdBy;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @LastModifiedBy
+    @Column(name = "updated_by")
+    private String updatedBy;
 
     @Column
     private LocalDateTime deletedAt;
