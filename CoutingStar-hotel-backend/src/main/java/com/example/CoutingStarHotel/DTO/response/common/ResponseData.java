@@ -12,7 +12,6 @@ import java.io.Serializable;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseData<T> implements Serializable {
-
     private int code;
     private String message;
     private T data;

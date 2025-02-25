@@ -2,6 +2,7 @@ package com.example.CoutingStarHotel.services;
 
 import com.example.CoutingStarHotel.DTO.request.user.LoginRequest;
 import com.example.CoutingStarHotel.DTO.request.user.UpdateUserRequest;
+import com.example.CoutingStarHotel.DTO.request.user.UploadUserRequest;
 import com.example.CoutingStarHotel.DTO.response.jwt.JwtResponse;
 import com.example.CoutingStarHotel.DTO.response.common.PageResponse;
 import com.example.CoutingStarHotel.DTO.response.user.UserResponse;
@@ -10,7 +11,7 @@ import com.example.CoutingStarHotel.entities.User;
 import java.util.List;
 
 public interface UserService {
-    User registerUser(User user);
+    User registerUser(UploadUserRequest user);
 
     User registerHotelOwner(User user);
 

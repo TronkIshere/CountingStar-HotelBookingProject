@@ -2,6 +2,7 @@ package com.example.CoutingStarHotel.services.impl;
 
 import com.example.CoutingStarHotel.DTO.request.user.LoginRequest;
 import com.example.CoutingStarHotel.DTO.request.user.UpdateUserRequest;
+import com.example.CoutingStarHotel.DTO.request.user.UploadUserRequest;
 import com.example.CoutingStarHotel.DTO.response.jwt.JwtResponse;
 import com.example.CoutingStarHotel.DTO.response.common.PageResponse;
 import com.example.CoutingStarHotel.DTO.response.user.UserResponse;
@@ -46,11 +47,15 @@ public class UserServiceImpl implements UserService {
     JwtUtils jwtUtils;
 
     @Override
-    public User registerUser(User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new UsernameNotFoundException(user.getEmail() + " already exists");
+    public User registerUser(UploadUserRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new UsernameNotFoundException(request.getEmail() + " already exists");
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User user = new User();
+        user.setFirstName(request.getFirstName());
+        user.setPassword(request.getPassword());
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         Role userRole = roleCoordinator.getRoleByName("ROLE_USER");
         user.setRoles(Collections.singletonList(userRole));
         user.setRegisterDay(LocalDate.now());
