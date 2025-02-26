@@ -19,7 +19,7 @@ public interface BookingRepository extends JpaRepository<BookedRoom, Long> {
     @Query("SELECT br FROM BookedRoom br JOIN br.room r JOIN r.hotel h WHERE h.id = :hotelId")
     Page<BookedRoom> findByHotelId(Pageable pageable, Long hotelId);
 
-    @Query("SELECT br FROM BookedRoom br LEFT JOIN br.rating r " +
+    @Query("SELECT br FROM BookedRoom br LEFT JOIN br.ratings r " +
             "WHERE br.user.id = :userId " +
             "AND br.room.hotel.id = :hotelId " +
             "AND r.id IS NULL")

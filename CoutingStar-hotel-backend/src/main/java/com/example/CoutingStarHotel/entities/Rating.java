@@ -23,7 +23,7 @@ public class Rating extends AbstractEntity<Long> {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bookedRoom_id")
     private BookedRoom bookedRoom;
 }

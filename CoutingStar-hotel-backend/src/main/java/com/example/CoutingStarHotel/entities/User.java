@@ -30,8 +30,7 @@ public class User extends AbstractEntity<Long> {
     private LocalDate registerDay;
 
     @ManyToMany(fetch = FetchType.EAGER,
-            cascade = {CascadeType.PERSIST,
-                    CascadeType.MERGE, CascadeType.DETACH})
+            cascade = {CascadeType.MERGE, CascadeType.DETACH})
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -50,7 +49,6 @@ public class User extends AbstractEntity<Long> {
     private List<RedeemedDiscount> redeemedDiscount;
 
     @Enumerated(value = EnumType.STRING)
-
     public void addBooking(BookedRoom booking) {
         if (bookedRooms == null) {
             bookedRooms = new HashSet<>();

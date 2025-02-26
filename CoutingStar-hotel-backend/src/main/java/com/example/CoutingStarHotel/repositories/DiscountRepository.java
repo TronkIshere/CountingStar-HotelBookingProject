@@ -21,4 +21,7 @@ public interface DiscountRepository extends JpaRepository<Discount, Long> {
             "lower(d.discountDescription) LIKE lower(concat('%', :keyword, '%')) OR " +
             "cast(d.id as string) LIKE lower(concat('%', :keyword, '%')) ")
     Page<Discount> getDiscountByKeyword(Pageable pageable, String keyword);
+
+    @Query("SELECT d FROM Discount d WHERE d.discountName = :name")
+    Discount findByName(String name);
 }

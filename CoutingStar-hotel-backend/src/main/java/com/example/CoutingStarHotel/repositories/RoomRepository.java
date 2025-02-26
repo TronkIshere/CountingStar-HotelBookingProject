@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
     @Query("SELECT r FROM Room r WHERE r.hotel.id = :hotelId")
@@ -19,5 +20,8 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     Page<Room> getAllRoomByKeywordAndHotelId(Pageable pageable, String keyword, Long hotelId);
 
     @Query("SELECT r FROM Room r WHERE r.hotel.name = :name")
-    Room findRoomByHotelName(String name);
+    Optional<Room> findRoomByHotelName(String name);
+
+    @Query("SELECT r FROM Room r WHERE r.roomType = :roomType")
+    Room findByRoomType(String roomType);
 }

@@ -8,6 +8,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -37,8 +38,8 @@ public class BookedRoom extends AbstractEntity<Long> {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(mappedBy = "bookedRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Rating rating;
+    @OneToMany(mappedBy = "bookedRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Rating> ratings;
 
     @OneToOne(mappedBy = "bookedRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private RedeemedDiscount redeemedDiscount;
