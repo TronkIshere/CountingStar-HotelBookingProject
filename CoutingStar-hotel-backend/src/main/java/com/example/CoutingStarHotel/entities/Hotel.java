@@ -16,11 +16,11 @@ import java.util.List;
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Hotel extends AbstractEntity<Long> {
-    private String hotelName;
+    private String name;
     private String city;
-    private String hotelLocation;
+    private String address;
     @Column(columnDefinition = "LONGTEXT")
-    private String hotelDescription;
+    private String description;
     private String phoneNumber;
     private LocalDate registerDay;
 

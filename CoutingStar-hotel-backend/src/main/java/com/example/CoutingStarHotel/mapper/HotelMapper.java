@@ -28,10 +28,10 @@ public class HotelMapper {
 
         return HotelResponse.builder()
                 .id(hotel.getId())
-                .hotelName(hotel.getHotelName())
+                .hotelName(hotel.getName())
                 .city(hotel.getCity())
-                .hotelLocation(hotel.getHotelLocation())
-                .hotelDescription(hotel.getHotelDescription())
+                .hotelLocation(hotel.getAddress())
+                .hotelDescription(hotel.getDescription())
                 .phoneNumber(hotel.getPhoneNumber())
                 .photo(convertBlobToBase64(hotel.getPhoto()))
                 .averageNumberOfHotelStars(hotelService.averageNumberOfHotelStars(hotel.getId()))

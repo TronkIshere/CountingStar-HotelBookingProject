@@ -48,10 +48,10 @@ public class HotelServiceImpl implements HotelService {
     public HotelResponse addHotel(Long userId,
                                   AddHotelRequest request) throws IOException, SQLException {
         Hotel hotel = new Hotel();
-        hotel.setHotelName(request.getHotelName());
+        hotel.setName(request.getHotelName());
         hotel.setCity(request.getCity());
-        hotel.setHotelLocation(request.getHotelLocation());
-        hotel.setHotelDescription(request.getHotelDescription());
+        hotel.setAddress(request.getHotelLocation());
+        hotel.setDescription(request.getHotelDescription());
         hotel.setPhoneNumber(request.getPhoneNumber());
         setHotelPhoto(hotel, request.getPhoto());
         User user = userService.getUserById(userId);
@@ -237,9 +237,9 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public HotelResponse updateHotel(Long hotelId, UpdateHotelRequest request) throws IOException, SQLException {
         Hotel hotel = getHotelById(hotelId);
-        hotel.setHotelName(request.getHotelName());
-        hotel.setHotelLocation(request.getHotelLocation());
-        hotel.setHotelDescription(request.getHotelDescription());
+        hotel.setName(request.getHotelName());
+        hotel.setAddress(request.getHotelLocation());
+        hotel.setDescription(request.getHotelDescription());
         hotel.setPhoneNumber(request.getPhoneNumber());
         hotel.setCity(request.getCity());
         setHotelPhoto(hotel, request.getPhoto());
