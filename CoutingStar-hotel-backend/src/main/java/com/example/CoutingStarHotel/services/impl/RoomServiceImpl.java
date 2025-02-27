@@ -7,6 +7,8 @@ import com.example.CoutingStarHotel.DTO.response.room.RoomResponse;
 import com.example.CoutingStarHotel.entities.Hotel;
 import com.example.CoutingStarHotel.entities.Rating;
 import com.example.CoutingStarHotel.entities.Room;
+import com.example.CoutingStarHotel.exception.ApplicationException;
+import com.example.CoutingStarHotel.exception.ErrorCode;
 import com.example.CoutingStarHotel.mapper.RoomMapper;
 import com.example.CoutingStarHotel.repositories.RoomRepository;
 import com.example.CoutingStarHotel.services.RoomService;
@@ -151,9 +153,9 @@ public class RoomServiceImpl implements RoomService {
 
     private Blob processPhoto(MultipartFile photo) throws IOException, SQLException {
         if (photo != null && !photo.isEmpty()) {
-            byte[] photoBytes = photo.getBytes();
-            return new SerialBlob(photoBytes);
+            throw new ApplicationException(ErrorCode.RESOURCE_NOT_FOUND);
         }
-        return null;
+        byte[] photoBytes = photo.getBytes();
+        return new SerialBlob(photoBytes);
     }
 }

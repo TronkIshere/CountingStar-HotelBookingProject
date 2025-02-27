@@ -67,15 +67,15 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public double averageNumberOfHotelStars(Long hotelId){
+    public double averageNumberOfHotelStars(Long hotelId) {
         double result = 0;
         int count = 0;
         List<RatingResponse> ratings = ratingService.getAllRatingByHotelId(hotelId);
-        for(RatingResponse rating: ratings){
+        for (RatingResponse rating : ratings) {
             result += rating.getStar();
             count++;
         }
-        return result/count;
+        return result / count;
     }
 
     @Override
@@ -203,7 +203,7 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public PageResponse<HotelResponse> getAllHotels(Integer pageNo, Integer pageSize){
+    public PageResponse<HotelResponse> getAllHotels(Integer pageNo, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         Page<Hotel> hotelPage = hotelRepository.findAll(pageable);
 
@@ -219,7 +219,7 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public PageResponse<HotelResponse> getAllHotelsByCity(String city, Integer pageNo, Integer pageSize){
+    public PageResponse<HotelResponse> getAllHotelsByCity(String city, Integer pageNo, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         Page<Hotel> hotelPage = hotelRepository.findAllHotelsByCity(city, pageable);
 
@@ -249,15 +249,16 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public void deleteHotel(Long hotelId){
+    public void deleteHotel(Long hotelId) {
         hotelRepository.deleteById(hotelId);
     }
 
     private void setHotelPhoto(Hotel hotel, MultipartFile photo) throws IOException, SQLException {
-        if (photo != null && !photo.isEmpty()) {
-            byte[] photoBytes = photo.getBytes();
-            Blob photoBlob = new SerialBlob(photoBytes);
-            hotel.setPhoto(photoBlob);
+        if (photo == null || photo.isEmpty()) {
+            throw new ApplicationException(ErrorCode.RESOURCE_NOT_FOUND);
         }
+        byte[] photoBytes = photo.getBytes();
+        Blob photoBlob = new SerialBlob(photoBytes);
+        hotel.setPhoto(photoBlob);
     }
 }
