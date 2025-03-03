@@ -315,6 +315,7 @@ public class DataInitializer {
         hotel.setAddress(address);
         hotel.setDescription(description);
         hotel.setPhoneNumber(phone);
+        hotel.setRegisterDay(LocalDate.now());
         hotel.setPhoto(convertImageToBlob(imagePath));
         hotel.setUser(owner);
         return hotel;
