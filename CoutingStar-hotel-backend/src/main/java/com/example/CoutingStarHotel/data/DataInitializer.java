@@ -90,16 +90,23 @@ public class DataInitializer {
 
             //insert rooms data
             if (roomRepository.count() == 0) {
+                String imagePath1 = "static/dummyImg/room1.jpg";
+                String imagePath2 = "static/dummyImg/room2.jpg";
+                String imagePath3 = "static/dummyImg/room3.jpg";
+                String imagePath4 = "static/dummyImg/room4.jpg";
+                String imagePath5 = "static/dummyImg/room5.jpg";
+
+
                 List<Hotel> hotels = hotelRepository.findAll();
                 List<Room> rooms = new ArrayList<>();
 
                 for (Hotel hotel : hotels) {
                     rooms.addAll(List.of(
-                            createRoom("Deluxe Suite", BigDecimal.valueOf(250.0), "Spacious suite with modern amenities", hotel),
-                            createRoom("Standard Room", BigDecimal.valueOf(120.0), "Comfortable standard room", hotel),
-                            createRoom("Executive Suite", BigDecimal.valueOf(300.0), "Luxurious suite with city view", hotel),
-                            createRoom("Family Room", BigDecimal.valueOf(180.0), "Ideal for families, with extra beds", hotel),
-                            createRoom("Penthouse", BigDecimal.valueOf(500.0), "Top floor luxury suite", hotel)
+                            createRoom("Deluxe Suite", BigDecimal.valueOf(250.0), "Spacious suite with modern amenities", imagePath1, hotel),
+                            createRoom("Standard Room", BigDecimal.valueOf(120.0), "Comfortable standard room", imagePath2, hotel),
+                            createRoom("Executive Suite", BigDecimal.valueOf(300.0), "Luxurious suite with city view", imagePath3, hotel),
+                            createRoom("Family Room", BigDecimal.valueOf(180.0), "Ideal for families, with extra beds", imagePath4, hotel),
+                            createRoom("Penthouse", BigDecimal.valueOf(500.0), "Top floor luxury suite", imagePath5, hotel)
                     ));
                 }
 
@@ -313,22 +320,13 @@ public class DataInitializer {
         return hotel;
     }
 
-    private static Blob convertImageToBlob(String imagePath) throws IOException, SQLException {
-        ClassPathResource resource = new ClassPathResource(imagePath);
-        InputStream inputStream = resource.getInputStream();
-
-        byte[] imageBytes = inputStream.readAllBytes();
-        inputStream.close();
-
-        return new SerialBlob(imageBytes);
-    }
-
-    private Room createRoom(String type, BigDecimal price, String description, Hotel hotel) {
+    private Room createRoom(String type, BigDecimal price, String description, String imagePath, Hotel hotel) throws SQLException, IOException {
         Room room = new Room();
         room.setRoomType(type);
         room.setRoomPrice(price);
         room.setRoomDescription(description);
         room.setBooked(false);
+        room.setPhoto(convertImageToBlob(imagePath));
         room.setHotel(hotel);
         return room;
     }
@@ -393,5 +391,15 @@ public class DataInitializer {
         rating.setUser(user);
         rating.setBookedRoom(bookedRoom);
         return rating;
+    }
+
+    private static Blob convertImageToBlob(String imagePath) throws IOException, SQLException {
+        ClassPathResource resource = new ClassPathResource(imagePath);
+        InputStream inputStream = resource.getInputStream();
+
+        byte[] imageBytes = inputStream.readAllBytes();
+        inputStream.close();
+
+        return new SerialBlob(imageBytes);
     }
 }
