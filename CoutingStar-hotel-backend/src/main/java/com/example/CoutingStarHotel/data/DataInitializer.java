@@ -7,8 +7,14 @@ import com.example.CoutingStarHotel.repositories.*;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
+import javax.sql.rowset.serial.SerialBlob;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,16 +69,21 @@ public class DataInitializer {
 
             // insert hotels data
             if (hotelRepository.count() == 0) {
+                String imagePath1 = "static/dummyImg/hotel1.jpg";
+                String imagePath2 = "static/dummyImg/hotel2.jpg";
+                String imagePath3 = "static/dummyImg/hotel3.jpg";
+                String imagePath4 = "static/dummyImg/hotel4.jpg";
+
                 User owner1 = userRepository.findByEmail("tronk@gmail.com").orElse(null);
                 User owner2 = userRepository.findByEmail("hotel@gmail.com").orElse(null);
                 User owner3 = userRepository.findByEmail("david@gmail.com").orElse(null);
                 User owner4 = userRepository.findByEmail("emily@gmail.com").orElse(null);
 
                 List<Hotel> hotels = List.of(
-                        createHotel("Luxury Hotel", "New York", "123 5th Avenue", "A 5-star hotel", "1234567890", owner1),
-                        createHotel("Budget Inn", "Los Angeles", "456 Sunset Blvd", "Affordable stay", "9876543210", owner2),
-                        createHotel("Seaside Resort", "Miami", "789 Ocean Drive", "Beachfront luxury", "1122334455", owner3),
-                        createHotel("Mountain Lodge", "Denver", "321 Rocky Road", "Scenic mountain retreat", "5566778899", owner4));
+                        createHotel("Luxury Hotel", "New York", "123 5th Avenue", "A 5-star hotel", "1234567890", imagePath1, owner1),
+                        createHotel("Budget Inn", "Los Angeles", "456 Sunset Blvd", "Affordable stay", "9876543210", imagePath2, owner2),
+                        createHotel("Seaside Resort", "Miami", "789 Ocean Drive", "Beachfront luxury", "1122334455", imagePath3, owner3),
+                        createHotel("Mountain Lodge", "Denver", "321 Rocky Road", "Scenic mountain retreat", "5566778899", imagePath4, owner4));
                 hotelRepository.saveAll(hotels);
                 System.out.println("Dummy Hotels inserted!");
             }
@@ -184,7 +195,6 @@ public class DataInitializer {
                 System.out.println("Dummy discounts inserted!");
             }
 
-
             // insert redeemedDiscounts data
             if (redeemedDiscountRepository.count() == 0) {
                 Discount springSale = discountRepository.findByName("Spring Sale");
@@ -291,15 +301,26 @@ public class DataInitializer {
         return user;
     }
 
-    private Hotel createHotel(String name, String city, String address, String description, String phone, User owner) {
+    private Hotel createHotel(String name, String city, String address, String description, String phone, String imagePath, User owner) throws SQLException, IOException {
         Hotel hotel = new Hotel();
         hotel.setName(name);
         hotel.setCity(city);
         hotel.setAddress(address);
         hotel.setDescription(description);
         hotel.setPhoneNumber(phone);
+        hotel.setPhoto(convertImageToBlob(imagePath));
         hotel.setUser(owner);
         return hotel;
+    }
+
+    private static Blob convertImageToBlob(String imagePath) throws IOException, SQLException {
+        ClassPathResource resource = new ClassPathResource(imagePath);
+        InputStream inputStream = resource.getInputStream();
+
+        byte[] imageBytes = inputStream.readAllBytes();
+        inputStream.close();
+
+        return new SerialBlob(imageBytes);
     }
 
     private Room createRoom(String type, BigDecimal price, String description, Hotel hotel) {
