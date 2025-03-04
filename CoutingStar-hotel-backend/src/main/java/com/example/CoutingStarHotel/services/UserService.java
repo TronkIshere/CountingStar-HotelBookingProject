@@ -11,7 +11,7 @@ import com.example.CoutingStarHotel.entities.User;
 import java.util.List;
 
 public interface UserService {
-    User registerUser(UploadUserRequest user);
+    UserResponse registerUser(UploadUserRequest user);
 
     User registerHotelOwner(User user);
 

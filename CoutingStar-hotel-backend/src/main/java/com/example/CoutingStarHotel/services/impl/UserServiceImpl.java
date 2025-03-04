@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
     JwtUtils jwtUtils;
 
     @Override
-    public User registerUser(UploadUserRequest request) {
+    public UserResponse registerUser(UploadUserRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new UsernameNotFoundException(request.getEmail() + " already exists");
         }
@@ -59,7 +59,8 @@ public class UserServiceImpl implements UserService {
         Role userRole = roleCoordinator.getRoleByName("ROLE_USER");
         user.setRoles(Collections.singletonList(userRole));
         user.setRegisterDay(LocalDate.now());
-        return userRepository.save(user);
+        userRepository.save(user);
+        return UserMapper.toUserResponse(user);
     }
 
     @Override

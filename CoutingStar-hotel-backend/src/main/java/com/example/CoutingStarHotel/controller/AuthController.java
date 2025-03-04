@@ -4,6 +4,7 @@ import com.example.CoutingStarHotel.DTO.request.user.LoginRequest;
 import com.example.CoutingStarHotel.DTO.request.user.UploadUserRequest;
 import com.example.CoutingStarHotel.DTO.response.jwt.JwtResponse;
 import com.example.CoutingStarHotel.DTO.response.common.ResponseData;
+import com.example.CoutingStarHotel.DTO.response.user.UserResponse;
 import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.services.UserService;
 import jakarta.validation.Valid;
@@ -21,12 +22,12 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/register-user")
-    public ResponseData<String> registerUser(@RequestBody UploadUserRequest request) {
-        var registeredUser = userService.registerUser(request);
-        return ResponseData.<String>builder()
+    public ResponseData<UserResponse> registerUser(@Valid @RequestBody UploadUserRequest request) {
+        var result = userService.registerUser(request);
+        return ResponseData.<UserResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("success register user")
-                .data(registeredUser.getEmail())
+                .data(result)
                 .build();
     }
 
