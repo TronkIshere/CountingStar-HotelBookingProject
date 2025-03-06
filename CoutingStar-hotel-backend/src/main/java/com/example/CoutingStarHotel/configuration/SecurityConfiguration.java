@@ -3,7 +3,9 @@ package com.example.CoutingStarHotel.configuration;
 import com.example.CoutingStarHotel.configuration.jwt.AuthTokenFilter;
 import com.example.CoutingStarHotel.configuration.jwt.JwtAuthEntryPoint;
 import com.example.CoutingStarHotel.configuration.user.HotelUserDetailsService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,16 +28,28 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebMvc
 @RequiredArgsConstructor
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SecurityConfiguration {
-    private final HotelUserDetailsService userDetailsService;
-    private final JwtAuthEntryPoint jwtAuthEntryPoint;
-    private static final Long MAX_AGE = 3600L;
-    private static final int CORS_FILTER_ORDER = -102;
+    HotelUserDetailsService userDetailsService;
+    JwtAuthEntryPoint jwtAuthEntryPoint;
+    static Long MAX_AGE = 3600L;
+    static int CORS_FILTER_ORDER = -102;
+    static String[] White_list = {
+            "/auth/**",
+            "/rooms/**",
+            "/bookings/**",
+            "/hotels/**",
+            "/ratings/**",
+            "/dashboard/**",
+            "/discounts/**",
+            "/redeemedDiscount/**"
+    };
 
     @Bean
     public AuthTokenFilter authenticationTokenFilter(){
@@ -61,20 +75,13 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer :: disable)
                 .exceptionHandling(
                         exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**",
-                                "/rooms/**",
-                                "/bookings/**",
-                                "/hotels/**",
-                                "/ratings/**",
-                                "/dashboard/**",
-                                "/discounts/**",
-                                "/redeemedDiscount/**")
+                        .requestMatchers(White_list)
                         .permitAll().requestMatchers("/roles/**").hasRole("ADMIN")
                         .anyRequest().authenticated());
         http.authenticationProvider(authenticationProvider());
@@ -84,21 +91,22 @@ public class SecurityConfiguration {
 
     @Bean
     public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:5173");
-        config.setAllowedHeaders(Arrays.asList(
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,
                 HttpHeaders.ACCEPT));
-        config.setAllowedMethods(Arrays.asList(
+        configuration.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),
                 HttpMethod.PUT.name(),
                 HttpMethod.DELETE.name()));
-        config.setMaxAge(MAX_AGE);
-        source.registerCorsConfiguration("/**", config);
+        configuration.setMaxAge(MAX_AGE);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
         return new CorsFilter(source);
     }
 
