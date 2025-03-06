@@ -1,4 +1,4 @@
-package com.example.CoutingStarHotel.security.user;
+package com.example.CoutingStarHotel.configuration.user;
 
 import com.example.CoutingStarHotel.entities.User;
 import lombok.AllArgsConstructor;

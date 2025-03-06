@@ -1,6 +1,6 @@
-package com.example.CoutingStarHotel.security.jwt;
+package com.example.CoutingStarHotel.configuration.jwt;
 
-import com.example.CoutingStarHotel.security.user.HotelUserDetails;
+import com.example.CoutingStarHotel.configuration.user.HotelUserDetails;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

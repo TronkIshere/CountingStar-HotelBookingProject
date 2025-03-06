@@ -1,4 +1,4 @@
-package com.example.CoutingStarHotel.security.jwt;
+package com.example.CoutingStarHotel.configuration.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;

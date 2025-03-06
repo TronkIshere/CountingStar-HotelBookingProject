@@ -1,6 +1,6 @@
-package com.example.CoutingStarHotel.security.jwt;
+package com.example.CoutingStarHotel.configuration.jwt;
 
-import com.example.CoutingStarHotel.security.user.HotelUserDetailsService;
+import com.example.CoutingStarHotel.configuration.user.HotelUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
