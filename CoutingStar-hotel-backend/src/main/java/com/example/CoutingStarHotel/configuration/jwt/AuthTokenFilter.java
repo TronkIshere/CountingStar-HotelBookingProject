@@ -1,6 +1,6 @@
 package com.example.CoutingStarHotel.configuration.jwt;
 
-import com.example.CoutingStarHotel.configuration.user.HotelUserDetailsService;
+import com.example.CoutingStarHotel.services.impl.UserDetailsServiceCustomizer;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +21,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtils jwtUtils;
     @Autowired
-    private HotelUserDetailsService userDetailsService;
+    private UserDetailsServiceCustomizer userDetailsService;
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
     @Override

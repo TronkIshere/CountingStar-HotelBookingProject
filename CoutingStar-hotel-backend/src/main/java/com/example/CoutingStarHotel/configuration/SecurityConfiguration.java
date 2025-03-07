@@ -2,7 +2,7 @@ package com.example.CoutingStarHotel.configuration;
 
 import com.example.CoutingStarHotel.configuration.jwt.AuthTokenFilter;
 import com.example.CoutingStarHotel.configuration.jwt.JwtAuthEntryPoint;
-import com.example.CoutingStarHotel.configuration.user.HotelUserDetailsService;
+import com.example.CoutingStarHotel.services.impl.UserDetailsServiceCustomizer;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -36,7 +36,7 @@ import java.util.List;
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SecurityConfiguration {
-    HotelUserDetailsService userDetailsService;
+    UserDetailsServiceCustomizer userDetailsService;
     JwtAuthEntryPoint jwtAuthEntryPoint;
     static Long MAX_AGE = 3600L;
     static int CORS_FILTER_ORDER = -102;

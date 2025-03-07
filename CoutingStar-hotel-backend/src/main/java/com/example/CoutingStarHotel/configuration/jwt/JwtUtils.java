@@ -1,6 +1,6 @@
 package com.example.CoutingStarHotel.configuration.jwt;
 
-import com.example.CoutingStarHotel.configuration.user.HotelUserDetails;
+import com.example.CoutingStarHotel.entities.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -25,14 +25,17 @@ public class JwtUtils {
     private int jwtExpirationMs;
 
     public String generateJwtTokenForUser(Authentication authentication){
-        HotelUserDetails userPrincipal = (HotelUserDetails) authentication.getPrincipal();
+        User userPrincipal = (User) authentication.getPrincipal();
         List<String> roles = userPrincipal.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority).toList();
+
+        Long hotelId = (userPrincipal.getHotel() != null) ? userPrincipal.getHotel().getId() : null;
+
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
                 .claim("userId", userPrincipal.getId())
-                .claim("userHotelId", userPrincipal.getHotelId())
+                .claim("userHotelId", hotelId)
                 .claim("roles", roles)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime()+jwtExpirationMs))

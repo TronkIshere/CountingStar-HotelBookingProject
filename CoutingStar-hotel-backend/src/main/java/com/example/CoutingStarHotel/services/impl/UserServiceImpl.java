@@ -3,15 +3,14 @@ package com.example.CoutingStarHotel.services.impl;
 import com.example.CoutingStarHotel.DTO.request.user.LoginRequest;
 import com.example.CoutingStarHotel.DTO.request.user.UpdateUserRequest;
 import com.example.CoutingStarHotel.DTO.request.user.UploadUserRequest;
-import com.example.CoutingStarHotel.DTO.response.jwt.JwtResponse;
 import com.example.CoutingStarHotel.DTO.response.common.PageResponse;
+import com.example.CoutingStarHotel.DTO.response.jwt.JwtResponse;
 import com.example.CoutingStarHotel.DTO.response.user.UserResponse;
+import com.example.CoutingStarHotel.configuration.jwt.JwtUtils;
 import com.example.CoutingStarHotel.entities.Role;
 import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.mapper.UserMapper;
 import com.example.CoutingStarHotel.repositories.UserRepository;
-import com.example.CoutingStarHotel.configuration.jwt.JwtUtils;
-import com.example.CoutingStarHotel.configuration.user.HotelUserDetails;
 import com.example.CoutingStarHotel.services.UserService;
 import com.example.CoutingStarHotel.services.impl.helpers.RoleCoordinator;
 import jakarta.persistence.EntityNotFoundException;
@@ -173,7 +172,7 @@ public class UserServiceImpl implements UserService {
                         .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtTokenForUser(authentication);
-        HotelUserDetails userDetails = (HotelUserDetails) authentication.getPrincipal();
+        User userDetails = (User) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority).toList();
 
