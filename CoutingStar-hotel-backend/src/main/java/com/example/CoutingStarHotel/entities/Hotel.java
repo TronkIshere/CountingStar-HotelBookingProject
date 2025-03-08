@@ -1,9 +1,10 @@
 package com.example.CoutingStarHotel.entities;
 
 import com.example.CoutingStarHotel.entities.common.AbstractEntity;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.sql.Blob;
 import java.time.LocalDate;
@@ -14,26 +15,26 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Hotel extends AbstractEntity<Long> {
-    private String name;
-    private String city;
-    private String address;
+    String name;
+    String city;
+    String address;
     @Column(columnDefinition = "LONGTEXT")
-    private String description;
-    private String phoneNumber;
-    private LocalDate registerDay;
+    String description;
+    String phoneNumber;
+    LocalDate registerDay;
 
     @Lob
     @JsonIgnore
-    private Blob photo;
+    Blob photo;
 
     @OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Room> rooms;
+    List<Room> rooms;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    User user;
 
     public void addRoom(Room room) {
         rooms.add(room);

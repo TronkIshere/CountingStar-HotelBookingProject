@@ -1,13 +1,9 @@
 package com.example.CoutingStarHotel.entities;
 
 import com.example.CoutingStarHotel.entities.common.AbstractEntity;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,42 +20,33 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class User extends AbstractEntity<Long> implements UserDetails {
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String password;
-    private String phoneNumber;
-    private LocalDate registerDay;
+    String firstName;
+    String lastName;
+    String email;
+    String password;
+    String phoneNumber;
+    LocalDate registerDay;
 
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = {CascadeType.MERGE, CascadeType.DETACH})
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Collection<Role> roles = new HashSet<>();
+    Collection<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<BookedRoom> bookedRooms = new HashSet<>();
+    Set<BookedRoom> bookedRooms = new HashSet<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Hotel hotel;
+    Hotel hotel;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Rating> rating;
+    List<Rating> rating;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<RedeemedDiscount> redeemedDiscount;
-
-    @Enumerated(value = EnumType.STRING)
-    public void addBooking(BookedRoom booking) {
-        if (bookedRooms == null) {
-            bookedRooms = new HashSet<>();
-        }
-        bookedRooms.add(booking);
-        booking.setUser(this);
-    }
+    List<RedeemedDiscount> redeemedDiscount;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -108,5 +95,14 @@ public class User extends AbstractEntity<Long> implements UserDetails {
 
     public void addRedeemedDiscount(RedeemedDiscount redeemedDiscount) {
         redeemedDiscount.setUser(this);
+    }
+
+    @Enumerated(value = EnumType.STRING)
+    public void addBooking(BookedRoom booking) {
+        if (bookedRooms == null) {
+            bookedRooms = new HashSet<>();
+        }
+        bookedRooms.add(booking);
+        booking.setUser(this);
     }
 }

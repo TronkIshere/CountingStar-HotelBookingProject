@@ -1,11 +1,13 @@
 package com.example.CoutingStarHotel.entities;
 
 import com.example.CoutingStarHotel.entities.common.AbstractEntity;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.math.BigDecimal;
@@ -17,23 +19,23 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Room extends AbstractEntity<Long> {
-    private String roomType;
-    private BigDecimal roomPrice;
-    private String roomDescription;
-    private boolean isBooked = false;
+    String roomType;
+    BigDecimal roomPrice;
+    String roomDescription;
+    boolean isBooked = false;
 
     @Lob
     @JsonIgnore
-    private Blob photo;
+    Blob photo;
 
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<BookedRoom> bookings;
+    List<BookedRoom> bookings;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id")
-    private Hotel hotel;
+    Hotel hotel;
 
     public Room() {
         this.bookings = new ArrayList<>();

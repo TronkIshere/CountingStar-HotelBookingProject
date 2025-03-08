@@ -1,10 +1,9 @@
 package com.example.CoutingStarHotel.entities;
 
 import com.example.CoutingStarHotel.entities.common.AbstractEntity;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,34 +14,34 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "bookingId")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookedRoom extends AbstractEntity<Long> {
-    private LocalDate checkInDate;
-    private LocalDate checkOutDate;
-    private String guestPhoneNumber;
-    private String guestFullName;
-    private String guestEmail;
-    private int NumOfAdults;
-    private int NumOfChildren;
-    private int totalNumOfGuest;
-    private String bookingConfirmationCode;
-    private LocalDate bookingDay;
-    private BigDecimal totalAmount;
-    private Boolean isCancelled = false;
+    LocalDate checkInDate;
+    LocalDate checkOutDate;
+    String guestPhoneNumber;
+    String guestFullName;
+    String guestEmail;
+    int NumOfAdults;
+    int NumOfChildren;
+    int totalNumOfGuest;
+    String bookingConfirmationCode;
+    LocalDate bookingDay;
+    BigDecimal totalAmount;
+    Boolean isCancelled = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
-    private Room room;
+    Room room;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    User user;
 
     @OneToMany(mappedBy = "bookedRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Rating> ratings;
+    List<Rating> ratings;
 
     @OneToOne(mappedBy = "bookedRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private RedeemedDiscount redeemedDiscount;
+    RedeemedDiscount redeemedDiscount;
 
     public BookedRoom(String bookingConfirmationCode) {
         this.bookingConfirmationCode = bookingConfirmationCode;

@@ -1,10 +1,12 @@
 package com.example.CoutingStarHotel.entities;
 
 import com.example.CoutingStarHotel.entities.common.AbstractEntity;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 
@@ -13,17 +15,17 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Rating extends AbstractEntity<Long> {
-    private int star;
-    private String comment;
-    private LocalDate rateDay;
+    int star;
+    String comment;
+    LocalDate rateDay;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bookedRoom_id")
-    private BookedRoom bookedRoom;
+    BookedRoom bookedRoom;
 }

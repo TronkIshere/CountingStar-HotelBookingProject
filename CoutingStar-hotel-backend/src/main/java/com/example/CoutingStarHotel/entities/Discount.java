@@ -1,8 +1,12 @@
 package com.example.CoutingStarHotel.entities;
 
 import com.example.CoutingStarHotel.entities.common.AbstractEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,15 +17,16 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Discount extends AbstractEntity<Long> {
-    private String discountName;
-    private int percentDiscount;
-    private String discountDescription;
-    private LocalDate createDate;
-    private LocalDate expirationDate;
+    String discountName;
+    int percentDiscount;
+    String discountDescription;
+    LocalDate createDate;
+    LocalDate expirationDate;
 
     @OneToMany(mappedBy = "discount", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<RedeemedDiscount> redeemedDiscount;
+    List<RedeemedDiscount> redeemedDiscount;
 
     public void addRedeemedDiscount(RedeemedDiscount redeemedDiscount) {
         redeemedDiscount.setDiscount(this);

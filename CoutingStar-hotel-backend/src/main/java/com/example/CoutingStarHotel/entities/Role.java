@@ -1,12 +1,13 @@
 package com.example.CoutingStarHotel.entities;
 
 import com.example.CoutingStarHotel.entities.common.AbstractEntity;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -16,12 +17,12 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Role extends AbstractEntity<Long> {
-    private String name;
+    String name;
 
     @ManyToMany(mappedBy = "roles")
-    private Collection<User> users = new HashSet<>();
+    Collection<User> users = new HashSet<>();
 
     public Role(String name) {
         this.name = name;
