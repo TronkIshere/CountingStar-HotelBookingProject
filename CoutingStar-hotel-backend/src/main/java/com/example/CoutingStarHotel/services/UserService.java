@@ -35,7 +35,5 @@ public interface UserService {
 
     UserResponse updateUser(Long userId, UpdateUserRequest request);
 
-    JwtResponse getJwtResponse(LoginRequest request);
-
     String softDelete(Long userId);
 }

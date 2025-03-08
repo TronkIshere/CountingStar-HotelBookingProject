@@ -1,11 +1,13 @@
 package com.example.CoutingStarHotel.controller;
 
 import com.example.CoutingStarHotel.DTO.request.user.UpdateUserRequest;
+import com.example.CoutingStarHotel.DTO.request.user.UploadUserRequest;
 import com.example.CoutingStarHotel.DTO.response.common.PageResponse;
 import com.example.CoutingStarHotel.DTO.response.common.ResponseData;
 import com.example.CoutingStarHotel.DTO.response.user.UserResponse;
 import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,26 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUsers());
+    }
+
+    @PostMapping("/register-user")
+    public ResponseData<UserResponse> registerUser(@Valid @RequestBody UploadUserRequest request) {
+        var result = userService.registerUser(request);
+        return ResponseData.<UserResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("success register user")
+                .data(result)
+                .build();
+    }
+
+    @PostMapping("/register-hotelOwner")
+    public ResponseData<Long> registerHotelOwnerAndReturnId(@RequestBody User user) {
+        User registeredUser = userService.registerHotelOwner(user);
+        return ResponseData.<Long>builder()
+                .code(HttpStatus.OK.value())
+                .message("success")
+                .data(registeredUser.getId())
+                .build();
     }
 
     @GetMapping("/{email}")

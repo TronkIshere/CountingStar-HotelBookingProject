@@ -1,12 +1,9 @@
 package com.example.CoutingStarHotel.services.impl;
 
-import com.example.CoutingStarHotel.DTO.request.user.LoginRequest;
 import com.example.CoutingStarHotel.DTO.request.user.UpdateUserRequest;
 import com.example.CoutingStarHotel.DTO.request.user.UploadUserRequest;
 import com.example.CoutingStarHotel.DTO.response.common.PageResponse;
-import com.example.CoutingStarHotel.DTO.response.jwt.JwtResponse;
 import com.example.CoutingStarHotel.DTO.response.user.UserResponse;
-import com.example.CoutingStarHotel.configuration.jwt.JwtUtils;
 import com.example.CoutingStarHotel.entities.Role;
 import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.mapper.UserMapper;
@@ -21,11 +18,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,8 +34,6 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
     RoleCoordinator roleCoordinator;
-    AuthenticationManager authenticationManager;
-    JwtUtils jwtUtils;
 
     @Override
     public UserResponse registerUser(UploadUserRequest request) {
@@ -163,25 +153,6 @@ public class UserServiceImpl implements UserService {
     public User getUserById(Long userId){
         return userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Room not found with ID: " + userId));
-    }
-
-    @Override
-    public JwtResponse getJwtResponse(LoginRequest request) {
-        Authentication authentication =
-                authenticationManager
-                        .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtTokenForUser(authentication);
-        User userDetails = (User) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities()
-                .stream().map(GrantedAuthority::getAuthority).toList();
-
-        return JwtResponse.builder()
-                .id(userDetails.getId())
-                .email(userDetails.getEmail())
-                .token(jwt)
-                .roles(roles)
-                .build();
     }
 
     @Override
