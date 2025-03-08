@@ -1,5 +1,6 @@
-package com.example.CoutingStarHotel.configuration.jwt;
+package com.example.CoutingStarHotel.configuration;
 
+import com.example.CoutingStarHotel.services.JwtService;
 import com.example.CoutingStarHotel.services.impl.UserDetailsServiceCustomizer;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,7 +20,7 @@ import java.io.IOException;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
-    private JwtUtils jwtUtils;
+    private JwtService jwtService;
     @Autowired
     private UserDetailsServiceCustomizer userDetailsService;
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
@@ -30,8 +31,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         try{
             String jwt = parseJwt(request);
-            if (jwt != null && jwtUtils.validateToken(jwt)){
-                String email = jwtUtils.getUserNameFromToken(jwt);
+            if (jwt != null && jwtService.validateToken(jwt)){
+                String email = jwtService.getUserNameFromToken(jwt);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
                 var authentication =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

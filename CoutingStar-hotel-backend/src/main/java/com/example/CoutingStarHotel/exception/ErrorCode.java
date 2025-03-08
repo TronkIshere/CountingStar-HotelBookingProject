@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
 
+    UNAUTHORIZED(401, "Unauthorized", HttpStatus.UNAUTHORIZED),
     INVALID_BOOKING_REQUEST(1001, "Booking function have error", HttpStatus.BAD_REQUEST),
     INVALID_DISCOUNT_REQUEST(1002, "Discount function have error", HttpStatus.BAD_REQUEST),
     INVALID_HOTEL_REQUEST(1003, "Hotel function have error", HttpStatus.BAD_REQUEST),

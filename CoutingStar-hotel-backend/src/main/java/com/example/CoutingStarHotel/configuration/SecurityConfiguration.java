@@ -1,7 +1,5 @@
 package com.example.CoutingStarHotel.configuration;
 
-import com.example.CoutingStarHotel.configuration.jwt.AuthTokenFilter;
-import com.example.CoutingStarHotel.configuration.jwt.JwtAuthEntryPoint;
 import com.example.CoutingStarHotel.services.impl.UserDetailsServiceCustomizer;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

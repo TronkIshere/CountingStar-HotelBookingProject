@@ -1,9 +1,12 @@
-package com.example.CoutingStarHotel.configuration.jwt;
+package com.example.CoutingStarHotel.services.impl;
 
 import com.example.CoutingStarHotel.entities.User;
+import com.example.CoutingStarHotel.services.JwtService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,14 +19,16 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class JwtUtils {
-    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class JwtServiceImpl implements JwtService {
+    static final Logger logger = LoggerFactory.getLogger(JwtService.class);
     @Value("${security.jwt.secret}")
-    private String jwtSecret;
+    String jwtSecret;
 
     @Value("${security.jwt.expirationInMils}")
-    private int jwtExpirationMs;
+    int jwtExpirationMs;
 
+    @Override
     public String generateJwtTokenForUser(Authentication authentication){
         User userPrincipal = (User) authentication.getPrincipal();
         List<String> roles = userPrincipal.getAuthorities()
@@ -46,6 +51,7 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
+    @Override
     public String getUserNameFromToken(String token){
         return Jwts.parserBuilder()
                 .setSigningKey(key())
@@ -53,6 +59,7 @@ public class JwtUtils {
                 .parseClaimsJws(token).getBody().getSubject();
     }
 
+    @Override
     public boolean validateToken(String token){
         try{
             Jwts.parserBuilder().setSigningKey(key()).build().parse(token);

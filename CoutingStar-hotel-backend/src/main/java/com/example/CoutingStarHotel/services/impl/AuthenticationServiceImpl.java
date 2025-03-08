@@ -2,9 +2,9 @@ package com.example.CoutingStarHotel.services.impl;
 
 import com.example.CoutingStarHotel.DTO.request.user.LoginRequest;
 import com.example.CoutingStarHotel.DTO.response.jwt.JwtResponse;
-import com.example.CoutingStarHotel.configuration.jwt.JwtUtils;
 import com.example.CoutingStarHotel.entities.User;
 import com.example.CoutingStarHotel.services.AuthenticationService;
+import com.example.CoutingStarHotel.services.JwtService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,14 +22,14 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationServiceImpl implements AuthenticationService {
     AuthenticationManager authenticationManager;
-    JwtUtils jwtUtils;
+    JwtService jwtService;
     @Override
     public JwtResponse signIn(LoginRequest request) {
         Authentication authentication =
                 authenticationManager
                         .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtTokenForUser(authentication);
+        String jwt = jwtService.generateJwtTokenForUser(authentication);
         User userDetails = (User) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority).toList();

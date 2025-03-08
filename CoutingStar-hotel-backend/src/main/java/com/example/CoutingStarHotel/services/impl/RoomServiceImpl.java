@@ -48,9 +48,7 @@ public class RoomServiceImpl implements RoomService {
         room.setRoomDescription(request.getRoomDescription());
         Hotel hotel = hotelCoordinator.getHotelById(hotelId);
         Blob photoBlob = processPhoto(request.getPhoto());
-        if (photoBlob != null) {
-            room.setPhoto(photoBlob);
-        }
+        room.setPhoto(photoBlob);
         hotel.addRoom(room);
         roomRepository.save(room);
         return RoomMapper.toRoomResponse(room);
@@ -78,9 +76,7 @@ public class RoomServiceImpl implements RoomService {
         room.setRoomPrice(request.getRoomPrice());
 
         Blob photoBlob = processPhoto(request.getPhoto());
-        if (photoBlob != null) {
-            room.setPhoto(photoBlob);
-        }
+        room.setPhoto(photoBlob);
 
         roomRepository.save(room);
         return RoomMapper.toRoomResponse(room);
