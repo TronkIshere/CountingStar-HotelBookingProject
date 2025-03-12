@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 @ShellComponent
 @Slf4j
@@ -132,6 +133,7 @@ public class CodeGeneratorCLI {
         String repoDirectoryPath = "./src/main/java/com/example/CountingStarHotel/repositories/";
         String interfaceDirectoryPath = "./src/main/java/com/example/CountingStarHotel/services/";
         String serviceDirectoryPath = "./src/main/java/com/example/CountingStarHotel/services/impl/";
+        String controllerDirectoryPath = "./src/main/java/com/example/CountingStarHotel/controller/";
 
         List<String> entityClasses = getEntityClasses(entitiesDirectoryPath);
         if (entityClasses.isEmpty()) return "Not Entity has found!";
@@ -144,8 +146,9 @@ public class CodeGeneratorCLI {
         createRepositoryFile(repoDirectoryPath, selectedEntity);
         createInterfaceFile(interfaceDirectoryPath, selectedEntity, entityPropertiesList);
         createServiceFile(serviceDirectoryPath, selectedEntity, entityPropertiesList);
+        createControllerFile(controllerDirectoryPath, selectedEntity, entityPropertiesList);
 
-        return "Created service, repository is completed";
+        return "Created controller, service, repository is completed";
     }
 
     private List<String> getEntityProperties(String selectedEntity) throws ClassNotFoundException {
@@ -412,5 +415,78 @@ public class CodeGeneratorCLI {
         return str.substring(0, 1).toLowerCase() + str.substring(1);
     }
 
+    private void createControllerFile(String controllerDirectoryPath, String selectedEntity, List<String> entityProperties) throws IOException {
+        String controllerName = selectedEntity + "Controller";
+        String filePath = controllerDirectoryPath + controllerName + ".java";
+        StringBuilder code = new StringBuilder();
+
+        code.append(addImportForController(selectedEntity, entityProperties));
+        code.append(addClassAndMethodForController(selectedEntity, entityProperties));
+
+        FileWriter writer = new FileWriter(filePath);
+        writer.write(code.toString());
+        writer.close();
+
+        log.info("Interface created at " + filePath);
+    }
+
+    private StringBuilder addImportForController(String selectedEntity, List<String> entityProperties) {
+        String propertiesString = String.join(", ", entityProperties);
+
+        StringBuilder code = new StringBuilder();
+        code.append("package com.example.CountingStarHotel.controller;\n\n");
+        code.append("import com.example.CountingStarHotel.entities.").append(selectedEntity).append(";\n");
+        code.append("import com.example.CountingStarHotel.services.").append(selectedEntity).append("Service;\n");
+        code.append("import org.springframework.http.ResponseEntity;\n");
+        code.append("import lombok.RequiredArgsConstructor;\n");
+        code.append("import org.springframework.web.bind.annotation.*;\n");
+        code.append(getRequiredImports(propertiesString));
+        return code;
+    }
+
+    private StringBuilder addClassAndMethodForController(String selectedEntity, List<String> entityProperties) {
+        StringBuilder code = new StringBuilder();
+        code.append("@CrossOrigin(\"http://localhost:5173\")\n");
+        code.append("@RequiredArgsConstructor\n");
+        code.append("@RestController\n");
+        code.append("@RequestMapping(\"/").append(selectedEntity.toLowerCase()).append("s\")\n");
+        code.append("public class ").append(selectedEntity).append("Controller {\n");
+        code.append("\tprivate final ").append(selectedEntity).append("Service ").append(lowerFirst(selectedEntity)).append("Service;\n\n");
+
+        // Create Method
+        code.append("\t@PostMapping\n");
+        code.append("\tpublic ResponseEntity<").append(selectedEntity).append("> create").append(selectedEntity).append("(");
+        code.append(String.join(", ", entityProperties));
+        code.append(") {\n");
+        code.append("\t\treturn ").append(lowerFirst(selectedEntity)).append("Service.save").append(selectedEntity).append("(");
+        code.append(entityProperties.stream().map(prop -> prop.split(" ")[1]).collect(Collectors.joining(", ")));
+        code.append(");\n");
+        code.append("\t}\n\n");
+
+        // Get By ID Method
+        code.append("\t@GetMapping(\"/{id}\")\n");
+        code.append("\tpublic ResponseEntity<").append(selectedEntity).append("> get").append(selectedEntity).append("ById(@PathVariable Long id) {\n");
+        code.append("\t\treturn ").append(lowerFirst(selectedEntity)).append("Service.get").append(selectedEntity).append("ById(id);\n");
+        code.append("\t}\n\n");
+
+        // Update Method
+        code.append("\t@PutMapping(\"/{id}\")\n");
+        code.append("\tpublic ResponseEntity<").append(selectedEntity).append("> update").append(selectedEntity).append("(@PathVariable Long id, ");
+        code.append(String.join(", ", entityProperties));
+        code.append(") {\n");
+        code.append("\t\treturn ").append(lowerFirst(selectedEntity)).append("Service.update").append(selectedEntity).append("(id, ");
+        code.append(entityProperties.stream().map(prop -> prop.split(" ")[1]).collect(Collectors.joining(", ")));
+        code.append(");\n");
+        code.append("\t}\n\n");
+
+        // Delete Method
+        code.append("\t@DeleteMapping(\"/{id}\")\n");
+        code.append("\tpublic ResponseEntity<Void> delete").append(selectedEntity).append("(@PathVariable Long id) {\n");
+        code.append("\t\treturn ").append(lowerFirst(selectedEntity)).append("Service.delete").append(selectedEntity).append("ById(id);\n");
+        code.append("\t}\n");
+
+        code.append("}\n");
+        return code;
+    }
 }
 
