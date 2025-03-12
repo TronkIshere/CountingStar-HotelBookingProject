@@ -1,7 +1,7 @@
 package com.example.CountingStarHotel.mapper;
 
 import com.example.CountingStarHotel.DTO.response.redeemedDiscount.RedeemedDiscountResponse;
-import com.example.CountingStarHotel.entities.RedeemedDiscount;
+import com.example.CountingStarHotel.entity.RedeemedDiscount;
 
 import java.util.List;
 

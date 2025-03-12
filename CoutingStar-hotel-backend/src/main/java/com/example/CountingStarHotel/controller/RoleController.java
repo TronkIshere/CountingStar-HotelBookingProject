@@ -1,8 +1,8 @@
 package com.example.CountingStarHotel.controller;
 
-import com.example.CountingStarHotel.entities.Role;
-import com.example.CountingStarHotel.entities.User;
-import com.example.CountingStarHotel.services.RoleService;
+import com.example.CountingStarHotel.entity.Role;
+import com.example.CountingStarHotel.entity.User;
+import com.example.CountingStarHotel.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

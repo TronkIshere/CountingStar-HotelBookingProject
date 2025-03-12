@@ -19,7 +19,7 @@ public class CodeGeneratorCLI {
     @ShellMethod(key = "addEntity", value = "Generate a new Entity class")
     public String generateEntity(String name, String fields) throws IOException {
         String className = capitalize(name);
-        String directoryPath = "./src/main/java/com/example/CountingStarHotel/entities/";
+        String directoryPath = "./src/main/java/com/example/CountingStarHotel/entity/";
         String filePath = directoryPath + className + ".java";
 
         StringBuilder code = new StringBuilder();
@@ -35,8 +35,8 @@ public class CodeGeneratorCLI {
 
     public StringBuilder addImportForEntity(String fields) {
         StringBuilder code = new StringBuilder();
-        code.append("package com.example.CountingStarHotel.entities;\n\n");
-        code.append("import com.example.CountingStarHotel.entities.common.AbstractEntity;\n");
+        code.append("package com.example.CountingStarHotel.entity;\n\n");
+        code.append("import com.example.CountingStarHotel.entity.common.AbstractEntity;\n");
         code.append("import jakarta.persistence.*;\n");
         code.append("import lombok.*;\n");
         code.append("import lombok.experimental.FieldDefaults;\n\n");
@@ -129,10 +129,10 @@ public class CodeGeneratorCLI {
 
     @ShellMethod(key = "addService", value = "Generate a new service class")
     public String generateService() throws IOException, ClassNotFoundException {
-        String entitiesDirectoryPath = "./src/main/java/com/example/CountingStarHotel/entities/";
-        String repoDirectoryPath = "./src/main/java/com/example/CountingStarHotel/repositories/";
-        String interfaceDirectoryPath = "./src/main/java/com/example/CountingStarHotel/services/";
-        String serviceDirectoryPath = "./src/main/java/com/example/CountingStarHotel/services/impl/";
+        String entitiesDirectoryPath = "./src/main/java/com/example/CountingStarHotel/entity/";
+        String repoDirectoryPath = "./src/main/java/com/example/CountingStarHotel/repository/";
+        String interfaceDirectoryPath = "./src/main/java/com/example/CountingStarHotel/service/";
+        String serviceDirectoryPath = "./src/main/java/com/example/CountingStarHotel/service/impl/";
         String controllerDirectoryPath = "./src/main/java/com/example/CountingStarHotel/controller/";
 
         List<String> entityClasses = getEntityClasses(entitiesDirectoryPath);
@@ -154,7 +154,7 @@ public class CodeGeneratorCLI {
     private List<String> getEntityProperties(String selectedEntity) throws ClassNotFoundException {
         List<String> properties = new ArrayList<>();
 
-        String basePackage = "com.example.CountingStarHotel.entities";
+        String basePackage = "com.example.CountingStarHotel.entity";
         String className = basePackage + "." + selectedEntity;
 
         Class<?> entityClass = Class.forName(className);
@@ -229,8 +229,8 @@ public class CodeGeneratorCLI {
 
     private StringBuilder addImportForRepo(String selectedEntity) {
         StringBuilder code = new StringBuilder();
-        code.append("package com.example.CountingStarHotel.repositories;\n\n");
-        code.append("import com.example.CountingStarHotel.entities." + selectedEntity + ";\n");
+        code.append("package com.example.CountingStarHotel.repository;\n\n");
+        code.append("import com.example.CountingStarHotel.entity." + selectedEntity + ";\n");
         code.append("import org.springframework.data.jpa.repository.JpaRepository;\n");
         code.append("\n");
         return code;
@@ -266,8 +266,8 @@ public class CodeGeneratorCLI {
         String propertiesString = String.join(", ", entityProperties);
 
         StringBuilder code = new StringBuilder();
-        code.append("package com.example.CountingStarHotel.services;\n\n");
-        code.append("import com.example.CountingStarHotel.entities." + selectedEntity + ";\n");
+        code.append("package com.example.CountingStarHotel.service;\n\n");
+        code.append("import com.example.CountingStarHotel.entity." + selectedEntity + ";\n");
         code.append("import org.springframework.http.ResponseEntity;\n");
         code.append(getRequiredImports(propertiesString));
         return code;
@@ -319,10 +319,10 @@ public class CodeGeneratorCLI {
         String propertiesString = String.join(", ", entityProperties);
 
         StringBuilder code = new StringBuilder();
-        code.append("package com.example.CountingStarHotel.services.impl;\n\n");
-        code.append("import com.example.CountingStarHotel.entities.").append(selectedEntity).append(";\n");
-        code.append("import com.example.CountingStarHotel.repositories.").append(selectedEntity).append("Repository;\n");
-        code.append("import com.example.CountingStarHotel.services.").append(selectedEntity).append("Service;\n");
+        code.append("package com.example.CountingStarHotel.service.impl;\n\n");
+        code.append("import com.example.CountingStarHotel.entity.").append(selectedEntity).append(";\n");
+        code.append("import com.example.CountingStarHotel.repository.").append(selectedEntity).append("Repository;\n");
+        code.append("import com.example.CountingStarHotel.service.").append(selectedEntity).append("Service;\n");
         code.append("import lombok.AccessLevel;").append("\n");
         code.append("import lombok.RequiredArgsConstructor;").append("\n");
         code.append("import lombok.experimental.FieldDefaults;").append("\n");
@@ -435,8 +435,8 @@ public class CodeGeneratorCLI {
 
         StringBuilder code = new StringBuilder();
         code.append("package com.example.CountingStarHotel.controller;\n\n");
-        code.append("import com.example.CountingStarHotel.entities.").append(selectedEntity).append(";\n");
-        code.append("import com.example.CountingStarHotel.services.").append(selectedEntity).append("Service;\n");
+        code.append("import com.example.CountingStarHotel.entity.").append(selectedEntity).append(";\n");
+        code.append("import com.example.CountingStarHotel.service.").append(selectedEntity).append("Service;\n");
         code.append("import org.springframework.http.ResponseEntity;\n");
         code.append("import lombok.RequiredArgsConstructor;\n");
         code.append("import org.springframework.web.bind.annotation.*;\n");

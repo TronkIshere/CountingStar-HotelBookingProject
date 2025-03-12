@@ -5,7 +5,7 @@ import com.example.CountingStarHotel.DTO.request.bookedroom.UpdateBookedRoom;
 import com.example.CountingStarHotel.DTO.response.bookedroom.BookingResponse;
 import com.example.CountingStarHotel.DTO.response.common.PageResponse;
 import com.example.CountingStarHotel.DTO.response.common.ResponseData;
-import com.example.CountingStarHotel.services.BookingService;
+import com.example.CountingStarHotel.service.BookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
