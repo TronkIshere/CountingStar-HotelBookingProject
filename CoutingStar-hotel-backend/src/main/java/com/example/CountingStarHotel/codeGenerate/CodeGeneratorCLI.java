@@ -4,32 +4,58 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @ShellComponent
 @Slf4j
 public class CodeGeneratorCLI {
+
+    private Path getOrCreateDirectory(String folderName) throws IOException {
+        Path basePath = Paths.get("src", "main", "java", "com", "example");
+        Path entityDir = findEntityFolder(basePath, folderName);
+
+        if (entityDir == null) {
+            entityDir = basePath.resolve(folderName);
+            Files.createDirectories(entityDir);
+        }
+        System.out.println("Entity directory path: " + entityDir.toAbsolutePath());
+        return entityDir;
+    }
+
+    private Path findEntityFolder(Path dir, String folderName) {
+        try (Stream<Path> paths = Files.walk(dir)) {
+            return paths.filter(Files::isDirectory)
+                    .filter(p -> p.getFileName().toString().equalsIgnoreCase(folderName))
+                    .findFirst()
+                    .orElse(null);
+        } catch (IOException e) {
+            System.err.println("Error finding entity folder: " + e.getMessage());
+            return null;
+        }
+    }
+
     @ShellMethod(key = "addEntity", value = "Generate a new Entity class")
     public String generateEntity(String name, String fields) throws IOException {
         String className = capitalize(name);
-        String directoryPath = "./src/main/java/com/example/CountingStarHotel/entity/";
-        String filePath = directoryPath + className + ".java";
+        Path directoryPath = getOrCreateDirectory("entity");
+        Path filePath = directoryPath.resolve(className + ".java");
 
         StringBuilder code = new StringBuilder();
         code.append(addImportForEntity(fields));
         code.append(addClassExtendAbstractClassForEntity(className));
         code.append(addPropertiesForEntity(fields));
 
-        FileWriter writer = new FileWriter(filePath);
-        writer.write(code.toString());
-        writer.close();
+        Files.write(filePath, code.toString().getBytes(StandardCharsets.UTF_8));
         return "Entity created at " + filePath;
     }
 
@@ -129,11 +155,11 @@ public class CodeGeneratorCLI {
 
     @ShellMethod(key = "addService", value = "Generate a new service class")
     public String generateService() throws IOException, ClassNotFoundException {
-        String entitiesDirectoryPath = "./src/main/java/com/example/CountingStarHotel/entity/";
-        String repoDirectoryPath = "./src/main/java/com/example/CountingStarHotel/repository/";
-        String interfaceDirectoryPath = "./src/main/java/com/example/CountingStarHotel/service/";
-        String serviceDirectoryPath = "./src/main/java/com/example/CountingStarHotel/service/impl/";
-        String controllerDirectoryPath = "./src/main/java/com/example/CountingStarHotel/controller/";
+        Path entitiesDirectoryPath = getOrCreateDirectory("entity");
+        Path repoDirectoryPath = getOrCreateDirectory("repository");
+        Path interfaceDirectoryPath = getOrCreateDirectory("service");
+        Path serviceDirectoryPath = getOrCreateDirectory("impl");
+        Path controllerDirectoryPath = getOrCreateDirectory("controller");
 
         List<String> entityClasses = getEntityClasses(entitiesDirectoryPath);
         if (entityClasses.isEmpty()) return "Not Entity has found!";
@@ -195,35 +221,32 @@ public class CodeGeneratorCLI {
         return selectedEntity;
     }
 
-    private List<String> getEntityClasses(String path) {
-        File folder = new File(path);
+    private List<String> getEntityClasses(Path path) {
         List<String> entityClasses = new ArrayList<>();
 
-        if (folder.exists() && folder.isDirectory()) {
-            File[] files = folder.listFiles((dir, name) -> name.endsWith(".java"));
-            if (files != null) {
-                for (File file : files) {
-                    String className = file.getName().replace(".java", "");
-                    entityClasses.add(className);
-                }
-            }
-        }
+        if (!Files.exists(path) || !Files.isDirectory(path)) return entityClasses;
 
+        try (Stream<Path> files = Files.list(path)) {
+            files.filter(Files::isRegularFile)
+                    .filter(p -> p.getFileName().toString().endsWith(".java"))
+                    .map(p -> p.getFileName().toString().replace(".java", ""))
+                    .forEach(entityClasses::add);
+        } catch (IOException e) {
+            System.err.println("Error reading entity files: " + e.getMessage());
+        }
         return entityClasses;
     }
 
-    private void createRepositoryFile(String repoDirectoryPath, String selectedEntity) throws IOException {
-        String repoName = selectedEntity + "Repository";
-        String filePath = repoDirectoryPath + repoName + ".java";
-        StringBuilder code = new StringBuilder();
 
+    private void createRepositoryFile(Path repoDirectoryPath, String selectedEntity) throws IOException {
+        String repoName = selectedEntity + "Repository";
+        Path filePath = repoDirectoryPath.resolve(repoName + ".java");
+
+        StringBuilder code = new StringBuilder();
         code.append(addImportForRepo(selectedEntity));
         code.append(addClassExtendJpa(selectedEntity));
 
-        FileWriter writer = new FileWriter(filePath);
-        writer.write(code.toString());
-        writer.close();
-
+        Files.write(filePath, code.toString().getBytes(StandardCharsets.UTF_8));
         log.info("Repository created at " + filePath);
     }
 
@@ -247,18 +270,15 @@ public class CodeGeneratorCLI {
         return code;
     }
 
-    private void createInterfaceFile(String interfaceDirectoryPath, String selectedEntity, List<String> entityProperties) throws IOException {
+    private void createInterfaceFile(Path interfaceDirectoryPath, String selectedEntity, List<String> entityProperties) throws IOException {
         String interfaceName = selectedEntity + "Service";
-        String filePath = interfaceDirectoryPath + interfaceName + ".java";
-        StringBuilder code = new StringBuilder();
+        Path filePath = interfaceDirectoryPath.resolve(interfaceName + ".java");
 
+        StringBuilder code = new StringBuilder();
         code.append(addImportForInterface(selectedEntity, entityProperties));
         code.append(addClassAndMethodForInterface(selectedEntity, entityProperties));
 
-        FileWriter writer = new FileWriter(filePath);
-        writer.write(code.toString());
-        writer.close();
-
+        Files.write(filePath, code.toString().getBytes(StandardCharsets.UTF_8));
         log.info("Interface created at " + filePath);
     }
 
@@ -300,18 +320,15 @@ public class CodeGeneratorCLI {
         return code;
     }
 
-    private void createServiceFile(String serviceDirectoryPath, String selectedEntity, List<String> entityProperties) throws IOException {
+    private void createServiceFile(Path serviceDirectoryPath, String selectedEntity, List<String> entityProperties) throws IOException {
         String serviceImplName = selectedEntity + "ServiceImpl";
-        String filePath = serviceDirectoryPath + serviceImplName + ".java";
-        StringBuilder code = new StringBuilder();
+        Path filePath = serviceDirectoryPath.resolve(serviceImplName + ".java");
 
+        StringBuilder code = new StringBuilder();
         code.append(addImportForServiceImpl(selectedEntity, entityProperties));
         code.append(addClassAndMethodForServiceImpl(selectedEntity, entityProperties));
 
-        FileWriter writer = new FileWriter(filePath);
-        writer.write(code.toString());
-        writer.close();
-
+        Files.write(filePath, code.toString().getBytes(StandardCharsets.UTF_8));
         log.info("Interface created at " + filePath);
     }
 
@@ -415,18 +432,15 @@ public class CodeGeneratorCLI {
         return str.substring(0, 1).toLowerCase() + str.substring(1);
     }
 
-    private void createControllerFile(String controllerDirectoryPath, String selectedEntity, List<String> entityProperties) throws IOException {
+    private void createControllerFile(Path controllerDirectoryPath, String selectedEntity, List<String> entityProperties) throws IOException {
         String controllerName = selectedEntity + "Controller";
-        String filePath = controllerDirectoryPath + controllerName + ".java";
-        StringBuilder code = new StringBuilder();
+        Path filePath = controllerDirectoryPath.resolve(controllerName + ".java");
 
+        StringBuilder code = new StringBuilder();
         code.append(addImportForController(selectedEntity, entityProperties));
         code.append(addClassAndMethodForController(selectedEntity, entityProperties));
 
-        FileWriter writer = new FileWriter(filePath);
-        writer.write(code.toString());
-        writer.close();
-
+        Files.write(filePath, code.toString().getBytes(StandardCharsets.UTF_8));
         log.info("Interface created at " + filePath);
     }
 
