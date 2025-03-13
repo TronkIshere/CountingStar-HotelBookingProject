@@ -1,6 +1,7 @@
 package com.example.CountingStarHotel.codeGenerate.writter;
 
 import com.example.CountingStarHotel.codeGenerate.utils.ProjectPathUtils;
+import com.example.CountingStarHotel.codeGenerate.utils.RequiredImports;
 
 public class EntityFileWriter {
     public static StringBuilder writeFile(String fields, String className) {

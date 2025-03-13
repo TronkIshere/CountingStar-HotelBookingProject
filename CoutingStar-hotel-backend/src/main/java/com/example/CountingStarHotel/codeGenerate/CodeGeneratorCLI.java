@@ -1,12 +1,8 @@
 package com.example.CountingStarHotel.codeGenerate;
 
-import com.example.CountingStarHotel.codeGenerate.generator.ControllerCodeGenerator;
-import com.example.CountingStarHotel.codeGenerate.generator.InterfaceCodeGenerator;
-import com.example.CountingStarHotel.codeGenerate.generator.RepositoryCodeGenerator;
-import com.example.CountingStarHotel.codeGenerate.generator.ServiceCodeGenerator;
-import com.example.CountingStarHotel.codeGenerate.utils.ProjectPathUtils;
-import com.example.CountingStarHotel.codeGenerate.writter.*;
+import com.example.CountingStarHotel.codeGenerate.generator.*;
 import com.example.CountingStarHotel.codeGenerate.utils.EntityUtils;
+import com.example.CountingStarHotel.codeGenerate.utils.ProjectPathUtils;
 import com.example.CountingStarHotel.codeGenerate.utils.StringUtils;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -15,8 +11,6 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -29,13 +23,11 @@ public class CodeGeneratorCLI {
     public String generateEntity(String name, String fields) throws IOException {
         String className = StringUtils.capitalize(name);
         Path directoryPath = ProjectPathUtils.getOrCreateDirectory("entity");
-        Path filePath = directoryPath.resolve(className + ".java");
+        Path entitiesDirectoryPath = directoryPath.resolve(className + ".java");
 
-        StringBuilder code = new StringBuilder();
-        code.append(EntityFileWriter.writeFile(fields, className));
+        EntityCodeGenerator.createFile(entitiesDirectoryPath, fields, className);
 
-        Files.write(filePath, code.toString().getBytes(StandardCharsets.UTF_8));
-        return "Entity created at " + filePath;
+        return "Entity created at " + entitiesDirectoryPath;
     }
 
     @ShellMethod(key = "addService", value = "Generate a new service class")
