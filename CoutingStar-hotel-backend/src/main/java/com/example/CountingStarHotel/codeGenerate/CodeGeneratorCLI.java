@@ -44,32 +44,6 @@ public class CodeGeneratorCLI {
         }
     }
 
-    @ShellMethod(key = "addEntity", value = "Generate a new Entity class")
-    public String generateEntity(String name, String fields) throws IOException {
-        String className = capitalize(name);
-        Path directoryPath = getOrCreateDirectory("entity");
-        Path filePath = directoryPath.resolve(className + ".java");
-
-        StringBuilder code = new StringBuilder();
-        code.append(addImportForEntity(fields));
-        code.append(addClassExtendAbstractClassForEntity(className));
-        code.append(addPropertiesForEntity(fields));
-
-        Files.write(filePath, code.toString().getBytes(StandardCharsets.UTF_8));
-        return "Entity created at " + filePath;
-    }
-
-    public StringBuilder addImportForEntity(String fields) {
-        StringBuilder code = new StringBuilder();
-        code.append("package com.example.CountingStarHotel.entity;\n\n");
-        code.append("import com.example.CountingStarHotel.entity.common.AbstractEntity;\n");
-        code.append("import jakarta.persistence.*;\n");
-        code.append("import lombok.*;\n");
-        code.append("import lombok.experimental.FieldDefaults;\n\n");
-        code.append(getRequiredImports(fields));
-        return code;
-    }
-
     private String getRequiredImports(String fields) {
         StringBuilder imports = new StringBuilder();
 
@@ -121,8 +95,27 @@ public class CodeGeneratorCLI {
         return imports.toString();
     }
 
-    private StringBuilder addClassExtendAbstractClassForEntity(String className) {
+    @ShellMethod(key = "addEntity", value = "Generate a new Entity class")
+    public String generateEntity(String name, String fields) throws IOException {
+        String className = capitalize(name);
+        Path directoryPath = getOrCreateDirectory("entity");
+        Path filePath = directoryPath.resolve(className + ".java");
+
         StringBuilder code = new StringBuilder();
+        code.append(writeEntityFile(fields, className));
+
+        Files.write(filePath, code.toString().getBytes(StandardCharsets.UTF_8));
+        return "Entity created at " + filePath;
+    }
+
+    public StringBuilder writeEntityFile(String fields, String className) {
+        StringBuilder code = new StringBuilder();
+        code.append("package com.example.CountingStarHotel.entity;\n\n");
+        code.append("import com.example.CountingStarHotel.entity.common.AbstractEntity;\n");
+        code.append("import jakarta.persistence.*;\n");
+        code.append("import lombok.*;\n");
+        code.append("import lombok.experimental.FieldDefaults;\n\n");
+        code.append(getRequiredImports(fields));
 
         //add annotation
         code.append("@Entity\n");
@@ -134,11 +127,8 @@ public class CodeGeneratorCLI {
 
         //add class
         code.append("public class ").append(className).append(" extends AbstractEntity<Long> {\n");
-        return code;
-    }
 
-    public StringBuilder addPropertiesForEntity(String fields) {
-        StringBuilder code = new StringBuilder();
+        //add properties
         for (String field : fields.split(",")) {
             String[] parts = field.split(":");
             if (parts.length == 2) {
@@ -146,6 +136,7 @@ public class CodeGeneratorCLI {
             }
         }
         code.append("}\n");
+
         return code;
     }
 
@@ -237,30 +228,26 @@ public class CodeGeneratorCLI {
         return entityClasses;
     }
 
-
     private void createRepositoryFile(Path repoDirectoryPath, String selectedEntity) throws IOException {
         String repoName = selectedEntity + "Repository";
         Path filePath = repoDirectoryPath.resolve(repoName + ".java");
 
         StringBuilder code = new StringBuilder();
-        code.append(addImportForRepo(selectedEntity));
-        code.append(addClassExtendJpa(selectedEntity));
+        code.append(writeRepoFile(selectedEntity));
 
         Files.write(filePath, code.toString().getBytes(StandardCharsets.UTF_8));
         log.info("Repository created at " + filePath);
     }
 
-    private StringBuilder addImportForRepo(String selectedEntity) {
+    private StringBuilder writeRepoFile(String selectedEntity) {
         StringBuilder code = new StringBuilder();
+        //add imports
         code.append("package com.example.CountingStarHotel.repository;\n\n");
         code.append("import com.example.CountingStarHotel.entity." + selectedEntity + ";\n");
         code.append("import org.springframework.data.jpa.repository.JpaRepository;\n");
         code.append("\n");
-        return code;
-    }
 
-    private StringBuilder addClassExtendJpa(String selectedEntity) {
-        StringBuilder code = new StringBuilder();
+        //add class
         code.append("public interface ")
                 .append(selectedEntity)
                 .append("Repository extends")
@@ -275,27 +262,23 @@ public class CodeGeneratorCLI {
         Path filePath = interfaceDirectoryPath.resolve(interfaceName + ".java");
 
         StringBuilder code = new StringBuilder();
-        code.append(addImportForInterface(selectedEntity, entityProperties));
-        code.append(addClassAndMethodForInterface(selectedEntity, entityProperties));
+        code.append(writeInterfaceFile(selectedEntity, entityProperties));
 
         Files.write(filePath, code.toString().getBytes(StandardCharsets.UTF_8));
         log.info("Interface created at " + filePath);
     }
 
-    private StringBuilder addImportForInterface(String selectedEntity, List<String> entityProperties) {
+    private StringBuilder writeInterfaceFile(String selectedEntity, List<String> entityProperties) {
         String propertiesString = String.join(", ", entityProperties);
 
         StringBuilder code = new StringBuilder();
+        //add imports
         code.append("package com.example.CountingStarHotel.service;\n\n");
         code.append("import com.example.CountingStarHotel.entity." + selectedEntity + ";\n");
         code.append("import org.springframework.http.ResponseEntity;\n");
         code.append(getRequiredImports(propertiesString));
-        return code;
-    }
 
-    private StringBuilder addClassAndMethodForInterface(String selectedEntity, List<String> entityProperties) {
-        StringBuilder code = new StringBuilder();
-
+        //add class
         code.append("public interface ").append(selectedEntity).append("Service {\n\n");
 
         code.append("\t").append("ResponseEntity<").append(selectedEntity).append("> save").append(selectedEntity).append("(");
@@ -325,17 +308,17 @@ public class CodeGeneratorCLI {
         Path filePath = serviceDirectoryPath.resolve(serviceImplName + ".java");
 
         StringBuilder code = new StringBuilder();
-        code.append(addImportForServiceImpl(selectedEntity, entityProperties));
-        code.append(addClassAndMethodForServiceImpl(selectedEntity, entityProperties));
+        code.append(writeServiceImplFile(selectedEntity, entityProperties));
 
         Files.write(filePath, code.toString().getBytes(StandardCharsets.UTF_8));
         log.info("Interface created at " + filePath);
     }
 
-    private StringBuilder addImportForServiceImpl(String selectedEntity, List<String> entityProperties) {
+    private StringBuilder writeServiceImplFile(String selectedEntity, List<String> entityProperties) {
         String propertiesString = String.join(", ", entityProperties);
 
         StringBuilder code = new StringBuilder();
+        //add import
         code.append("package com.example.CountingStarHotel.service.impl;\n\n");
         code.append("import com.example.CountingStarHotel.entity.").append(selectedEntity).append(";\n");
         code.append("import com.example.CountingStarHotel.repository.").append(selectedEntity).append("Repository;\n");
@@ -346,12 +329,8 @@ public class CodeGeneratorCLI {
         code.append("import org.springframework.http.ResponseEntity;\n");
         code.append("import org.springframework.stereotype.Service;").append("\n");
         code.append(getRequiredImports(propertiesString));
-        return code;
-    }
 
-    private StringBuilder addClassAndMethodForServiceImpl(String selectedEntity, List<String> entityProperties) {
-        StringBuilder code = new StringBuilder();
-
+        //add class
         code.append("@Service\n")
                 .append("@RequiredArgsConstructor\n")
                 .append("@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)\n")
@@ -437,17 +416,17 @@ public class CodeGeneratorCLI {
         Path filePath = controllerDirectoryPath.resolve(controllerName + ".java");
 
         StringBuilder code = new StringBuilder();
-        code.append(addImportForController(selectedEntity, entityProperties));
-        code.append(addClassAndMethodForController(selectedEntity, entityProperties));
+        code.append(writeControllerFile(selectedEntity, entityProperties));
 
         Files.write(filePath, code.toString().getBytes(StandardCharsets.UTF_8));
         log.info("Interface created at " + filePath);
     }
 
-    private StringBuilder addImportForController(String selectedEntity, List<String> entityProperties) {
+    private StringBuilder writeControllerFile(String selectedEntity, List<String> entityProperties) {
         String propertiesString = String.join(", ", entityProperties);
 
         StringBuilder code = new StringBuilder();
+        //add imports
         code.append("package com.example.CountingStarHotel.controller;\n\n");
         code.append("import com.example.CountingStarHotel.entity.").append(selectedEntity).append(";\n");
         code.append("import com.example.CountingStarHotel.service.").append(selectedEntity).append("Service;\n");
@@ -455,11 +434,8 @@ public class CodeGeneratorCLI {
         code.append("import lombok.RequiredArgsConstructor;\n");
         code.append("import org.springframework.web.bind.annotation.*;\n");
         code.append(getRequiredImports(propertiesString));
-        return code;
-    }
 
-    private StringBuilder addClassAndMethodForController(String selectedEntity, List<String> entityProperties) {
-        StringBuilder code = new StringBuilder();
+        //add class
         code.append("@CrossOrigin(\"http://localhost:5173\")\n");
         code.append("@RequiredArgsConstructor\n");
         code.append("@RestController\n");
