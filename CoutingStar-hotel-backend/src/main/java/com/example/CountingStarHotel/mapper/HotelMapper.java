@@ -1,8 +1,8 @@
 package com.example.CountingStarHotel.mapper;
 
 import com.example.CountingStarHotel.DTO.response.hotel.HotelResponse;
-import com.example.CountingStarHotel.entities.Hotel;
-import com.example.CountingStarHotel.services.HotelService;
+import com.example.CountingStarHotel.entity.Hotel;
+import com.example.CountingStarHotel.service.HotelService;
 import org.springframework.stereotype.Component;
 
 import java.sql.Blob;

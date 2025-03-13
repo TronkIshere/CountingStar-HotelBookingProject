@@ -1,6 +1,6 @@
 package com.example.CountingStarHotel.DTO.response.role;
 
-import com.example.CountingStarHotel.entities.User;
+import com.example.CountingStarHotel.entity.User;
 import lombok.*;
 import java.util.Collection;
 

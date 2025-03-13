@@ -3,7 +3,7 @@ package com.example.CountingStarHotel.controller;
 import com.example.CountingStarHotel.DTO.request.user.LoginRequest;
 import com.example.CountingStarHotel.DTO.response.common.ResponseData;
 import com.example.CountingStarHotel.DTO.response.jwt.JwtResponse;
-import com.example.CountingStarHotel.services.AuthenticationService;
+import com.example.CountingStarHotel.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

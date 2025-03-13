@@ -2,7 +2,7 @@ package com.example.CountingStarHotel.controller;
 
 import com.example.CountingStarHotel.DTO.response.redeemedDiscount.RedeemedDiscountResponse;
 import com.example.CountingStarHotel.DTO.response.common.ResponseData;
-import com.example.CountingStarHotel.services.RedeemedDiscountService;
+import com.example.CountingStarHotel.service.RedeemedDiscountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

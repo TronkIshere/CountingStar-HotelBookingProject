@@ -1,6 +1,6 @@
 package com.example.CountingStarHotel.configuration;
 
-import com.example.CountingStarHotel.services.impl.UserDetailsServiceCustomizer;
+import com.example.CountingStarHotel.service.impl.UserDetailsServiceCustomizer;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

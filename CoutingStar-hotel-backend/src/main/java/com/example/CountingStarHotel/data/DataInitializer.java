@@ -1,9 +1,9 @@
 package com.example.CountingStarHotel.data;
 
-import com.example.CountingStarHotel.entities.*;
+import com.example.CountingStarHotel.entity.*;
 import com.example.CountingStarHotel.exception.ApplicationException;
 import com.example.CountingStarHotel.exception.ErrorCode;
-import com.example.CountingStarHotel.repositories.*;
+import com.example.CountingStarHotel.repository.*;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

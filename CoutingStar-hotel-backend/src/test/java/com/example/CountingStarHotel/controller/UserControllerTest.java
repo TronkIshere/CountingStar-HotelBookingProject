@@ -2,7 +2,7 @@ package com.example.CountingStarHotel.controller;
 
 import com.example.CountingStarHotel.DTO.request.user.UploadUserRequest;
 import com.example.CountingStarHotel.DTO.response.user.UserResponse;
-import com.example.CountingStarHotel.services.UserService;
+import com.example.CountingStarHotel.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;

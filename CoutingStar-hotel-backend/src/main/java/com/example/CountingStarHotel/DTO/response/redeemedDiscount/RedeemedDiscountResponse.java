@@ -1,8 +1,8 @@
 package com.example.CountingStarHotel.DTO.response.redeemedDiscount;
 
-import com.example.CountingStarHotel.entities.BookedRoom;
-import com.example.CountingStarHotel.entities.Discount;
-import com.example.CountingStarHotel.entities.User;
+import com.example.CountingStarHotel.entity.BookedRoom;
+import com.example.CountingStarHotel.entity.Discount;
+import com.example.CountingStarHotel.entity.User;
 import lombok.*;
 
 @Getter

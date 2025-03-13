@@ -1,7 +1,7 @@
 package com.example.CountingStarHotel.DTO.response.hotel;
 
-import com.example.CountingStarHotel.entities.Room;
-import com.example.CountingStarHotel.entities.User;
+import com.example.CountingStarHotel.entity.Room;
+import com.example.CountingStarHotel.entity.User;
 import lombok.*;
 
 import java.io.Serializable;

@@ -4,7 +4,7 @@ import com.example.CountingStarHotel.DTO.request.rating.AddRatingRequest;
 import com.example.CountingStarHotel.DTO.request.rating.UpdateRatingRequest;
 import com.example.CountingStarHotel.DTO.response.rating.RatingResponse;
 import com.example.CountingStarHotel.DTO.response.common.ResponseData;
-import com.example.CountingStarHotel.services.RatingService;
+import com.example.CountingStarHotel.service.RatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,8 +1,8 @@
 package com.example.CountingStarHotel.mapper;
 
 import com.example.CountingStarHotel.DTO.response.room.RoomResponse;
-import com.example.CountingStarHotel.entities.Room;
-import com.example.CountingStarHotel.services.RoomService;
+import com.example.CountingStarHotel.entity.Room;
+import com.example.CountingStarHotel.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;

@@ -5,7 +5,7 @@ import com.example.CountingStarHotel.DTO.request.discount.UpdateDiscountRequest;
 import com.example.CountingStarHotel.DTO.response.discount.DiscountResponse;
 import com.example.CountingStarHotel.DTO.response.common.PageResponse;
 import com.example.CountingStarHotel.DTO.response.common.ResponseData;
-import com.example.CountingStarHotel.services.DiscountService;
+import com.example.CountingStarHotel.service.DiscountService;
 import io.jsonwebtoken.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

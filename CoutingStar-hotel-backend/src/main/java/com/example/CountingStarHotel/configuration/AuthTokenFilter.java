@@ -1,7 +1,7 @@
 package com.example.CountingStarHotel.configuration;
 
-import com.example.CountingStarHotel.services.JwtService;
-import com.example.CountingStarHotel.services.impl.UserDetailsServiceCustomizer;
+import com.example.CountingStarHotel.service.JwtService;
+import com.example.CountingStarHotel.service.impl.UserDetailsServiceCustomizer;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
