@@ -29,7 +29,7 @@ public class CodeGeneratorCLI {
         return "Entity created at " + entitiesDirectoryPath;
     }
 
-    @ShellMethod(key = "addResponse", value = "Generate a new Entity class")
+    @ShellMethod(key = "addResponse", value = "Generate a new Response class")
     public String generateResponse(String name, String fields) throws IOException {
         String responseNameString = StringUtils.capitalize(name);
         Path entitesDirectoryPath = ProjectPathUtils.getOrCreateDirectory("entity");
@@ -42,6 +42,23 @@ public class CodeGeneratorCLI {
         if (selectedEntity == null) return "Not Entity selected";
 
         ResponseCodeGenerator.createFile(responseDirectoryPath, fields, responseNameString, selectedEntity);
+
+        return "Entity created at " + responseDirectoryPath;
+    }
+
+    @ShellMethod(key = "addRequest", value = "Generate a new Request class")
+    public String generateRequest(String name, String fields) throws IOException {
+        String responseNameString = StringUtils.capitalize(name);
+        Path entitesDirectoryPath = ProjectPathUtils.getOrCreateDirectory("entity");
+        Path responseDirectoryPath = ProjectPathUtils.getOrCreateDirectory("request");
+
+        List<String> entityClasses = EntityUtils.getEntityClasses(entitesDirectoryPath);
+        if (entityClasses.isEmpty()) return "Not Entity has found!";
+
+        String selectedEntity = EntityUtils.selectEntityTable(entityClasses);
+        if (selectedEntity == null) return "Not Entity selected";
+
+        RequestCodeGenerator.createFile(responseDirectoryPath, fields, responseNameString, selectedEntity);
 
         return "Entity created at " + responseDirectoryPath;
     }
