@@ -1,4 +1,4 @@
-package com.example.CountingStarHotel.codeGenerate.writter;
+package com.example.CountingStarHotel.codeGenerate.utils;
 
 public class RequiredImports {
     public static String getRequiredImports(String fields) {
