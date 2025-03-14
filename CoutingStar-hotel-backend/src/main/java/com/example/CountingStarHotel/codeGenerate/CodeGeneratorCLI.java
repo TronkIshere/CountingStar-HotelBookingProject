@@ -22,12 +22,28 @@ public class CodeGeneratorCLI {
     @ShellMethod(key = "addEntity", value = "Generate a new Entity class")
     public String generateEntity(String name, String fields) throws IOException {
         String className = StringUtils.capitalize(name);
-        Path directoryPath = ProjectPathUtils.getOrCreateDirectory("entity");
-        Path entitiesDirectoryPath = directoryPath.resolve(className + ".java");
+        Path entitiesDirectoryPath = ProjectPathUtils.getOrCreateDirectory("entity");
 
         EntityCodeGenerator.createFile(entitiesDirectoryPath, fields, className);
 
         return "Entity created at " + entitiesDirectoryPath;
+    }
+
+    @ShellMethod(key = "addResponse", value = "Generate a new Entity class")
+    public String generateResponse(String name, String fields) throws IOException {
+        String responseNameString = StringUtils.capitalize(name);
+        Path entitesDirectoryPath = ProjectPathUtils.getOrCreateDirectory("entity");
+        Path responseDirectoryPath = ProjectPathUtils.getOrCreateDirectory("response");
+
+        List<String> entityClasses = EntityUtils.getEntityClasses(entitesDirectoryPath);
+        if (entityClasses.isEmpty()) return "Not Entity has found!";
+
+        String selectedEntity = EntityUtils.selectEntityTable(entityClasses);
+        if (selectedEntity == null) return "Not Entity selected";
+
+        ResponseCodeGenerator.createFile(responseDirectoryPath, fields, responseNameString, selectedEntity);
+
+        return "Entity created at " + responseDirectoryPath;
     }
 
     @ShellMethod(key = "addService", value = "Generate a new service class")
